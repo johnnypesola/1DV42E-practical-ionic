@@ -4,9 +4,16 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers'])
 
-.run(function($ionicPlatform) {
+var BookingSystem;
+
+BookingSystem = angular
+  .module('BookingSystem', [
+    'ionic',
+    'starter.controllers'
+  ]);
+
+BookingSystem.run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -20,9 +27,16 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       StatusBar.styleDefault();
     }
   });
-})
+});
 
-.config(function($stateProvider, $urlRouterProvider) {
+// Constants
+BookingSystem.constant('API_URL', 'http://www.pesola.se:8080/BookingSystem/api/');
+BookingSystem.constant('DEFAULT_MAP_ZOOM', 5);
+BookingSystem.constant('DEFAULT_LATITUDE', 59.2792);
+BookingSystem.constant('DEFAULT_LONGITUDE', 15.2361);
+
+// Routes
+BookingSystem.config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
 
     .state('app', {
