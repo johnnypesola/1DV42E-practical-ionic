@@ -6,12 +6,16 @@ var sass = require('gulp-sass');
 var minifyCss = require('gulp-minify-css');
 var rename = require('gulp-rename');
 var sh = require('shelljs');
+var babel = require("gulp-babel");
+var plumber = require("gulp-plumber");
+var eslint = require("gulp-eslint");
 
 var paths = {
+  es6: ['./src/**/*.js'],
   sass: ['./scss/**/*.scss']
 };
 
-gulp.task('default', ['sass']);
+gulp.task('default', ['lint', 'babel', 'sass']);
 
 gulp.task('sass', function(done) {
   gulp.src('./scss/ionic.app.scss')
@@ -26,7 +30,32 @@ gulp.task('sass', function(done) {
     .on('end', done);
 });
 
+gulp.task('lint', function () {
+  // ESLint ignores files with "node_modules" paths.
+  // So, it's best to have gulp ignore the directory as well.
+  // Also, Be sure to return the stream from the task;
+  // Otherwise, the task may end before the stream has finished.
+  return gulp.src(['src/**/*.js','!node_modules/**'])
+    // eslint() attaches the lint output to the "eslint" property
+    // of the file object so it can be used by other modules.
+    .pipe(eslint())
+    // eslint.format() outputs the lint results to the console.
+    // Alternatively use eslint.formatEach() (see Docs).
+    .pipe(eslint.format())
+    // To have the process exit with an error code (1) on
+    // lint error, return the stream and pipe to failAfterError last.
+    .pipe(eslint.failAfterError());
+});
+
+gulp.task("babel", function () {
+  return gulp.src(paths.es6)
+    .pipe(plumber())
+    .pipe(babel({presets: ['es2015']}))
+    .pipe(gulp.dest("www/js"));
+});
+
 gulp.task('watch', function() {
+  gulp.watch(paths.es6, ['lint', 'babel']);
   gulp.watch(paths.sass, ['sass']);
 });
 
