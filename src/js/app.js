@@ -8,7 +8,8 @@
 const BookingSystem = angular
   .module( 'BookingSystem', [
     'ionic',
-    'starter.controllers'
+    'BookingSystem.controllers',
+    'ngMaterial'
   ] );
 
 BookingSystem.run( ['$ionicPlatform', ( $ionicPlatform ) => {

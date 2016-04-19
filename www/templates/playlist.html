@@ -1,5 +1,31 @@
 <ion-view view-title="Playlist">
   <ion-content>
     <h1>Playlist</h1>
+
+    <md-card md-theme="default">
+      <md-card-title>
+          <md-card-title-text>
+              <span class="md-headline">Card with image</span>
+              <span class="md-subhead">Large</span>
+          </md-card-title-text>
+          <md-card-title-media>
+              <div class="md-media-lg card-media"></div>
+          </md-card-title-media>
+      </md-card-title>
+      <md-card-actions layout="row" layout-align="end center">
+          <md-button>Action 1</md-button>
+          <md-button>Action 2</md-button>
+      </md-card-actions>
+
+        <h4>Standard date-picker</h4>
+        <md-datepicker ng-model="myDate" md-placeholder="Enter date"></md-datepicker>
+        <h4>Disabled date-picker</h4>
+        <md-datepicker ng-model="myDate" md-placeholder="Enter date" disabled></md-datepicker>
+        <h4>Date-picker with min date and max date</h4>
+        <md-datepicker ng-model="myDate" md-placeholder="Enter date"
+                       md-min-date="minDate" md-max-date="maxDate"></md-datepicker>
+        <h4>Only weekends are selectable</h4>
+        <md-datepicker ng-model="myDate" md-placeholder="Enter date"
+    </md-card>
   </ion-content>
 </ion-view>

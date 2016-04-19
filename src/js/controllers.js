@@ -1,4 +1,4 @@
-angular.module( 'starter.controllers', [] )
+angular.module( 'BookingSystem.controllers', [] )
 
 .controller( 'AppCtrl', ['$scope', '$ionicModal', '$timeout', ( $scope, $ionicModal, $timeout ) => {
 
