@@ -7,4 +7,5 @@ resources/
 server/
 srcmaps/
 www/
+src/lib/
 gulpfile.js

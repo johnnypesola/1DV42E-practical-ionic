@@ -3,8 +3,8 @@
   "app_id": "",
   "gulpStartupTasks": [
     "lint",
-    "babel",
     "sass",
+    "compile",
     "watch"
   ]
 }

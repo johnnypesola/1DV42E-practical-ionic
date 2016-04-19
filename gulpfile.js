@@ -9,13 +9,27 @@ var sh = require('shelljs');
 var babel = require("gulp-babel");
 var plumber = require("gulp-plumber");
 var eslint = require("gulp-eslint");
+var useref = require('gulp-useref');
+var uglify = require('gulp-uglify');
+var gulpIf = require('gulp-if');
+var cssnano = require('gulp-cssnano');
 
 var paths = {
-  es6: ['./src/**/*.js'],
+  es6: ['./src/js/**/*.js'],
   sass: ['./scss/**/*.scss']
 };
 
-gulp.task('default', ['lint', 'babel', 'sass']);
+gulp.task('default', ['lint', 'sass', 'compile']);
+
+gulp.task('compile', ['lint'], function(){
+  return gulp.src('src/index.html')
+    .pipe(useref())
+    .pipe(plumber())
+    .pipe(gulpIf('*.min.js', babel({presets: ['es2015']})))
+    .pipe(gulpIf('*.min.js', uglify()))
+    //.pipe(gulpIf('*.css', cssnano()))
+    .pipe(gulp.dest('www'));
+});
 
 gulp.task('sass', function(done) {
   gulp.src('./scss/ionic.app.scss')
@@ -47,15 +61,17 @@ gulp.task('lint', function () {
     .pipe(eslint.failAfterError());
 });
 
-gulp.task("babel", function () {
+/*
+gulp.task("babel", ['lint'], function () {
   return gulp.src(paths.es6)
     .pipe(plumber())
     .pipe(babel({presets: ['es2015']}))
     .pipe(gulp.dest("www/js"));
 });
+*/
 
 gulp.task('watch', function() {
-  gulp.watch(paths.es6, ['lint', 'babel']);
+  gulp.watch(paths.es6, ['lint', 'compile']);
   gulp.watch(paths.sass, ['sass']);
 });
 

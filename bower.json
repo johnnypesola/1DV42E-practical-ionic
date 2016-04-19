@@ -4,5 +4,10 @@
   "devDependencies": {
     "ionic": "driftyco/ionic-bower#1.2.4",
     "babel-polyfill": "^0.0.1"
+  },
+  "dependencies": {
+    "angular-material": "^1.0.7",
+    "angular-aria": "^1.4.8",
+    "angular-messages": "^1.4.8"
   }
 }
