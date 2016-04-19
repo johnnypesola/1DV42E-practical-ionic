@@ -12,20 +12,22 @@ var eslint = require("gulp-eslint");
 var useref = require('gulp-useref');
 var uglify = require('gulp-uglify');
 var gulpIf = require('gulp-if');
+var cssnano = require('gulp-cssnano');
 
 var paths = {
   es6: ['./src/js/**/*.js'],
   sass: ['./scss/**/*.scss']
 };
 
-gulp.task('default', ['lint', 'sass', 'useref']);
+gulp.task('default', ['lint', 'sass', 'compile']);
 
-gulp.task('useref', ['lint'], function(){
+gulp.task('compile', ['lint'], function(){
   return gulp.src('src/index.html')
     .pipe(useref())
     .pipe(plumber())
-    .pipe(gulpIf('*.bundle.js', babel({presets: ['es2015']})))
-    .pipe(gulpIf('*.bundle.js', uglify()))
+    .pipe(gulpIf('*.min.js', babel({presets: ['es2015']})))
+    .pipe(gulpIf('*.min.js', uglify()))
+    //.pipe(gulpIf('*.css', cssnano()))
     .pipe(gulp.dest('www'));
 });
 
@@ -69,7 +71,7 @@ gulp.task("babel", ['lint'], function () {
 */
 
 gulp.task('watch', function() {
-  gulp.watch(paths.es6, ['lint', 'useref']);
+  gulp.watch(paths.es6, ['lint', 'compile']);
   gulp.watch(paths.sass, ['sass']);
 });
 
