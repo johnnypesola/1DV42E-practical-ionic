@@ -1,17 +1,45 @@
-<ion-view view-title="Search">
-    <ion-content>
+<ion-view view-title="Möblering">
+    <ion-content padding="true">
+
         <h1>{{furnituring.Name}}</h1>
 
-        <form name="userForm">
-            <div layout-gt-xs="row">
-                <md-input-container class="md-block" flex-gt-xs>
-                    <label>Namn</label>
-                    <input ng-model="furnituring.Name" disabled>
-                </md-input-container>
-                <md-datepicker ng-model="furnituring.Name" md-placeholder="Enter date">
-                </md-datepicker>
-            </div>
-        </form>
+        <div class="row padding">
+
+            <form name="userForm">
+                <div layout-gt-xs="row">
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Namn</label>
+                        <input ng-model="furnituring.Name" ng-disabled="!isEditMode">
+                    </md-input-container>
+                </div>
+            </form>
+        </div>
+
+        <md-button
+            ng-show="isEditMode"
+            ng-click="abortEditMode()"
+            class="md-raised"
+        >
+            Avbryt
+        </md-button>
+
+        <md-button
+            ng-show="isEditMode"
+            class="md-raised md-primary"
+            ng-click="saveFurnituring()"
+        >
+            Spara
+        </md-button>
+
+        <md-button
+            class="md-fab md-warn md-lower-right-button"
+            aria-label="Edit"
+            ng-click="startEditMode()"
+            ng-show="!isEditMode"
+        >
+            <span class="icon ion-edit md-big-icon"></span>
+        </md-button>
 
     </ion-content>
+
 </ion-view>

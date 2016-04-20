@@ -32,3 +32,21 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   font-family: "Roboto";
   src: url("../font/Roboto-Regular.ttf");
 }
+
+// Background image on menu
+.menu-background {
+  background: url("../img/menu-card.png") top left no-repeat;
+  background-size: 100%;
+  height: 110px;
+}
+
+// Big icon for material design MB buttons
+.md-big-icon {
+  font-size: 150% !important;
+}
+
+.md-lower-right-button {
+  position: absolute !important;
+  bottom: 5% !important;
+  right: 5% !important;
+}
