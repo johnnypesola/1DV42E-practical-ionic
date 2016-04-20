@@ -25,3 +25,10 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 .md-input[disabled] {
   color: #000 !important;
 }
+
+// Force usage of Roboto font
+
+@font-face {
+  font-family: "Roboto";
+  src: url("../font/Roboto-Regular.ttf");
+}
