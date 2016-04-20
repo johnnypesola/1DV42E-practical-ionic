@@ -38,12 +38,23 @@ BookingSystem.constant( 'DEFAULT_LONGITUDE', 15.2361 );
 BookingSystem.config( ['$stateProvider', '$urlRouterProvider', ( $stateProvider, $urlRouterProvider ) => {
   $stateProvider
 
-    .state( 'app', {
-      url: '/app',
-      abstract: true,
-      templateUrl: 'templates/menu.html',
-      controller: 'AppCtrl'
-    })
+  .state( 'app', {
+    url: '/app',
+    abstract: true,
+    templateUrl: 'templates/menu.html',
+    controller: 'AppCtrl'
+  })
+
+  .state( 'app.furnituring-list', {
+    url: '/furnituring-list',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/furnituring/furnituring-list.html'
+      }
+    }
+  })
+
+  // Old states below
 
   .state( 'app.search', {
     url: '/search',
