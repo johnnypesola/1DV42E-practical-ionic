@@ -58,12 +58,24 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', ( $stateProvider,
     }
   })
 
+  // Furniturings
+
   .state( 'app.furnituring-list', {
     url: '/furnituring-list',
     views: {
       'menuContent': {
         templateUrl: 'templates/furnituring/furnituring-list.html',
         controller: 'FurnituringListCtrl'
+      }
+    }
+  })
+
+  .state( 'app.furnituring-details', {
+    url: '/furnituring-details/:furnituringId',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/furnituring/furnituring-details.html',
+        controller: 'FurnituringDetailsCtrl'
       }
     }
   });

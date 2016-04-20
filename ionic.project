@@ -4,6 +4,7 @@
   "gulpStartupTasks": [
     "lint",
     "sass",
+    "clean",
     "compile",
     "watch"
   ]
