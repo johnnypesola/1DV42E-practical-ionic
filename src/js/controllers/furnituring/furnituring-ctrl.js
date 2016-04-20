@@ -7,15 +7,30 @@ angular.module( 'BookingSystem.furnituring',
     )
 
     // Controller
-    .controller( 'FurnituringListCtrl', [ '$scope', '$state', ( $scope, $state ) => {
+    .controller( 'FurnituringListCtrl', [ '$rootScope', '$scope', '$state', 'Furnituring', ( $rootScope, $scope, $state, Furnituring ) => {
 
       /* Init vars */
-      // $scope.markerServicesArray = [];
+      console.log( 'FurnituringListCtrl' );
 
       /* Private methods START */
 
-      const getMarkerServices = function () {
-        // $scope.markerServicesArray = Markers.getServices();
+      const getFurniturings = function () {
+
+        console.log( 'Hämtar saker!' );
+
+        const furniturings = Furnituring.query();
+
+        // In case furnituring cannot be fetched, display an error to user.
+        furniturings.$promise.catch( () => {
+
+          $rootScope.FlashMessage = {
+            type: 'error',
+            message: 'Möbleringar kunde inte hämtas, var god försök igen.'
+          };
+        });
+
+        $scope.furniturings = furniturings;
+
       };
 
       /* Private Methods END */
@@ -26,12 +41,7 @@ angular.module( 'BookingSystem.furnituring',
 
       /* Initialization START */
 
-      getMarkerServices();
-
-      // Every time this view is left, do some stuff.
-      $scope.$on( '$ionicView.leave', ( scopes, states ) => {
-
-      });
+      getFurniturings();
 
       /* Initialization END */
 

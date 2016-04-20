@@ -1,5 +1,11 @@
 <ion-view view-title="Search">
     <ion-content>
         <h1>Möbleringar</h1>
+
+        <ion-list>
+            <ion-item ng-repeat="furnituring in furniturings" href="#/app/furnituring/{{furnituring.FurnituringId}}">
+                {{furnituring.Name}}
+            </ion-item>
+        </ion-list>
     </ion-content>
 </ion-view>
