@@ -156,7 +156,7 @@ angular.module( 'BookingSystem.furnituring',
       $scope.deleteFurnituring = function() {
 
       };
-      
+
       /* Public Methods END */
 
       /* Initialization START */

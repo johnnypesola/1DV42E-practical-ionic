@@ -11,6 +11,10 @@ const BookingSystem = angular
     'BookingSystem.controllers',
     'BookingSystem.furnituring',
     'BookingSystem.furnituringServices',
+    'BookingSystem.meals',
+    'BookingSystem.mealsServices',
+    'BookingSystem.resources',
+    'BookingSystem.resourcesServices',
     'ngMaterial',
     'ngResource'
   ] );
@@ -32,8 +36,8 @@ BookingSystem.run( ['$ionicPlatform', ( $ionicPlatform ) => {
 }] );
 
 // Constants
-// BookingSystem.constant( 'API_URL', 'http://www.pesola.se:8080/BookingSystem/api/' );
-BookingSystem.constant( 'API_URL', 'http://192.168.1.4:8080/BookingSystem/api/' );
+BookingSystem.constant( 'API_URL', 'http://www.pesola.se:8080/BookingSystem/api/' );
+//BookingSystem.constant( 'API_URL', 'http://192.168.1.4:8080/BookingSystem/api/' );
 BookingSystem.constant( 'DEFAULT_MAP_ZOOM', 5 );
 BookingSystem.constant( 'DEFAULT_LATITUDE', 59.2792 );
 BookingSystem.constant( 'DEFAULT_LONGITUDE', 15.2361 );
@@ -76,6 +80,30 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', ( $stateProvider,
       'menuContent': {
         templateUrl: 'templates/furnituring/furnituring-details.html',
         controller: 'FurnituringDetailsCtrl'
+      }
+    }
+  })
+
+  //Meals
+
+  .state( 'app.meals-list', {
+    url: '/meals-list',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/meals/meals-list.html',
+        controller: 'MealsListCtrl'
+      }
+    }
+  })
+
+  //Resources
+
+  .state( 'app.resources-list', {
+    url: '/resources-list',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/resources/resources-list.html',
+        controller: 'ResourcesListCtrl'
       }
     }
   });
