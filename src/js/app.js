@@ -106,6 +106,16 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', ( $stateProvider,
         controller: 'ResourcesListCtrl'
       }
     }
+  })
+
+  .state( 'app.resource-details', {
+    url: '/resource-details/:resourceId',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/resources/resource-details.html',
+        controller: 'ResourceDetailsCtrl'
+      }
+    }
   });
 
   // Old states below

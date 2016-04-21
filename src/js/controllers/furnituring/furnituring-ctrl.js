@@ -48,7 +48,7 @@ angular.module( 'BookingSystem.furnituring',
     .controller( 'FurnituringDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', '$state', 'Furnituring', ( $rootScope, $scope, $stateParams, $state, Furnituring ) => {
 
       /* Init vars */
-      $scope.editMode = false;
+      $scope.isEditMode = false;
       $scope.furnituringBackup = {};
 
       /* Private methods START */

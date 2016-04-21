@@ -45,4 +45,46 @@ angular.module( 'BookingSystem.resources',
 
     /* Initialization END */
   }]
+  )
+
+  .controller( 'ResourceDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', '$state', 'Resource', ($rootScope, $scope, $stateParams, $state, Resource ) => {
+    /* Init vars */
+
+    $scope.isEditMode = false;
+
+    /* Private methods START */
+
+    const getResource = function () {
+
+      const resource = Resource.get(
+        {
+          resourceId: $stateParams.resourceId
+        }
+      );
+
+      // In case resource cannot be fetched, display an error to user.
+      resource.$promise.catch( () => {
+
+        $rootScope.FlashMessage = {
+          type: 'error',
+          message: 'Resurs kunde inte hämtas, var god försök igen.'
+        };
+      });
+
+      $scope.resource = resource;
+
+    };
+
+    /* Private Methods END */
+
+    /* Public Methods START */
+
+    /* Public Methods END */
+
+    /* Initialization START */
+
+    getResource();
+
+    /* Initialization END */
+  }]
   );
