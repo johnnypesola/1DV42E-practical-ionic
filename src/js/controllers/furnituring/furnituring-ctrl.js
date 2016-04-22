@@ -46,13 +46,40 @@ angular.module( 'BookingSystem.furnituring',
     }]
     )
 
-    .controller( 'FurnituringDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', '$state', 'Furnituring', ( $rootScope, $scope, $stateParams, $state, Furnituring ) => {
+    .controller( 'FurnituringDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', 'Furnituring', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, Furnituring ) => {
 
       /* Init vars */
+      const modelTemplateUrl = 'templates/modals/furnituring-delete.html';
       $scope.editMode = false;
       $scope.furnituringBackup = {};
 
       /* Private methods START */
+      const setupModal = function(){
+
+        $ionicModal.fromTemplateUrl( modelTemplateUrl, {
+          scope: $scope,
+          animation: MODAL_ANIMATION
+        })
+          .then( ( response ) => {
+
+            $scope.modal = response;
+          });
+
+        // Cleanup the modal when we're done with it!
+        $scope.$on( '$destroy', () => {
+          $scope.modal.remove();
+        });
+
+        // Execute action on hide modal
+        // $scope.$on( 'modal.hidden', () => {
+          // Execute action
+        // });
+
+        // Execute action on remove modal
+        // $scope.$on( 'modal.removed', () => {
+          // Execute action
+        // });
+      };
 
       const getFurnituring = function () {
 
@@ -156,12 +183,64 @@ angular.module( 'BookingSystem.furnituring',
 
       $scope.deleteFurnituring = function() {
 
+        // Delete furnituring
+        Furnituring.delete(
+          {
+            furnituringId: $stateParams.furnituringId
+          }
+        ).$promise
+
+          // If everything went ok
+          .then( ( response ) => {
+
+            $rootScope.FlashMessage = {
+              type: 'success',
+              message: 'Möbleringen "' + $scope.furnituring.Name + '" raderades med ett lyckat resultat'
+            };
+
+            history.back();
+          })
+          // Something went wrong
+          .catch( ( response ) => {
+
+            // If there there was a foreign key reference
+            if (
+              response.status === 400 &&
+              response.data.Message !== 'undefined' &&
+              response.data.Message === 'Foreign key references exists'
+            ){
+              $rootScope.FlashMessage = {
+                type: 'error',
+                message:    'Möbleringen kan inte raderas eftersom det finns' +
+                ' en lokalbokning eller en lokalmöblering som refererar till möbleringen'
+              };
+            }
+
+            // If there was a problem with the in-data
+            else if ( response.status === 400 || response.status === 500 ){
+              $rootScope.FlashMessage = {
+                type: 'error',
+                message: 'Ett oväntat fel uppstod när möbleringen skulle tas bort'
+              };
+            }
+
+            // If the entry was not found
+            if ( response.status === 404 ) {
+              $rootScope.FlashMessage = {
+                type: 'error',
+                message: 'Möbleringen "' + $scope.furnituring.Name + '" existerar inte längre. Hann kanske någon radera den?'
+              };
+            }
+
+            history.back();
+          });
       };
 
       /* Public Methods END */
 
       /* Initialization START */
 
+      setupModal();
       getFurnituring();
 
       /* Initialization END */
