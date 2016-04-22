@@ -78,6 +78,16 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', ( $stateProvider,
         controller: 'FurnituringDetailsCtrl'
       }
     }
+  })
+
+  .state( 'app.furnituring-create', {
+    url: '/furnituring-create',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/furnituring/furnituring-create.html',
+        controller: 'FurnituringCreateCtrl'
+      }
+    }
   });
 
   // Old states below

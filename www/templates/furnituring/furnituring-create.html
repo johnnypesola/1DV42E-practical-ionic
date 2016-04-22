@@ -1,0 +1,34 @@
+<ion-view view-title="Skapa Möblering">
+    <ion-nav-buttons side="secondary">
+        <button
+            class="button"
+            ng-click="abortEditMode()"
+            ng-show="true"
+        >
+            editMode: {{isEditMode}}
+        </button>
+    </ion-nav-buttons>
+    <ion-content padding="true">
+
+        <div class="row padding">
+
+            <form name="userForm">
+                <div layout-gt-xs="row">
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Namn</label>
+                        <input ng-model="furnituring.Name">
+                    </md-input-container>
+                </div>
+            </form>
+        </div>
+
+        <md-button
+            class="md-raised md-primary"
+            ng-click="saveFurnituring()"
+        >
+            Spara
+        </md-button>
+
+    </ion-content>
+
+</ion-view>
