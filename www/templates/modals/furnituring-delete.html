@@ -4,22 +4,27 @@
     </ion-header-bar>
     <ion-content padding="true">
 
-        <div class="row padding">
-            Vill du verkligen ta bort möbleringen {{furnituring.Name}}?
+        <div class="row padding" layout-align="center">
+            <h4>
+                Vill du verkligen ta bort möbleringen {{furnituring.Name}}?
+            </h4>
         </div>
 
-        <md-button
-            class="md-raised md-primary"
-            ng-click="deleteFurnituring()"
-        >
-            Ja
-        </md-button>
-        <md-button
-            class="md-raised md-primary"
-            ng-click="modal.hide()"
-        >
-            Nej
-        </md-button>
+        <div class="row padding" layout-align="center">
+
+            <md-button
+                class="md-raised md-primary"
+                ng-click="deleteFurnituring()"
+            >
+                Ja
+            </md-button>
+            <md-button
+                class="md-raised md-primary"
+                ng-click="modal.hide()"
+            >
+                Nej
+            </md-button>
+        </div>
 
     </ion-content>
 </ion-modal-view>
