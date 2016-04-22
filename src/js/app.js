@@ -116,6 +116,16 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', ( $stateProvider,
         controller: 'ResourceDetailsCtrl'
       }
     }
+  })
+
+  .state( 'app.resource-create', {
+    url: '/resource-create',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/resources/resource-create.html',
+        controller: 'ResourceCreateCtrl'
+      }
+    }
   });
 
   // Old states below

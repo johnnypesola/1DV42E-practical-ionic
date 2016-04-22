@@ -9,7 +9,7 @@ angular.module( 'BookingSystem.resources',
   []
   )
 
-  //Controller
+  //List controller
   .controller( 'ResourcesListCtrl', [ '$rootScope', '$scope', '$state', 'Resource', ($rootScope, $scope, $state, Resource) => {
 
     /* Init vars */
@@ -41,12 +41,15 @@ angular.module( 'BookingSystem.resources',
 
     /* Initialization START */
 
-    getResources();
+    $scope.$on( '$ionicView.enter', ( event, data ) => {
+      getResources();
+    });
 
     /* Initialization END */
   }]
   )
 
+  //Edit controller
   .controller( 'ResourceDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', '$state', 'Resource', ($rootScope, $scope, $stateParams, $state, Resource ) => {
     /* Init vars */
 
@@ -167,5 +170,74 @@ angular.module( 'BookingSystem.resources',
     getResource();
 
     /* Initialization END */
+  }]
+  )
+
+  //Create controller
+  .controller( 'ResourceCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'Resource', ( $rootScope, $stateParams, $scope, $state, Resource ) => {
+
+    /* Init vars */
+    $scope.resource = {};
+
+    /* Private methods START */
+
+    /* Private Methods END */
+
+    /* Public Methods START */
+
+    $scope.saveResource = function() {
+
+      const $scope = this;
+
+      // Save resource
+      Resource.save(
+        {
+          ResourceId: 0,
+          Name: $scope.resource.Name,
+          Count: $scope.resource.Count,
+          BookingPricePerHour: $scope.resource.BookingPricePerHour,
+          MinutesMarginAfterBooking: $scope.resource.MinutesMarginAfterBooking,
+          WeekEndCount: $scope.resource.WeekEndCount
+        }
+      ).$promise
+
+        // If everything went ok
+        .then( ( response ) => {
+
+          $rootScope.FlashMessage = {
+            type: 'success',
+            message: 'Resursen "' + $scope.resource.Name + '" skapades med ett lyckat resultat'
+          };
+
+          history.back();
+
+          // Something went wrong
+        }).catch( ( response ) => {
+
+        // If there there was a foreign key reference
+        if ( response.status === 409 ){
+          $rootScope.FlashMessage = {
+            type: 'error',
+            message: 'Det finns redan en resurs som heter "' + $scope.resource.Name +
+            '". Två resurser kan inte heta lika.'
+          };
+        }
+
+        // If there was a problem with the in-data
+        else {
+          $rootScope.FlashMessage = {
+            type: 'error',
+            message: 'Ett oväntat fel uppstod när resursen skulle sparas'
+          };
+        }
+      });
+    };
+
+    /* Public Methods END */
+
+    /* Initialization START */
+
+    /* Initialization END */
+
   }]
   );

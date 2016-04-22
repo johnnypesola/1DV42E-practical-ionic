@@ -1,7 +1,5 @@
-<ion-view view-title="Resurs">
+<ion-view view-title="Skapa Resurs">
     <ion-content padding="true">
-
-        <h1>{{resources.Name}}</h1>
 
         <div class="row padding">
 
@@ -9,67 +7,41 @@
                 <div layout-gt-xs="row">
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Namn</label>
-                        <input ng-model="resource.Name" ng-disabled="!isEditMode">
+                        <input ng-model="resource.Name">
                     </md-input-container>
                 </div>
                 <div layout-gt-xs="row">
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Antal</label>
-                        <input ng-model="resource.Count" ng-disabled="!isEditMode">
+                        <input ng-model="resource.Count">
                     </md-input-container>
                 </div>
                 <div layout-gt-xs="row">
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Pris per timme</label>
-                        <input ng-model="resource.BookingPricePerHour" ng-disabled="!isEditMode">
+                        <input ng-model="resource.BookingPricePerHour">
                     </md-input-container>
                 </div>
                 <div layout-gt-xs="row">
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Marginal efter bokning</label>
-                        <input ng-model="resource.MinutesMarginAfterBooking" ng-disabled="!isEditMode">
+                        <input ng-model="resource.MinutesMarginAfterBooking">
                     </md-input-container>
                 </div>
                 <div layout-gt-xs="row">
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Helgantal</label>
-                        <input ng-model="resource.WeekEndCount" ng-disabled="!isEditMode">
+                        <input ng-model="resource.WeekEndCount">
                     </md-input-container>
                 </div>
             </form>
         </div>
 
         <md-button
-                ng-show="isEditMode"
-                ng-click="abortEditMode()"
-                class="md-raised"
-        >
-            Avbryt
-        </md-button>
-
-        <md-button
-                ng-show="isEditMode"
                 class="md-raised md-primary"
                 ng-click="saveResource()"
         >
             Spara
-        </md-button>
-
-        <md-button
-                ng-show="isEditMode"
-                class="md-fab md-mini md-warn"
-                ng-click="deleteResource()"
-        >
-            <span class="icon ion-trash-a md-medium-icon"></span>
-        </md-button>
-
-        <md-button
-                class="md-fab md-warn md-lower-right-button"
-                aria-label="Redigera"
-                ng-click="startEditMode()"
-                ng-show="!isEditMode"
-        >
-            <span class="icon ion-edit md-big-icon"></span>
         </md-button>
 
     </ion-content>
