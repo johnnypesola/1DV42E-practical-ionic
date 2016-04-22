@@ -30,7 +30,7 @@ namespace BookingSystem.Models
         {
             if (FurnituringId < 0)
             {
-                throw new FormatException("Invalid FunituringId");
+                throw new FormatException("Invalid FurnituringId");
             }
 
             // Check that the Furnituring exists before deletion

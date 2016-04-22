@@ -98,6 +98,7 @@
     <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\FurnituringController.cs" />
     <Compile Include="Controllers\LocationFurnituringController.cs" />
+    <Compile Include="Controllers\MealController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -109,6 +110,7 @@
     <Compile Include="Models\BLL\Customer.cs" />
     <Compile Include="Models\BLL\LocationBooking.cs" />
     <Compile Include="Models\BLL\LocationFurnituring.cs" />
+    <Compile Include="Models\BLL\Meal.cs" />
     <Compile Include="Models\BLL\Resource.cs" />
     <Compile Include="Models\BLL\Furnituring.cs" />
     <Compile Include="Models\BLL\Location.cs" />
@@ -124,6 +126,7 @@
     <Compile Include="Models\DAL\LocationBookingDAL.cs" />
     <Compile Include="Models\DAL\LocationDAL.cs" />
     <Compile Include="Models\DAL\LocationFurnituringDAL.cs" />
+    <Compile Include="Models\DAL\MealDAL.cs" />
     <Compile Include="Models\DAL\ResourceDAL.cs" />
     <Compile Include="Models\DAL\SharedDAL.cs" />
     <Compile Include="Models\FurnituringService.cs" />
@@ -131,6 +134,7 @@
     <Compile Include="Models\LocationBookingService.cs" />
     <Compile Include="Models\LocationFurnituringService.cs" />
     <Compile Include="Models\LocationService.cs" />
+    <Compile Include="Models\MealService.cs" />
     <Compile Include="Models\ResourceService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
