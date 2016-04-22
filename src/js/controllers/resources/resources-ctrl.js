@@ -51,6 +51,7 @@ angular.module( 'BookingSystem.resources',
     /* Init vars */
 
     $scope.isEditMode = false;
+    $scope.resourceBackup = {};
 
     /* Private methods START */
 
@@ -78,6 +79,86 @@ angular.module( 'BookingSystem.resources',
     /* Private Methods END */
 
     /* Public Methods START */
+
+    $scope.startEditMode = function () {
+      const $scope = this;
+
+      $scope.isEditMode = true;
+
+      // Make backup of data if in editMode.
+      $scope.resourceBackup = angular.copy( $scope.resource );
+    };
+
+    $scope.endEditMode = function () {
+      const $scope = this;
+
+      $scope.isEditMode = false;
+    };
+
+    $scope.abortEditMode = function() {
+      const $scope = this;
+
+      $scope.isEditMode = false;
+      $scope.resource = $scope.resourceBackup;
+    };
+
+    $scope.saveResource = function() {
+
+      const $scope = this;
+
+      // Save resource
+      Resource.save(
+        {
+          ResourceId: $stateParams.resourceId,
+          Name: $scope.resource.Name,
+          Count: $scope.resource.Count,
+          BookingPricePerHour: $scope.resource.BookingPricePerHour,
+          MinutesMarginAfterBooking: $scope.resource.MinutesMarginAfterBooking,
+          WeekEndCount: $scope.resource.WeekEndCount
+        }
+      ).$promise
+
+        // If everything went ok
+        .then( ( response ) => {
+
+          $scope.endEditMode();
+
+          $rootScope.FlashMessage = {
+            type: 'success',
+            message: 'Resursen "' + $scope.resource.Name + '" sparades med ett lyckat resultat'
+          };
+
+          // Something went wrong
+        }).catch( ( response ) => {
+
+        // If there there was a foreign key reference
+        if ( response.status === 409 ){
+          $rootScope.FlashMessage = {
+            type: 'error',
+            message: 'Det finns redan en resurs som heter "' + $scope.resource.Name +
+            '". Två resurser kan inte heta lika.'
+          };
+        }
+
+        // If there was a problem with the in-data
+        else if ( response.status === 400 || response.status === 500 ){
+          $rootScope.FlashMessage = {
+            type: 'error',
+            message: 'Ett oväntat fel uppstod när resursen skulle sparas'
+          };
+        }
+
+        // If the entry was not found
+        if ( response.status === 404 ) {
+          $rootScope.FlashMessage = {
+            type: 'error',
+            message: 'Resursen "' + $scope.resource.Name + '" existerar inte längre. Hann kanske någon radera den?'
+          };
+
+          history.back();
+        }
+      });
+    };
 
     /* Public Methods END */
 
