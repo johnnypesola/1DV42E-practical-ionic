@@ -1,5 +1,10 @@
 <ion-view view-title="Måltider">
     <ion-content>
-        <h1>En liten lista</h1>
+        <ion-list>
+            <ion-item ng-repeat="meal in meals" href="#/app/meals-details/{{meal.MealId}}">
+                {{meal.Name}}
+            </ion-item>
+        </ion-list>
+
     </ion-content>
 </ion-view>
