@@ -13,11 +13,10 @@
 # Fail fast
 set -e
 
-# Deploy
+# Setup github pages repo
 cd www
 
 git init
-#git checkout -b gh-pages
 git config --global user.email "johnny@pesola.eu"
 git config --global user.name "Travis"
 
@@ -31,6 +30,7 @@ cd ..
 gulp
 cd www
 
+# Commit and push to github pages repo
 git add -A
 
 git commit -am "Deploy of build #$TRAVIS_BUILD_NUMBER of commit $TRAVIS_COMMIT"
