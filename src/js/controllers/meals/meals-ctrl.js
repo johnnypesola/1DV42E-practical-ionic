@@ -47,7 +47,7 @@ angular.module( 'BookingSystem.meals',
   )
 
   //Edit controller
-  .controller( 'MealDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$ionicModal', '$state', 'Resource', ($rootScope, $scope, $stateParams, MODAL_ANIMATION, $ionicModal, $state, Meal ) => {
+  .controller( 'MealDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$ionicModal', '$state', 'Meal', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $ionicModal, $state, Meal ) => {
       /* Init vars */
 
     const modalTemplateUrl = 'templates/modals/meals-delete.html';
@@ -128,7 +128,7 @@ angular.module( 'BookingSystem.meals',
       Meal.save(
         {
           MealId: $stateParams.mealId,
-          Name: $scope.resource.Name
+          Name: $scope.meal.Name
         }
       ).$promise
 
