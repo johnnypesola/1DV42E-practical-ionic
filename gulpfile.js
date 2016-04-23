@@ -13,13 +13,14 @@ var useref = require('gulp-useref');
 var uglify = require('gulp-uglify');
 var gulpIf = require('gulp-if');
 var cssnano = require('gulp-cssnano');
+var clean = require('gulp-clean');
 
 var paths = {
   es6: ['./src/js/**/*.js'],
   sass: ['./scss/**/*.scss']
 };
 
-gulp.task('default', ['lint', 'sass', 'compile']);
+gulp.task('default', ['lint', 'sass', 'clean', 'compile']);
 
 gulp.task('compile', ['lint'], function(){
   return gulp.src('src/index.html')
@@ -42,6 +43,11 @@ gulp.task('sass', function(done) {
     .pipe(rename({ extname: '.min.css' }))
     .pipe(gulp.dest('./www/css/'))
     .on('end', done);
+});
+
+gulp.task('clean', ['sass'], function () {
+  return gulp.src('./www/css/ionic.app.css', {read: false})
+    .pipe(clean());
 });
 
 gulp.task('lint', function () {
@@ -72,7 +78,7 @@ gulp.task("babel", ['lint'], function () {
 
 gulp.task('watch', function() {
   gulp.watch(paths.es6, ['lint', 'compile']);
-  gulp.watch(paths.sass, ['sass']);
+  gulp.watch(paths.sass, ['sass', 'clean']);
 });
 
 gulp.task('install', ['git-check'], function() {

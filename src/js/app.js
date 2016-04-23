@@ -8,7 +8,11 @@
 const BookingSystem = angular
   .module( 'BookingSystem', [
     'ionic',
-    'starter.controllers'
+    'BookingSystem.controllers',
+    'BookingSystem.furnituring',
+    'BookingSystem.furnituringServices',
+    'ngMaterial',
+    'ngResource'
   ] );
 
 BookingSystem.run( ['$ionicPlatform', ( $ionicPlatform ) => {
@@ -28,22 +32,68 @@ BookingSystem.run( ['$ionicPlatform', ( $ionicPlatform ) => {
 }] );
 
 // Constants
-BookingSystem.constant( 'API_URL', 'http://www.pesola.se:8080/BookingSystem/api/' );
+// BookingSystem.constant( 'API_URL', 'http://www.pesola.se:8080/BookingSystem/api/' );
+BookingSystem.constant( 'API_URL', 'http://192.168.1.4:8080/BookingSystem/api/' );
+// BookingSystem.constant( 'API_URL', 'http://localhost:6796/api/' );
 BookingSystem.constant( 'DEFAULT_MAP_ZOOM', 5 );
 BookingSystem.constant( 'DEFAULT_LATITUDE', 59.2792 );
 BookingSystem.constant( 'DEFAULT_LONGITUDE', 15.2361 );
+BookingSystem.constant( 'MODAL_ANIMATION', 'slide-in-up' );
 
 // Routes
 BookingSystem.config( ['$stateProvider', '$urlRouterProvider', ( $stateProvider, $urlRouterProvider ) => {
   $stateProvider
 
-    .state( 'app', {
-      url: '/app',
-      abstract: true,
-      templateUrl: 'templates/menu.html',
-      controller: 'AppCtrl'
-    })
+  .state( 'app', {
+    url: '/app',
+    abstract: true,
+    templateUrl: 'templates/menu.html',
+    controller: 'AppCtrl'
+  })
 
+  .state( 'app.start', {
+    url: '/start',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/start.html'
+      }
+    }
+  })
+
+  // Furniturings
+
+  .state( 'app.furnituring-list', {
+    url: '/furnituring-list',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/furnituring/furnituring-list.html',
+        controller: 'FurnituringListCtrl'
+      }
+    }
+  })
+
+  .state( 'app.furnituring-details', {
+    url: '/furnituring-details/:furnituringId',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/furnituring/furnituring-details.html',
+        controller: 'FurnituringDetailsCtrl'
+      }
+    }
+  })
+
+  .state( 'app.furnituring-create', {
+    url: '/furnituring-create',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/furnituring/furnituring-create.html',
+        controller: 'FurnituringCreateCtrl'
+      }
+    }
+  });
+
+  // Old states below
+  /*
   .state( 'app.search', {
     url: '/search',
     views: {
@@ -79,7 +129,8 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', ( $stateProvider,
       }
     }
   });
+  */
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise( '/app/playlists' );
+  $urlRouterProvider.otherwise( '/app/start' );
 }] );

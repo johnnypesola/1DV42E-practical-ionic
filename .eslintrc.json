@@ -2,7 +2,7 @@
   "parser": "babel-eslint",
   "rules": {
     "camelcase": 0,
-    "consistent-this": [1, "that"],
+    // "consistent-this": [1, "that"],
     "eol-last": 0,
     "indent": ["error", 2, {"SwitchCase": 1}],
     "keyword-spacing": [2, {"before": true, "after": true, "overrides": {}}],

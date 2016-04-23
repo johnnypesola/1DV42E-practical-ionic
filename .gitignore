@@ -6,3 +6,5 @@
 /.idea
 platforms/
 plugins/
+/www/js/
+/www/css/

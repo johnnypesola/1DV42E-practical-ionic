@@ -1,0 +1,18 @@
+<ion-view view-title="Möbleringar">
+    <ion-content>
+        <ion-list>
+            <ion-item ng-repeat="furnituring in furniturings" href="#/app/furnituring-details/{{furnituring.FurnituringId}}">
+                {{furnituring.Name}}
+            </ion-item>
+        </ion-list>
+
+        <md-button
+            class="md-fab md-warn md-lower-right-button"
+            aria-label="Skapa"
+            href="#/app/furnituring-create"
+        >
+            <span class="icon ion-plus-round md-big-icon"></span>
+        </md-button>
+
+    </ion-content>
+</ion-view>
