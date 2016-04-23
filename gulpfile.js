@@ -26,8 +26,8 @@ gulp.task('compile', ['lint'], function(){
   return gulp.src('src/index.html')
     .pipe(useref())
     .pipe(plumber())
-    // .pipe(gulpIf('*.min.js', babel({presets: ['es2015']})))
-    // .pipe(gulpIf('*.min.js', uglify()))
+    .pipe(gulpIf('*.min.js', babel({presets: ['es2015']})))
+    .pipe(gulpIf('*.min.js', uglify()))
     //.pipe(gulpIf('*.css', cssnano()))
     .pipe(gulp.dest('www'));
 });
