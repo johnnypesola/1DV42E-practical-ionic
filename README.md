@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/johnnypesola/1DV42E-practical-ionic.svg?branch=master)](https://travis-ci.org/johnnypesola/1DV42E-practical-ionic)
+
 # 1DV42E-practical-ionic
 
 ### Latest working demo
