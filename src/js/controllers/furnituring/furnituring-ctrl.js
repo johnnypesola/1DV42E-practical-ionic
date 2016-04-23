@@ -50,14 +50,14 @@ angular.module( 'BookingSystem.furnituring',
 
       /* Init vars */
 
-      const modelTemplateUrl = 'templates/modals/furnituring-delete.html';
+      const modalTemplateUrl = 'templates/modals/furnituring-delete.html';
       $scope.editMode = false;
       $scope.furnituringBackup = {};
 
       /* Private methods START */
       const setupModal = function(){
 
-        $ionicModal.fromTemplateUrl( modelTemplateUrl, {
+        $ionicModal.fromTemplateUrl( modalTemplateUrl, {
           scope: $scope,
           animation: MODAL_ANIMATION
         })
