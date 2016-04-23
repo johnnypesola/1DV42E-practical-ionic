@@ -50,13 +50,31 @@ angular.module( 'BookingSystem.resources',
   )
 
   //Edit controller
-  .controller( 'ResourceDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', '$state', 'Resource', ($rootScope, $scope, $stateParams, $state, Resource ) => {
+  .controller( 'ResourceDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$ionicModal', '$state', 'Resource', ($rootScope, $scope, $stateParams, MODAL_ANIMATION, $ionicModal, $state, Resource ) => {
     /* Init vars */
 
+    const modelTemplateUrl = 'templates/modals/resources-delete.html';
     $scope.isEditMode = false;
     $scope.resourceBackup = {};
 
     /* Private methods START */
+
+    const setupModal = function(){
+
+      $ionicModal.fromTemplateUrl( modelTemplateUrl, {
+          scope: $scope,
+          animation: MODAL_ANIMATION
+        })
+        .then( ( response ) => {
+
+          $scope.modal = response;
+        });
+
+      // Cleanup the modal when we're done with it!
+      $scope.$on( '$destroy', () => {
+        $scope.modal.remove();
+      });
+    };
 
     const getResource = function () {
 
@@ -222,6 +240,7 @@ angular.module( 'BookingSystem.resources',
 
     /* Initialization START */
 
+    setupModal();
     getResource();
 
     /* Initialization END */
