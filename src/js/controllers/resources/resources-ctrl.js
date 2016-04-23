@@ -163,6 +163,61 @@ angular.module( 'BookingSystem.resources',
       });
     };
 
+    $scope.deleteResource = function() {
+
+      // Delete resource
+      Resource.delete(
+        {
+          resourceId: $stateParams.resourceId
+        }
+      ).$promise
+
+        // If everything went ok
+        .then( ( response ) => {
+
+          $rootScope.FlashMessage = {
+            type: 'success',
+            message: 'Resursen "' + $scope.resource.Name + '" raderades med ett lyckat resultat'
+          };
+
+          history.back();
+        })
+        // Something went wrong
+        .catch( ( response ) => {
+
+          // If there there was a foreign key reference
+          if (
+            response.status === 400 &&
+            response.data.Message !== 'undefined' &&
+            response.data.Message === 'Foreign key references exists'
+          ){
+            $rootScope.FlashMessage = {
+              type: 'error',
+              message:    'Resursen kan inte raderas eftersom det finns' +
+              ' en lokalbokning eller en lokalresurs som refererar till resursen'
+            };
+          }
+
+          // If there was a problem with the in-data
+          else if ( response.status === 400 || response.status === 500 ){
+            $rootScope.FlashMessage = {
+              type: 'error',
+              message: 'Ett oväntat fel uppstod när resursen skulle tas bort'
+            };
+          }
+
+          // If the entry was not found
+          if ( response.status === 404 ) {
+            $rootScope.FlashMessage = {
+              type: 'error',
+              message: 'Resursen "' + $scope.resource.Name + '" existerar inte längre. Hann kanske någon radera den?'
+            };
+          }
+
+          history.back();
+        });
+    };
+
     /* Public Methods END */
 
     /* Initialization START */
