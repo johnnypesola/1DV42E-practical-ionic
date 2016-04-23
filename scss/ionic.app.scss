@@ -21,3 +21,36 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
 
+// Make disabled input colors black instead of grey
+.md-input[disabled] {
+  color: #000 !important;
+}
+
+// Force usage of Roboto font
+
+@font-face {
+  font-family: "Roboto";
+  src: url("../font/Roboto-Regular.ttf");
+}
+
+// Background image on menu
+.menu-background {
+  background: url("../img/menu-card.png") top left no-repeat;
+  background-size: 100%;
+  height: 110px;
+}
+
+// Big icon for material design MB buttons
+.md-big-icon {
+  font-size: 150% !important;
+}
+
+.md-medium-icon {
+  font-size: 130% !important;
+}
+
+.md-lower-right-button {
+  position: absolute !important;
+  bottom: 5% !important;
+  right: 5% !important;
+}

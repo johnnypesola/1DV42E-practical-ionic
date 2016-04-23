@@ -1,4 +1,11 @@
 {
   "name": "BookingSystemApp",
-  "app_id": ""
+  "app_id": "",
+  "gulpStartupTasks": [
+    "lint",
+    "sass",
+    "clean",
+    "compile",
+    "watch"
+  ]
 }

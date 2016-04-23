@@ -1,0 +1,11 @@
+node_modules/
+bower_components/
+dist/
+coverage/
+hooks/
+resources/
+server/
+srcmaps/
+www/
+src/lib/
+gulpfile.js
