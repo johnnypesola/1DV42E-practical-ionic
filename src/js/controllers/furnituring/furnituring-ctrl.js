@@ -49,6 +49,7 @@ angular.module( 'BookingSystem.furnituring',
     .controller( 'FurnituringDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', 'Furnituring', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, Furnituring ) => {
 
       /* Init vars */
+
       const modelTemplateUrl = 'templates/modals/furnituring-delete.html';
       $scope.editMode = false;
       $scope.furnituringBackup = {};

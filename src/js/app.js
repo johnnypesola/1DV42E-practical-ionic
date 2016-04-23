@@ -11,6 +11,10 @@ const BookingSystem = angular
     'BookingSystem.controllers',
     'BookingSystem.furnituring',
     'BookingSystem.furnituringServices',
+    'BookingSystem.meals',
+    'BookingSystem.mealsServices',
+    'BookingSystem.resources',
+    'BookingSystem.resourcesServices',
     'ngMaterial',
     'ngResource'
   ] );
@@ -32,8 +36,8 @@ BookingSystem.run( ['$ionicPlatform', ( $ionicPlatform ) => {
 }] );
 
 // Constants
-// BookingSystem.constant( 'API_URL', 'http://www.pesola.se:8080/BookingSystem/api/' );
-BookingSystem.constant( 'API_URL', 'http://192.168.1.4:8080/BookingSystem/api/' );
+BookingSystem.constant( 'API_URL', 'http://www.pesola.se:8080/BookingSystem/api/' );
+//BookingSystem.constant( 'API_URL', 'http://192.168.1.4:8080/BookingSystem/api/' );
 // BookingSystem.constant( 'API_URL', 'http://localhost:6796/api/' );
 BookingSystem.constant( 'DEFAULT_MAP_ZOOM', 5 );
 BookingSystem.constant( 'DEFAULT_LATITUDE', 59.2792 );
@@ -90,6 +94,50 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', ( $stateProvider,
         controller: 'FurnituringCreateCtrl'
       }
     }
+  })
+
+  //Meals
+
+  .state( 'app.meals-list', {
+    url: '/meals-list',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/meals/meals-list.html',
+        controller: 'MealsListCtrl'
+      }
+    }
+  })
+
+  //Resources
+
+  .state( 'app.resources-list', {
+    url: '/resources-list',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/resources/resources-list.html',
+        controller: 'ResourcesListCtrl'
+      }
+    }
+  })
+
+  .state( 'app.resource-details', {
+    url: '/resource-details/:resourceId',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/resources/resource-details.html',
+        controller: 'ResourceDetailsCtrl'
+      }
+    }
+  })
+
+  .state( 'app.resource-create', {
+    url: '/resource-create',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/resources/resource-create.html',
+        controller: 'ResourceCreateCtrl'
+      }
+    }
   });
 
   // Old states below
@@ -133,4 +181,5 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', ( $stateProvider,
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise( '/app/start' );
-}] );
+}]
+);
