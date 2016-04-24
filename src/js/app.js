@@ -15,6 +15,8 @@ const BookingSystem = angular
     'BookingSystem.mealsServices',
     'BookingSystem.resources',
     'BookingSystem.resourcesServices',
+    'BookingSystem.customers',
+    'BookingSystem.customersServices',
     'ngMaterial',
     'ngResource'
   ] );
@@ -156,6 +158,18 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', ( $stateProvider,
       'menuContent': {
         templateUrl: 'templates/resources/resource-create.html',
         controller: 'ResourceCreateCtrl'
+      }
+    }
+  })
+
+  //Customers
+
+  .state( 'app.customers-list', {
+    url: '/customers-list',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/customers/customers-list.html',
+        controller: 'CustomersListCtrl'
       }
     }
   });
