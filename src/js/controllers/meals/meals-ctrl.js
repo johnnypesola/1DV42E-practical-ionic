@@ -238,4 +238,69 @@ angular.module( 'BookingSystem.meals',
 
     /* Initialization END */
   }]
+  )
+
+  //Create controller
+  .controller( 'MealCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'Meal', ( $rootScope, $stateParams, $scope, $state, Meal ) => {
+
+    /* Init vars */
+    $scope.meal = {};
+
+    /* Private methods START */
+
+    /* Private Methods END */
+
+    /* Public Methods START */
+
+    $scope.saveMeal = function() {
+
+      const $scope = this;
+
+      // Save meal
+      Meal.save(
+        {
+          MealId: 0,
+          Name: $scope.meal.Name
+        }
+      ).$promise
+
+        // If everything went ok
+        .then( ( response ) => {
+
+          $rootScope.FlashMessage = {
+            type: 'success',
+            message: 'Måltiden "' + $scope.meal.Name + '" skapades med ett lyckat resultat'
+          };
+
+          history.back();
+
+          // Something went wrong
+        }).catch( ( response ) => {
+
+          // If there there was a foreign key reference
+          if ( response.status === 409 ){
+            $rootScope.FlashMessage = {
+              type: 'error',
+              message: 'Det finns redan en måltid som heter "' + $scope.meal.Name +
+              '". Två måltider kan inte heta lika.'
+            };
+          }
+
+          // If there was a problem with the in-data
+          else {
+            $rootScope.FlashMessage = {
+              type: 'error',
+              message: 'Ett oväntat fel uppstod när måltiden skulle sparas'
+            };
+          }
+        });
+    };
+
+    /* Public Methods END */
+
+    /* Initialization START */
+
+    /* Initialization END */
+
+  }]
   );

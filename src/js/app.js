@@ -118,6 +118,16 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', ( $stateProvider,
     }
   })
 
+  .state( 'app.meal-create', {
+    url: '/meal-create',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/meals/meal-create.html',
+        controller: 'MealCreateCtrl'
+      }
+    }
+  })
+
   //Resources
 
   .state( 'app.resources-list', {
