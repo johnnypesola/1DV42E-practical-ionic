@@ -1,0 +1,107 @@
+<ion-view view-title="Kund">
+    <ion-content padding="true">
+
+        <h1>{{customer.Name}}</h1>
+
+        <div class="row padding">
+
+            <form name="userForm">
+                <div layout-gt-xs="row">
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Namn</label>
+                        <input ng-model="customer.Name" ng-disabled="!isEditMode">
+                    </md-input-container>
+                </div>
+                <div layout-gt-xs="row">
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Kundnummer</label>
+                        <input ng-model="customer.CustomerNumber" disabled>
+                    </md-input-container>
+                </div>
+                <div layout-gt-xs="row">
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Adress</label>
+                        <input ng-model="customer.Address" ng-disabled="!isEditMode">
+                    </md-input-container>
+                </div>
+                <div layout-gt-xs="row">
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Postnummer</label>
+                        <input ng-model="customer.PostNumber" ng-disabled="!isEditMode">
+                    </md-input-container>
+                </div>
+                <div layout-gt-xs="row">
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Stad</label>
+                        <input ng-model="customer.City" ng-disabled="!isEditMode">
+                    </md-input-container>
+                </div>
+                <div layout-gt-xs="row">
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>E-postadress</label>
+                        <input ng-model="customer.EmailAddress" ng-disabled="!isEditMode">
+                    </md-input-container>
+                </div>
+                <div layout-gt-xs="row">
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Telefonnummer</label>
+                        <input ng-model="customer.PhoneNumber" ng-disabled="!isEditMode">
+                    </md-input-container>
+                </div>
+                <div layout-gt-xs="row">
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Mobilnummer</label>
+                        <input ng-model="customer.CellPhoneNumber" ng-disabled="!isEditMode">
+                    </md-input-container>
+                </div>
+                <div layout-gt-xs="row">
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Tillhör kund</label>
+                        <input ng-model="customer.ParentCustomerId" ng-disabled="!isEditMode">
+                    </md-input-container>
+                </div>
+                <div layout-gt-xs="row">
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Anteckningar</label>
+                        <input ng-model="customer.Notes" ng-disabled="!isEditMode">
+                    </md-input-container>
+                </div>
+            </form>
+        </div>
+
+        <md-button
+                ng-show="isEditMode"
+                ng-click="abortEditMode()"
+                class="md-raised"
+        >
+            Avbryt
+        </md-button>
+
+        <md-button
+                ng-show="isEditMode"
+                class="md-raised md-primary"
+                ng-click="saveCustomer()"
+        >
+            Spara
+        </md-button>
+
+        <md-button
+                ng-show="isEditMode"
+                class="md-fab md-mini md-warn"
+                ng-click="modal.show()"
+        >
+            <span class="icon ion-trash-a md-medium-icon"></span>
+        </md-button>
+
+        <md-button
+                class="md-fab md-warn md-lower-right-button"
+                aria-label="Redigera"
+                ng-click="startEditMode()"
+                ng-show="!isEditMode"
+        >
+            <span class="icon ion-edit md-big-icon"></span>
+        </md-button>
+
+    </ion-content>
+
+</ion-view>

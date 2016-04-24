@@ -1,0 +1,73 @@
+<ion-view view-title="Skapa Kund">
+    <ion-content padding="true">
+
+        <div class="row padding">
+
+            <form name="userForm">
+                <div layout-gt-xs="row">
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Namn</label>
+                        <input ng-model="customer.Name">
+                    </md-input-container>
+                </div>
+                <div layout-gt-xs="row">
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Adress</label>
+                        <input ng-model="customer.Address">
+                    </md-input-container>
+                </div>
+                <div layout-gt-xs="row">
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Postnummer</label>
+                        <input ng-model="customer.PostNumber">
+                    </md-input-container>
+                </div>
+                <div layout-gt-xs="row">
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Stad</label>
+                        <input ng-model="customer.City">
+                    </md-input-container>
+                </div>
+                <div layout-gt-xs="row">
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>E-postadress</label>
+                        <input ng-model="customer.EmailAddress">
+                    </md-input-container>
+                </div>
+                <div layout-gt-xs="row">
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Telefonnummer</label>
+                        <input ng-model="customer.PhoneNumber">
+                    </md-input-container>
+                </div>
+                <div layout-gt-xs="row">
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Mobilnummer</label>
+                        <input ng-model="customer.CellPhoneNumber">
+                    </md-input-container>
+                </div>
+                <div layout-gt-xs="row">
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Tillhör kund</label>
+                        <input ng-model="customer.ParentCustomerId">
+                    </md-input-container>
+                </div>
+                <div layout-gt-xs="row">
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Anteckningar</label>
+                        <input ng-model="customer.Notes">
+                    </md-input-container>
+                </div>
+            </form>
+        </div>
+
+        <md-button
+                class="md-raised md-primary"
+                ng-click="saveCustomer()"
+        >
+            Spara
+        </md-button>
+
+    </ion-content>
+
+</ion-view>

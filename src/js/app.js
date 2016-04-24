@@ -172,6 +172,26 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', ( $stateProvider,
         controller: 'CustomersListCtrl'
       }
     }
+  })
+
+  .state( 'app.customer-details', {
+    url: '/customer-details/:customerId',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/customers/customer-details.html',
+        controller: 'CustomerDetailsCtrl'
+      }
+    }
+  })
+
+  .state( 'app.customer-create', {
+    url: '/customer-create',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/customers/customer-create.html',
+        controller: 'CustomerCreateCtrl'
+      }
+    }
   });
 
   // Old states below

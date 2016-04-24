@@ -176,7 +176,7 @@ angular.module( 'BookingSystem.meals',
 
     $scope.deleteMeal = function() {
 
-      // Delete resource
+      // Delete meal
       Meal.delete(
         {
           mealId: $stateParams.mealId
