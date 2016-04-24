@@ -1,5 +1,18 @@
 <ion-view view-title="Måltider">
     <ion-content>
-        <h1>En liten lista</h1>
+        <ion-list>
+            <ion-item ng-repeat="meal in meals" href="#/app/meal-details/{{meal.MealId}}">
+                {{meal.Name}}
+            </ion-item>
+        </ion-list>
+
+        <md-button
+                class="md-fab md-warn md-lower-right-button"
+                aria-label="Skapa"
+                href="#/app/meal-create"
+        >
+            <span class="icon ion-plus-round md-big-icon"></span>
+        </md-button>
+
     </ion-content>
 </ion-view>

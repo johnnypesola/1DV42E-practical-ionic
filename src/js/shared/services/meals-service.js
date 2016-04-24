@@ -14,7 +14,7 @@ angular.module( 'BookingSystem.mealsServices',
 
     return $resource(
       API_URL + 'Meal/:mealId',
-      {mealsId: '@mealId'}
+      {mealId: '@mealId'}
     );
   }]
   );

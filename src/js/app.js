@@ -108,6 +108,26 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', ( $stateProvider,
     }
   })
 
+  .state( 'app.meal-details', {
+    url: '/meal-details/:mealId',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/meals/meal-details.html',
+        controller: 'MealDetailsCtrl'
+      }
+    }
+  })
+
+  .state( 'app.meal-create', {
+    url: '/meal-create',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/meals/meal-create.html',
+        controller: 'MealCreateCtrl'
+      }
+    }
+  })
+
   //Resources
 
   .state( 'app.resources-list', {
