@@ -12,8 +12,8 @@ var eslint = require("gulp-eslint");
 var useref = require('gulp-useref');
 var uglify = require('gulp-uglify');
 var gulpIf = require('gulp-if');
-var cssnano = require('gulp-cssnano');
 var clean = require('gulp-clean');
+var Server = require('karma').Server;
 
 var paths = {
   es6: ['./src/js/**/*.js'],
@@ -22,13 +22,35 @@ var paths = {
 
 gulp.task('default', ['lint', 'sass', 'clean', 'compile']);
 
-gulp.task('compile', ['lint'], function(){
-  return gulp.src('src/index.html')
+/**
+ * Run test once and exit
+ */
+gulp.task('test', function (done) {
+  new Server({
+    configFile: __dirname + '/karma.conf.js',
+    singleRun: true
+  }, done).start();
+});
+
+
+gulp.task('compile-build', ['lint', 'compile'], function(){
+  return gulp.src('www/index.html')
     .pipe(useref())
     .pipe(plumber())
-    .pipe(gulpIf('*.min.js', babel({presets: ['es2015']})))
-    .pipe(gulpIf('*.min.js', uglify()))
-    //.pipe(gulpIf('*.css', cssnano()))
+    .pipe(gulpIf('*.bundle.js', babel({presets: ['es2015']})))
+    .pipe(gulpIf('*.bundle.js', uglify()))
+    .pipe(clean())
+    .pipe(gulp.dest('www'));
+});
+
+gulp.task('build', ['lint', 'compile', 'compile-build'], function(){
+  return gulp.src(['www/js/app.js', 'www/js/shared', 'www/js/controllers'])
+    .pipe(clean());
+});
+
+gulp.task('compile', ['lint'], function(){
+  return gulp.src(['src/index.html', 'src/*.js', 'src/**/*.js'])
+    .pipe(gulpIf('*.js', babel({presets: ['es2015']})))
     .pipe(gulp.dest('www'));
 });
 
@@ -66,15 +88,6 @@ gulp.task('lint', function () {
     // lint error, return the stream and pipe to failAfterError last.
     .pipe(eslint.failAfterError());
 });
-
-/*
-gulp.task("babel", ['lint'], function () {
-  return gulp.src(paths.es6)
-    .pipe(plumber())
-    .pipe(babel({presets: ['es2015']}))
-    .pipe(gulp.dest("www/js"));
-});
-*/
 
 gulp.task('watch', function() {
   gulp.watch(paths.es6, ['lint', 'compile']);

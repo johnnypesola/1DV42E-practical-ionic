@@ -3,7 +3,9 @@
   "private": "true",
   "devDependencies": {
     "ionic": "driftyco/ionic-bower#1.2.4",
-    "babel-polyfill": "^0.0.1"
+    "babel-polyfill": "^0.0.1",
+    "ngCordova": "^0.1.26-alpha",
+    "angular-mocks": "1.4.3"
   },
   "dependencies": {
     "angular-material": "^1.0.7",

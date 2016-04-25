@@ -9,3 +9,6 @@ srcmaps/
 www/
 src/lib/
 gulpfile.js
+tests/
+test-reports/
+karma.conf.js

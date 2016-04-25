@@ -8,7 +8,6 @@
 const BookingSystem = angular
   .module( 'BookingSystem', [
     'ionic',
-    'BookingSystem.controllers',
     'BookingSystem.furnituring',
     'BookingSystem.furnituringServices',
     'BookingSystem.meals',
@@ -51,8 +50,7 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', ( $stateProvider,
   .state( 'app', {
     url: '/app',
     abstract: true,
-    templateUrl: 'templates/menu.html',
-    controller: 'AppCtrl'
+    templateUrl: 'templates/menu.html'
   })
 
   .state( 'app.start', {
