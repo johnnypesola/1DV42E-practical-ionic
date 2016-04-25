@@ -17,6 +17,8 @@ const BookingSystem = angular
     'BookingSystem.resourcesServices',
     'BookingSystem.customers',
     'BookingSystem.customersServices',
+    'BookingSystem.bookingTypes',
+    'BookingSystem.bookingTypesServices',
     'ngMaterial',
     'ngResource'
   ] );
@@ -190,6 +192,38 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', ( $stateProvider,
       'menuContent': {
         templateUrl: 'templates/customers/customer-create.html',
         controller: 'CustomerCreateCtrl'
+      }
+    }
+  })
+
+  //BookingType
+
+  .state( 'app.bookingtypes-list', {
+    url: '/bookingtypes-list',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/bookingtypes/bookingtypes-list.html',
+        controller: 'BookingTypesListCtrl'
+      }
+    }
+  })
+
+  .state( 'app.bookingtype-details', {
+    url: '/bookingtype-details/:bookingTypeId',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/bookingtypes/bookingtype-details.html',
+        controller: 'BookingTypeDetailsCtrl'
+      }
+    }
+  })
+
+  .state( 'app.bookingtype-create', {
+    url: '/bookingtype-create',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/bookingtypes/bookingtype-create.html',
+        controller: 'BookingTypeCreateCtrl'
       }
     }
   });

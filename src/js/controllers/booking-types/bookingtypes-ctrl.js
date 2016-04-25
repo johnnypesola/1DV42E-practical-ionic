@@ -1,34 +1,35 @@
 /**
- * Created by Johanna Larsson on 2016-04-24.
+ * Created by Johanna Larsson on 2016-04-25.
  */
 'use strict';
-angular.module( 'BookingSystem.customers',
 
-  //Dependencies
+angular.module( 'BookingSystem.bookingTypes',
+
+  // Dependencies
   []
   )
 
-  //Controller
-  .controller( 'CustomersListCtrl', [ '$rootScope', '$scope', '$state', 'Customer', ( $rootScope, $scope, $state, Customer ) => {
+  // List controller
+  .controller( 'BookingTypesListCtrl', [ '$rootScope', '$scope', '$state', 'BookingType', ( $rootScope, $scope, $state, BookingType ) => {
 
     /* Init vars */
 
     /* Private methods START */
 
-    const getCustomers = function() {
+    const getBookingTypes = function() {
 
-      const customers = Customer.query();
+      const bookingTypes = BookingType.query();
 
       // In case customers cannot be fetched, display an error to user.
-      customers.$promise.catch( () => {
+      bookingTypes.$promise.catch( () => {
 
         $rootScope.FlashMessage = {
           type: 'error',
-          message: 'Kunder kunde inte hämtas, var god försök igen.'
+          message: 'Bokningstyper kunde inte hämtas, var god försök igen.'
         };
       });
 
-      $scope.customers = customers;
+      $scope.bookingTypes = bookingTypes;
     };
 
     /* Private Methods END */
@@ -40,7 +41,7 @@ angular.module( 'BookingSystem.customers',
     /* Initialization START */
 
     $scope.$on( '$ionicView.enter', ( event, data ) => {
-      getCustomers();
+      getBookingTypes();
     });
 
     /* Initialization END */
@@ -49,12 +50,13 @@ angular.module( 'BookingSystem.customers',
   )
 
   //Edit controller
-  .controller( 'CustomerDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$ionicModal', '$state', 'Customer', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $ionicModal, $state, Customer ) => {
+  .controller( 'BookingTypeDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$ionicModal', '$state', 'BookingType', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $ionicModal, $state, BookingType ) => {
+
     /* Init vars */
 
-    const modalTemplateUrl = 'templates/modals/customers-delete.html';
+    const modalTemplateUrl = 'templates/modals/bookingtypes-delete.html';
     $scope.isEditMode = false;
-    $scope.customerBackup = {};
+    $scope.bookingTypeBackup = {};
 
     /* Private methods START */
 
@@ -75,24 +77,24 @@ angular.module( 'BookingSystem.customers',
       });
     };
 
-    const getCustomer = function () {
+    const getBookingType = function () {
 
-      const customer = Customer.get(
+      const bookingType = BookingType.get(
         {
-          customerId: $stateParams.customerId
+          bookingTypeId: $stateParams.bookingTypeId
         }
       );
 
-      // In case customer cannot be fetched, display an error to user.
-      customer.$promise.catch( () => {
+      // In case bookingtype cannot be fetched, display an error to user.
+      bookingType.$promise.catch( () => {
 
         $rootScope.FlashMessage = {
           type: 'error',
-          message: 'Kunden kunde inte hämtas, var god försök igen.'
+          message: 'Bokningstypen kunde inte hämtas, var god försök igen.'
         };
       });
 
-      $scope.customer = customer;
+      $scope.bookingType = bookingType;
 
     };
 
@@ -100,13 +102,25 @@ angular.module( 'BookingSystem.customers',
 
     /* Public Methods START */
 
+    $scope.toggleHasLocation = function () {
+      const $scope = this;
+      console.log( $scope.bookingType.HasLocation );
+
+      if ( $scope.bookingType.HasLocation === true ) {
+        $scope.bookingType.HasLocation = false;
+      }
+      else {
+        $scope.bookingType.HasLocation = true;
+      }
+    };
+
     $scope.startEditMode = function () {
       const $scope = this;
 
       $scope.isEditMode = true;
 
       // Make backup of data if in editMode.
-      $scope.customerBackup = angular.copy( $scope.customer );
+      $scope.bookingTypeBackup = angular.copy( $scope.bookingType );
     };
 
     $scope.endEditMode = function () {
@@ -119,28 +133,21 @@ angular.module( 'BookingSystem.customers',
       const $scope = this;
 
       $scope.isEditMode = false;
-      $scope.customer = $scope.customerBackup;
+      $scope.bookingType = $scope.bookingTypeBackup;
     };
 
-    $scope.saveCustomer = function() {
+    $scope.saveBookingType = function() {
 
       const $scope = this;
 
-      // Save customer
-      Customer.save(
+      // Save bookingtype
+      BookingType.save(
         {
-          CustomerId: $stateParams.customerId,
-          CustomerNumber: $scope.customer.CustomerNumber,
-          Name: $scope.customer.Name,
-          Address: $scope.customer.Address,
-          PostNumber: $scope.customer.PostNumber,
-          City: $scope.customer.City,
-          EmailAddress: $scope.customer.EmailAddress,
-          PhoneNumber: $scope.customer.PhoneNumber,
-          CellPhoneNumber: $scope.customer.CellPhoneNumber,
-          ParentCustomerId: $scope.customer.ParentCustomerId,
-          ImageSrc: $scope.customer.ImageSrc,
-          Notes: $scope.customer.Notes
+          BookingTypeId: $stateParams.bookingTypeId,
+          Name: $scope.bookingType.Name,
+          HasLocation: $scope.bookingType.HasLocation,
+          MinutesMarginBeforeBooking: $scope.bookingType.MinutesMarginBeforeBooking,
+          MinutesMarginAfterBooking: $scope.bookingType.MinutesMarginAfterBooking
         }
       ).$promise
 
@@ -151,18 +158,18 @@ angular.module( 'BookingSystem.customers',
 
           $rootScope.FlashMessage = {
             type: 'success',
-            message: 'Kunden "' + $scope.customer.Name + '" sparades med ett lyckat resultat'
+            message: 'Bokningstypen "' + $scope.bookingType.Name + '" sparades med ett lyckat resultat'
           };
 
           // Something went wrong
         }).catch( ( response ) => {
 
-        // If there there was a foreign key reference
+          // If there there was a foreign key reference
           if ( response.status === 409 ){
             $rootScope.FlashMessage = {
               type: 'error',
-              message: 'Det finns redan en kund som heter "' + $scope.customer.Name +
-              '". Två kunder kan inte heta lika.'
+              message: 'Det finns redan en bokningstyp som heter "' + $scope.bookingType.Name +
+              '". Två boknigstyper kan inte heta lika.'
             };
           }
 
@@ -170,7 +177,7 @@ angular.module( 'BookingSystem.customers',
           else if ( response.status === 400 || response.status === 500 ){
             $rootScope.FlashMessage = {
               type: 'error',
-              message: 'Ett oväntat fel uppstod när kunden skulle sparas'
+              message: 'Ett oväntat fel uppstod när bokningstypen skulle sparas'
             };
           }
 
@@ -178,7 +185,7 @@ angular.module( 'BookingSystem.customers',
           if ( response.status === 404 ) {
             $rootScope.FlashMessage = {
               type: 'error',
-              message: 'Kunden "' + $scope.customer.Name + '" existerar inte längre. Hann kanske någon radera den?'
+              message: 'Bokningstypen "' + $scope.bookingType.Name + '" existerar inte längre. Hann kanske någon radera den?'
             };
 
             history.back();
@@ -186,12 +193,12 @@ angular.module( 'BookingSystem.customers',
         });
     };
 
-    $scope.deleteCustomer = function() {
+    $scope.deleteBookingType = function() {
 
-      // Delete customer
-      Customer.delete(
+      // Delete bookingtype
+      BookingType.delete(
         {
-          customerId: $stateParams.customerId
+          bookingTypeId: $stateParams.bookingTypeId
         }
       ).$promise
 
@@ -200,7 +207,7 @@ angular.module( 'BookingSystem.customers',
 
           $rootScope.FlashMessage = {
             type: 'success',
-            message: 'Kunden "' + $scope.customer.Name + '" raderades med ett lyckat resultat'
+            message: 'Bokningstypen "' + $scope.bookingType.Name + '" raderades med ett lyckat resultat'
           };
 
           history.back();
@@ -216,8 +223,8 @@ angular.module( 'BookingSystem.customers',
           ){
             $rootScope.FlashMessage = {
               type: 'error',
-              message:    'Kunden kan inte raderas eftersom det finns' +
-              ' en bokning som refererar till kunden'
+              message:    'Bokningstypen kan inte raderas eftersom det finns' +
+              ' en bokning som refererar till bokningstypen'
             };
           }
 
@@ -225,7 +232,7 @@ angular.module( 'BookingSystem.customers',
           else if ( response.status === 400 || response.status === 500 ){
             $rootScope.FlashMessage = {
               type: 'error',
-              message: 'Ett oväntat fel uppstod när kunden skulle tas bort'
+              message: 'Ett oväntat fel uppstod när bokningstypen skulle tas bort'
             };
           }
 
@@ -233,7 +240,7 @@ angular.module( 'BookingSystem.customers',
           if ( response.status === 404 ) {
             $rootScope.FlashMessage = {
               type: 'error',
-              message: 'Kunden "' + $scope.customer.Name + '" existerar inte längre. Hann kanske någon radera den?'
+              message: 'Bokningstypen "' + $scope.bookingType.Name + '" existerar inte längre. Hann kanske någon radera den?'
             };
           }
 
@@ -246,17 +253,18 @@ angular.module( 'BookingSystem.customers',
     /* Initialization START */
 
     setupModal();
-    getCustomer();
+    getBookingType();
 
     /* Initialization END */
   }]
   )
 
   //Create controller
-  .controller( 'CustomerCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'Customer', ( $rootScope, $stateParams, $scope, $state, Customer ) => {
+  .controller( 'BookingTypeCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'BookingType', ( $rootScope, $stateParams, $scope, $state, BookingType ) => {
 
     /* Init vars */
-    $scope.customer = {};
+    $scope.bookingType = {};
+    $scope.bookingType.HasLocation = false;
 
     /* Private methods START */
 
@@ -264,24 +272,29 @@ angular.module( 'BookingSystem.customers',
 
     /* Public Methods START */
 
-    $scope.saveCustomer = function() {
+    $scope.toggleHasLocation = function () {
+      const $scope = this;
+
+      if ( $scope.bookingType.HasLocation === true ) {
+        $scope.bookingType.HasLocation = false;
+      }
+      else {
+        $scope.bookingType.HasLocation = true;
+      }
+    };
+
+    $scope.saveBookingType = function() {
 
       const $scope = this;
 
-      // Save meal
-      Customer.save(
+      // Save bookingtype
+      BookingType.save(
         {
-          CustomerId: 0,
-          Name: $scope.customer.Name,
-          Address: $scope.customer.Address,
-          PostNumber: $scope.customer.PostNumber,
-          City: $scope.customer.City,
-          EmailAddress: $scope.customer.EmailAddress,
-          PhoneNumber: $scope.customer.PhoneNumber,
-          CellPhoneNumber: $scope.customer.CellPhoneNumber,
-          ParentCustomerId: $scope.customer.ParentCustomerId,
-          ImageSrc: $scope.customer.ImageSrc,
-          Notes: $scope.customer.Notes
+          BookingTypeId: 0,
+          Name: $scope.bookingType.Name,
+          HasLocation: $scope.bookingType.HasLocation,
+          MinutesMarginBeforeBooking: $scope.bookingType.MinutesMarginBeforeBooking,
+          MinutesMarginAfterBooking: $scope.bookingType.MinutesMarginAfterBooking
         }
       ).$promise
 
@@ -290,7 +303,7 @@ angular.module( 'BookingSystem.customers',
 
           $rootScope.FlashMessage = {
             type: 'success',
-            message: 'Kunden "' + $scope.customer.Name + '" skapades med ett lyckat resultat'
+            message: 'Bokningstypen "' + $scope.bookingType.Name + '" skapades med ett lyckat resultat'
           };
 
           history.back();
@@ -302,8 +315,8 @@ angular.module( 'BookingSystem.customers',
           if ( response.status === 409 ){
             $rootScope.FlashMessage = {
               type: 'error',
-              message: 'Det finns redan en kund som heter "' + $scope.customer.Name +
-              '". Två kunder kan inte heta lika.'
+              message: 'Det finns redan en bokningstyp som heter "' + $scope.bookingType.Name +
+              '". Två bokningstyper kan inte heta lika.'
             };
           }
 
@@ -311,7 +324,7 @@ angular.module( 'BookingSystem.customers',
           else {
             $rootScope.FlashMessage = {
               type: 'error',
-              message: 'Ett oväntat fel uppstod när kunden skulle sparas'
+              message: 'Ett oväntat fel uppstod när bokningstypen skulle sparas'
             };
           }
         });

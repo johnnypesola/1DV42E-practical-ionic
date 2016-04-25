@@ -1,0 +1,42 @@
+<ion-view view-title="Skapa Bokningstyp">
+    <ion-content padding="true">
+
+        <div class="row padding">
+
+            <form name="userForm">
+                <div layout-gt-xs="row">
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Namn</label>
+                        <input ng-model="bookingType.Name">
+                    </md-input-container>
+                </div>
+                <div layout-gt-xs="row">
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Marginal före bokning</label>
+                        <input ng-model="bookingType.MinutesMarginBeforeBooking">
+                    </md-input-container>
+                </div>
+                <div layout-gt-xs="row">
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Marginal efter bokning</label>
+                        <input ng-model="bookingType.MinutesMarginAfterBooking">
+                    </md-input-container>
+                </div>
+                <div layout-gt-xs="row">
+                    <md-checkbox ng-click="toggleHasLocation()">
+                        Måste ha en lokal/plats
+                    </md-checkbox>
+                </div>
+            </form>
+        </div>
+
+        <md-button
+                class="md-raised md-primary"
+                ng-click="saveBookingType()"
+        >
+            Spara
+        </md-button>
+
+    </ion-content>
+
+</ion-view>
