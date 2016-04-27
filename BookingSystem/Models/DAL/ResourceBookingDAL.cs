@@ -7,12 +7,10 @@ using System.Web;
 
 namespace BookingSystem.Models
 {
-    public class LocationBookingDAL : DALBase
+    public class ResourceBookingDAL : DALBase
     {
-        public bool IsLocationBooked(Booking booking)
+        public bool IsResourceBooked(Booking booking)
         {
-         
-            
             //// Create connection object
             //using (this.CreateConnection())
             //{
@@ -21,14 +19,14 @@ namespace BookingSystem.Models
             //        SqlCommand cmd;
 
             //        // Connect to database and execute given stored procedure
-            //        cmd = this.Setup("appSchema.usp_LocationBookedCheck", DALOptions.closedConnection);
+            //        cmd = this.Setup("appSchema.usp_ResourceBookedCheck", DALOptions.closedConnection);
 
             //        // Add parameters for Stored procedure
             //        if (booking.BookingId > 0)
             //        {
             //            cmd.Parameters.Add("@BookingId", SqlDbType.Int).Value = booking.BookingId;
             //        }
-            //        cmd.Parameters.Add("@LocationId", SqlDbType.Int).Value = booking.LocationId;
+            //        cmd.Parameters.Add("@ResourceId", SqlDbType.Int).Value = booking.ResourceId;
             //        cmd.Parameters.Add("@StartDate", SqlDbType.VarChar, 10).Value = booking.StartDate;
             //        cmd.Parameters.Add("@StartTime", SqlDbType.VarChar, 5).Value = booking.StartTime;
             //        cmd.Parameters.Add("@EndDate", SqlDbType.VarChar, 10).Value = booking.EndDate;
@@ -56,7 +54,7 @@ namespace BookingSystem.Models
             return false;
         }
 
-        public void DeleteLocationBooking(int locationBookingId)
+        public void DeleteResourceBooking(int resourceBookingId)
         {
             // Create connection object
             using (this.CreateConnection())
@@ -66,12 +64,12 @@ namespace BookingSystem.Models
                     SqlCommand cmd;
 
                     // Connect to database
-                    cmd = this.Setup("appSchema.usp_LocationBookingDelete");
+                    cmd = this.Setup("appSchema.usp_ResourceBookingDelete");
 
                     // Add parameter for Stored procedure
-                    cmd.Parameters.Add("@LocationBookingId", SqlDbType.Int).Value = locationBookingId;
+                    cmd.Parameters.Add("@ResourceBookingId", SqlDbType.Int).Value = resourceBookingId;
 
-                    // Try to delete location from database.
+                    // Try to delete resource from database.
                     cmd.ExecuteNonQuery();
                 }
                 catch
@@ -82,21 +80,21 @@ namespace BookingSystem.Models
             }
         }
 
-        public IEnumerable<LocationBooking> GetLocationBookingsForPeriod(DateTime startTime, DateTime endTime)
+        public IEnumerable<ResourceBooking> GetResourceBookingsForPeriod(DateTime startTime, DateTime endTime)
         {
             // Create connection object
             using (this.CreateConnection())
             {
                 try
                 {
-                    List<LocationBooking> locationBookingsReturnList;
+                    List<ResourceBooking> resourceBookingsReturnList;
                     SqlCommand cmd;
 
                     // Create list object
-                    locationBookingsReturnList = new List<LocationBooking>(50);
+                    resourceBookingsReturnList = new List<ResourceBooking>(50);
 
                     // Connect to database and execute given stored procedure
-                    cmd = this.Setup("appSchema.usp_LocationBookingsForPeriod", DALOptions.closedConnection);
+                    cmd = this.Setup("appSchema.usp_ResourceBookingsForPeriod", DALOptions.closedConnection);
 
                     // Add parameter for Stored procedure
                     cmd.Parameters.Add("@StartTime", SqlDbType.SmallDateTime).Value = startTime;
@@ -112,33 +110,33 @@ namespace BookingSystem.Models
                         while (reader.Read())
                         {
                             // Create new Booking object from database values and add to list
-                            locationBookingsReturnList.Add(new LocationBooking
+                            resourceBookingsReturnList.Add(new ResourceBooking
                             {
-                                LocationBookingId = reader.GetSafeInt32(reader.GetOrdinal("LocationBookingId")),
+                                ResourceBookingId = reader.GetSafeInt32(reader.GetOrdinal("ResourceBookingId")),
                                 BookingId = reader.GetSafeInt32(reader.GetOrdinal("BookingId")),
                                 BookingName = reader.GetSafeString(reader.GetOrdinal("BookingName")),
                                 Provisional = reader.GetBoolean(reader.GetOrdinal("Provisional")),
-                                LocationName = reader.GetSafeString(reader.GetOrdinal("LocationName")),
-                                LocationId = reader.GetSafeInt32(reader.GetOrdinal("LocationId")),
-                                LocationImageSrc = reader.GetSafeString(reader.GetOrdinal("LocationImageSrc")),
-                                NumberOfPeople = reader.GetSafeInt16(reader.GetOrdinal("NumberOfPeople")),
-                                MaxPeople = reader.GetSafeInt32(reader.GetOrdinal("MaxPeople")),
-                                FurnituringId = reader.GetSafeInt16(reader.GetOrdinal("FurnituringId")),
-                                FurnituringName = reader.GetSafeString(reader.GetOrdinal("FurnituringName")),
+                                ResourceId = reader.GetSafeInt32(reader.GetOrdinal("ResourceId")),
+                                ResourceName = reader.GetSafeString(reader.GetOrdinal("ResourceName")),
+                                ResourceCount = reader.GetSafeInt16(reader.GetOrdinal("ResourceCount")),
+                                ResourceImageSrc = reader.GetSafeString(reader.GetOrdinal("ResourceImageSrc")),
+
                                 StartTime = reader.GetSafeDateTime(reader.GetOrdinal("StartTime")),
                                 EndTime = reader.GetSafeDateTime(reader.GetOrdinal("EndTime")),
+
                                 MinutesMarginBeforeBooking = reader.GetSafeInt16(reader.GetOrdinal("MinutesMarginBeforeBooking")),
                                 MinutesMarginAfterBooking = reader.GetSafeInt16(reader.GetOrdinal("MinutesMarginAfterBooking")),
+
                                 CalculatedBookingPrice = reader.GetSafeDecimal(reader.GetOrdinal("CalculatedBookingPrice")),
                             });
                         }
                     }
 
                     // Remove unused list rows, free memory.
-                    locationBookingsReturnList.TrimExcess();
+                    resourceBookingsReturnList.TrimExcess();
 
                     // Return list
-                    return locationBookingsReturnList;
+                    return resourceBookingsReturnList;
                 }
                 catch
                 {
@@ -147,7 +145,7 @@ namespace BookingSystem.Models
             }
         }
 
-        public void InsertLocationBooking(LocationBooking locationBooking)
+        public void InsertResourceBooking(ResourceBooking resourceBooking)
         {
             // Create connection object
             using (this.CreateConnection())
@@ -157,15 +155,14 @@ namespace BookingSystem.Models
                     SqlCommand cmd;
 
                     // Connect to database
-                    cmd = this.Setup("appSchema.usp_LocationBookingCreate", DALOptions.closedConnection);
+                    cmd = this.Setup("appSchema.usp_ResourceBookingCreate", DALOptions.closedConnection);
 
                     // Add in parameters for Stored procedure
-                    cmd.Parameters.Add("@BookingId", SqlDbType.Int).Value = locationBooking.BookingId;
-                    cmd.Parameters.Add("@LocationId", SqlDbType.Int).Value = locationBooking.LocationId;
-                    cmd.Parameters.Add("@FurnituringId", SqlDbType.Int).Value = locationBooking.FurnituringId;
-                    cmd.Parameters.Add("@StartTime", SqlDbType.SmallDateTime).Value = locationBooking.StartTime;
-                    cmd.Parameters.Add("@EndTime", SqlDbType.SmallDateTime).Value = locationBooking.EndTime;
-                    cmd.Parameters.Add("@NumberOfPeople", SqlDbType.SmallInt).Value = locationBooking.NumberOfPeople;
+                    cmd.Parameters.Add("@BookingId", SqlDbType.Int).Value = resourceBooking.BookingId;
+                    cmd.Parameters.Add("@ResourceId", SqlDbType.Int).Value = resourceBooking.ResourceId;
+                    cmd.Parameters.Add("@ResourceCount", SqlDbType.Int).Value = resourceBooking.ResourceCount;
+                    cmd.Parameters.Add("@StartTime", SqlDbType.SmallDateTime).Value = resourceBooking.StartTime;
+                    cmd.Parameters.Add("@EndTime", SqlDbType.SmallDateTime).Value = resourceBooking.EndTime;
 
                     // Add out parameter for Stored procedure
                     cmd.Parameters.Add("@InsertId", SqlDbType.Int).Direction = ParameterDirection.Output;
@@ -177,11 +174,11 @@ namespace BookingSystem.Models
                     cmd.ExecuteNonQuery();
 
                     // Place database insert id into booking object.
-                    locationBooking.BookingId = (int)cmd.Parameters["@InsertId"].Value;
+                    resourceBooking.BookingId = (int)cmd.Parameters["@InsertId"].Value;
                 }
                 catch (Exception exception)
                 {
-                    if (exception.Message == "The location is already booked at the given time.")
+                    if (exception.Message == "The resource is already booked at the given time.")
                     {
                         throw new DoubleBookingException(exception.Message);
                     }
@@ -191,7 +188,7 @@ namespace BookingSystem.Models
             }
         }
 
-        public void UpdateLocationBooking(LocationBooking locationBooking)
+        public void UpdateResourceBooking(ResourceBooking resourceBooking)
         {
             // Create connection object
             using (this.CreateConnection())
@@ -201,16 +198,15 @@ namespace BookingSystem.Models
                     SqlCommand cmd;
 
                     // Connect to database
-                    cmd = this.Setup("appSchema.usp_LocationBookingUpdate", DALOptions.closedConnection);
+                    cmd = this.Setup("appSchema.usp_ResourceBookingUpdate", DALOptions.closedConnection);
 
                     // Add in parameters for Stored procedure
-                    cmd.Parameters.Add("@LocationBookingId", SqlDbType.Int).Value = locationBooking.LocationBookingId;
-                    cmd.Parameters.Add("@BookingId", SqlDbType.Int).Value = locationBooking.BookingId;
-                    cmd.Parameters.Add("@LocationId", SqlDbType.Int).Value = locationBooking.LocationId;
-                    cmd.Parameters.Add("@FurnituringId", SqlDbType.Int).Value = locationBooking.FurnituringId;
-                    cmd.Parameters.Add("@StartTime", SqlDbType.SmallDateTime).Value = locationBooking.StartTime;
-                    cmd.Parameters.Add("@EndTime", SqlDbType.SmallDateTime).Value = locationBooking.EndTime;
-                    cmd.Parameters.Add("@NumberOfPeople", SqlDbType.SmallInt).Value = locationBooking.NumberOfPeople;
+                    cmd.Parameters.Add("@ResourceBookingId", SqlDbType.Int).Value = resourceBooking.ResourceBookingId;
+                    cmd.Parameters.Add("@BookingId", SqlDbType.Int).Value = resourceBooking.BookingId;
+                    cmd.Parameters.Add("@ResourceId", SqlDbType.Int).Value = resourceBooking.ResourceId;
+                    cmd.Parameters.Add("@ResourceCount", SqlDbType.Int).Value = resourceBooking.ResourceCount;
+                    cmd.Parameters.Add("@StartTime", SqlDbType.SmallDateTime).Value = resourceBooking.StartTime;
+                    cmd.Parameters.Add("@EndTime", SqlDbType.SmallDateTime).Value = resourceBooking.EndTime;
 
                     // Open DB connection
                     connection.Open();
@@ -220,7 +216,7 @@ namespace BookingSystem.Models
                 }
                 catch (Exception exception)
                 {
-                    if (exception.Message == "The location is already booked at the given time.")
+                    if (exception.Message == "The resource is already booked at the given time.")
                     {
                         throw new DoubleBookingException(exception.Message);
                     }
@@ -230,24 +226,24 @@ namespace BookingSystem.Models
             }
         }
 
-        public IEnumerable<LocationBooking> GetLocationBookings(int? BookingId = null)
+        public IEnumerable<ResourceBooking> GetResourceBookings(int? BookingId = null)
         {
             // Create connection object
             using (this.CreateConnection())
             {
                 try
                 {
-                    List<LocationBooking> locationBookingsReturnList;
+                    List<ResourceBooking> resourceBookingsReturnList;
                     SqlCommand cmd;
 
                     // Create list object
-                    locationBookingsReturnList = new List<LocationBooking>(50);
+                    resourceBookingsReturnList = new List<ResourceBooking>(50);
 
 
                     // Connect to database and execute given stored procedure
-                    cmd = this.Setup("appSchema.usp_LocationBookingList");
+                    cmd = this.Setup("appSchema.usp_ResourceBookingList");
 
-                    // Get locations for BookingId if defined
+                    // Get resources for BookingId if defined
                     if (BookingId != null)
                     {
                         // Add parameter for Stored procedure
@@ -260,30 +256,28 @@ namespace BookingSystem.Models
                         // Get all data rows
                         while (reader.Read())
                         {
-                            // Create new Location object from database values and add to list
-                            locationBookingsReturnList.Add(new LocationBooking
+                            // Create new Resource object from database values and add to list
+                            resourceBookingsReturnList.Add(new ResourceBooking
                             {
-                                LocationBookingId = reader.GetSafeInt32(reader.GetOrdinal("LocationBookingId")),
+                                ResourceBookingId = reader.GetSafeInt32(reader.GetOrdinal("ResourceBookingId")),
                                 BookingId = reader.GetSafeInt32(reader.GetOrdinal("BookingId")),
-                                LocationId = reader.GetSafeInt32(reader.GetOrdinal("LocationId")),
-                                FurnituringId = reader.GetSafeInt16(reader.GetOrdinal("FurnituringId")),
+                                ResourceId = reader.GetSafeInt32(reader.GetOrdinal("ResourceId")),
+                                ResourceName = reader.GetSafeString(reader.GetOrdinal("ResourceName")),
+                                ResourceImageSrc = reader.GetSafeString(reader.GetOrdinal("ResourceImageSrc")),
+                                ResourceCount = reader.GetSafeInt16(reader.GetOrdinal("ResourceCount")),
                                 StartTime = reader.GetSafeDateTime(reader.GetOrdinal("StartTime")),
                                 EndTime = reader.GetSafeDateTime(reader.GetOrdinal("EndTime")),
-                                NumberOfPeople = reader.GetSafeInt16(reader.GetOrdinal("NumberOfPeople")),
-                                MaxPeople = reader.GetSafeInt32(reader.GetOrdinal("MaxPeople")),
-                                CalculatedBookingPrice = reader.GetSafeDecimal(reader.GetOrdinal("CalculatedBookingPrice")),
-
-                                LocationName = reader.GetSafeString(reader.GetOrdinal("LocationName")),
-                                FurnituringName = reader.GetSafeString(reader.GetOrdinal("FurnituringName"))
+                                CalculatedBookingPrice = reader.GetSafeDecimal(reader.GetOrdinal("CalculatedBookingPrice"))
+                                
                             });
                         }
                     }
 
                     // Remove unused list rows, free memory.
-                    locationBookingsReturnList.TrimExcess();
+                    resourceBookingsReturnList.TrimExcess();
 
                     // Return list
-                    return locationBookingsReturnList;
+                    return resourceBookingsReturnList;
                 }
                 catch
                 {
@@ -292,7 +286,7 @@ namespace BookingSystem.Models
             }
         }
 
-        public LocationBooking GetLocationBookingById(int locationBookingId)
+        public ResourceBooking GetResourceBookingById(int resourceBookingId)
         {
             // Create connection object
             using (this.CreateConnection())
@@ -302,10 +296,10 @@ namespace BookingSystem.Models
                     SqlCommand cmd;
 
                     // Connect to database
-                    cmd = this.Setup("appSchema.usp_LocationBookingList", DALOptions.closedConnection);
+                    cmd = this.Setup("appSchema.usp_ResourceBookingList", DALOptions.closedConnection);
 
                     // Add parameter for Stored procedure
-                    cmd.Parameters.Add("@LocationBookingId", SqlDbType.Int).Value = locationBookingId;
+                    cmd.Parameters.Add("@ResourceBookingId", SqlDbType.Int).Value = resourceBookingId;
 
                     // Open connection to database
                     connection.Open();
@@ -317,21 +311,17 @@ namespace BookingSystem.Models
                         if (reader.Read())
                         {
                             // Create new Booking object from database values and return a reference
-                            return new LocationBooking
+                            return new ResourceBooking
                             {
-                                LocationBookingId = reader.GetSafeInt32(reader.GetOrdinal("LocationBookingId")),
+                                ResourceBookingId = reader.GetSafeInt32(reader.GetOrdinal("ResourceBookingId")),
                                 BookingId = reader.GetSafeInt32(reader.GetOrdinal("BookingId")),
-                                LocationId = reader.GetSafeInt32(reader.GetOrdinal("LocationId")),
-                                LocationImageSrc = reader.GetSafeString(reader.GetOrdinal("LocationImageSrc")),
-                                FurnituringId = reader.GetSafeInt16(reader.GetOrdinal("FurnituringId")),
+                                ResourceId = reader.GetSafeInt32(reader.GetOrdinal("ResourceId")),
+                                ResourceName = reader.GetSafeString(reader.GetOrdinal("ResourceName")),
+                                ResourceImageSrc = reader.GetSafeString(reader.GetOrdinal("ResourceImageSrc")),
+                                ResourceCount = reader.GetSafeInt16(reader.GetOrdinal("ResourceCount")),
                                 StartTime = reader.GetSafeDateTime(reader.GetOrdinal("StartTime")),
                                 EndTime = reader.GetSafeDateTime(reader.GetOrdinal("EndTime")),
-                                NumberOfPeople = reader.GetSafeInt16(reader.GetOrdinal("NumberOfPeople")),
-                                MaxPeople = reader.GetSafeInt32(reader.GetOrdinal("MaxPeople")),
-                                CalculatedBookingPrice = reader.GetSafeDecimal(reader.GetOrdinal("CalculatedBookingPrice")),
-
-                                LocationName = reader.GetSafeString(reader.GetOrdinal("LocationName")),
-                                FurnituringName = reader.GetSafeString(reader.GetOrdinal("FurnituringName"))
+                                CalculatedBookingPrice = reader.GetSafeDecimal(reader.GetOrdinal("CalculatedBookingPrice"))
                             };
                         }
                     }

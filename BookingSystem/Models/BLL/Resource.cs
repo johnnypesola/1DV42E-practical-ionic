@@ -25,6 +25,9 @@ namespace BookingSystem.Models
         [Range(0.00, int.MaxValue, ErrorMessage = "BookingPricePerHour is out of range.")]
         public decimal BookingPricePerHour { get; set; }
 
+        [Range(0, Int16.MaxValue, ErrorMessage = "MinutesMarginBeforeBooking is out of range.")]
+        public int MinutesMarginBeforeBooking { get; set; }
+
         [Range(0, Int16.MaxValue, ErrorMessage = "MinutesMarginAfterBooking is out of range.")]
         public int MinutesMarginAfterBooking { get; set; }
 
