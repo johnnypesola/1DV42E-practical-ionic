@@ -144,10 +144,7 @@ angular.module( 'BookingSystem.bookingTypes',
       BookingType.save(
         {
           BookingTypeId: $stateParams.bookingTypeId,
-          Name: $scope.bookingType.Name,
-          HasLocation: $scope.bookingType.HasLocation,
-          MinutesMarginBeforeBooking: $scope.bookingType.MinutesMarginBeforeBooking,
-          MinutesMarginAfterBooking: $scope.bookingType.MinutesMarginAfterBooking
+          Name: $scope.bookingType.Name
         }
       ).$promise
 

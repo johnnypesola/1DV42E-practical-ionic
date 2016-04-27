@@ -13,23 +13,39 @@
                     </md-input-container>
                 </div>
                 <div layout-gt-xs="row">
-                    <md-input-container class="md-block" flex-gt-xs>
-                        <label>Marginal före bokning</label>
-                        <input ng-model="bookingType.MinutesMarginBeforeBooking" ng-disabled="!isEditMode">
-                    </md-input-container>
-                </div>
-                <div layout-gt-xs="row">
-                    <md-input-container class="md-block" flex-gt-xs>
-                        <label>Marginal efter bokning</label>
-                        <input ng-model="bookingType.MinutesMarginAfterBooking" ng-disabled="!isEditMode">
-                    </md-input-container>
-                </div>
-                <div layout-gt-xs="row">
                     <md-checkbox ng-checked="bookingType.HasLocation" ng-click="toggleHasLocation()" ng-disabled="!isEditMode">
                         Måste ha en lokal/plats
                     </md-checkbox>
                 </div>
             </form>
+        </div>
+        <div layout-gt-xs="row">
+            <h4>Antal resurser</h4>
+            <ion-list>
+                <ion-item>
+                    Nån resurs
+                </ion-item>
+            </ion-list>
+            <md-input-container style="margin-right: 10px;">
+                <label>Lägg till resurs</label>
+                <md-select ng-model="resource" ng-disabled="!isEditMode">
+                    <md-option ng-repeat="resource in resources" value="{{resource.Name}}">{{resource.Name}}</md-option>
+                </md-select>
+            </md-input-container>
+        </div>
+        <div layout-gt-xs="row">
+            <h4>Eventuella måltider</h4>
+            <ion-list>
+                <ion-item>
+                    Nån måltid
+                </ion-item>
+            </ion-list>
+            <md-input-container style="margin-right: 10px;">
+                <label>Lägg till måltid</label>
+                <md-select ng-model="meal" ng-disabled="!isEditMode">
+                    <md-option ng-repeat="meal in meals" value="{{meal.Name}}">{{meal.Name}}</md-option>
+                </md-select>
+            </md-input-container>
         </div>
 
         <md-button

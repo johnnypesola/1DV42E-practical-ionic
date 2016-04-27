@@ -130,7 +130,6 @@ angular.module( 'BookingSystem.customers',
       Customer.save(
         {
           CustomerId: $stateParams.customerId,
-          CustomerNumber: $scope.customer.CustomerNumber,
           Name: $scope.customer.Name,
           Address: $scope.customer.Address,
           PostNumber: $scope.customer.PostNumber,
