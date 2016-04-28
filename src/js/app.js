@@ -36,9 +36,7 @@ BookingSystem.run( ['$ionicPlatform', ( $ionicPlatform ) => {
 }] );
 
 // Constants
-BookingSystem.constant( 'API_URL', 'http://www.pesola.se:8080/BookingSystem/api/' );
-//BookingSystem.constant( 'API_URL', 'http://192.168.1.4:8080/BookingSystem/api/' );
-// BookingSystem.constant( 'API_URL', 'http://localhost:6796/api/' );
+BookingSystem.constant( 'API_URL', 'http://bokning.vvfors.se/api/' );
 BookingSystem.constant( 'DEFAULT_MAP_ZOOM', 5 );
 BookingSystem.constant( 'DEFAULT_LATITUDE', 59.2792 );
 BookingSystem.constant( 'DEFAULT_LONGITUDE', 15.2361 );
@@ -104,6 +102,26 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', ( $stateProvider,
       'menuContent': {
         templateUrl: 'templates/meals/meals-list.html',
         controller: 'MealsListCtrl'
+      }
+    }
+  })
+
+  .state( 'app.meal-details', {
+    url: '/meal-details/:mealId',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/meals/meal-details.html',
+        controller: 'MealDetailsCtrl'
+      }
+    }
+  })
+
+  .state( 'app.meal-create', {
+    url: '/meal-create',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/meals/meal-create.html',
+        controller: 'MealCreateCtrl'
       }
     }
   })
