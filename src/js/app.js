@@ -19,6 +19,7 @@ const BookingSystem = angular
     'BookingSystem.customersServices',
     'BookingSystem.bookingTypes',
     'BookingSystem.bookingTypesServices',
+    'BookingSystem.imageResizeServices',
     'ngMaterial',
     'ngResource'
   ] );
@@ -43,6 +44,9 @@ BookingSystem.run( ['$ionicPlatform', ( $ionicPlatform ) => {
 BookingSystem.constant( 'API_URL', 'http://www.pesola.se:8080/BookingSystem/api/' );
 //BookingSystem.constant( 'API_URL', 'http://192.168.1.4:8080/BookingSystem/api/' );
 // BookingSystem.constant( 'API_URL', 'http://localhost:6796/api/' );
+BookingSystem.constant( 'API_IMG_PATH_URL', 'http://www.pesola.se:8080/BookingSystem/' );
+BookingSystem.constant( 'UPLOAD_IMG_MAX_WIDTH', '400' );
+BookingSystem.constant( 'UPLOAD_IMG_MAX_HEIGHT', '400' );
 BookingSystem.constant( 'DEFAULT_MAP_ZOOM', 5 );
 BookingSystem.constant( 'DEFAULT_LATITUDE', 59.2792 );
 BookingSystem.constant( 'DEFAULT_LONGITUDE', 15.2361 );

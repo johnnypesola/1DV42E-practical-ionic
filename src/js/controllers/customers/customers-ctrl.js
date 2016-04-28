@@ -8,7 +8,7 @@ angular.module( 'BookingSystem.customers',
   []
   )
 
-  //Controller
+  // List controller
   .controller( 'CustomersListCtrl', [ '$rootScope', '$scope', '$state', 'Customer', ( $rootScope, $scope, $state, Customer ) => {
 
     /* Init vars */
@@ -49,7 +49,7 @@ angular.module( 'BookingSystem.customers',
   )
 
   //Edit controller
-  .controller( 'CustomerDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$ionicModal', '$state', 'Customer', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $ionicModal, $state, Customer ) => {
+  .controller( 'CustomerDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$ionicModal', '$state', 'Customer', 'CustomerImage', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $ionicModal, $state, Customer, CustomerImage ) => {
     /* Init vars */
 
     const modalTemplateUrl = 'templates/modals/customers-delete.html';
@@ -73,6 +73,23 @@ angular.module( 'BookingSystem.customers',
       $scope.$on( '$destroy', () => {
         $scope.modal.remove();
       });
+    };
+
+    const uploadImage = function( CustomerId ){
+
+      return CustomerImage.upload( $scope.customer.ImageForUpload, CustomerId );
+
+    };
+
+    const saveSuccess = function() {
+      // Display success message
+      $rootScope.FlashMessage = {
+        type: 'success',
+        message: 'Kunden "' + $scope.customer.Name + '" sparades med ett lyckat resultat'
+      };
+
+      // Redirect
+      history.back();
     };
 
     const getCustomer = function () {
@@ -148,10 +165,28 @@ angular.module( 'BookingSystem.customers',
 
           $scope.endEditMode();
 
-          $rootScope.FlashMessage = {
-            type: 'success',
-            message: 'Kunden "' + $scope.customer.Name + '" sparades med ett lyckat resultat'
-          };
+          // Upload image
+          if ( typeof $scope.customer.ImageForUpload !== 'undefined' ){
+
+            uploadImage( response.CustomerId )
+
+              // Image upload successful
+              .success( () => {
+                saveSuccess();
+              })
+              // Image upload failed
+              .error( () => {
+
+                $rootScope.FlashMessage = {
+                  type: 'error',
+                  message: 'Kunden sparades, men det gick inte att ladda upp och spara den önskade bilden.'
+                };
+              });
+          }
+          else {
+
+            saveSuccess();
+          }
 
           // Something went wrong
         }).catch( ( response ) => {
@@ -252,12 +287,32 @@ angular.module( 'BookingSystem.customers',
   )
 
   //Create controller
-  .controller( 'CustomerCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'Customer', ( $rootScope, $stateParams, $scope, $state, Customer ) => {
+  .controller( 'CustomerCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'Customer', 'CustomerImage', ( $rootScope, $stateParams, $scope, $state, Customer, CustomerImage ) => {
 
     /* Init vars */
     $scope.customer = {};
 
     /* Private methods START */
+
+    // Upload image
+    const uploadImage = ( CustomerId ) => {
+
+      return CustomerImage.upload( $scope.customer.ImageForUpload, CustomerId );
+
+    };
+
+    // Display success message
+    const saveSuccess = () => {
+
+      // Display success message
+      $rootScope.FlashMessage = {
+        type: 'success',
+        message: 'Kunden "' + $scope.customer.Name + '" sparades med ett lyckat resultat'
+      };
+
+      // Redirect
+      history.back();
+    };
 
     /* Private Methods END */
 
@@ -267,7 +322,7 @@ angular.module( 'BookingSystem.customers',
 
       const $scope = this;
 
-      // Save meal
+      // Save customer
       Customer.save(
         {
           CustomerId: 0,
@@ -287,12 +342,31 @@ angular.module( 'BookingSystem.customers',
         // If everything went ok
         .then( ( response ) => {
 
-          $rootScope.FlashMessage = {
-            type: 'success',
-            message: 'Kunden "' + $scope.customer.Name + '" skapades med ett lyckat resultat'
-          };
+          if ( typeof $scope.customer.ImageForUpload !== 'undefined' ) {
 
-          history.back();
+            // Upload image
+            uploadImage( response.CustomerId )
+
+              // Image upload successful
+              .success( ( data ) => {
+
+                saveSuccess();
+              })
+              // Image upload failed
+              .error( () => {
+
+                $rootScope.FlashMessage = {
+                  type: 'error',
+                  message: 'Kunden "' + $scope.customer.Name + '" skapades, men det gick inte att ladda upp och spara den önskade bilden.'
+                };
+
+                // Redirect
+                history.back();
+              });
+
+          } else {
+            saveSuccess();
+          }
 
           // Something went wrong
         }).catch( ( response ) => {

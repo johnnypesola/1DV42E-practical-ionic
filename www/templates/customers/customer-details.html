@@ -7,6 +7,14 @@
 
             <form name="userForm">
                 <div layout-gt-xs="row">
+                    <label>Bild på Kund</label>
+                    <img class="show-image" ng-src="{{customer.ImageSrc}}" ng-show="customer.ImageSrc" ng-disabled="isEditMode">
+                    <div ng-if="isEditMode">
+                        <label>Bild på Kund</label>
+                        <image-uploader type="Customer" id="{{customer.CustomerId}}" image-src="customer.ImageSrc" base64-encoded-image="customer.ImageForUpload"></image-uploader>
+                    </div>
+                </div>
+                <div layout-gt-xs="row">
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Namn</label>
                         <input ng-model="customer.Name" ng-disabled="!isEditMode">

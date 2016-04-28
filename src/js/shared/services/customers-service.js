@@ -17,4 +17,22 @@ angular.module( 'BookingSystem.customersServices',
       {customerId: '@customerId'}
     );
   }]
+  )
+
+  .factory( 'CustomerImage', ['$http', 'API_URL', ( $http, API_URL ) => {
+
+    return {
+      upload : function( imageData, customerId ) {
+
+        return $http(
+          {
+            method: 'POST',
+            url: API_URL + 'Customer/image/' + customerId,
+            data: imageData,
+            headers: {'Content-Type': undefined}
+          }
+        );
+      }
+    };
+  }]
   );
