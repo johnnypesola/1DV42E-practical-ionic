@@ -62,6 +62,18 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', ( $stateProvider,
     }
   })
 
+  // Location Bookings
+
+    .state( 'app.location-booking-view', {
+      url: '/location-booking-view',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/location-booking/location-booking-view.html',
+          controller: 'LocationBookingViewCtrl'
+        }
+      }
+    })
+
   // Furniturings
 
   .state( 'app.furnituring-list', {
