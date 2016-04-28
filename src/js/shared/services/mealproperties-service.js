@@ -48,7 +48,7 @@ angular.module( 'BookingSystem.mealPropertiesServices',
         },
 
         queryForMealProperty: {
-          url: API_URL + 'MealHasProperty/MealProperty/:mealPropertyId',
+          url: API_URL + 'MealHasProperty/:mealPropertyId',
           id: '@id',
           method: 'GET',
           isArray: true,
@@ -58,7 +58,7 @@ angular.module( 'BookingSystem.mealPropertiesServices',
         },
 
         saveForMealProperty: {
-          url: API_URL + 'MealHasProperty/MealProperty',
+          url: API_URL + 'MealHasProperty',
           id: '@id',
           method: 'POST',
           isArray: true
