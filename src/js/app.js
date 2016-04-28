@@ -15,6 +15,8 @@ const BookingSystem = angular
     'BookingSystem.mealsServices',
     'BookingSystem.resources',
     'BookingSystem.resourcesServices',
+    'BookingSystem.locationBooking',
+    'BookingSystem.locationBookingServices',
     'ngMaterial',
     'ngResource'
   ] );
