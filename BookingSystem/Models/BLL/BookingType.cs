@@ -17,15 +17,6 @@ namespace BookingSystem.Models
         [RegularExpression(ValidationExtensions.TEXT_FIELD_REGEXP, ErrorMessage = "Name must be alphanumeric and may also contain the following chars: &_-.,@")]
         public string Name { get; set; }
 
-        [Required(ErrorMessage = "HasLocation is required.")]
-        public bool HasLocation { get; set; }
-
-        [Range(0, Int16.MaxValue, ErrorMessage = "MinutesMarginBeforeBooking is out of range.")]
-        public int MinutesMarginBeforeBooking { get; set; }
-
-        [Range(0, Int16.MaxValue, ErrorMessage = "MinutesMarginAfterBooking is out of range.")]
-        public int MinutesMarginAfterBooking { get; set; }
-
         // Extra datafields retrieved from database/stored procedure
         public int BookingTypeCount { get; set; }
     }
