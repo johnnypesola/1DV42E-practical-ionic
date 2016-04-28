@@ -17,7 +17,7 @@ namespace BookingSystem.Models
         public int BookingId { get; set; }
 
         [Required(ErrorMessage = "NumberOfPeople is required.")]
-        [Range(0, Int16.MaxValue, ErrorMessage = "NumberOfPeopleis out of range.")]
+        [Range(0, Int16.MaxValue, ErrorMessage = "NumberOfPeople is out of range.")]
         public int NumberOfPeople { get; set; }
 
         [Required(ErrorMessage = "StartTime is required.")]
