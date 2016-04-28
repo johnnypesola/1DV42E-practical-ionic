@@ -95,6 +95,7 @@
     <Compile Include="Controllers\BookingController.cs" />
     <Compile Include="Controllers\BookingTypeController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
+    <Compile Include="Controllers\BookingTypeHasMealController.cs" />
     <Compile Include="Controllers\MealBookingController.cs" />
     <Compile Include="Controllers\ResourceBookingController.cs" />
     <Compile Include="Controllers\LocationBookingController.cs" />
@@ -112,6 +113,7 @@
     <Compile Include="Models\BLL\BookingType.cs" />
     <Compile Include="Models\BLL\CalendarBookingDay.cs" />
     <Compile Include="Models\BLL\Customer.cs" />
+    <Compile Include="Models\BLL\BookingTypeHasMeal.cs" />
     <Compile Include="Models\BLL\MealBooking.cs" />
     <Compile Include="Models\BLL\LocationBooking.cs" />
     <Compile Include="Models\BLL\LocationFurnituring.cs" />
@@ -130,6 +132,7 @@
     <Compile Include="Models\DAL\CustomerDAL.cs" />
     <Compile Include="Models\DAL\DALBase.cs" />
     <Compile Include="Models\DAL\FurnituringDAL.cs" />
+    <Compile Include="Models\DAL\BookingTypeHasMealDAL.cs" />
     <Compile Include="Models\DAL\MealBookingDAL.cs" />
     <Compile Include="Models\DAL\LocationBookingDAL.cs" />
     <Compile Include="Models\DAL\LocationDAL.cs" />
@@ -141,6 +144,7 @@
     <Compile Include="Models\DAL\SharedDAL.cs" />
     <Compile Include="Models\FurnituringService.cs" />
     <Compile Include="Models\ImageService.cs" />
+    <Compile Include="Models\BookingTypeHasMealService.cs" />
     <Compile Include="Models\MealBookingService.cs" />
     <Compile Include="Models\ResourceBookingService.cs" />
     <Compile Include="Models\LocationBookingService.cs" />
