@@ -21,6 +21,10 @@ namespace BookingSystem.Models
         [Range(0, Int16.MaxValue, ErrorMessage = "Count is out of range.")]
         public int Count { get; set; }
 
+        [StringLength(50, ErrorMessage = "ImageSrc must not exceed 50 chars.")]
+        [RegularExpression(ValidationExtensions.IMG_PATH_REGEXP, ErrorMessage = "ImageSrc is invalid")]
+        public string ImageSrc { get; set; }
+
         [Required(ErrorMessage = "BookingPricePerHour is required.")]
         [Range(0.00, int.MaxValue, ErrorMessage = "BookingPricePerHour is out of range.")]
         public decimal BookingPricePerHour { get; set; }
