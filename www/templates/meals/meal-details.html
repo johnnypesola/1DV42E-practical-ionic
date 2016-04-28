@@ -1,7 +1,7 @@
 <ion-view view-title="Måltid">
     <ion-content padding="true">
 
-        <h1>{{furnituring.Name}}</h1>
+        <h1>{{meal.Name}}</h1>
 
         <div class="row padding">
 
@@ -13,6 +13,11 @@
                     </md-input-container>
                 </div>
             </form>
+            <ion-list>
+                <ion-item ng-repeat="mealProperty in meal.mealProperties">
+                    {{mealProperty.Name}}
+                </ion-item>
+            </ion-list>
         </div>
 
         <md-button

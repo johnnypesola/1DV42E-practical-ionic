@@ -13,6 +13,7 @@ const BookingSystem = angular
     'BookingSystem.furnituringServices',
     'BookingSystem.meals',
     'BookingSystem.mealsServices',
+    'BookingSystem.mealPropertiesServices',
     'BookingSystem.resources',
     'BookingSystem.resourcesServices',
     'BookingSystem.customers',

@@ -47,7 +47,7 @@ angular.module( 'BookingSystem.meals',
   )
 
   //Edit controller
-  .controller( 'MealDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$ionicModal', '$state', 'Meal', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $ionicModal, $state, Meal ) => {
+  .controller( 'MealDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$ionicModal', '$state', 'Meal', 'MealHasProperty', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $ionicModal, $state, Meal, MealHasProperty ) => {
       /* Init vars */
 
     const modalTemplateUrl = 'templates/modals/meals-delete.html';
@@ -82,7 +82,14 @@ angular.module( 'BookingSystem.meals',
       );
 
       // In case meal cannot be fetched, display an error to user.
-      meal.$promise.catch( () => {
+      meal.$promise.then( () => {
+        meal.mealProperties = MealHasProperty.queryForMealProperty(
+          {
+            mealPropertyId: $stateParams.mealPropertyId
+          }
+        );
+      })
+      .catch( () => {
 
         $rootScope.FlashMessage = {
           type: 'error',
