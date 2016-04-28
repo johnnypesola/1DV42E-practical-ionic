@@ -7,9 +7,9 @@ using System.Web;
 
 namespace BookingSystem.Models
 {
-    public class BookingTypeHasMealDAL : DALBase
+    public class MealHasPropertyDAL : DALBase
     {
-        public void DeleteBookingTypeHasMeal(int BookingTypeId, int? MealId = null)
+        public void DeleteMealHasProperty(int MealId, int? MealPropertyId = null)
         {
             // Create connection object
             using (this.CreateConnection())
@@ -19,16 +19,16 @@ namespace BookingSystem.Models
                     SqlCommand cmd;
 
                     // Connect to database
-                    cmd = this.Setup("appSchema.usp_BookingTypeHasMealDelete");
+                    cmd = this.Setup("appSchema.usp_MealHasPropertyDelete");
 
                     // Add parameter for Stored procedure
-                    cmd.Parameters.Add("@BookingTypeId", SqlDbType.SmallInt).Value = BookingTypeId;
-                    if (MealId != null)
+                    cmd.Parameters.Add("@MealId", SqlDbType.SmallInt).Value = MealId;
+                    if (MealPropertyId != null)
                     {
-                        cmd.Parameters.Add("@MealId", SqlDbType.SmallInt).Value = MealId;
+                        cmd.Parameters.Add("@MealPropertyId", SqlDbType.SmallInt).Value = MealPropertyId;
                     }
 
-                    // Try to delete BookingTypeHasMeal from database.
+                    // Try to delete MealHasProperty from database.
                     cmd.ExecuteNonQuery();
                 }
                 catch (Exception)
@@ -39,7 +39,7 @@ namespace BookingSystem.Models
             }
         }
 
-        public BookingTypeHasMeal GetBookingTypeHasMealById(int BookingTypeId, int? MealId = null)
+        public MealHasProperty GetMealHasPropertyById(int MealId, int? MealPropertyId = null)
         {
             // Create connection object
             using (this.CreateConnection())
@@ -49,13 +49,13 @@ namespace BookingSystem.Models
                     SqlCommand cmd;
 
                     // Connect to database
-                    cmd = this.Setup("appSchema.usp_BookingTypeHasMealList", DALOptions.closedConnection);
+                    cmd = this.Setup("appSchema.usp_MealHasPropertyList", DALOptions.closedConnection);
 
                     // Add parameter for Stored procedure
-                    cmd.Parameters.Add("@BookingTypeId", SqlDbType.SmallInt).Value = BookingTypeId;
-                    if(MealId != null)
+                    cmd.Parameters.Add("@MealId", SqlDbType.SmallInt).Value = MealId;
+                    if(MealPropertyId != null)
                     {
-                        cmd.Parameters.Add("@MealId", SqlDbType.SmallInt).Value = MealId;
+                        cmd.Parameters.Add("@MealPropertyId", SqlDbType.SmallInt).Value = MealPropertyId;
                     }
 
                     // Open connection to database
@@ -67,13 +67,13 @@ namespace BookingSystem.Models
                         // Check if there is any return data to read
                         if (reader.Read())
                         {
-                            // Create new BookingTypeHasMeal object from database values and return a reference
-                            return new BookingTypeHasMeal
+                            // Create new MealHasProperty object from database values and return a reference
+                            return new MealHasProperty
                             {
-                                BookingTypeId = reader.GetSafeInt16(reader.GetOrdinal("BookingTypeId")),
                                 MealId = reader.GetSafeInt16(reader.GetOrdinal("MealId")),
+                                MealPropertyId = reader.GetSafeInt16(reader.GetOrdinal("MealPropertyId")),
                                 MealName = reader.GetSafeString(reader.GetOrdinal("MealName")),
-                                BookingTypeName = reader.GetSafeString(reader.GetOrdinal("BookingTypeName"))
+                                MealPropertyName = reader.GetSafeString(reader.GetOrdinal("MealPropertyName"))
                             };
                         }
                     }
@@ -88,26 +88,26 @@ namespace BookingSystem.Models
             } // Connection is closed here
         }
 
-        public IEnumerable<BookingTypeHasMeal> GetBookingTypeHasMeals(int? BookingTypeId = null)
+        public IEnumerable<MealHasProperty> GetMealHasPropertys(int? MealId = null)
         {
             // Create connection object
             using (this.CreateConnection())
             {
                 try
                 {
-                    List<BookingTypeHasMeal> BookingTypeHasMealsReturnList;
+                    List<MealHasProperty> MealHasPropertysReturnList;
                     SqlCommand cmd;
 
                     // Create list object
-                    BookingTypeHasMealsReturnList = new List<BookingTypeHasMeal>(50);
+                    MealHasPropertysReturnList = new List<MealHasProperty>(50);
 
                     // Connect to database and execute given stored procedure
-                    cmd = this.Setup("appSchema.usp_BookingTypeHasMealList");
+                    cmd = this.Setup("appSchema.usp_MealHasPropertyList");
 
                     // Add parameter for Stored procedure
-                    if (BookingTypeId != null)
+                    if (MealId != null)
                     {
-                        cmd.Parameters.Add("@BookingTypeId", SqlDbType.SmallInt).Value = BookingTypeId;
+                        cmd.Parameters.Add("@MealId", SqlDbType.SmallInt).Value = MealId;
                     }
 
                     // Get all data from stored procedure
@@ -116,22 +116,22 @@ namespace BookingSystem.Models
                         // Get all data rows
                         while (reader.Read())
                         {
-                            // Create new BookingTypeHasMeal object from database values and add to list
-                            BookingTypeHasMealsReturnList.Add(new BookingTypeHasMeal
+                            // Create new MealHasProperty object from database values and add to list
+                            MealHasPropertysReturnList.Add(new MealHasProperty
                             {
-                                BookingTypeId = reader.GetSafeInt16(reader.GetOrdinal("BookingTypeId")),
                                 MealId = reader.GetSafeInt16(reader.GetOrdinal("MealId")),
+                                MealPropertyId = reader.GetSafeInt16(reader.GetOrdinal("MealPropertyId")),
                                 MealName = reader.GetSafeString(reader.GetOrdinal("MealName")),
-                                BookingTypeName = reader.GetSafeString(reader.GetOrdinal("BookingTypeName"))
+                                MealPropertyName = reader.GetSafeString(reader.GetOrdinal("MealPropertyName"))
                             });
                         }
                     }
 
                     // Remove unused list rows, free memory.
-                    BookingTypeHasMealsReturnList.TrimExcess();
+                    MealHasPropertysReturnList.TrimExcess();
 
                     // Return list
-                    return BookingTypeHasMealsReturnList;
+                    return MealHasPropertysReturnList;
                 }
                 catch
                 {
@@ -140,7 +140,7 @@ namespace BookingSystem.Models
             }
         }
 
-        public void InsertBookingTypeHasMeal(BookingTypeHasMeal BookingTypeHasMeal)
+        public void InsertMealHasProperty(MealHasProperty MealHasProperty)
         {
             // Create connection object
             using (this.CreateConnection())
@@ -150,11 +150,11 @@ namespace BookingSystem.Models
                     SqlCommand cmd;
 
                     // Connect to database
-                    cmd = this.Setup("appSchema.usp_BookingTypeHasMealCreate", DALOptions.closedConnection);
+                    cmd = this.Setup("appSchema.usp_MealHasPropertyCreate", DALOptions.closedConnection);
 
                     // Add in parameters for Stored procedure
-                    cmd.Parameters.Add("@BookingTypeId", SqlDbType.SmallInt).Value = BookingTypeHasMeal.BookingTypeId;
-                    cmd.Parameters.Add("@MealId", SqlDbType.SmallInt).Value = BookingTypeHasMeal.MealId;
+                    cmd.Parameters.Add("@MealId", SqlDbType.SmallInt).Value = MealHasProperty.MealId;
+                    cmd.Parameters.Add("@MealPropertyId", SqlDbType.SmallInt).Value = MealHasProperty.MealPropertyId;
 
                     // Open DB connection
                     connection.Open();
@@ -164,7 +164,7 @@ namespace BookingSystem.Models
                 }
                 catch (Exception exception)
                 {
-                    if (exception.Message == "The booking type already has that meal.")
+                    if (exception.Message == "The meal already has that property.")
                     {
                         throw new DuplicateNameException(exception.Message);
                     }
@@ -174,7 +174,7 @@ namespace BookingSystem.Models
             }
         }
 
-        public void UpdateBookingTypeHasMeal(BookingTypeHasMeal BookingTypeHasMeal)
+        public void UpdateMealHasProperty(MealHasProperty MealHasProperty)
         {
             // Create connection object
             using (this.CreateConnection())
@@ -184,11 +184,11 @@ namespace BookingSystem.Models
                     SqlCommand cmd;
 
                     // Connect to database
-                    cmd = this.Setup("appSchema.usp_BookingTypeHasMealUpdate", DALOptions.closedConnection);
+                    cmd = this.Setup("appSchema.usp_MealHasPropertyUpdate", DALOptions.closedConnection);
 
                     // Add in parameters for Stored procedure
-                    cmd.Parameters.Add("@BookingTypeId", SqlDbType.SmallInt).Value = BookingTypeHasMeal.BookingTypeId;
-                    cmd.Parameters.Add("@MealId", SqlDbType.SmallInt).Value = BookingTypeHasMeal.MealId;
+                    cmd.Parameters.Add("@MealId", SqlDbType.SmallInt).Value = MealHasProperty.MealId;
+                    cmd.Parameters.Add("@MealPropertyId", SqlDbType.SmallInt).Value = MealHasProperty.MealPropertyId;
 
                     // Open DB connection
                     connection.Open();

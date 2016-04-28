@@ -11,26 +11,26 @@ using System.Data;
 namespace BookingSystem.Controllers
 {
     [EnableCors(origins: "*", headers: "*", methods: "*")]
-    public class BookingTypeHasMealController : ApiController
+    public class MealHasPropertyController : ApiController
     {
         // Set up Service.
-        BookingTypeHasMealService bookingTypeHasMealService = new BookingTypeHasMealService();
+        MealHasPropertyService mealHasPropertyService = new MealHasPropertyService();
 
-        // GET: api/BookingTypeHasMeal
-        [Route("api/BookingTypeHasMeal")]
+        // GET: api/MealHasProperty
+        [Route("api/MealHasProperty")]
         [AcceptVerbs("GET")]
         public IHttpActionResult Get()
         {
             try
             {
-                IEnumerable<BookingTypeHasMeal> bookingTypeHasMeals = bookingTypeHasMealService.GetBookingTypeHasMeals();
+                IEnumerable<MealHasProperty> mealHasPropertys = mealHasPropertyService.GetMealHasPropertys();
 
-                if (bookingTypeHasMeals == null)
+                if (mealHasPropertys == null)
                 {
                     return NotFound();
                 }
 
-                return Ok(bookingTypeHasMeals);
+                return Ok(mealHasPropertys);
             }
             catch
             {
@@ -38,19 +38,19 @@ namespace BookingSystem.Controllers
             }
         }
 
-        // GET: api/BookingTypeHasMeal/5
-        [Route("api/BookingTypeHasMeal/{BookingTypeId:int}")]
+        // GET: api/MealHasProperty/5
+        [Route("api/MealHasProperty/{MealId:int}")]
         [AcceptVerbs("GET")]
-        public IHttpActionResult Get(int BookingTypeId)
+        public IHttpActionResult Get(int MealId)
         {
             try
             {
-                BookingTypeHasMeal bookingTypeHasMeal = bookingTypeHasMealService.GetBookingTypeHasMeal(BookingTypeId);
-                if (bookingTypeHasMeal == null)
+                MealHasProperty mealHasProperty = mealHasPropertyService.GetMealHasProperty(MealId);
+                if (mealHasProperty == null)
                 {
                     return NotFound();
                 }
-                return Ok(bookingTypeHasMeal);
+                return Ok(mealHasProperty);
             }
             catch
             {
@@ -58,10 +58,10 @@ namespace BookingSystem.Controllers
             }
         }
 
-        // POST: api/BookingTypeHasMeal
-        [Route("api/BookingTypeHasMeal")]
+        // POST: api/MealHasProperty
+        [Route("api/MealHasProperty")]
         [AcceptVerbs("POST")]
-        public IHttpActionResult Post(BookingTypeHasMeal bookingTypeHasMeal)
+        public IHttpActionResult Post(MealHasProperty mealHasProperty)
         {
             // Check for bad values, done by the data annotations in the model class.
             if (!ModelState.IsValid)
@@ -69,10 +69,10 @@ namespace BookingSystem.Controllers
                 return BadRequest(ModelState);
             }
 
-            // Try to save bookingTypeHasMeal
+            // Try to save mealHasProperty
             try
             {
-                bookingTypeHasMealService.SaveBookingTypeHasMeal(bookingTypeHasMeal);
+                mealHasPropertyService.SaveMealHasProperty(mealHasProperty);
             }
             catch (DataBaseEntryNotFoundException)
             {
@@ -92,13 +92,13 @@ namespace BookingSystem.Controllers
             }
 
             // Respond that the booking was created and redirect
-            return Ok(bookingTypeHasMeal); //CreatedAtRoute("DefaultApi", new { id = bookingTypeHasMeal.BookingTypeHasMealId }, bookingTypeHasMeal);
+            return Ok(mealHasProperty); //CreatedAtRoute("DefaultApi", new { id = mealHasProperty.MealHasPropertyId }, mealHasProperty);
         }
 
-        // POST: api/BookingTypeHasMeal/meal
-        [Route("api/BookingTypeHasMeal/meal")]
+        // POST: api/MealHasProperty/meal
+        [Route("api/MealHasProperty/meal")]
         [AcceptVerbs("POST")]
-        public IHttpActionResult Post(BookingTypeHasMeal[] bookingTypeHasMeals)
+        public IHttpActionResult Post(MealHasProperty[] mealHasPropertys)
         {
             // Check for bad values, done by the data annotations in the model class.
             if (!ModelState.IsValid)
@@ -106,10 +106,10 @@ namespace BookingSystem.Controllers
                 return BadRequest(ModelState);
             }
 
-            // Try to save bookingTypeHasMeal
+            // Try to save mealHasProperty
             try
             {
-                bookingTypeHasMealService.SaveBookingTypeHasMeals(bookingTypeHasMeals);
+                mealHasPropertyService.SaveMealHasPropertys(mealHasPropertys);
             }
             catch (DataBaseEntryNotFoundException)
             {
@@ -129,18 +129,18 @@ namespace BookingSystem.Controllers
             }
 
             // Respond that the booking was created and redirect
-            return Ok(bookingTypeHasMeals); //CreatedAtRoute("DefaultApi", new { id = bookingTypeHasMeal.BookingTypeHasMealId }, bookingTypeHasMeal);
+            return Ok(mealHasPropertys); //CreatedAtRoute("DefaultApi", new { id = mealHasProperty.MealHasPropertyId }, mealHasProperty);
         }
 
-        // DELETE: api/BookingTypeHasMeal/5/5
-        [Route("api/BookingTypeHasMeal/{BookingTypeId:int}/{MealId:int}")]
+        // DELETE: api/MealHasProperty/5/5
+        [Route("api/MealHasProperty/{MealId:int}/{MealPropertyId:int}")]
         [AcceptVerbs("DELETE")]
-        public IHttpActionResult Delete(int BookingTypeId, int MealId)
+        public IHttpActionResult Delete(int MealId, int MealPropertyId)
         {
             try
             {
                 // Delete info from database
-                bookingTypeHasMealService.BookingTypeHasMealDelete(BookingTypeId, MealId);
+                mealHasPropertyService.MealHasPropertyDelete(MealId, MealPropertyId);
             }
             catch (FormatException)
             {
@@ -162,15 +162,15 @@ namespace BookingSystem.Controllers
             return Ok();
         }
 
-        // DELETE: api/BookingTypeHasMeal/5/5
-        [Route("api/BookingTypeHasMeal/{BookingTypeId:int}")]
+        // DELETE: api/MealHasProperty/5/5
+        [Route("api/MealHasProperty/{MealId:int}")]
         [AcceptVerbs("DELETE")]
-        public IHttpActionResult Delete(int BookingTypeId)
+        public IHttpActionResult Delete(int MealId)
         {
             try
             {
                 // Delete info from database
-                bookingTypeHasMealService.BookingTypeHasMealDelete(BookingTypeId);
+                mealHasPropertyService.MealHasPropertyDelete(MealId);
             }
             catch (FormatException)
             {
@@ -192,20 +192,20 @@ namespace BookingSystem.Controllers
             return Ok();
         }
 
-        // GET: all meals for specific booking type
-        [Route("api/BookingTypeHasMeal/meal/{BookingTypeId:int}")]
+        // GET: all meal properties for specific meal
+        [Route("api/MealHasProperty/mealproperty/{MealId:int}")]
         [AcceptVerbs("GET")]
-        public IHttpActionResult GetForBookingType(int BookingTypeId)
+        public IHttpActionResult GetForMeal(int MealId)
         {
             try
             {
-                IEnumerable<BookingTypeHasMeal> bookingTypeHasMeals = bookingTypeHasMealService.GetBookingTypeHasMeals(BookingTypeId);
+                IEnumerable<MealHasProperty> mealHasPropertys = mealHasPropertyService.GetMealHasPropertys(MealId);
 
-                if (bookingTypeHasMeals == null)
+                if (mealHasPropertys == null)
                 {
                     return NotFound();
                 }
-                return Ok(bookingTypeHasMeals);
+                return Ok(mealHasPropertys);
             }
             catch
             {
