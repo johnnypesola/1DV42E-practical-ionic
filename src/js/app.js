@@ -17,6 +17,7 @@ const BookingSystem = angular
     'BookingSystem.resourcesServices',
     'BookingSystem.locationBooking',
     'BookingSystem.locationBookingServices',
+    'BookingSystem.calendarDayDirective',
     'ngMaterial',
     'ngResource'
   ] );

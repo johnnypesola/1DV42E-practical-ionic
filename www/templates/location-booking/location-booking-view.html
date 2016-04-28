@@ -8,26 +8,32 @@
             editMode: {{isEditMode}}
         </button>
     </ion-nav-buttons>
-    <ion-content padding="true">
+    <ion-content padding="false">
 
-        <div class="row padding">
+        <div class="row booking-calendar">
 
-            <form name="userForm">
-                <div layout-gt-xs="row">
-                    <md-input-container class="md-block" flex-gt-xs>
-                        <label>Namn</label>
-                        <input ng-model="furnituring.Name">
-                    </md-input-container>
-                </div>
-            </form>
+            <calendar-day>
+            </calendar-day>
+
+            <calendar-day>
+            </calendar-day>
+
+            <calendar-day>
+            </calendar-day>
+
+            <calendar-day>
+            </calendar-day>
+
+            <calendar-day>
+            </calendar-day>
+
+            <calendar-day>
+            </calendar-day>
+
+            <calendar-day>
+            </calendar-day>
+
         </div>
-
-        <md-button
-            class="md-raised md-primary"
-            ng-click="saveFurnituring()"
-        >
-            Spara
-        </md-button>
 
     </ion-content>
 </ion-view>

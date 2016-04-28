@@ -54,3 +54,31 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   bottom: 5% !important;
   right: 5% !important;
 }
+
+// Calendar specific START
+
+.booking-calendar {
+  padding: 0 !important;
+
+  .col {
+
+    border-right: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    color: #aaa;
+
+    .day-header {
+
+      .number {
+        font-size: 24px !important;
+      }
+
+      .name {
+        font-size: 14px !important;
+      }
+    }
+  }
+}
+
+
+
+// Calendar specifit END
