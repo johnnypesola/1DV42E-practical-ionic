@@ -7,9 +7,9 @@ using System.Web;
 
 namespace BookingSystem.Models
 {
-    public class BookingTypeHasMealDAL : DALBase
+    public class BookingTypeHasResourceDAL : DALBase
     {
-        public void DeleteBookingTypeHasMeal(int BookingTypeId, int? MealId = null)
+        public void DeleteBookingTypeHasResource(int BookingTypeId, int? ResourceId = null)
         {
             // Create connection object
             using (this.CreateConnection())
@@ -19,16 +19,16 @@ namespace BookingSystem.Models
                     SqlCommand cmd;
 
                     // Connect to database
-                    cmd = this.Setup("appSchema.usp_BookingTypeHasMealDelete");
+                    cmd = this.Setup("appSchema.usp_BookingTypeHasResourceDelete");
 
                     // Add parameter for Stored procedure
                     cmd.Parameters.Add("@BookingTypeId", SqlDbType.SmallInt).Value = BookingTypeId;
-                    if (MealId != null)
+                    if (ResourceId != null)
                     {
-                        cmd.Parameters.Add("@MealId", SqlDbType.SmallInt).Value = MealId;
+                        cmd.Parameters.Add("@ResourceId", SqlDbType.Int).Value = ResourceId;
                     }
 
-                    // Try to delete BookingTypeHasMeal from database.
+                    // Try to delete BookingTypeHasResource from database.
                     cmd.ExecuteNonQuery();
                 }
                 catch (Exception)
@@ -39,7 +39,7 @@ namespace BookingSystem.Models
             }
         }
 
-        public BookingTypeHasMeal GetBookingTypeHasMealById(int BookingTypeId, int? MealId = null)
+        public BookingTypeHasResource GetBookingTypeHasResourceById(int BookingTypeId, int? ResourceId = null)
         {
             // Create connection object
             using (this.CreateConnection())
@@ -49,13 +49,13 @@ namespace BookingSystem.Models
                     SqlCommand cmd;
 
                     // Connect to database
-                    cmd = this.Setup("appSchema.usp_BookingTypeHasMealList", DALOptions.closedConnection);
+                    cmd = this.Setup("appSchema.usp_BookingTypeHasResourceList", DALOptions.closedConnection);
 
                     // Add parameter for Stored procedure
                     cmd.Parameters.Add("@BookingTypeId", SqlDbType.SmallInt).Value = BookingTypeId;
-                    if(MealId != null)
+                    if(ResourceId != null)
                     {
-                        cmd.Parameters.Add("@MealId", SqlDbType.SmallInt).Value = MealId;
+                        cmd.Parameters.Add("@ResourceId", SqlDbType.Int).Value = ResourceId;
                     }
 
                     // Open connection to database
@@ -67,12 +67,13 @@ namespace BookingSystem.Models
                         // Check if there is any return data to read
                         if (reader.Read())
                         {
-                            // Create new BookingTypeHasMeal object from database values and return a reference
-                            return new BookingTypeHasMeal
+                            // Create new BookingTypeHasResource object from database values and return a reference
+                            return new BookingTypeHasResource
                             {
                                 BookingTypeId = reader.GetSafeInt16(reader.GetOrdinal("BookingTypeId")),
-                                MealId = reader.GetSafeInt16(reader.GetOrdinal("MealId")),
-                                MealName = reader.GetSafeString(reader.GetOrdinal("MealName")),
+                                ResourceId = reader.GetSafeInt32(reader.GetOrdinal("ResourceId")),
+                                ResourceCount = reader.GetSafeInt32(reader.GetOrdinal("ResourceCount")),
+                                ResourceName = reader.GetSafeString(reader.GetOrdinal("ResourceName")),
                                 BookingTypeName = reader.GetSafeString(reader.GetOrdinal("BookingTypeName"))
                             };
                         }
@@ -88,21 +89,21 @@ namespace BookingSystem.Models
             } // Connection is closed here
         }
 
-        public IEnumerable<BookingTypeHasMeal> GetBookingTypeHasMeals(int? BookingTypeId = null)
+        public IEnumerable<BookingTypeHasResource> GetBookingTypeHasResources(int? BookingTypeId = null)
         {
             // Create connection object
             using (this.CreateConnection())
             {
                 try
                 {
-                    List<BookingTypeHasMeal> BookingTypeHasMealsReturnList;
+                    List<BookingTypeHasResource> BookingTypeHasResourcesReturnList;
                     SqlCommand cmd;
 
                     // Create list object
-                    BookingTypeHasMealsReturnList = new List<BookingTypeHasMeal>(50);
+                    BookingTypeHasResourcesReturnList = new List<BookingTypeHasResource>(50);
 
                     // Connect to database and execute given stored procedure
-                    cmd = this.Setup("appSchema.usp_BookingTypeHasMealList");
+                    cmd = this.Setup("appSchema.usp_BookingTypeHasResourceList");
 
                     // Add parameter for Stored procedure
                     if (BookingTypeId != null)
@@ -116,22 +117,22 @@ namespace BookingSystem.Models
                         // Get all data rows
                         while (reader.Read())
                         {
-                            // Create new BookingTypeHasMeal object from database values and add to list
-                            BookingTypeHasMealsReturnList.Add(new BookingTypeHasMeal
+                            // Create new BookingTypeHasResource object from database values and add to list
+                            BookingTypeHasResourcesReturnList.Add(new BookingTypeHasResource
                             {
                                 BookingTypeId = reader.GetSafeInt16(reader.GetOrdinal("BookingTypeId")),
-                                MealId = reader.GetSafeInt16(reader.GetOrdinal("MealId")),
-                                MealName = reader.GetSafeString(reader.GetOrdinal("MealName")),
+                                ResourceId = reader.GetSafeInt32(reader.GetOrdinal("ResourceId")),
+                                ResourceName = reader.GetSafeString(reader.GetOrdinal("ResourceName")),
                                 BookingTypeName = reader.GetSafeString(reader.GetOrdinal("BookingTypeName"))
                             });
                         }
                     }
 
                     // Remove unused list rows, free memory.
-                    BookingTypeHasMealsReturnList.TrimExcess();
+                    BookingTypeHasResourcesReturnList.TrimExcess();
 
                     // Return list
-                    return BookingTypeHasMealsReturnList;
+                    return BookingTypeHasResourcesReturnList;
                 }
                 catch
                 {
@@ -140,7 +141,7 @@ namespace BookingSystem.Models
             }
         }
 
-        public void InsertBookingTypeHasMeal(BookingTypeHasMeal BookingTypeHasMeal)
+        public void InsertBookingTypeHasResource(BookingTypeHasResource BookingTypeHasResource)
         {
             // Create connection object
             using (this.CreateConnection())
@@ -150,11 +151,12 @@ namespace BookingSystem.Models
                     SqlCommand cmd;
 
                     // Connect to database
-                    cmd = this.Setup("appSchema.usp_BookingTypeHasMealCreate", DALOptions.closedConnection);
+                    cmd = this.Setup("appSchema.usp_BookingTypeHasResourceCreate", DALOptions.closedConnection);
 
                     // Add in parameters for Stored procedure
-                    cmd.Parameters.Add("@BookingTypeId", SqlDbType.SmallInt).Value = BookingTypeHasMeal.BookingTypeId;
-                    cmd.Parameters.Add("@MealId", SqlDbType.SmallInt).Value = BookingTypeHasMeal.MealId;
+                    cmd.Parameters.Add("@BookingTypeId", SqlDbType.SmallInt).Value = BookingTypeHasResource.BookingTypeId;
+                    cmd.Parameters.Add("@ResourceId", SqlDbType.Int).Value = BookingTypeHasResource.ResourceId;
+                    cmd.Parameters.Add("@ResourceCount", SqlDbType.Int).Value = BookingTypeHasResource.ResourceCount;
 
                     // Open DB connection
                     connection.Open();
@@ -164,10 +166,42 @@ namespace BookingSystem.Models
                 }
                 catch (Exception exception)
                 {
-                    if (exception.Message == "The booking type already has that meal.")
+                    if (exception.Message == "The booking type already has that Resource.")
                     {
                         throw new DuplicateNameException(exception.Message);
                     }
+                    // Throw exception
+                    throw new ApplicationException(DAL_ERROR_MSG);
+                }
+            }
+        }
+
+        public void UpdateBookingTypeHasResource(BookingTypeHasResource BookingTypeHasResource)
+        {
+            // Create connection object
+            using (this.CreateConnection())
+            {
+                try
+                {
+                    SqlCommand cmd;
+
+                    // Connect to database
+                    cmd = this.Setup("appSchema.usp_BookingTypeHasResourceUpdate", DALOptions.closedConnection);
+
+                    // Add in parameters for Stored procedure
+                    cmd.Parameters.Add("@BookingTypeId", SqlDbType.SmallInt).Value = BookingTypeHasResource.BookingTypeId;
+                    cmd.Parameters.Add("@ResourceId", SqlDbType.Int).Value = BookingTypeHasResource.ResourceId;
+                    cmd.Parameters.Add("@ResourceCount", SqlDbType.Int).Value = BookingTypeHasResource.ResourceCount;
+
+
+                    // Open DB connection
+                    connection.Open();
+
+                    // Execute insert to database
+                    cmd.ExecuteNonQuery();
+                }
+                catch (Exception)
+                {
                     // Throw exception
                     throw new ApplicationException(DAL_ERROR_MSG);
                 }

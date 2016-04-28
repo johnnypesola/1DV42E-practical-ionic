@@ -94,6 +94,8 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\BookingController.cs" />
     <Compile Include="Controllers\BookingTypeController.cs" />
+    <Compile Include="Controllers\BookingTypeHasLocationController.cs" />
+    <Compile Include="Controllers\BookingTypeHasResourceController.cs" />
     <Compile Include="Controllers\MealHasPropertyController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\BookingTypeHasMealController.cs" />
@@ -112,6 +114,7 @@
     <Compile Include="Interfaces\IBookingService.cs" />
     <Compile Include="Models\BLL\Booking.cs" />
     <Compile Include="Models\BLL\BookingType.cs" />
+    <Compile Include="Models\BLL\BookingTypeHasLocation.cs" />
     <Compile Include="Models\BLL\MealHasProperty.cs" />
     <Compile Include="Models\BLL\BookingTypeHasResource.cs" />
     <Compile Include="Models\BLL\CalendarBookingDay.cs" />
@@ -128,6 +131,10 @@
     <Compile Include="Models\BLL\ResourceBooking.cs" />
     <Compile Include="Models\BLL\SearchContainer.cs" />
     <Compile Include="Models\BookingService.cs" />
+    <Compile Include="Models\BookingTypeHasLocationService.cs" />
+    <Compile Include="Models\BookingTypeHasResourceService.cs" />
+    <Compile Include="Models\DAL\BookingTypeHasLocationDAL.cs" />
+    <Compile Include="Models\DAL\BookingTypeHasResourceDAL.cs" />
     <Compile Include="Models\MealHasPropertyService.cs" />
     <Compile Include="Models\BookingTypeService.cs" />
     <Compile Include="Models\CustomerService.cs" />

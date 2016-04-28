@@ -78,12 +78,6 @@ namespace BookingSystem.Models
                 {
                     BookingTypeHasMealDAL.InsertBookingTypeHasMeal(BookingTypeHasMeal);
                 }
-                // Existing BookingTypeHasMeal should be updated
-                else
-                {
-                    // Update BookingTypeHasMeal
-                    BookingTypeHasMealDAL.UpdateBookingTypeHasMeal(BookingTypeHasMeal);
-                }
             }
             // Validation failed
             else

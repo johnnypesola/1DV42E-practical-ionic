@@ -78,12 +78,6 @@ namespace BookingSystem.Models
                 {
                     MealHasPropertyDAL.InsertMealHasProperty(MealHasProperty);
                 }
-                // Existing MealHasProperty should be updated
-                else
-                {
-                    // Update MealHasProperty
-                    MealHasPropertyDAL.UpdateMealHasProperty(MealHasProperty);
-                }
             }
             // Validation failed
             else

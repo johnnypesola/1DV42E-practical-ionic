@@ -173,35 +173,5 @@ namespace BookingSystem.Models
                 }
             }
         }
-
-        public void UpdateMealHasProperty(MealHasProperty MealHasProperty)
-        {
-            // Create connection object
-            using (this.CreateConnection())
-            {
-                try
-                {
-                    SqlCommand cmd;
-
-                    // Connect to database
-                    cmd = this.Setup("appSchema.usp_MealHasPropertyUpdate", DALOptions.closedConnection);
-
-                    // Add in parameters for Stored procedure
-                    cmd.Parameters.Add("@MealId", SqlDbType.SmallInt).Value = MealHasProperty.MealId;
-                    cmd.Parameters.Add("@MealPropertyId", SqlDbType.SmallInt).Value = MealHasProperty.MealPropertyId;
-
-                    // Open DB connection
-                    connection.Open();
-
-                    // Execute insert to database
-                    cmd.ExecuteNonQuery();
-                }
-                catch (Exception)
-                {
-                    // Throw exception
-                    throw new ApplicationException(DAL_ERROR_MSG);
-                }
-            }
-        }
     }
 }
