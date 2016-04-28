@@ -38,11 +38,6 @@ namespace BookingSystem.Models
 
         public string ResourceImageSrc { get; set; }
 
-        [Range(0, Int16.MaxValue, ErrorMessage = "FurnituringId is out of range.")]
-        public int FurnituringId { get; set; }
-
-        public string FurnituringName { get; set; }
-
         [Range(0, Int16.MaxValue, ErrorMessage = "MaxPeople is out of range.")]
         public int MaxPeople { get; set; }
 

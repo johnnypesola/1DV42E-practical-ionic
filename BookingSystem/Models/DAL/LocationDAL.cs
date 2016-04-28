@@ -87,6 +87,7 @@ namespace BookingSystem.Models
                                 BookingPricePerHour = reader.GetSafeDecimal(reader.GetOrdinal("BookingPricePerHour")),
                                 TotalBookings = reader.GetSafeInt32(reader.GetOrdinal("TotalBookings")),
                                 TotalBookingValue = reader.GetSafeDecimal(reader.GetOrdinal("TotalBookingValue")),
+                                MinutesMarginBeforeBooking = reader.GetSafeInt16(reader.GetOrdinal("MinutesMarginBeforeBooking")),
                                 MinutesMarginAfterBooking = reader.GetSafeInt16(reader.GetOrdinal("MinutesMarginAfterBooking"))
                             });
                         }

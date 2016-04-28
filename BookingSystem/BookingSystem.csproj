@@ -95,6 +95,7 @@
     <Compile Include="Controllers\BookingController.cs" />
     <Compile Include="Controllers\BookingTypeController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
+    <Compile Include="Controllers\ResourceBookingController.cs" />
     <Compile Include="Controllers\LocationBookingController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\FurnituringController.cs" />
@@ -117,6 +118,7 @@
     <Compile Include="Models\BLL\Resource.cs" />
     <Compile Include="Models\BLL\Furnituring.cs" />
     <Compile Include="Models\BLL\Location.cs" />
+    <Compile Include="Models\BLL\ResourceBooking.cs" />
     <Compile Include="Models\BLL\SearchContainer.cs" />
     <Compile Include="Models\BookingService.cs" />
     <Compile Include="Models\BookingTypeService.cs" />
@@ -131,10 +133,12 @@
     <Compile Include="Models\DAL\LocationFurnituringDAL.cs" />
     <Compile Include="Models\DAL\MealDAL.cs" />
     <Compile Include="Models\DAL\MealPropertyDAL.cs" />
+    <Compile Include="Models\DAL\ResourceBookingDAL.cs" />
     <Compile Include="Models\DAL\ResourceDAL.cs" />
     <Compile Include="Models\DAL\SharedDAL.cs" />
     <Compile Include="Models\FurnituringService.cs" />
     <Compile Include="Models\ImageService.cs" />
+    <Compile Include="Models\ResourceBookingService.cs" />
     <Compile Include="Models\LocationBookingService.cs" />
     <Compile Include="Models\LocationFurnituringService.cs" />
     <Compile Include="Models\LocationService.cs" />
