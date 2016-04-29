@@ -41,9 +41,7 @@ BookingSystem.run( ['$ionicPlatform', ( $ionicPlatform ) => {
 }] );
 
 // Constants
-BookingSystem.constant( 'API_URL', 'http://www.pesola.se:8080/BookingSystem/api/' );
-//BookingSystem.constant( 'API_URL', 'http://192.168.1.4:8080/BookingSystem/api/' );
-// BookingSystem.constant( 'API_URL', 'http://localhost:6796/api/' );
+BookingSystem.constant( 'API_URL', 'http://bokning.vvfors.se/api/' );
 BookingSystem.constant( 'API_IMG_PATH_URL', 'http://www.pesola.se:8080/BookingSystem/' );
 BookingSystem.constant( 'UPLOAD_IMG_MAX_WIDTH', '400' );
 BookingSystem.constant( 'UPLOAD_IMG_MAX_HEIGHT', '400' );
