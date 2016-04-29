@@ -15,25 +15,57 @@
 
       /* Declare variables START */
 
+      $scope.visibleAddButtonHour = null;
+
       /* Declare variables END */
 
       /* Private methods START */
+
+      const setupHours = function(){
+
+        let hour;
+        const totalDayHours = 24;
+        $scope.hoursArray = [];
+
+        for ( hour = 0; hour < totalDayHours; hour++ ) {
+
+          $scope.hoursArray.push( hour );
+
+        }
+      };
 
       /* Private methods END */
 
       /* Public methods START */
 
-      $scope.changeToPreviousMonth = function(){
+      $scope.showAddHour = function( hour ){
 
+        $scope.hideAllAddButtonsCallback();
+
+        $scope.visibleAddButtonHour = hour;
       };
 
-      $scope.changeToNextMonth = function(){
+      $scope.hideAddButton = function() {
 
+        $scope.visibleAddButtonHour = null;
+      };
+
+      $scope.createEventForHour = function( hour ) {
+        console.log( 'Should open dialog to create an event for date and hour', hour );
       };
 
       /* Public methods END */
 
       /* Initialization START */
+
+      setupHours();
+
+      // Listen to when AddButton should hide
+      $scope.$on( 'hideAllAddButtons', ( event, msg ) => {
+
+        $scope.hideAddButton();
+
+      });
 
       /* Initialization END */
     }]
@@ -48,8 +80,12 @@
         templateUrl: function( element, attr ){
           return 'templates/directives/calendar-day.html';
         },
-        scope: true,
-        link: function(){
+        scope: {
+          date: '=',
+          hideAllAddButtonsCallback: '&',
+          hideAddButton: '='
+        },
+        link: function ( scope, element, attrs ) {
 
         },
         controller: 'CalendarDayCtrl'
@@ -59,15 +95,37 @@
 
     .controller( 'CalendarTimeCtrl', ['$scope', function( $scope ) {
 
-      let hour;
-      const totalDayHours = 24;
-      $scope.hoursArray = [];
+      /* Declare variables START */
 
-      for ( hour = 0; hour < totalDayHours; hour++ ) {
+      /* Declare variables END */
 
-        $scope.hoursArray.push( hour );
+      /* Private methods START */
 
-      }
+      const setupHours = function(){
+
+        let hour;
+        const totalDayHours = 24;
+        $scope.hoursArray = [];
+
+        for ( hour = 1; hour < totalDayHours; hour++ ) {
+
+          $scope.hoursArray.push( hour );
+
+        }
+      };
+
+      /* Private methods END */
+
+      /* Public methods START */
+
+      /* Public methods END */
+
+      /* Initialization START */
+
+      setupHours();
+
+      /* Initialization END */
+
     }]
     )
 

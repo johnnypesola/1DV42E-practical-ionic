@@ -12,31 +12,65 @@
 
         <div class="row booking-calendar">
 
-            <calendar-time>
-            </calendar-time>
+            <calendar-time></calendar-time>
 
-            <calendar-day>
+            <calendar-day
+                date=""
+                hide-all-add-buttons-callback="hideAddButtons()"
+            >
             </calendar-day>
 
-            <calendar-day>
+            <calendar-day
+                    date=""
+                    hide-all-add-buttons-callback="hideAddButtons()"
+                    >
             </calendar-day>
 
-            <calendar-day>
+            <calendar-day
+                    date=""
+                    hide-all-add-buttons-callback="hideAddButtons()"
+                    >
             </calendar-day>
 
-            <calendar-day>
+            <calendar-day
+                    date=""
+                    hide-all-add-buttons-callback="hideAddButtons()"
+                    >
             </calendar-day>
 
-            <calendar-day>
+            <calendar-day
+                    date=""
+                    hide-all-add-buttons-callback="hideAddButtons()"
+                    >
             </calendar-day>
 
-            <calendar-day>
+            <calendar-day
+                    date=""
+                    hide-all-add-buttons-callback="hideAddButtons()"
+                    >
             </calendar-day>
 
-            <calendar-day>
+            <calendar-day
+                    date=""
+                    hide-all-add-buttons-callback="hideAddButtons()"
+                    >
             </calendar-day>
 
         </div>
 
+        Location Bookings:
+        <pre>
+            {{LocationBookings | json}}
+        </pre>
+
     </ion-content>
+
+  <md-button
+    class="md-fab md-warn md-lower-right-button"
+    aria-label="Skapa"
+    href="#/app/furnituring-create"
+    >
+    <span class="icon ion-plus-round md-big-icon"></span>
+  </md-button>
+
 </ion-view>

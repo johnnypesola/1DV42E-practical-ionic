@@ -30,9 +30,18 @@ angular.module( 'BookingSystem.locationBooking',
 
     };
 
+    const hideAllAddButtons = function( msg ) {
+      $scope.$broadcast( 'hideAllAddButtons', true );
+    };
+
     /* Private Methods END */
 
     /* Public Methods START */
+
+    $scope.hideAddButtons = function( something ) {
+
+      hideAllAddButtons();
+    };
 
     /* Public Methods END */
 

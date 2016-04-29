@@ -11,7 +11,7 @@ angular.module( 'BookingSystem.locationBookingServices',
   .factory( 'LocationBooking', [ '$resource', 'API_URL', ( $resource, API_URL ) => {
 
     return $resource(
-      API_URL + 'Furnituring/:locationBookingId',
+      API_URL + 'LocationBooking/:locationBookingId',
       {locationBookingId: '@locationBookingId'}
     );
   }]
