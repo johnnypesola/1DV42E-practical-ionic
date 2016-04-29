@@ -12,7 +12,8 @@ angular.module( 'BookingSystem.imageResizeServices',
 
     let img,
       canvas,
-      deferred;
+      deferred,
+      returnImageData;
 
     /* Private functions START */
 
@@ -74,7 +75,6 @@ angular.module( 'BookingSystem.imageResizeServices',
 
     const scaleCanvasWithAlgorithm = ( canvas ) => {
       const scaledCanvas = document.createElement( 'canvas' );
-
       const scale = UPLOAD_IMG_MAX_WIDTH / canvas.width;
 
       scaledCanvas.width = canvas.width * scale;
