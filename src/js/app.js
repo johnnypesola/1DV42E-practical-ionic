@@ -15,6 +15,9 @@ const BookingSystem = angular
     'BookingSystem.mealsServices',
     'BookingSystem.resources',
     'BookingSystem.resourcesServices',
+    'BookingSystem.locationBooking',
+    'BookingSystem.locationBookingServices',
+    'BookingSystem.calendarDayDirective',
     'BookingSystem.customers',
     'BookingSystem.customersServices',
     'BookingSystem.bookingTypes',
@@ -69,6 +72,18 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', ( $stateProvider,
       }
     }
   })
+
+  // Location Bookings
+
+    .state( 'app.location-booking-view', {
+      url: '/location-booking-view',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/location-booking/location-booking-view.html',
+          controller: 'LocationBookingViewCtrl'
+        }
+      }
+    })
 
   // Furniturings
 
