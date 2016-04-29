@@ -1,61 +1,69 @@
 'use strict';
 
-angular.module( 'BookingSystem.meals',
+angular.module( 'BookingSystem.locationBooking',
 
-  //Dependencies
+  // Dependencies
   []
   )
 
-  //Controller
-  .controller( 'MealsListCtrl', [ '$rootScope', '$scope', '$state', 'Meal', ( $rootScope, $scope, $state, Meal ) => {
+  // Controller
+  .controller( 'LocationBookingViewCtrl', [ '$rootScope', '$scope', '$state', 'LocationBooking', ( $rootScope, $scope, $state, LocationBooking ) => {
 
     /* Init vars */
 
     /* Private methods START */
 
-    const getMeals = function() {
+    const getLocationBookings = function () {
 
-      const meals = Meal.query();
+      const LocationBookings = LocationBooking.query();
 
-      // In case meals cannot be fetched, display an error to user.
-      meals.$promise.catch( () => {
+      // In case LocationBooking cannot be fetched, display an error to user.
+      LocationBookings.$promise.catch( () => {
 
         $rootScope.FlashMessage = {
           type: 'error',
-          message: 'Måltider kunde inte hämtas, var god försök igen.'
+          message: 'Möbleringar kunde inte hämtas, var god försök igen.'
         };
       });
 
-      $scope.meals = meals;
+      $scope.LocationBookings = LocationBookings;
+
+    };
+
+    const hideAllAddButtons = function( msg ) {
+      $scope.$broadcast( 'hideAllAddButtons', true );
     };
 
     /* Private Methods END */
 
     /* Public Methods START */
 
+    $scope.hideAddButtons = function( something ) {
+
+      hideAllAddButtons();
+    };
+
     /* Public Methods END */
 
     /* Initialization START */
-
     $scope.$on( '$ionicView.enter', ( event, data ) => {
-      getMeals();
+      getLocationBookings();
     });
 
     /* Initialization END */
 
   }]
-  )
+)
 
-  //Edit controller
-  .controller( 'MealDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$ionicModal', '$state', 'Meal', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $ionicModal, $state, Meal ) => {
-      /* Init vars */
+  .controller( 'LocationBookingDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', 'LocationBooking', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, LocationBooking ) => {
 
-    const modalTemplateUrl = 'templates/modals/meals-delete.html';
-    $scope.isEditMode = false;
-    $scope.mealBackup = {};
+    /* Init vars */
+
+    const modalTemplateUrl = 'templates/modals/locationBooking-delete.html';
+    $scope.editMode = false;
+    $scope.locationBookingBackup = {};
 
     /* Private methods START */
-
     const setupModal = function(){
 
       $ionicModal.fromTemplateUrl( modalTemplateUrl, {
@@ -71,27 +79,36 @@ angular.module( 'BookingSystem.meals',
       $scope.$on( '$destroy', () => {
         $scope.modal.remove();
       });
+
+      // Execute action on hide modal
+      // $scope.$on( 'modal.hidden', () => {
+      // Execute action
+      // });
+
+      // Execute action on remove modal
+      // $scope.$on( 'modal.removed', () => {
+      // Execute action
+      // });
     };
 
-    const getMeal = function () {
+    const getLocationBooking = function () {
 
-      const meal = Meal.get(
+      const locationBooking = LocationBooking.get(
         {
-          mealId: $stateParams.mealId
+          locationBookingId: $stateParams.locationBookingId
         }
       );
 
-      // In case meal cannot be fetched, display an error to user.
-      meal.$promise.catch( () => {
+      // In case locationBooking cannot be fetched, display an error to user.
+      locationBooking.$promise.catch( () => {
 
         $rootScope.FlashMessage = {
           type: 'error',
-          message: 'Måltid kunde inte hämtas, var god försök igen.'
+          message: 'Möblering kunde inte hämtas, var god försök igen.'
         };
       });
 
-      $scope.meal = meal;
-
+      $scope.locationBooking = locationBooking;
     };
 
     /* Private Methods END */
@@ -104,7 +121,7 @@ angular.module( 'BookingSystem.meals',
       $scope.isEditMode = true;
 
       // Make backup of data if in editMode.
-      $scope.mealBackup = angular.copy( $scope.meal );
+      $scope.locationBookingBackup = angular.copy( $scope.locationBooking );
     };
 
     $scope.endEditMode = function () {
@@ -117,18 +134,18 @@ angular.module( 'BookingSystem.meals',
       const $scope = this;
 
       $scope.isEditMode = false;
-      $scope.meal = $scope.mealBackup;
+      $scope.locationBooking = $scope.locationBookingBackup;
     };
 
-    $scope.saveMeal = function() {
+    $scope.saveLocationBooking = function() {
 
       const $scope = this;
 
-      // Save resource
-      Meal.save(
+      // Save locationBooking
+      LocationBooking.save(
         {
-          MealId: $stateParams.mealId,
-          Name: $scope.meal.Name
+          LocationBookingId: $stateParams.locationBookingId,
+          Name: $scope.locationBooking.Name
         }
       ).$promise
 
@@ -139,7 +156,7 @@ angular.module( 'BookingSystem.meals',
 
           $rootScope.FlashMessage = {
             type: 'success',
-            message: 'Måltiden "' + $scope.meal.Name + '" sparades med ett lyckat resultat'
+            message: 'Möbleringen "' + $scope.locationBooking.Name + '" sparades med ett lyckat resultat'
           };
 
           // Something went wrong
@@ -149,8 +166,8 @@ angular.module( 'BookingSystem.meals',
           if ( response.status === 409 ){
             $rootScope.FlashMessage = {
               type: 'error',
-              message: 'Det finns redan en måltid som heter "' + $scope.meal.Name +
-              '". Två måltider kan inte heta lika.'
+              message: 'Det finns redan en möblering som heter "' + $scope.locationBooking.Name +
+              '". Två möbleringar kan inte heta lika.'
             };
           }
 
@@ -158,7 +175,7 @@ angular.module( 'BookingSystem.meals',
           else if ( response.status === 400 || response.status === 500 ){
             $rootScope.FlashMessage = {
               type: 'error',
-              message: 'Ett oväntat fel uppstod när måltiden skulle sparas'
+              message: 'Ett oväntat fel uppstod när möbleringen skulle sparas'
             };
           }
 
@@ -166,7 +183,7 @@ angular.module( 'BookingSystem.meals',
           if ( response.status === 404 ) {
             $rootScope.FlashMessage = {
               type: 'error',
-              message: 'Måltiden "' + $scope.meal.Name + '" existerar inte längre. Hann kanske någon radera den?'
+              message: 'Möbleringen "' + $scope.locationBooking.Name + '" existerar inte längre. Hann kanske någon radera den?'
             };
 
             history.back();
@@ -174,12 +191,12 @@ angular.module( 'BookingSystem.meals',
         });
     };
 
-    $scope.deleteMeal = function() {
+    $scope.deleteLocationBooking = function() {
 
-      // Delete meal
-      Meal.delete(
+      // Delete locationBooking
+      LocationBooking.delete(
         {
-          mealId: $stateParams.mealId
+          locationBookingId: $stateParams.locationBookingId
         }
       ).$promise
 
@@ -188,7 +205,7 @@ angular.module( 'BookingSystem.meals',
 
           $rootScope.FlashMessage = {
             type: 'success',
-            message: 'Måltiden "' + $scope.meal.Name + '" raderades med ett lyckat resultat'
+            message: 'Möbleringen "' + $scope.locationBooking.Name + '" raderades med ett lyckat resultat'
           };
 
           history.back();
@@ -204,8 +221,8 @@ angular.module( 'BookingSystem.meals',
           ){
             $rootScope.FlashMessage = {
               type: 'error',
-              message:    'Måltiden kan inte raderas eftersom det finns' +
-              ' en lokalbokning eller en lokalmåltid som refererar till måltiden'
+              message:    'Möbleringen kan inte raderas eftersom det finns' +
+              ' en lokalbokning eller en lokalmöblering som refererar till möbleringen'
             };
           }
 
@@ -213,7 +230,7 @@ angular.module( 'BookingSystem.meals',
           else if ( response.status === 400 || response.status === 500 ){
             $rootScope.FlashMessage = {
               type: 'error',
-              message: 'Ett oväntat fel uppstod när måltiden skulle tas bort'
+              message: 'Ett oväntat fel uppstod när möbleringen skulle tas bort'
             };
           }
 
@@ -221,7 +238,7 @@ angular.module( 'BookingSystem.meals',
           if ( response.status === 404 ) {
             $rootScope.FlashMessage = {
               type: 'error',
-              message: 'Måltiden "' + $scope.meal.Name + '" existerar inte längre. Hann kanske någon radera den?'
+              message: 'Möbleringen "' + $scope.locationBooking.Name + '" existerar inte längre. Hann kanske någon radera den?'
             };
           }
 
@@ -234,17 +251,17 @@ angular.module( 'BookingSystem.meals',
     /* Initialization START */
 
     setupModal();
-    getMeal();
+    getLocationBooking();
 
     /* Initialization END */
+
   }]
   )
 
-  //Create controller
-  .controller( 'MealCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'Meal', ( $rootScope, $stateParams, $scope, $state, Meal ) => {
+  .controller( 'LocationBookingCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'LocationBooking', ( $rootScope, $stateParams, $scope, $state, LocationBooking ) => {
 
     /* Init vars */
-    $scope.meal = {};
+    $scope.locationBooking = {};
 
     /* Private methods START */
 
@@ -252,15 +269,15 @@ angular.module( 'BookingSystem.meals',
 
     /* Public Methods START */
 
-    $scope.saveMeal = function() {
+    $scope.saveLocationBooking = function() {
 
       const $scope = this;
 
-      // Save meal
-      Meal.save(
+      // Save locationBooking
+      LocationBooking.save(
         {
-          MealId: 0,
-          Name: $scope.meal.Name
+          LocationBookingId: 0,
+          Name: $scope.locationBooking.Name
         }
       ).$promise
 
@@ -269,7 +286,7 @@ angular.module( 'BookingSystem.meals',
 
           $rootScope.FlashMessage = {
             type: 'success',
-            message: 'Måltiden "' + $scope.meal.Name + '" skapades med ett lyckat resultat'
+            message: 'Möbleringen "' + $scope.locationBooking.Name + '" skapades med ett lyckat resultat'
           };
 
           history.back();
@@ -281,8 +298,8 @@ angular.module( 'BookingSystem.meals',
           if ( response.status === 409 ){
             $rootScope.FlashMessage = {
               type: 'error',
-              message: 'Det finns redan en måltid som heter "' + $scope.meal.Name +
-              '". Två måltider kan inte heta lika.'
+              message: 'Det finns redan en möblering som heter "' + $scope.locationBooking.Name +
+              '". Två möbleringar kan inte heta lika.'
             };
           }
 
@@ -290,7 +307,7 @@ angular.module( 'BookingSystem.meals',
           else {
             $rootScope.FlashMessage = {
               type: 'error',
-              message: 'Ett oväntat fel uppstod när måltiden skulle sparas'
+              message: 'Ett oväntat fel uppstod när möbleringen skulle sparas'
             };
           }
         });
@@ -303,4 +320,4 @@ angular.module( 'BookingSystem.meals',
     /* Initialization END */
 
   }]
-  );
+);

@@ -1,5 +1,37 @@
-<ion-view view-title="Search">
-    <ion-content>
-        <h1>Start</h1>
+<ion-view view-title="Vad vill du göra?">
+    <ion-content padding="true">
+        <div layout-gt-xs="row">
+            <md-input-container style="margin-right: 10px;">
+                <label>Boka</label>
+                <md-select ng-model="bookings">
+                    <md-option ng-repeat="bookingType in bookingTypes" value="{{bookingType.Name}}">Boka {{bookingType.Name}}</md-option>
+                    <md-option>Boka Konferenslokal</md-option>
+                    <md-option>Boka Begravning</md-option>
+                    <md-option>Boka Kyrka</md-option>
+                    <md-option>Boka Resurs</md-option>
+                    <md-option>Boka Måltid</md-option>
+                </md-select>
+            </md-input-container>
+        </div>
+
+        <a href="#/app/location-booking-view">Visa Lokalbokningar</a>
+
+        <div class="loggedInAsAdmin">
+            <div layout-gt-xs="row">
+                <md-input-container style="margin-right: 10px;">
+                    <label>Administration</label>
+                    <md-select ng-model="bookings">
+                        <md-option>Preliminära bokningar</md-option>
+                        <md-option>Hantera användare</md-option>
+                        <md-option>Hantera lokaler/platser</md-option>
+                        <md-option>Hantera möbleringar</md-option>
+                        <md-option>Hantera kunder</md-option>
+                        <md-option>Hantera måltider</md-option>
+                        <md-option>Hantera resurser</md-option>
+                        <md-option>Hantera bokningstyper</md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+        </div>
     </ion-content>
 </ion-view>
