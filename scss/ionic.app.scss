@@ -62,19 +62,54 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 
   .col {
 
+    padding: 0 !important;
+    height: 1000px;
     border-right: 1px solid #eee;
-    border-bottom: 1px solid #eee;
-    color: #aaa;
 
-    .day-header {
+    .day-header, .time-header {
+
+      height: 50px;
+      padding: 5px;
+      border-bottom: 1px solid #eee;
+      color: #aaa;
+
+      .week {
+        margin-top: 12px;
+        text-align: center;
+      }
 
       .number {
+        margin: 2px;
         font-size: 24px !important;
       }
 
       .name {
+        margin: 2px;
         font-size: 14px !important;
       }
+    }
+
+    .row {
+      padding: 2px;
+    }
+
+    .event {
+      margin: 1px;
+      border-radius: 3px;
+      background: #4b8bf4;
+      padding: 0 !important;
+      height: 25px;
+      border-right: none !important;
+    }
+
+    .time {
+      color: #666;
+      margin: 5px 0;
+      padding: 0 !important;
+      height: 25px;
+      font-size: 11px;
+      text-align: center;
+      border-right: none !important;
     }
   }
 }

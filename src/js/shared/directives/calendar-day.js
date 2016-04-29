@@ -55,4 +55,15 @@
         controller: 'CalendarDayCtrl'
       };
     }]
+    )
+
+    .directive( 'calendarTime', [function() {
+      return {
+        restrict: 'E',
+        replace: true,
+        templateUrl: function( element, attr ){
+          return 'templates/directives/calendar-time.html';
+        }
+      };
+    }]
     );
