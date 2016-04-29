@@ -1,0 +1,68 @@
+<div class="col calendar-day">
+    <div class="day-header">
+        <div class="number">25</div>
+        <div class="name">mån</div>
+    </div>
+
+    <!-- Background lines with containers below -->
+    <div class="event-hours">
+        <div class="event-hour" ng-repeat="hour in hoursArray" ng-click="showAddHour( hour )">
+        </div>
+    </div>
+
+    <!-- Events below -->
+    <div class="row">
+        <div class="col event" style="
+        height: 100px;
+        width: 29%;
+        left: 0%;
+        ">
+        Atlas Copco
+        </div>
+        <div class="col event" style="
+        height: 200px;
+        width: 29%;
+        left: 33%;
+        ">
+        </div>
+        <div class="col event" style="
+        height: 200px;
+        width: 29%;
+        left: 66%;
+        ">
+        Tandläkarbesök är bra för att det gillar vi liksom
+        </div>
+        <div class="col event" style="
+        height: 175px;
+        top: 210px;
+        width: 95%;
+        left: 0%;
+        ">
+        Tandläkarbesök är bra för att det gillar vi liksom
+        </div>
+        <div class="col event" style="
+        height: 175px;
+        top: 385px;
+        width: 95%;
+        left: 0%;
+        ">
+            Something Cool {{visibleAddButtonHour}}
+        </div>
+    </div>
+
+    <!-- Event Add button below -->
+
+    <button class="add-button"
+
+            style="margin-top: {{ visibleAddButtonHour * 35 }}px"
+            ng-show="visibleAddButtonHour"
+            ng-click="createEventForHour( visibleAddButtonHour )"
+            >
+        +
+    </button>
+
+
+</div>
+
+
+

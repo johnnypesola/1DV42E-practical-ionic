@@ -1,0 +1,14 @@
+<div class="col col-10">
+    <div class="time-header">
+        <div class="week">v 25</div>
+    </div>
+    <div class="row">
+        <div class="col time first"></div>
+    </div>
+    <div class="row" ng-repeat="hour in hoursArray">
+        <div class="col time">{{hour | digits}}.00</div>
+    </div>
+</div>
+
+
+
