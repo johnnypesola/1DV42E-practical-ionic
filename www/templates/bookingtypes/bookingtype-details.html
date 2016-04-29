@@ -1,0 +1,86 @@
+<ion-view view-title="Bokningstyp">
+    <ion-content padding="true">
+
+        <h1>{{bookingType.Name}}</h1>
+
+        <div class="row padding">
+
+            <form name="userForm">
+                <div layout-gt-xs="row">
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Namn</label>
+                        <input ng-model="bookingType.Name" ng-disabled="!isEditMode">
+                    </md-input-container>
+                </div>
+                <div layout-gt-xs="row">
+                    <md-checkbox ng-checked="bookingType.HasLocation" ng-click="toggleHasLocation()" ng-disabled="!isEditMode">
+                        Måste ha en lokal/plats
+                    </md-checkbox>
+                </div>
+            </form>
+        </div>
+        <div layout-gt-xs="row">
+            <h4>Antal resurser</h4>
+            <ion-list>
+                <ion-item>
+                    Nån resurs
+                </ion-item>
+            </ion-list>
+            <md-input-container style="margin-right: 10px;">
+                <label>Lägg till resurs</label>
+                <md-select ng-model="resource" ng-disabled="!isEditMode">
+                    <md-option ng-repeat="resource in resources" value="{{resource.Name}}">{{resource.Name}}</md-option>
+                </md-select>
+            </md-input-container>
+        </div>
+        <div layout-gt-xs="row">
+            <h4>Eventuella måltider</h4>
+            <ion-list>
+                <ion-item>
+                    Nån måltid
+                </ion-item>
+            </ion-list>
+            <md-input-container style="margin-right: 10px;">
+                <label>Lägg till måltid</label>
+                <md-select ng-model="meal" ng-disabled="!isEditMode">
+                    <md-option ng-repeat="meal in meals" value="{{meal.Name}}">{{meal.Name}}</md-option>
+                </md-select>
+            </md-input-container>
+        </div>
+
+        <md-button
+                ng-show="isEditMode"
+                ng-click="abortEditMode()"
+                class="md-raised"
+        >
+            Avbryt
+        </md-button>
+
+        <md-button
+                ng-show="isEditMode"
+                class="md-raised md-primary"
+                ng-click="saveBookingType()"
+        >
+            Spara
+        </md-button>
+
+        <md-button
+                ng-show="isEditMode"
+                class="md-fab md-mini md-warn"
+                ng-click="modal.show()"
+        >
+            <span class="icon ion-trash-a md-medium-icon"></span>
+        </md-button>
+
+        <md-button
+                class="md-fab md-warn md-lower-right-button"
+                aria-label="Redigera"
+                ng-click="startEditMode()"
+                ng-show="!isEditMode"
+        >
+            <span class="icon ion-edit md-big-icon"></span>
+        </md-button>
+
+    </ion-content>
+
+</ion-view>

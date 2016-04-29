@@ -15,6 +15,11 @@ const BookingSystem = angular
     'BookingSystem.mealsServices',
     'BookingSystem.resources',
     'BookingSystem.resourcesServices',
+    'BookingSystem.customers',
+    'BookingSystem.customersServices',
+    'BookingSystem.bookingTypes',
+    'BookingSystem.bookingTypesServices',
+    'BookingSystem.imageResizeServices',
     'ngMaterial',
     'ngResource'
   ] );
@@ -37,6 +42,9 @@ BookingSystem.run( ['$ionicPlatform', ( $ionicPlatform ) => {
 
 // Constants
 BookingSystem.constant( 'API_URL', 'http://bokning.vvfors.se/api/' );
+BookingSystem.constant( 'API_IMG_PATH_URL', 'http://www.pesola.se:8080/BookingSystem/' );
+BookingSystem.constant( 'UPLOAD_IMG_MAX_WIDTH', '400' );
+BookingSystem.constant( 'UPLOAD_IMG_MAX_HEIGHT', '400' );
 BookingSystem.constant( 'DEFAULT_MAP_ZOOM', 5 );
 BookingSystem.constant( 'DEFAULT_LATITUDE', 59.2792 );
 BookingSystem.constant( 'DEFAULT_LONGITUDE', 15.2361 );
@@ -154,6 +162,70 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', ( $stateProvider,
       'menuContent': {
         templateUrl: 'templates/resources/resource-create.html',
         controller: 'ResourceCreateCtrl'
+      }
+    }
+  })
+
+  //Customers
+
+  .state( 'app.customers-list', {
+    url: '/customers-list',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/customers/customers-list.html',
+        controller: 'CustomersListCtrl'
+      }
+    }
+  })
+
+  .state( 'app.customer-details', {
+    url: '/customer-details/:customerId',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/customers/customer-details.html',
+        controller: 'CustomerDetailsCtrl'
+      }
+    }
+  })
+
+  .state( 'app.customer-create', {
+    url: '/customer-create',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/customers/customer-create.html',
+        controller: 'CustomerCreateCtrl'
+      }
+    }
+  })
+
+  //BookingType
+
+  .state( 'app.bookingtypes-list', {
+    url: '/bookingtypes-list',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/bookingtypes/bookingtypes-list.html',
+        controller: 'BookingTypesListCtrl'
+      }
+    }
+  })
+
+  .state( 'app.bookingtype-details', {
+    url: '/bookingtype-details/:bookingTypeId',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/bookingtypes/bookingtype-details.html',
+        controller: 'BookingTypeDetailsCtrl'
+      }
+    }
+  })
+
+  .state( 'app.bookingtype-create', {
+    url: '/bookingtype-create',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/bookingtypes/bookingtype-create.html',
+        controller: 'BookingTypeCreateCtrl'
       }
     }
   });
