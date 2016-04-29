@@ -1,0 +1,17 @@
+<ion-view view-title="Kunder">
+    <ion-content>
+        <ion-list>
+            <ion-item ng-repeat="customer in customers" href="#/app/customer-details/{{customer.CustomerId}}">
+                {{customer.Name}}
+            </ion-item>
+        </ion-list>
+
+        <md-button
+                class="md-fab md-warn md-lower-right-button"
+                aria-label="Skapa"
+                href="#/app/customer-create"
+        >
+            <span class="icon ion-plus-round md-big-icon"></span>
+        </md-button>
+    </ion-content>
+</ion-view>
