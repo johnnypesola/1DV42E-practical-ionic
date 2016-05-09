@@ -14,10 +14,10 @@
     .controller( 'CalendarDayCtrl', ['$scope', '$element', '$attrs', '$rootScope', '$location', '$q', function( $scope, $element, $attrs, $rootScope, $location, $q ) {
 
       /* Declare variables START */
-      const momentDate = moment( $scope.date );
+      const calendarDayMomentDate = moment( $scope.date );
 
-      $scope.dayNumber = momentDate.format( 'D' );
-      $scope.dayName = momentDate.format( 'ddd' );
+      $scope.dayNumber = calendarDayMomentDate.format( 'D' );
+      $scope.dayName = calendarDayMomentDate.format( 'ddd' );
       $scope.visibleAddButtonHour = null;
 
       /* Declare variables END */
@@ -35,6 +35,47 @@
           $scope.hoursArray.push( hour );
 
         }
+      };
+
+      const calculateStartHour = function( booking ) {
+
+        // If booking start on previous day or earlier.
+        const endTimeStartOfDay = moment( booking.EndTime ).startOf( 'day' );
+
+        // TODO: Check if its Starttime is current day.
+
+        if (
+          calendarDayMomentDate.date() !== moment( booking.StartTime ).date() &&
+          moment( booking.StartTime ).isBefore( endTimeStartOfDay )
+        ) {
+          console.log( 'not the same', calendarDayMomentDate.date(), moment( booking.StartTime ).date() );
+
+          return 0;
+        }
+
+        console.log( Number( moment( booking.StartTime ).format( 'H' ) ) + Number( moment( booking.StartTime ).format( 'mm' ) / 60 ) );
+        return ( Number( moment( booking.StartTime ).format( 'H' ) ) + Number( moment( booking.StartTime ).format( 'mm' ) / 60 ) );
+      };
+
+      const calculateEndHour = function( booking ) {
+
+        // If booking ends on next day or later.
+        if ( moment( booking.EndTime ).isAfter( moment( booking.StartTime ).endOf( 'day' ) ) ) {
+          return 23.99;
+        }
+
+        return ( Number( moment( booking.EndTime ).format( 'H' ) ) + Number( moment( booking.EndTime ).format( 'mm' ) / 60 ) );
+      };
+
+      const setupBookings = function(){
+
+        $scope.bookings.forEach( ( booking ) => {
+
+          booking.ConcurrentCount = $scope.dayNumber;
+          booking.StartHour = calculateStartHour( booking );
+          booking.EndHour = calculateEndHour( booking );
+          booking.Duration = ( booking.EndHour - booking.StartHour );
+        });
       };
 
       /* Private methods END */
@@ -68,6 +109,15 @@
 
         $scope.hideAddButton();
 
+      });
+
+      // Add a watch on bookings. Passed from parent controller.
+      $scope.$watch( 'bookings', ( newValue, oldValue ) => {
+        if ( Array.isArray( newValue ) && oldValue === undefined ) {
+
+          setupBookings();
+          console.log( 'watch bookings' );
+        }
       });
 
       /* Initialization END */

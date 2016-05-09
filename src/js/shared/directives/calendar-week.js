@@ -44,8 +44,16 @@ angular.module( 'BookingSystem.calendarWeekDirective',
         const dayEndTime = moment( dayStartTime ).endOf( 'day' );
 
         // Filter bookings for day
-        $scope.days[ dayNum ].bookings = $scope.bookings.filter( filterDayBookings.bind( dayStartTime, dayEndTime ) );
+        const bookings = $scope.bookings.filter( filterDayBookings.bind( null, dayStartTime, dayEndTime ) );
 
+        $scope.days[ dayNum ].bookings = [];
+
+        // Break reference
+        bookings.forEach( ( booking ) => {
+
+          $scope.days[ dayNum ].bookings.push( JSON.parse( JSON.stringify( booking ) ) );
+
+        });
       }
     };
 
