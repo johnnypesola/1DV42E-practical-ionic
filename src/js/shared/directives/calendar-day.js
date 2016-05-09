@@ -99,6 +99,7 @@
     .controller( 'CalendarTimeCtrl', ['$scope', function( $scope ) {
 
       /* Declare variables START */
+      $scope.weekNumber = moment( $scope.date ).isoWeek();
 
       /* Declare variables END */
 
@@ -136,6 +137,9 @@
       return {
         restrict: 'E',
         replace: true,
+        scope: {
+          date: '='
+        },
         templateUrl: function( element, attr ){
           return 'templates/directives/calendar-time.html';
         },

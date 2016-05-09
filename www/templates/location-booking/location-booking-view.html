@@ -10,53 +10,10 @@
     </ion-nav-buttons>
     <ion-content padding="false">
 
-        <div class="row booking-calendar">
-
-            <calendar-time></calendar-time>
-
-            <calendar-day
-                date="monDate"
-                hide-all-add-buttons-callback="hideAddButtons()"
-            >
-            </calendar-day>
-
-            <calendar-day
-                    date=""
-                    hide-all-add-buttons-callback="hideAddButtons()"
-                    >
-            </calendar-day>
-
-            <calendar-day
-                    date=""
-                    hide-all-add-buttons-callback="hideAddButtons()"
-                    >
-            </calendar-day>
-
-            <calendar-day
-                    date=""
-                    hide-all-add-buttons-callback="hideAddButtons()"
-                    >
-            </calendar-day>
-
-            <calendar-day
-                    date=""
-                    hide-all-add-buttons-callback="hideAddButtons()"
-                    >
-            </calendar-day>
-
-            <calendar-day
-                    date=""
-                    hide-all-add-buttons-callback="hideAddButtons()"
-                    >
-            </calendar-day>
-
-            <calendar-day
-                    date=""
-                    hide-all-add-buttons-callback="hideAddButtons()"
-                    >
-            </calendar-day>
-
-        </div>
+        <calendar-week
+            date="weekDate"
+        >
+        </calendar-week>
 
         Location Bookings:
         <pre>
