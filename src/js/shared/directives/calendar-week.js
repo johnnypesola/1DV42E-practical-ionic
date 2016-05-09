@@ -10,31 +10,52 @@ angular.module( 'BookingSystem.calendarWeekDirective',
   .controller( 'CalendarWeekCtrl', [ '$rootScope', '$scope', '$state', 'LocationBooking', ( $rootScope, $scope, $state, LocationBooking ) => {
 
     /* Init vars */
-    $scope.mondayDate = moment( $scope.date );
-    $scope.tuesdayDate = moment( $scope.date ).add( 1, 'day' );
-    $scope.wednesdayDate = moment( $scope.date ).add( 2, 'days' );
-    $scope.thursdayDate = moment( $scope.date ).add( 3, 'days' );
-    $scope.fridayDate = moment( $scope.date ).add( 4, 'days' );
-    $scope.saturdayDate = moment( $scope.date ).add( 5, 'days' );
-    $scope.sundayDate = moment( $scope.date ).add( 6, 'days' );
+    $scope.days = [];
+    //$scope.bookings = $scope.bookings || [];
+
+    // Set scope time to guaranteed start of week, in case this was missed in parent.
+    $scope.weekDateStart = moment( $scope.date ).startOf( 'isoWeek' );
+    // const weekDateEnd = moment( $scope.date ).endOf( 'isoWeek' );
 
     /* Private methods START */
 
-    const getLocationBookings = function () {
+    const filterDayBookings = function( dayStartTime, dayEndTime, booking ){
 
-      const LocationBookings = LocationBooking.query();
+      // Create moment objects of date objects
+      const b = {};
+      b.startTime = moment( booking.StartTime );
+      b.endTime = moment( booking.EndTime );
 
-      // In case LocationBooking cannot be fetched, display an error to user.
-      LocationBookings.$promise.catch( () => {
+      // Check if booking is withing day start time and day end time
+      return (
+        b.startTime.isBefore( dayEndTime ) && b.endTime.isAfter( dayEndTime ) ||
+        b.startTime.isBefore( dayStartTime ) && b.endTime.isAfter( dayStartTime ) ||
+        b.startTime.isSameOrAfter( dayStartTime ) && b.endTime.isSameOrBefore( dayEndTime )
+      );
+    };
 
-        $rootScope.FlashMessage = {
-          type: 'error',
-          message: 'Möbleringar kunde inte hämtas, var god försök igen.'
-        };
-      });
+    const setDayBookings = function( dayDate ){
 
-      $scope.LocationBookings = LocationBookings;
+      let dayNum;
+      for ( dayNum = 0; dayNum < 7; dayNum++ ) {
 
+        // Convert day times to moment objects
+        const dayStartTime = moment( $scope.days[ dayNum ].date );
+        const dayEndTime = moment( dayStartTime ).endOf( 'day' );
+
+        // Filter bookings for day
+        $scope.days[ dayNum ].bookings = $scope.bookings.filter( filterDayBookings.bind( dayStartTime, dayEndTime ) );
+
+      }
+    };
+
+    const setDayDates = function() {
+      let dayNum = 0;
+      for ( let dayDate = moment( $scope.weekDateStart ); dayNum < 7; dayDate.add( 1, 'days' ) ) {
+        $scope.days[ dayNum ] = {};
+        $scope.days[ dayNum ].date = dayDate.format();
+        dayNum++;
+      }
     };
 
     const hideAllAddButtons = function( msg ) {
@@ -53,8 +74,15 @@ angular.module( 'BookingSystem.calendarWeekDirective',
     /* Public Methods END */
 
     /* Initialization START */
-    $scope.$on( '$ionicView.enter', ( event, data ) => {
-      getLocationBookings();
+
+    setDayDates();
+
+    // Add a watch on bookings. Passed from parent controller.
+    $scope.$watch( 'bookings', ( newValue ) => {
+
+      if ( newValue !== undefined ) {
+        setDayBookings();
+      }
     });
 
     /* Initialization END */
@@ -70,7 +98,8 @@ angular.module( 'BookingSystem.calendarWeekDirective',
         return 'templates/directives/calendar-week.html';
       },
       scope: {
-        date: '='
+        date: '=',
+        bookings: '='
       },
       link: function ( scope, element, attrs ) {
 

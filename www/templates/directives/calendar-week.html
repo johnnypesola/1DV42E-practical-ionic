@@ -1,50 +1,17 @@
 <div class="row booking-calendar">
 
     <calendar-time
-            date="date"
+            date="weekDateStart"
             >
     </calendar-time>
 
-    <calendar-day
-            date="mondayDate"
+    <calendar-day ng-repeat="day in days"
+            date="day.date"
+            bookings="day.bookings"
             hide-all-add-buttons-callback="hideAddButtons()"
             >
     </calendar-day>
 
-    <calendar-day
-            date="tuesdayDate"
-            hide-all-add-buttons-callback="hideAddButtons()"
-            >
-    </calendar-day>
 
-    <calendar-day
-            date="wednesdayDate"
-            hide-all-add-buttons-callback="hideAddButtons()"
-            >
-    </calendar-day>
-
-    <calendar-day
-            date="thursdayDate"
-            hide-all-add-buttons-callback="hideAddButtons()"
-            >
-    </calendar-day>
-
-    <calendar-day
-            date="fridayDate"
-            hide-all-add-buttons-callback="hideAddButtons()"
-            >
-    </calendar-day>
-
-    <calendar-day
-            date="satudayDate"
-            hide-all-add-buttons-callback="hideAddButtons()"
-            >
-    </calendar-day>
-
-    <calendar-day
-            date="sundayDate"
-            hide-all-add-buttons-callback="hideAddButtons()"
-            >
-    </calendar-day>
 
 </div>

@@ -16,33 +16,25 @@ angular.module( 'BookingSystem.locationBooking',
 
     const getLocationBookings = function () {
 
-      const LocationBookings = LocationBooking.query();
+      const locationBookings = LocationBooking.query();
 
       // In case LocationBooking cannot be fetched, display an error to user.
-      LocationBookings.$promise.catch( () => {
+      locationBookings.$promise.catch( () => {
 
         $rootScope.FlashMessage = {
           type: 'error',
           message: 'Möbleringar kunde inte hämtas, var god försök igen.'
         };
+      })
+
+      .then( ( locationBookings ) => {
+        $scope.locationBookings = locationBookings;
       });
-
-      $scope.LocationBookings = LocationBookings;
-
-    };
-
-    const hideAllAddButtons = function( msg ) {
-      $scope.$broadcast( 'hideAllAddButtons', true );
     };
 
     /* Private Methods END */
 
     /* Public Methods START */
-
-    $scope.hideAddButtons = function( something ) {
-
-      hideAllAddButtons();
-    };
 
     /* Public Methods END */
 

@@ -86,7 +86,8 @@
         scope: {
           date: '=',
           hideAllAddButtonsCallback: '&',
-          hideAddButton: '='
+          hideAddButton: '=',
+          bookings: '='
         },
         link: function ( scope, element, attrs ) {
 
