@@ -14,7 +14,10 @@
     .controller( 'CalendarDayCtrl', ['$scope', '$element', '$attrs', '$rootScope', '$location', '$q', function( $scope, $element, $attrs, $rootScope, $location, $q ) {
 
       /* Declare variables START */
+      const momentDate = moment( $scope.date );
 
+      $scope.dayNumber = momentDate.format( 'D' );
+      $scope.dayName = momentDate.format( 'ddd' );
       $scope.visibleAddButtonHour = null;
 
       /* Declare variables END */

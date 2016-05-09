@@ -10,6 +10,10 @@ angular.module( 'BookingSystem.locationBooking',
   .controller( 'LocationBookingViewCtrl', [ '$rootScope', '$scope', '$state', 'LocationBooking', ( $rootScope, $scope, $state, LocationBooking ) => {
 
     /* Init vars */
+    const momentDate = moment( $scope.date );
+
+    $scope.monDate = new Date();
+    $scope.monDate = new Date();
 
     /* Private methods START */
 
