@@ -27,7 +27,8 @@ angular.module( 'BookingSystem.bookingHelperServices',
       const concurrentBookingsArray = [];
       let concurrentBookingIndex = 0;
       // let concurrentBookingsFalsePositiveCount = 0;
-      // let i, j;
+      let i;
+      // let j;
 
       for ( i = 0; i < bookingsArray.length; i++ ){
 
@@ -66,8 +67,6 @@ angular.module( 'BookingSystem.bookingHelperServices',
       // Set concurrent bookings count
       targetBooking.ConcurrentBookings = concurrentBookingsArray.length; // - concurrentBookingsFalsePositiveCount;
 
-      console.log( concurrentBookingsFalsePositiveCount );
-
       // Abort if no concurrent bookings were found
       if ( concurrentBookingsArray.length ) {
 
@@ -87,9 +86,6 @@ angular.module( 'BookingSystem.bookingHelperServices',
 
       // Get concurrent booking index
       targetBooking.ConcurrentBookingIndex = concurrentBookingIndex;
-
-      // console.log( targetBooking );
-
     }
 
     // Public functions

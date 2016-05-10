@@ -109,24 +109,7 @@
           booking.Duration = ( booking.EndHour - booking.StartHour );
 
           // Make this booking aware of other concurrent bookings
-          //booking.ConcurrentCount = $scope.bookings.filter( doBookingsOverlap.bind( null, booking ) ).length;
-
           BookingHelper.setConcurrentBookingData( booking, $scope.bookings );
-
-          // Concurrent booking awareness
-          //$scope.bookings.forEach( doBookingsOverlap.bind( null, booking ) );
-
-          // TODO: Does no take to account of concurrent bookings
-
-          // For displaying concurrent bookings beside each other
-          /*
-          if ( booking.ConcurrentCount > 1 ){
-            booking.ConcurrentNum = concurrentBookingNum;
-            concurrentBookingNum++;
-          } else {
-            booking.ConcurrentNum = 0;
-          }
-          */
         });
       };
 
@@ -138,6 +121,7 @@
 
         $scope.hideAllAddButtonsCallback();
 
+        console.log( hour );
         $scope.visibleAddButtonHour = hour;
       };
 

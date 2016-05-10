@@ -21,9 +21,9 @@
                 width: {{95 / booking.ConcurrentBookings }}%;
                 left: {{(100 / booking.ConcurrentBookings) * booking.ConcurrentBookingIndex}}%;
                 z-index: 10;
-                opacity: 0.5;
+                opacity: {{ booking.Provisional === 'true' ? 0.3 : 0.8 }};
             ">
-            {{ booking.ConcurrentBookingIndex }} <br> {{ booking.ConcurrentBookings }}
+            {{ booking.Provisional }} {{ booking.LocationName }}
         </div>
     </div>
 
@@ -31,8 +31,11 @@
 
     <button class="add-button"
 
-            style="margin-top: {{ visibleAddButtonHour * 35 }}px"
-            ng-show="visibleAddButtonHour"
+            style="
+                margin-top: {{ visibleAddButtonHour * 35 }}px;
+                z-index: 11;
+            "
+            ng-show="visibleAddButtonHour || visibleAddButtonHour === 0"
             ng-click="createEventForHour( visibleAddButtonHour )"
             >
         +
