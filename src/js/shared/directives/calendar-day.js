@@ -120,8 +120,6 @@
       $scope.showAddHour = function( hour ){
 
         $scope.hideAllAddButtonsCallback();
-
-        console.log( hour );
         $scope.visibleAddButtonHour = hour;
       };
 
@@ -132,6 +130,8 @@
 
       $scope.createEventForHour = function( hour ) {
         console.log( 'Should open dialog to create an event for date and hour', hour );
+
+        $scope.newBookingCallback({hour : hour});
       };
 
       /* Public methods END */
@@ -172,6 +172,7 @@
         scope: {
           date: '=',
           hideAllAddButtonsCallback: '&',
+          newBookingCallback: '&',
           hideAddButton: '=',
           bookings: '='
         },

@@ -36,6 +36,12 @@ angular.module( 'BookingSystem.locationBooking',
 
     /* Public Methods START */
 
+    $scope.newBookingCallback = function( hour ) {
+
+      console.log( 'newBookingCallback', hour );
+
+    };
+
     /* Public Methods END */
 
     /* Initialization START */
