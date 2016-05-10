@@ -24,6 +24,7 @@ const BookingSystem = angular
     'BookingSystem.bookingTypesServices',
     'BookingSystem.imageResizeServices',
     'BookingSystem.calendarWeekDirective',
+    'BookingSystem.bookingHelperServices',
     'ngMaterial',
     'ngResource'
   ] );

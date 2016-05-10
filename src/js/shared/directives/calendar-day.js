@@ -11,7 +11,7 @@
   )
 
     // Directive specific controllers START
-    .controller( 'CalendarDayCtrl', ['$scope', '$element', '$attrs', '$rootScope', '$location', '$q', function( $scope, $element, $attrs, $rootScope, $location, $q ) {
+    .controller( 'CalendarDayCtrl', ['$scope', '$element', '$attrs', '$rootScope', '$location', '$q', 'BookingHelper', function( $scope, $element, $attrs, $rootScope, $location, $q, BookingHelper ) {
 
       /* Declare variables START */
       const calendarDayMomentDate = moment( $scope.date );
@@ -39,42 +39,94 @@
 
       const calculateStartHour = function( booking ) {
 
-        // If booking start on previous day or earlier.
         const endTimeStartOfDay = moment( booking.EndTime ).startOf( 'day' );
 
-        // TODO: Check if its Starttime is current day.
-
+        // If booking start on previous day or earlier.
         if (
           calendarDayMomentDate.date() !== moment( booking.StartTime ).date() &&
           moment( booking.StartTime ).isBefore( endTimeStartOfDay )
         ) {
-          console.log( 'not the same', calendarDayMomentDate.date(), moment( booking.StartTime ).date() );
-
           return 0;
         }
 
-        console.log( Number( moment( booking.StartTime ).format( 'H' ) ) + Number( moment( booking.StartTime ).format( 'mm' ) / 60 ) );
         return ( Number( moment( booking.StartTime ).format( 'H' ) ) + Number( moment( booking.StartTime ).format( 'mm' ) / 60 ) );
       };
 
       const calculateEndHour = function( booking ) {
 
         // If booking ends on next day or later.
-        if ( moment( booking.EndTime ).isAfter( moment( booking.StartTime ).endOf( 'day' ) ) ) {
+        if ( moment( booking.EndTime ).isAfter( moment( calendarDayMomentDate ).endOf( 'day' ) ) ) {
           return 23.99;
         }
 
         return ( Number( moment( booking.EndTime ).format( 'H' ) ) + Number( moment( booking.EndTime ).format( 'mm' ) / 60 ) );
       };
 
+      /*
+      const doBookingsOverlap = function( booking1, booking2 ){
+
+        // Check if booking is within day start time and day end time
+        return BookingHelper.doBookingsCollide(
+          booking1.StartTime,
+          booking1.EndTime,
+          booking2.StartTime,
+          booking2.EndTime
+        );
+      };
+      */
+
+      /*const makeBookingAwareOfConcurrentBookings = function( booking ){
+
+        let concurrentCount = 0;
+
+        for ( let i = 0; i < $scope.bookings.length; i++ ){
+
+          if (
+            BookingHelper.doBookingsCollide(
+              booking.StartTime,
+              booking.EndTime,
+              $scope.bookings[i].StartTime,
+              $scope.bookings[i].EndTime
+            )
+          ){
+            concurrentCount++;
+          }
+        }
+
+        booking.ConcurrentCount = concurrentCount;
+      };
+      */
+
       const setupBookings = function(){
 
+        // let concurrentBookingNum = 0;
+
+        // Loop through all bookings for day.
         $scope.bookings.forEach( ( booking ) => {
 
-          booking.ConcurrentCount = $scope.dayNumber;
           booking.StartHour = calculateStartHour( booking );
           booking.EndHour = calculateEndHour( booking );
           booking.Duration = ( booking.EndHour - booking.StartHour );
+
+          // Make this booking aware of other concurrent bookings
+          //booking.ConcurrentCount = $scope.bookings.filter( doBookingsOverlap.bind( null, booking ) ).length;
+
+          BookingHelper.setConcurrentBookingData( booking, $scope.bookings );
+
+          // Concurrent booking awareness
+          //$scope.bookings.forEach( doBookingsOverlap.bind( null, booking ) );
+
+          // TODO: Does no take to account of concurrent bookings
+
+          // For displaying concurrent bookings beside each other
+          /*
+          if ( booking.ConcurrentCount > 1 ){
+            booking.ConcurrentNum = concurrentBookingNum;
+            concurrentBookingNum++;
+          } else {
+            booking.ConcurrentNum = 0;
+          }
+          */
         });
       };
 

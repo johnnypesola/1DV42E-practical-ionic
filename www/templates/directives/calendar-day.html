@@ -18,11 +18,12 @@
             style="
                 top: {{booking.StartHour * 35}}px;
                 height: {{booking.Duration * 35}}px;
-                width: 95%;
-                left: 0%;
+                width: {{95 / booking.ConcurrentBookings }}%;
+                left: {{(100 / booking.ConcurrentBookings) * booking.ConcurrentBookingIndex}}%;
+                z-index: 10;
+                opacity: 0.5;
             ">
-            {{ booking.LocationName }} | {{booking.ConcurrentCount}}
-
+            {{ booking.ConcurrentBookingIndex }} <br> {{ booking.ConcurrentBookings }}
         </div>
     </div>
 

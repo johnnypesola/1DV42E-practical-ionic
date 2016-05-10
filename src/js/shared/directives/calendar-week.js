@@ -7,7 +7,7 @@ angular.module( 'BookingSystem.calendarWeekDirective',
 )
 
   // Controller
-  .controller( 'CalendarWeekCtrl', [ '$rootScope', '$scope', '$state', 'LocationBooking', ( $rootScope, $scope, $state, LocationBooking ) => {
+  .controller( 'CalendarWeekCtrl', [ '$rootScope', '$scope', '$state', 'LocationBooking', 'BookingHelper', ( $rootScope, $scope, $state, LocationBooking, BookingHelper ) => {
 
     /* Init vars */
     $scope.days = [];
@@ -21,16 +21,12 @@ angular.module( 'BookingSystem.calendarWeekDirective',
 
     const filterDayBookings = function( dayStartTime, dayEndTime, booking ){
 
-      // Create moment objects of date objects
-      const b = {};
-      b.startTime = moment( booking.StartTime );
-      b.endTime = moment( booking.EndTime );
-
       // Check if booking is withing day start time and day end time
-      return (
-        b.startTime.isBefore( dayEndTime ) && b.endTime.isAfter( dayEndTime ) ||
-        b.startTime.isBefore( dayStartTime ) && b.endTime.isAfter( dayStartTime ) ||
-        b.startTime.isSameOrAfter( dayStartTime ) && b.endTime.isSameOrBefore( dayEndTime )
+      return BookingHelper.doBookingsCollide(
+        booking.StartTime,
+        booking.EndTime,
+        dayStartTime,
+        dayEndTime
       );
     };
 
