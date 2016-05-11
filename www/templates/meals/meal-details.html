@@ -2,6 +2,9 @@
     <ion-content padding="true">
 
         <h1>{{meal.Name}}</h1>
+        <pre>
+            {{meal|json}}
+        </pre>
 
         <div class="row padding">
 
@@ -14,12 +17,9 @@
                 </div>
             </form>
         </div>
-        <div class="row padding">
-            <ion-list>
-                <ion-item ng-repeat="mealProperty in meal.mealProperties">
-                    {{mealProperty.MealPropertyName}}
-                </ion-item>
-            </ion-list>
+
+        <div class="custom-chip" ng-repeat="mealProperty in meal.mealProperties">
+            {{mealProperty.MealPropertyName}}
         </div>
 
         <md-button
