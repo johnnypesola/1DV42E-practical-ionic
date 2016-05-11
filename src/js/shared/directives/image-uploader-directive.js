@@ -3,16 +3,16 @@
  */
 'use strict';
 
-angular.module( 'bookingSystem.imageUploaderDirective',
+angular.module( 'BookingSystem.imageUploaderDirective',
 
   // Dependencies
   [
-    'bookingSystem.imageResizeServices'
+    'BookingSystem.imageResizeServices'
   ]
   )
 
   // Directive specific controllers START
-  .controller( 'imageUploaderCtrl', [ '$scope', '$q', '$element', '$attrs', '$rootScope', 'LocationImage', 'ImageResize', 'API_IMG_PATH_URL', 'PHOTO_MISSING_SRC', ( $scope, $q, $element, $attrs, $rootScope, LocationImage, ImageResize, API_IMG_PATH_URL, PHOTO_MISSING_SRC ) => {
+  .controller( 'imageUploaderCtrl', [ '$scope', '$q', '$element', '$attrs', '$rootScope', 'CustomerImage', 'ImageResize', 'API_IMG_PATH_URL', 'PHOTO_MISSING_SRC', ( $scope, $q, $element, $attrs, $rootScope, CustomerImage, ImageResize, API_IMG_PATH_URL, PHOTO_MISSING_SRC ) => {
 
     /* Declare variables START */
     $scope.file = '';
@@ -143,7 +143,7 @@ angular.module( 'bookingSystem.imageUploaderDirective',
         base64EncodedImage: '=base64EncodedImage'
       },
       replace: true,
-      templateUrl: 'shared/directives/imageUploaderDirective.html',
+      templateUrl: 'templates/directives/image-uploader-directive.html',
       controller: 'imageUploaderCtrl'
     };
   }]

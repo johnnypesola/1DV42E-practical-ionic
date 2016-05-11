@@ -49,12 +49,13 @@ angular.module( 'BookingSystem.customers',
   )
 
   //Edit controller
-  .controller( 'CustomerDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$ionicModal', '$state', 'Customer', 'CustomerImage', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $ionicModal, $state, Customer, CustomerImage ) => {
+  .controller( 'CustomerDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$ionicModal', '$state', 'Customer', 'CustomerImage', 'API_IMG_PATH_URL', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $ionicModal, $state, Customer, CustomerImage, API_IMG_PATH_URL ) => {
     /* Init vars */
 
     const modalTemplateUrl = 'templates/modals/customers-delete.html';
     $scope.isEditMode = false;
     $scope.customerBackup = {};
+    $scope.API_IMG_PATH_URL = API_IMG_PATH_URL;
 
     /* Private methods START */
 
@@ -291,6 +292,8 @@ angular.module( 'BookingSystem.customers',
 
     /* Init vars */
     $scope.customer = {};
+
+    console.log( API_IMG_PATH_URL );
 
     /* Private methods START */
 

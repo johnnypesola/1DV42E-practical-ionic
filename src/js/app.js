@@ -13,6 +13,7 @@ const BookingSystem = angular
     'BookingSystem.furnituringServices',
     'BookingSystem.meals',
     'BookingSystem.mealsServices',
+    'BookingSystem.mealPropertiesServices',
     'BookingSystem.resources',
     'BookingSystem.resourcesServices',
     'BookingSystem.locationBooking',
@@ -25,6 +26,7 @@ const BookingSystem = angular
     'BookingSystem.imageResizeServices',
     'BookingSystem.calendarWeekDirective',
     'BookingSystem.bookingHelperServices',
+    'BookingSystem.imageUploaderDirective',
     'ngMaterial',
     'ngResource'
   ] );
@@ -51,9 +53,10 @@ BookingSystem.run( ['$ionicPlatform', ( $ionicPlatform ) => {
 
 // Constants
 BookingSystem.constant( 'API_URL', 'http://bokning.vvfors.se/api/' );
-BookingSystem.constant( 'API_IMG_PATH_URL', 'http://www.pesola.se:8080/BookingSystem/' );
+BookingSystem.constant( 'API_IMG_PATH_URL', 'http://bokning.vvfors.se/' );
 BookingSystem.constant( 'UPLOAD_IMG_MAX_WIDTH', '400' );
 BookingSystem.constant( 'UPLOAD_IMG_MAX_HEIGHT', '400' );
+BookingSystem.constant( 'PHOTO_MISSING_SRC', 'img/photo_missing.svg' );
 BookingSystem.constant( 'DEFAULT_MAP_ZOOM', 5 );
 BookingSystem.constant( 'DEFAULT_LATITUDE', 59.2792 );
 BookingSystem.constant( 'DEFAULT_LONGITUDE', 15.2361 );
