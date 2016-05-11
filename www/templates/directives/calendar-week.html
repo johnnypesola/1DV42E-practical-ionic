@@ -1,16 +1,16 @@
 <div class="row booking-calendar">
 
     <calendar-time
-            date="weekDateStart"
-            >
+        date="weekDateStart"
+        >
     </calendar-time>
 
     <calendar-day ng-repeat="day in days"
-            date="day.date"
-            bookings="day.bookings"
-            hide-all-add-buttons-callback="hideAddButtons()"
-            new-booking-callback="newBookingCallback(hour)"
-            >
+        date="day.date"
+        bookings="day.bookings"
+        hide-all-add-buttons-callback="hideAddButtons()"
+        bookings-type="bookingsType"
+        >
     </calendar-day>
 
 

@@ -23,7 +23,7 @@ angular.module( 'BookingSystem.locationBooking',
 
         $rootScope.FlashMessage = {
           type: 'error',
-          message: 'Möbleringar kunde inte hämtas, var god försök igen.'
+          message: 'Lokalbokningar kunde inte hämtas, var god försök igen.'
         };
       })
 
@@ -36,16 +36,13 @@ angular.module( 'BookingSystem.locationBooking',
 
     /* Public Methods START */
 
-    $scope.newBookingCallback = function( hour ) {
-
-      console.log( 'newBookingCallback', hour );
-
-    };
-
     /* Public Methods END */
 
     /* Initialization START */
     $scope.$on( '$ionicView.enter', ( event, data ) => {
+
+      console.log( 'fetched new bookings' );
+
       getLocationBookings();
     });
 
@@ -264,6 +261,45 @@ angular.module( 'BookingSystem.locationBooking',
 
     /* Private methods START */
 
+    const initDate = function() {
+
+      // Initialize date if its not set in incoming state params.
+      // It does not matter if its a normal date object or moment.js object. Make it a regular date object either way.
+      // We need to make it to a regular date object since that's what angular material date picker requires.
+      if ( $state.params.date ) {
+        $scope.bookingDate = moment( $state.params.date ).toDate();
+      } else {
+        $scope.bookingDate = new Date();
+      }
+    };
+
+    const getLocations = function() {
+      $scope.locations = [
+        {
+          LocationId: 3,
+          Name: 'Testlokal',
+          MaxPeople: 10,
+          GPSLatitude: 40,
+          GPSLongitude: 40,
+          ImageSrc: 'testimagesource',
+          BookingPricePerHour: 10,
+          MinutesMarginBeforeBooking: 1,
+          MinutesMarginAfterBooking: 2
+        },
+        {
+          LocationId: 4,
+          Name: 'Testlokal 2',
+          MaxPeople: 10,
+          GPSLatitude: 40,
+          GPSLongitude: 40,
+          ImageSrc: 'testimagesource',
+          BookingPricePerHour: 10,
+          MinutesMarginBeforeBooking: 1,
+          MinutesMarginAfterBooking: 2
+        }
+      ];
+    };
+
     /* Private Methods END */
 
     /* Public Methods START */
@@ -315,6 +351,9 @@ angular.module( 'BookingSystem.locationBooking',
     /* Public Methods END */
 
     /* Initialization START */
+
+    initDate();
+    getLocations();
 
     /* Initialization END */
 

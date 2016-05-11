@@ -103,8 +103,8 @@ angular.module( 'BookingSystem.calendarWeekDirective',
       },
       scope: {
         date: '=',
-        newBookingCallback: '&',
-        bookings: '='
+        bookings: '=',
+        bookingsType: '='
       },
       link: function ( scope, element, attrs ) {
 

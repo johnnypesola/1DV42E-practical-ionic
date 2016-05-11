@@ -11,7 +11,7 @@
   )
 
     // Directive specific controllers START
-    .controller( 'CalendarDayCtrl', ['$scope', '$element', '$attrs', '$rootScope', '$location', '$q', 'BookingHelper', function( $scope, $element, $attrs, $rootScope, $location, $q, BookingHelper ) {
+    .controller( 'CalendarDayCtrl', ['$scope', '$element', '$attrs', '$rootScope', '$location', '$q', '$state', 'BookingHelper', function( $scope, $element, $attrs, $rootScope, $location, $q, $state, BookingHelper ) {
 
       /* Declare variables START */
       const calendarDayMomentDate = moment( $scope.date );
@@ -62,55 +62,21 @@
         return ( Number( moment( booking.EndTime ).format( 'H' ) ) + Number( moment( booking.EndTime ).format( 'mm' ) / 60 ) );
       };
 
-      /*
-      const doBookingsOverlap = function( booking1, booking2 ){
-
-        // Check if booking is within day start time and day end time
-        return BookingHelper.doBookingsCollide(
-          booking1.StartTime,
-          booking1.EndTime,
-          booking2.StartTime,
-          booking2.EndTime
-        );
-      };
-      */
-
-      /*const makeBookingAwareOfConcurrentBookings = function( booking ){
-
-        let concurrentCount = 0;
-
-        for ( let i = 0; i < $scope.bookings.length; i++ ){
-
-          if (
-            BookingHelper.doBookingsCollide(
-              booking.StartTime,
-              booking.EndTime,
-              $scope.bookings[i].StartTime,
-              $scope.bookings[i].EndTime
-            )
-          ){
-            concurrentCount++;
-          }
-        }
-
-        booking.ConcurrentCount = concurrentCount;
-      };
-      */
-
       const setupBookings = function(){
 
-        // let concurrentBookingNum = 0;
+        if ( $scope.bookings !== undefined ) {
 
-        // Loop through all bookings for day.
-        $scope.bookings.forEach( ( booking ) => {
+          // Loop through all bookings for day.
+          $scope.bookings.forEach( ( booking ) => {
 
-          booking.StartHour = calculateStartHour( booking );
-          booking.EndHour = calculateEndHour( booking );
-          booking.Duration = ( booking.EndHour - booking.StartHour );
+            booking.StartHour = calculateStartHour( booking );
+            booking.EndHour = calculateEndHour( booking );
+            booking.Duration = ( booking.EndHour - booking.StartHour );
 
-          // Make this booking aware of other concurrent bookings
-          BookingHelper.setConcurrentBookingData( booking, $scope.bookings );
-        });
+            // Make this booking aware of other concurrent bookings
+            BookingHelper.setConcurrentBookingData( booking, $scope.bookings );
+          });
+        }
       };
 
       /* Private methods END */
@@ -129,9 +95,17 @@
       };
 
       $scope.createEventForHour = function( hour ) {
-        console.log( 'Should open dialog to create an event for date and hour', hour );
 
-        $scope.newBookingCallback({hour : hour});
+        calendarDayMomentDate.set({
+          'hour': hour
+        });
+
+        // Redirect to create view
+        $state.go( 'app.location-booking-create', {
+          date: calendarDayMomentDate,
+          locationId: null
+        });
+
       };
 
       /* Public methods END */
@@ -149,10 +123,10 @@
 
       // Add a watch on bookings. Passed from parent controller.
       $scope.$watch( 'bookings', ( newValue, oldValue ) => {
-        if ( Array.isArray( newValue ) && oldValue === undefined ) {
+
+        if ( Array.isArray( newValue ) ) {
 
           setupBookings();
-          console.log( 'watch bookings' );
         }
       });
 
@@ -172,9 +146,9 @@
         scope: {
           date: '=',
           hideAllAddButtonsCallback: '&',
-          newBookingCallback: '&',
           hideAddButton: '=',
-          bookings: '='
+          bookings: '=',
+          bookingsType: '='
         },
         link: function ( scope, element, attrs ) {
 

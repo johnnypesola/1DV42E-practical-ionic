@@ -1,0 +1,57 @@
+<ion-view view-title="Skapa lokalbokning">
+    <ion-nav-buttons side="secondary">
+        <button
+            class="button"
+            ng-click="abortEditMode()"
+            ng-show="true"
+        >
+            editMode: {{isEditMode}}
+        </button>
+    </ion-nav-buttons>
+    <ion-content padding="true">
+
+        <div class="row padding">
+
+            <form name="userForm">
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>Välj lokal / plats</label>
+                    <md-select ng-model="locationBooking.LocationId">
+                        <md-option ng-repeat="location in locations" value="{{location.LocationId}}">
+                            {{location.Name}}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+
+                <md-datepicker
+                    ng-model="bookingDate"
+                ></md-datepicker>
+
+                <div layout-gt-xs="row">
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Starttid</label>
+                        <input
+                            ng-model="locationBooking.Name"
+                            ng-pattern="/^[0-9]{3}-[0-9]{2}-[0-9]{4}$/"
+                        >
+                    </md-input-container>
+                </div>
+
+                <div layout-gt-xs="row">
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Sluttid</label>
+                        <input ng-model="furnituring.Name">
+                    </md-input-container>
+                </div>
+
+            </form>
+        </div>
+
+        <md-button
+            class="md-raised md-primary"
+            ng-click="saveFurnituring()"
+        >
+            Spara
+        </md-button>
+
+    </ion-content>
+</ion-view>

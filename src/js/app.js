@@ -91,6 +91,20 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', ( $stateProvider,
       }
     })
 
+    .state( 'app.location-booking-create', {
+      url: '/location-booking-create',
+      params: {
+        date: null,
+        locationId: null
+      },
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/location-booking/location-booking-create.html',
+          controller: 'LocationBookingCreateCtrl'
+        }
+      }
+    })
+
   // Furniturings
 
   .state( 'app.furnituring-list', {
