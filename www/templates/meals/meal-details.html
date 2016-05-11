@@ -18,7 +18,12 @@
             </form>
         </div>
 
-        <div class="custom-chip" ng-repeat="mealProperty in meal.mealProperties">
+        <div
+            class="custom-chip"
+            ng-repeat="mealProperty in meal.mealProperties"
+            ng-class="{ 'custom-chip-active' : mealProperty.active }"
+            ng-click="mealProperty.active = !mealProperty.active"
+        >
             {{mealProperty.MealPropertyName}}
         </div>
 

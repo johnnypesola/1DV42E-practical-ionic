@@ -47,7 +47,7 @@ angular.module( 'BookingSystem.meals',
   )
 
   //Edit controller
-  .controller( 'MealDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$ionicModal', '$state', 'Meal', 'MealHasProperty', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $ionicModal, $state, Meal, MealHasProperty ) => {
+  .controller( 'MealDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$ionicModal', '$state', 'Meal', 'MealProperty','MealHasProperty', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $ionicModal, $state, Meal, MealProperty, MealHasProperty ) => {
       /* Init vars */
 
     const modalTemplateUrl = 'templates/modals/meals-delete.html';
@@ -98,6 +98,48 @@ angular.module( 'BookingSystem.meals',
       });
 
       $scope.meal = meal;
+
+    };
+
+    const getAllMealProperties = function() {
+      $scope.mealProperties = MealProperty.query();
+    };
+
+    const saveMealProperties = function(){
+      let mealPropertiesToSave;
+      const postDataArray = [];
+
+      // Delete previous location furniturings
+      const mealPropertyResource = LocationFurnituring.removeForLocation(
+        {
+          mealId: $scope.meal.MealId
+        }
+      );
+
+      // After previous furniturings were deleted. Save new furniturings for location
+      mealPropertyResource.$promise.finally( () => {
+
+        // Filter out furniturings to save
+        mealPropertiesToSave = $scope.mealProperties.filter( ( mealProperty ) => {
+          return mealProperty.Selected;
+        });
+
+        // Process each and one of the furniturings
+        mealPropertiesToSave.forEach( ( mealProperty ) => {
+
+          postDataArray.push({
+            LocationId: $routeParams.locationId,
+            FurnituringId: furnituring.FurnituringId,
+            MaxPeople: furnituring.MaxPeople
+          });
+        });
+
+        // Save
+        LocationFurnituring.saveForLocation( postDataArray );
+      });
+
+      // Return promise
+      return mealPropertyResource.$promise;
 
     };
 
@@ -242,6 +284,7 @@ angular.module( 'BookingSystem.meals',
 
     setupModal();
     getMeal();
+    getAllMealProperties();
 
     /* Initialization END */
   }]
