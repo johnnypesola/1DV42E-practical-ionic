@@ -64,7 +64,7 @@ BookingSystem.constant( 'DEFAULT_LONGITUDE', 15.2361 );
 BookingSystem.constant( 'MODAL_ANIMATION', 'slide-in-up' );
 
 // Routes
-BookingSystem.config( ['$stateProvider', '$urlRouterProvider', ( $stateProvider, $urlRouterProvider ) => {
+BookingSystem.config( ['$stateProvider', '$urlRouterProvider', '$mdDateLocaleProvider', ( $stateProvider, $urlRouterProvider, $mdDateLocaleProvider ) => {
   $stateProvider
 
   .state( 'app', {
@@ -269,46 +269,37 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', ( $stateProvider,
     }
   });
 
-  // Old states below
-  /*
-  .state( 'app.search', {
-    url: '/search',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/search.html'
-      }
-    }
-  })
-
-  .state( 'app.browse', {
-    url: '/browse',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/browse.html'
-      }
-    }
-  })
-  .state( 'app.playlists', {
-    url: '/playlists',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/playlists.html',
-        controller: 'PlaylistsCtrl'
-      }
-    }
-  })
-  .state( 'app.single', {
-    url: '/playlists/:playlistId',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/playlist.html',
-        controller: 'PlaylistCtrl'
-      }
-    }
-  });
-  */
-
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise( '/app/start' );
+
+  // Locatization configuration for Angular Material ( Swedish localization. )
+
+  $mdDateLocaleProvider.months = ['januari', 'februari', 'mars', 'april', 'maj', 'juni', 'juli', 'augusti', 'september', 'oktober', 'november', 'december'];
+  $mdDateLocaleProvider.shortMonths = ['jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'];
+  $mdDateLocaleProvider.days = ['söndag', 'måndag', 'tisdag', 'onsdag', 'torsdag', 'fredag', 'lördag'];
+  $mdDateLocaleProvider.shortDays = ['Sö', 'Mo', 'Ti', 'On', 'To', 'Fr', 'Lö'];
+
+  // Can change week display to start on Monday.
+  $mdDateLocaleProvider.firstDayOfWeek = 1;
+
+  // Example uses moment.js to parse and format dates.
+  $mdDateLocaleProvider.parseDate = function( dateString ) {
+    const m = moment( dateString, 'L', true );
+    return m.isValid() ? m.toDate() : new Date( NaN );
+  };
+  $mdDateLocaleProvider.formatDate = function( date ) {
+    return moment( date ).format( 'L' );
+  };
+  $mdDateLocaleProvider.monthHeaderFormatter = function( date ) {
+    return $mdDateLocaleProvider.months[date.getMonth()] + ' ' + date.getFullYear();
+  };
+  // In addition to date display, date components also need localized messages
+  // for aria-labels for screen-reader users.
+  $mdDateLocaleProvider.weekNumberFormatter = function( weekNumber ) {
+    return 'Vecka ' + weekNumber;
+  };
+  $mdDateLocaleProvider.msgCalendar = 'Kalender';
+  $mdDateLocaleProvider.msgOpenCalendar = 'Öppna kalender';
+
 }]
 );
