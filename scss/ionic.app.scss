@@ -50,7 +50,116 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 }
 
 .md-lower-right-button {
-  position: absolute !important;
-  bottom: 5% !important;
-  right: 5% !important;
+  position: fixed !important;
+  bottom: 2% !important;
+  right: 2% !important;
 }
+
+// Calendar specific START
+
+.booking-calendar {
+  padding: 0 !important;
+
+  .calendar-day {
+    position: relative;
+  }
+
+  .col {
+
+    padding: 0 !important;
+    height: 1000px;
+    border-right: 1px solid #eee;
+
+    .day-header, .time-header {
+
+      height: 50px;
+      padding: 5px;
+      border-bottom: 1px solid #eee;
+      color: #aaa;
+
+      .week {
+        margin-top: 12px;
+        text-align: center;
+      }
+
+      .number {
+        margin: 2px;
+        font-size: 24px !important;
+      }
+
+      .name {
+        margin: 2px;
+        font-size: 14px !important;
+      }
+    }
+
+    .row {
+      padding: 0px;
+      position: relative;
+    }
+
+    .event-hours {
+      position: absolute;
+      top: 50px;
+      left: 0;
+      width: 100%;
+
+        .event-hour {
+          border-bottom: 1px solid #f8f8f8;
+          height: 35px;
+        }
+    }
+
+    .add-button {
+      position: absolute;
+      top: 50px;
+      left: 0;
+      width: 100%;
+      opacity: 0.98;
+
+      color: #fff;
+      background: rgb(255,87,34);
+      margin: 0;
+      border-radius: 2px;
+      text-align: center;
+      height: 35px;
+      line-height: 35px;
+      font-size: 20px;
+      border: none;
+      display: block;
+      width: 100%;
+    }
+
+    .event {
+      color: #fff;
+      font-size: 11px;
+      position: absolute;
+      margin: 1px;
+      border-radius: 4px;
+      border: 1px solid #fff;
+      background: #4b8bf4;
+      padding: 3px !important;
+      height: 25px;
+      border-right: none !important;
+      line-height: 12px;
+      overflow: hidden;
+    }
+
+    .time {
+      color: #666;
+      margin: 5px 0;
+      padding: 0 !important;
+      height: 30px;
+      font-size: 11px;
+      text-align: center;
+      border-right: none !important;
+      width: 50px;
+    }
+
+    .first {
+      height: 15px;
+    }
+  }
+}
+
+// Calendar specifit END
