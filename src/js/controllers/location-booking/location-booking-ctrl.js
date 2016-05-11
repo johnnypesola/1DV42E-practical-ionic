@@ -254,7 +254,7 @@ angular.module( 'BookingSystem.locationBooking',
   }]
   )
 
-  .controller( 'LocationBookingCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'LocationBooking', ( $rootScope, $stateParams, $scope, $state, LocationBooking ) => {
+  .controller( 'LocationBookingCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'LocationBooking', 'Location', ( $rootScope, $stateParams, $scope, $state, LocationBooking, Location ) => {
 
     /* Init vars */
     $scope.locationBooking = {};
@@ -274,6 +274,8 @@ angular.module( 'BookingSystem.locationBooking',
     };
 
     const getLocations = function() {
+
+      /*
       $scope.locations = [
         {
           LocationId: 3,
@@ -298,6 +300,10 @@ angular.module( 'BookingSystem.locationBooking',
           MinutesMarginAfterBooking: 2
         }
       ];
+      */
+
+      $scope.locations = Location.query();
+
     };
 
     /* Private Methods END */

@@ -27,6 +27,7 @@ const BookingSystem = angular
     'BookingSystem.calendarWeekDirective',
     'BookingSystem.bookingHelperServices',
     'BookingSystem.imageUploaderDirective',
+    'BookingSystem.locationsServices',
     'ngMaterial',
     'ngResource'
   ] );
