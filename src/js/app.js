@@ -277,7 +277,7 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', '$mdDateLocalePro
   $mdDateLocaleProvider.months = ['januari', 'februari', 'mars', 'april', 'maj', 'juni', 'juli', 'augusti', 'september', 'oktober', 'november', 'december'];
   $mdDateLocaleProvider.shortMonths = ['jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'];
   $mdDateLocaleProvider.days = ['söndag', 'måndag', 'tisdag', 'onsdag', 'torsdag', 'fredag', 'lördag'];
-  $mdDateLocaleProvider.shortDays = ['Sö', 'Mo', 'Ti', 'On', 'To', 'Fr', 'Lö'];
+  $mdDateLocaleProvider.shortDays = ['Sö', 'Må', 'Ti', 'On', 'To', 'Fr', 'Lö'];
 
   // Can change week display to start on Monday.
   $mdDateLocaleProvider.firstDayOfWeek = 1;
@@ -291,7 +291,7 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', '$mdDateLocalePro
     return moment( date ).format( 'L' );
   };
   $mdDateLocaleProvider.monthHeaderFormatter = function( date ) {
-    return $mdDateLocaleProvider.months[date.getMonth()] + ' ' + date.getFullYear();
+    return $mdDateLocaleProvider.shortMonths[date.getMonth()] + ' ' + date.getFullYear();
   };
   // In addition to date display, date components also need localized messages
   // for aria-labels for screen-reader users.

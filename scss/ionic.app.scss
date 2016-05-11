@@ -189,3 +189,24 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 }
 
 // Calendar specific END
+
+// Angular Material Datepicker fixes START
+
+.md-calendar-day-header th {
+  vertical-align: middle !important;
+}
+
+.md-datepicker-input-mask {
+  width: auto !important;
+  height: 30px !important;
+}
+
+.md-calendar-month-label {
+  vertical-align: middle !important;
+}
+
+.md-datepicker-open .md-datepicker-input {
+  height: 30px !important;
+}
+
+// Angular Material Datepicker fixes END
