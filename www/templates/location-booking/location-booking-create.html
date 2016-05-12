@@ -16,12 +16,12 @@
 
                 Starttidpunkt
 
-                <div class="validation-messages" ng-messages="locationBookingForm.bookingStartDate.$error">
-                    <div ng-message="valid">Ange ett giltigt startdatum</div>
-                    <div ng-message="required">Ett startdatum måste anges</div>
-                </div>
+                <div class="row rel-l-20 pos-relative">
 
-                <div class="row rel-l-20">
+                    <div class="validation-messages" ng-messages="locationBookingForm.bookingStartDate.$error">
+                        <div ng-message="valid">Ange ett giltigt startdatum</div>
+                        <div ng-message="required">Ett startdatum måste anges</div>
+                    </div>
 
                     <div class="col">
                         <md-datepicker
@@ -57,7 +57,13 @@
 
                 Sluttidpunkt
 
-                <div class="row rel-l-20">
+                <div class="row rel-l-20 pos-relative">
+
+                    <div class="validation-messages" ng-messages="locationBookingForm.bookingEndDate.$error">
+                        <div ng-message="valid">Ange ett giltigt slutdatum</div>
+                        <div ng-message="required">Ett slutdatum måste anges</div>
+                        <div ng-message="mindate">Slutdatumet kan inte vara före startdatumet</div>
+                    </div>
 
                     <div class="col">
                         <md-datepicker
@@ -89,29 +95,100 @@
 
                 </div>
 
-                <div class="validation-messages" ng-messages="locationBookingForm.bookingEndDate.$error">
-                    <div ng-message="valid">Ange ett giltigt slutdatum</div>
-                    <div ng-message="required">Ett slutdatum måste anges</div>
-                    <div ng-message="mindate">Slutdatumet kan inte vara före startdatumet</div>
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="locationBookingForm.LocationId.$error">
+                        <div ng-message="required">Var god ange kund</div>
+                    </div>
+
+                    <md-input-container class="md-block" flex-gt-sm>
+
+                        <label>Välj kund</label>
+                        <md-select
+                                name="CustomerId"
+                                ng-model="locationBooking.CustomerId"
+                                ng-required="true"
+                        >
+                            <md-option ng-repeat="customer in customers" value="{{customer.CustomerId}}">
+                                {{customer.Name}}
+                            </md-option>
+                        </md-select>
+
+                    </md-input-container>
+
                 </div>
 
-                <div class="validation-messages" ng-messages="locationBookingForm.LocationId.$error">
-                    <div ng-message="required">Var god ange lokal</div>
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="locationBookingForm.LocationId.$error">
+                        <div ng-message="required">Var god ange lokal</div>
+                    </div>
+
+                    <md-input-container class="md-block" flex-gt-sm>
+
+                        <label>Välj lokal / plats</label>
+                        <md-select
+                                name="LocationId"
+                                ng-model="locationBooking.LocationId"
+                                ng-required="true"
+                                ng-change="updateFurniturings()"
+                        >
+                            <md-option ng-repeat="location in locations" value="{{location.LocationId}}">
+                                {{location.Name}}
+                            </md-option>
+                        </md-select>
+
+                    </md-input-container>
+
                 </div>
 
-                <md-input-container class="md-block" flex-gt-sm>
-                    <label>Välj lokal / plats</label>
-                    <md-select
-                        name="LocationId"
-                        ng-model="locationBooking.LocationId"
-                        ng-required="true"
-                    >
-                        <md-option ng-repeat="location in locations" value="{{location.LocationId}}">
-                            {{location.Name}}
-                        </md-option>
-                    </md-select>
+                <div layout-gt-xs="row" class="pos-relative">
 
-                </md-input-container>
+                    <div class="validation-messages" ng-messages="locationBookingForm.SelectedFurnituring.$error">
+                        <div ng-message="required">Var god ange möblering</div>
+                    </div>
+
+                    <md-input-container class="md-block" flex-gt-sm>
+
+                        <label>Välj möblering</label>
+                        <md-select
+                            name="SelectedFurnituring"
+                            ng-model="locationBooking.SelectedFurnituring"
+                            ng-required="true"
+                            ng-disabled="!furniturings.length"
+                        >
+                            <md-option ng-repeat="furnituring in furniturings" ng-value="furnituring">
+                                {{furnituring.FurnituringName}} <span class="faded">({{furnituring.MaxPeople}} pers.)</span>
+                            </md-option>
+                        </md-select>
+
+                    </md-input-container>
+
+                </div>
+
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="locationBookingForm.NumberOfPeople.$error">
+                        <div ng-message="required">Var god ange antal personer</div>
+                        <div ng-message="pattern">Endast nummer tillåtna</div>
+                        <div ng-message="max">Får vara max {{locationBooking.SelectedFurnituring.MaxPeople}}</div>
+                        <div ng-message="min">Får vara minst 0</div>
+                    </div>
+
+                    <md-input-container class="md-block" flex-gt-xs>
+
+                        <label>Antal personer</label>
+                        <input
+                            type="number"
+                            name="NumberOfPeople"
+                            ng-model="location.NumberOfPeople"
+                            ng-required="true"
+                            ng-pattern="/^[0-9]*$/"
+                            ng-max="locationBooking.SelectedFurnituring.MaxPeople"
+                            min="0"
+                        >
+                    </md-input-container>
+                </div>
 
                 <div class="row">
                     <md-checkbox ng-model="locationBooking.Provisional" aria-label="Finished?">
@@ -125,7 +202,7 @@
 
         <md-button
             class="md-raised md-primary"
-            ng-click="saveFurnituring()"
+            ng-click="saveLocationBooking()"
             ng-disabled="locationBookingForm.$invalid"
         >
             Spara

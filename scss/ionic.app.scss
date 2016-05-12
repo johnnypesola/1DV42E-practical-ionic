@@ -190,6 +190,20 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 
 // Calendar specific END
 
+// Angular Material input fixes START
+
+input[type=search], input[type=text], input[type=password], input[type=datetime], input[type=datetime-local], input[type=date], input[type=month], input[type=time], input[type=week], input[type=number], input[type=email], input[type=url], input[type=tel], input[type=color], textarea {
+  border: solid;
+  border-width: 0 0 1px;
+  border-color: rgba(0,0,0,0.12);
+}
+
+md-input-container:not(.md-input-has-value) input:not(:focus), md-input-container:not(.md-input-has-value) input:not(:focus)::-webkit-datetime-edit-ampm-field, md-input-container:not(.md-input-has-value) input:not(:focus)::-webkit-datetime-edit-day-field, md-input-container:not(.md-input-has-value) input:not(:focus)::-webkit-datetime-edit-hour-field, md-input-container:not(.md-input-has-value) input:not(:focus)::-webkit-datetime-edit-millisecond-field, md-input-container:not(.md-input-has-value) input:not(:focus)::-webkit-datetime-edit-minute-field, md-input-container:not(.md-input-has-value) input:not(:focus)::-webkit-datetime-edit-month-field, md-input-container:not(.md-input-has-value) input:not(:focus)::-webkit-datetime-edit-second-field, md-input-container:not(.md-input-has-value) input:not(:focus)::-webkit-datetime-edit-text, md-input-container:not(.md-input-has-value) input:not(:focus)::-webkit-datetime-edit-week-field, md-input-container:not(.md-input-has-value) input:not(:focus)::-webkit-datetime-edit-year-field {
+  border-bottom-color: rgba(0,0,0,0.12)
+}
+
+// Angular Material input fixes END
+
 // Angular Material Datepicker fixes START
 
 .md-calendar-day-header th {
@@ -248,8 +262,21 @@ md-datepicker {
 .validation-messages {
   font-size: 12px;
   color: #dd2c00;
-  margin: 0 0 0 25px;
-  float: right;
+  padding: 0 0 0 12px;
+  position: absolute;
+  top: -15px;
+  right: 0;
+
+  background: url(../img/validation_arrow.gif) bottom left no-repeat;
+}
+
+.pos-relative {
+  position: relative !important;
+}
+
+md-select span.faded, md-option span.faded {
+  color: #aaa;
+  font-size: 12px;
 }
 
 // Validation messages look END

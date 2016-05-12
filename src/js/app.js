@@ -28,6 +28,7 @@ const BookingSystem = angular
     'BookingSystem.bookingHelperServices',
     'BookingSystem.imageUploaderDirective',
     'BookingSystem.locationsServices',
+    'BookingSystem.ngMinMaxDirectives',
     'BookingSystem.filters',
     'ngMaterial',
     'ngResource',

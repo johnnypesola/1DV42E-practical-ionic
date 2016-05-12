@@ -254,12 +254,13 @@ angular.module( 'BookingSystem.locationBooking',
   }]
   )
 
-  .controller( 'LocationBookingCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'LocationBooking', 'Location', 'BookingHelper', ( $rootScope, $stateParams, $scope, $state, LocationBooking, Location, BookingHelper ) => {
+  .controller( 'LocationBookingCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'LocationBooking', 'Location', 'BookingHelper', 'LocationFurnituring', 'Customer', ( $rootScope, $stateParams, $scope, $state, LocationBooking, Location, BookingHelper, LocationFurnituring, Customer ) => {
 
     /* Init vars */
     $scope.locationBooking = {
       Provisional: true
     };
+    $scope.furnituring = [];
 
     /* Private methods START */
 
@@ -300,9 +301,47 @@ angular.module( 'BookingSystem.locationBooking',
       $scope.locations = Location.query();
     };
 
+    const getLocationFurniturings = function() {
+
+      $scope.furniturings = LocationFurnituring.query();
+    };
+
+    const getCustomers = function(){
+
+      $scope.customers = Customer.query();
+    };
+
     /* Private Methods END */
 
     /* Public Methods START */
+
+    $scope.updateFurniturings = function() {
+
+      // Get all available furniturings for selected location
+      if ( $scope.locationBooking.LocationId ){
+        $scope.furniturings = LocationFurnituring.queryForLocation(
+          {
+            locationId: $scope.locationBooking.LocationId
+          }
+        );
+
+        // If furniturings could not be fetched
+        $scope.furniturings.$promise.catch( () => {
+          $rootScope.FlashMessage = {
+            type: 'error',
+            message: 'Möbleringar för vald lokal kunde inte hämtas.'
+          };
+        })
+
+        // If furniturings were fetch successfully
+        .then( () => {
+          // $scope.showInfoAboutNoFurniturings = !$scope.furniturings.length;
+        });
+      }
+      else {
+        $scope.furnituring = [];
+      }
+    };
 
     $scope.checkEndDate = function() {
 
@@ -365,6 +404,8 @@ angular.module( 'BookingSystem.locationBooking',
 
     initDate();
     getLocations();
+    getLocationFurniturings();
+    getCustomers();
     initTimeSelectData();
 
     /* Initialization END */
