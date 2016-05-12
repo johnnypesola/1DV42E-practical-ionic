@@ -3,7 +3,7 @@
 angular.module( 'BookingSystem.locationBooking',
 
   // Dependencies
-  []
+  [ 'ngMessages' ]
   )
 
   // Controller
@@ -254,10 +254,12 @@ angular.module( 'BookingSystem.locationBooking',
   }]
   )
 
-  .controller( 'LocationBookingCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'LocationBooking', 'Location', ( $rootScope, $stateParams, $scope, $state, LocationBooking, Location ) => {
+  .controller( 'LocationBookingCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'LocationBooking', 'Location', 'BookingHelper', ( $rootScope, $stateParams, $scope, $state, LocationBooking, Location, BookingHelper ) => {
 
     /* Init vars */
-    $scope.locationBooking = {};
+    $scope.locationBooking = {
+      Provisional: true
+    };
 
     /* Private methods START */
 
@@ -267,48 +269,51 @@ angular.module( 'BookingSystem.locationBooking',
       // It does not matter if its a normal date object or moment.js object. Make it a regular date object either way.
       // We need to make it to a regular date object since that's what angular material date picker requires.
       if ( $state.params.date ) {
-        $scope.bookingDate = moment( $state.params.date ).toDate();
+
+        $scope.bookingStartDate = moment( $state.params.date ).toDate();
+        $scope.bookingStartHour = moment( $state.params.date ).hour();
+        $scope.bookingStartMinute = moment( $state.params.date ).minute();
+
+        $scope.bookingEndDate = moment( $state.params.date ).toDate();
+        $scope.bookingEndHour = moment( $state.params.date ).hour() + 1;
+        $scope.bookingEndMinute = moment( $state.params.date ).minute();
+
       } else {
-        $scope.bookingDate = new Date();
+
+        $scope.bookingStartDate = new Date();
+        $scope.bookingStartHour = 8;
+        $scope.bookingStartMinute = 0;
+
+        $scope.bookingEndDate = new Date();
+        $scope.bookingEndHour = 9;
+        $scope.bookingEndMinute = 0;
       }
     };
 
+    const initTimeSelectData = function() {
+
+      $scope.selectHours = BookingHelper.getHoursForSelect();
+      $scope.selectMinutes = BookingHelper.getMinutesForSelect();};
+
     const getLocations = function() {
 
-      /*
-      $scope.locations = [
-        {
-          LocationId: 3,
-          Name: 'Testlokal',
-          MaxPeople: 10,
-          GPSLatitude: 40,
-          GPSLongitude: 40,
-          ImageSrc: 'testimagesource',
-          BookingPricePerHour: 10,
-          MinutesMarginBeforeBooking: 1,
-          MinutesMarginAfterBooking: 2
-        },
-        {
-          LocationId: 4,
-          Name: 'Testlokal 2',
-          MaxPeople: 10,
-          GPSLatitude: 40,
-          GPSLongitude: 40,
-          ImageSrc: 'testimagesource',
-          BookingPricePerHour: 10,
-          MinutesMarginBeforeBooking: 1,
-          MinutesMarginAfterBooking: 2
-        }
-      ];
-      */
-
       $scope.locations = Location.query();
-
     };
 
     /* Private Methods END */
 
     /* Public Methods START */
+
+    $scope.checkEndDate = function() {
+
+      if (
+        $scope.bookingEndDate !== undefined && $scope.bookingStartDate !== undefined &&
+        $scope.bookingEndDate.getTime() < $scope.bookingStartDate.getTime()
+      ) {
+
+        $scope.bookingEndDate = $scope.bookingStartDate;
+      }
+    };
 
     $scope.saveLocationBooking = function() {
 
@@ -360,6 +365,7 @@ angular.module( 'BookingSystem.locationBooking',
 
     initDate();
     getLocations();
+    initTimeSelectData();
 
     /* Initialization END */
 

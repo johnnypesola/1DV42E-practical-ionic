@@ -1,4 +1,4 @@
-<ion-view view-title="Skapa lokalbokning">
+<ion-view view-title="Skapa lokal/platsbokning">
     <ion-nav-buttons side="secondary">
         <button
             class="button"
@@ -10,61 +10,123 @@
     </ion-nav-buttons>
     <ion-content padding="true">
 
-        <div class="row padding">
+        <div class="row">
 
-            <form name="userForm">
+            <form name="locationBookingForm" class="col">
 
-                <h5>Starttidpunkt</h5>
-                <md-datepicker
-                    ng-model="bookingDate"
-                ></md-datepicker>
+                Starttidpunkt
 
-                <div layout-gt-xs="row">
-                    <md-input-container class="md-block" flex-gt-xs>
-                        <label>Starttid</label>
-                        <input
-                                ng-model="locationBooking.Name"
-                                ng-pattern="/^[0-9]{3}-[0-9]{2}-[0-9]{4}$/"
+                <div class="validation-messages" ng-messages="locationBookingForm.bookingStartDate.$error">
+                    <div ng-message="valid">Ange ett giltigt startdatum</div>
+                    <div ng-message="required">Ett startdatum måste anges</div>
+                </div>
+
+                <div class="row rel-l-20">
+
+                    <div class="col">
+                        <md-datepicker
+                            name="bookingStartDate"
+                            ng-change="checkEndDate()"
+                            ng-model="$parent.bookingStartDate"
+                            ng-required="true"
+                        ></md-datepicker>
+                    </div>
+
+                    <md-input-container class="col">
+                        <label>Timme</label>
+                        <md-select
+                            ng-model="bookingStartHour"
                         >
+                            <md-option ng-repeat="hour in selectHours" value="{{hour}}">
+                                {{hour | zpad:2}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+
+                    <md-input-container class="col">
+                        <label>Minut</label>
+                        <md-select
+                            ng-model="bookingStartMinute"
+                        >
+                            <md-option ng-repeat="minute in selectMinutes" value="{{minute}}">
+                                {{minute | zpad:2}}
+                            </md-option>
+                        </md-select>
                     </md-input-container>
                 </div>
 
-                <h5>Sluttidpunkt</h5>
-                <md-datepicker
-                    ng-model="bookingDate"
-                ></md-datepicker>
+                Sluttidpunkt
 
-                <div layout-gt-xs="row">
-                    <md-input-container class="md-block" flex-gt-xs>
-                        <label>Starttid</label>
-                        <input
-                                ng-model="locationBooking.Name"
-                                ng-pattern="/^[0-9]{3}-[0-9]{2}-[0-9]{4}$/"
-                        >
+                <div class="row rel-l-20">
+
+                    <div class="col">
+                        <md-datepicker
+                            name="bookingEndDate"
+                            ng-change="checkEndDate()"
+                            ng-model="$parent.bookingEndDate"
+                            ng-required="true"
+                            md-min-date="bookingStartDate"
+                        ></md-datepicker>
+                    </div>
+
+                    <md-input-container class="col">
+                        <label>Timme</label>
+                        <md-select ng-model="bookingEndHour">
+                            <md-option ng-repeat="hour in selectHours" value="{{hour}}">
+                                {{hour | zpad:2}}
+                            </md-option>
+                        </md-select>
                     </md-input-container>
+
+                    <md-input-container class="col">
+                        <label>Minut</label>
+                        <md-select ng-model="bookingEndMinute">
+                            <md-option ng-repeat="minute in selectMinutes" value="{{minute}}">
+                                {{minute | zpad:2}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+
                 </div>
 
-                <br>
-                <br>
-                <hr>
+                <div class="validation-messages" ng-messages="locationBookingForm.bookingEndDate.$error">
+                    <div ng-message="valid">Ange ett giltigt slutdatum</div>
+                    <div ng-message="required">Ett slutdatum måste anges</div>
+                    <div ng-message="mindate">Slutdatumet kan inte vara före startdatumet</div>
+                </div>
+
+                <div class="validation-messages" ng-messages="locationBookingForm.LocationId.$error">
+                    <div ng-message="required">Var god ange lokal</div>
+                </div>
 
                 <md-input-container class="md-block" flex-gt-sm>
                     <label>Välj lokal / plats</label>
-                    <md-select ng-model="locationBooking.LocationId">
+                    <md-select
+                        name="LocationId"
+                        ng-model="locationBooking.LocationId"
+                        ng-required="true"
+                    >
                         <md-option ng-repeat="location in locations" value="{{location.LocationId}}">
                             {{location.Name}}
                         </md-option>
                     </md-select>
+
                 </md-input-container>
 
-
+                <div class="row">
+                    <md-checkbox ng-model="locationBooking.Provisional" aria-label="Finished?">
+                        Preliminär bokning
+                    </md-checkbox>
+                </div>
 
             </form>
+
         </div>
 
         <md-button
             class="md-raised md-primary"
             ng-click="saveFurnituring()"
+            ng-disabled="locationBookingForm.$invalid"
         >
             Spara
         </md-button>

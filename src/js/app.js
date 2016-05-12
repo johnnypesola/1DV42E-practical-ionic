@@ -28,8 +28,10 @@ const BookingSystem = angular
     'BookingSystem.bookingHelperServices',
     'BookingSystem.imageUploaderDirective',
     'BookingSystem.locationsServices',
+    'BookingSystem.filters',
     'ngMaterial',
-    'ngResource'
+    'ngResource',
+    'ngMessages'
   ] );
 
 BookingSystem.run( ['$ionicPlatform', ( $ionicPlatform ) => {
@@ -271,8 +273,11 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', '$mdDateLocalePro
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise( '/app/start' );
+}]
+);
 
-  // Locatization configuration for Angular Material ( Swedish localization. )
+// Locatization configuration for Angular Material ( Swedish localization. )
+BookingSystem.config( ['$mdDateLocaleProvider', ( $mdDateLocaleProvider ) => {
 
   $mdDateLocaleProvider.months = ['januari', 'februari', 'mars', 'april', 'maj', 'juni', 'juli', 'augusti', 'september', 'oktober', 'november', 'december'];
   $mdDateLocaleProvider.shortMonths = ['jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'];
@@ -300,6 +305,5 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', '$mdDateLocalePro
   };
   $mdDateLocaleProvider.msgCalendar = 'Kalender';
   $mdDateLocaleProvider.msgOpenCalendar = 'Öppna kalender';
-
 }]
 );

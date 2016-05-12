@@ -7,7 +7,7 @@ angular.module( 'BookingSystem.bookingHelperServices',
 
     // Private functions
 
-    function doBookingsCollide( sourceStartTime, sourceEndTime, targetStartTime, targetEndTime ) {
+    const doBookingsCollide = function( sourceStartTime, sourceEndTime, targetStartTime, targetEndTime ) {
 
       // Convert to moment.js objects
       sourceStartTime = moment( sourceStartTime );
@@ -20,9 +20,9 @@ angular.module( 'BookingSystem.bookingHelperServices',
         sourceStartTime.isBefore( targetStartTime ) && sourceEndTime.isAfter( targetStartTime ) ||
         sourceStartTime.isSameOrAfter( targetStartTime ) && sourceEndTime.isSameOrBefore( targetEndTime )
       );
-    }
+    };
 
-    function setConcurrentBookingData( targetBooking, bookingsArray ) {
+    const setConcurrentBookingData = function( targetBooking, bookingsArray ) {
 
       const concurrentBookingsArray = [];
       let concurrentBookingIndex = 0;
@@ -86,13 +86,37 @@ angular.module( 'BookingSystem.bookingHelperServices',
 
       // Get concurrent booking index
       targetBooking.ConcurrentBookingIndex = concurrentBookingIndex;
-    }
+    };
+
+    const getHoursForSelect = function(){
+
+      const returnArray = [];
+
+      for ( let i = 0; i <= 23; i++ ){
+        returnArray.push( i );
+      }
+
+      return returnArray;
+    };
+
+    const getMinutesForSelect = function(){
+
+      const returnArray = [];
+
+      for ( let i = 0; i <= 59; i++ ){
+        returnArray.push( i );
+      }
+
+      return returnArray;
+    };
 
     // Public functions
 
     return {
       doBookingsCollide: doBookingsCollide,
-      setConcurrentBookingData: setConcurrentBookingData
+      setConcurrentBookingData: setConcurrentBookingData,
+      getHoursForSelect: getHoursForSelect,
+      getMinutesForSelect: getMinutesForSelect
     };
   }]
 );

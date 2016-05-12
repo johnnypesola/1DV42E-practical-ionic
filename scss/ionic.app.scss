@@ -198,7 +198,7 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 
 .md-datepicker-input-mask {
   width: auto !important;
-  height: 30px !important;
+  height: 0 !important;
 }
 
 .md-calendar-month-label {
@@ -207,6 +207,49 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 
 .md-datepicker-open .md-datepicker-input {
   height: 30px !important;
+  margin-left: 0 !important;
+}
+
+.md-datepicker-input {
+  min-width: 84px !important;
+  max-width: 84px !important;
+}
+
+.md-datepicker-input-container {
+  margin-left: 0 !important;
+  padding-bottom: 2px !important;
+}
+
+md-datepicker {
+  position: relative;
+  top: 15px;
+}
+
+.md-button.md-icon-button {
+  padding: 0;
+  margin: 0;
+}
+
+.md-datepicker-calendar-pane.md-pane-open {
+
 }
 
 // Angular Material Datepicker fixes END
+
+// Custom relative position classes START
+.rel-l-20 {
+  position: relative;
+  left: -20px;
+}
+
+// Custom relative position classes END
+
+// Validation messages look START
+.validation-messages {
+  font-size: 12px;
+  color: #dd2c00;
+  margin: 0 0 0 25px;
+  float: right;
+}
+
+// Validation messages look END
