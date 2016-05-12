@@ -3,7 +3,7 @@ angular.module( 'BookingSystem.bookingHelperServices',
   // Dependencies
   []
 )
-  .factory( 'BookingHelper', [ () => {
+  .factory( 'BookingHelper', [ '$q', 'Booking', ( $q, Booking ) => {
 
     // Private functions
 
@@ -110,13 +110,33 @@ angular.module( 'BookingSystem.bookingHelperServices',
       return returnArray;
     };
 
+    const createBookingContainer = function( bookingInfoObj ){
+
+      // Save booking
+      return Booking.save(
+        {
+          BookingId: 0,
+          Name: '',
+          BookingTypeId: bookingInfoObj.BookingTypeId,
+          CustomerId: bookingInfoObj.CustomerId,
+          Provisional: 1,
+          NumberOfPeople: bookingInfoObj.NumberOfPeople,
+          Discount: 0,
+          CreatedByUserId: 1, //Temporary value, users not implemented
+          ModifiedByUserId: 1, //Temporary value, users not implemented
+          ResponsibleUserId: 1 //Temporary value, users not implemented
+        }
+      ).$promise;
+    };
+
     // Public functions
 
     return {
       doBookingsCollide: doBookingsCollide,
       setConcurrentBookingData: setConcurrentBookingData,
       getHoursForSelect: getHoursForSelect,
-      getMinutesForSelect: getMinutesForSelect
+      getMinutesForSelect: getMinutesForSelect,
+      createBookingContainer: createBookingContainer
     };
   }]
 );

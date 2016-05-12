@@ -30,6 +30,7 @@ const BookingSystem = angular
     'BookingSystem.locationsServices',
     'BookingSystem.ngMinMaxDirectives',
     'BookingSystem.filters',
+    'BookingSystem.bookingServices',
     'ngMaterial',
     'ngResource',
     'ngMessages'
@@ -56,7 +57,8 @@ BookingSystem.run( ['$ionicPlatform', ( $ionicPlatform ) => {
 }] );
 
 // Constants
-BookingSystem.constant( 'API_URL', 'http://bokning.vvfors.se/api/' );
+// BookingSystem.constant( 'API_URL', 'http://bokning.vvfors.se/api/' );
+BookingSystem.constant( 'API_URL', 'http://localhost:6796/api/' );
 BookingSystem.constant( 'API_IMG_PATH_URL', 'http://bokning.vvfors.se/' );
 BookingSystem.constant( 'UPLOAD_IMG_MAX_WIDTH', '400' );
 BookingSystem.constant( 'UPLOAD_IMG_MAX_HEIGHT', '400' );

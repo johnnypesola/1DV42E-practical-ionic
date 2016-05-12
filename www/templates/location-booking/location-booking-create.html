@@ -35,7 +35,8 @@
                     <md-input-container class="col">
                         <label>Timme</label>
                         <md-select
-                            ng-model="bookingStartHour"
+                            ng-model="$parent.bookingStartHour"
+                            ng-change="checkEndDate()"
                         >
                             <md-option ng-repeat="hour in selectHours" value="{{hour}}">
                                 {{hour | zpad:2}}
@@ -46,7 +47,8 @@
                     <md-input-container class="col">
                         <label>Minut</label>
                         <md-select
-                            ng-model="bookingStartMinute"
+                            ng-model="$parent.bookingStartMinute"
+                            ng-change="checkEndDate()"
                         >
                             <md-option ng-repeat="minute in selectMinutes" value="{{minute}}">
                                 {{minute | zpad:2}}
@@ -77,7 +79,10 @@
 
                     <md-input-container class="col">
                         <label>Timme</label>
-                        <md-select ng-model="bookingEndHour">
+                        <md-select
+                            ng-model="$parent.bookingEndHour"
+                            ng-change="checkEndDate()"
+                        >
                             <md-option ng-repeat="hour in selectHours" value="{{hour}}">
                                 {{hour | zpad:2}}
                             </md-option>
@@ -86,8 +91,13 @@
 
                     <md-input-container class="col">
                         <label>Minut</label>
-                        <md-select ng-model="bookingEndMinute">
-                            <md-option ng-repeat="minute in selectMinutes" value="{{minute}}">
+                        <md-select
+                            ng-model="$parent.bookingEndMinute"
+                            ng-change="checkEndDate()"
+                        >
+                            <md-option
+                                ng-repeat="minute in selectMinutes" value="{{minute}}"
+                            >
                                 {{minute | zpad:2}}
                             </md-option>
                         </md-select>
@@ -97,7 +107,7 @@
 
                 <div layout-gt-xs="row" class="pos-relative">
 
-                    <div class="validation-messages" ng-messages="locationBookingForm.LocationId.$error">
+                    <div class="validation-messages" ng-messages="locationBookingForm.CustomerId.$error">
                         <div ng-message="required">Var god ange kund</div>
                     </div>
 
@@ -105,9 +115,9 @@
 
                         <label>Välj kund</label>
                         <md-select
-                                name="CustomerId"
-                                ng-model="locationBooking.CustomerId"
-                                ng-required="true"
+                            name="CustomerId"
+                            ng-model="locationBooking.CustomerId"
+                            ng-required="true"
                         >
                             <md-option ng-repeat="customer in customers" value="{{customer.CustomerId}}">
                                 {{customer.Name}}
@@ -121,17 +131,17 @@
                 <div layout-gt-xs="row" class="pos-relative">
 
                     <div class="validation-messages" ng-messages="locationBookingForm.LocationId.$error">
-                        <div ng-message="required">Var god ange lokal</div>
+                        <div ng-message="required">Var god ange lokal / plats</div>
                     </div>
 
                     <md-input-container class="md-block" flex-gt-sm>
 
                         <label>Välj lokal / plats</label>
                         <md-select
-                                name="LocationId"
-                                ng-model="locationBooking.LocationId"
-                                ng-required="true"
-                                ng-change="updateFurniturings()"
+                            name="LocationId"
+                            ng-model="locationBooking.LocationId"
+                            ng-required="true"
+                            ng-change="updateFurniturings()"
                         >
                             <md-option ng-repeat="location in locations" value="{{location.LocationId}}">
                                 {{location.Name}}
@@ -144,17 +154,12 @@
 
                 <div layout-gt-xs="row" class="pos-relative">
 
-                    <div class="validation-messages" ng-messages="locationBookingForm.SelectedFurnituring.$error">
-                        <div ng-message="required">Var god ange möblering</div>
-                    </div>
-
                     <md-input-container class="md-block" flex-gt-sm>
 
                         <label>Välj möblering</label>
                         <md-select
                             name="SelectedFurnituring"
                             ng-model="locationBooking.SelectedFurnituring"
-                            ng-required="true"
                             ng-disabled="!furniturings.length"
                         >
                             <md-option ng-repeat="furnituring in furniturings" ng-value="furnituring">
@@ -181,7 +186,7 @@
                         <input
                             type="number"
                             name="NumberOfPeople"
-                            ng-model="location.NumberOfPeople"
+                            ng-model="locationBooking.NumberOfPeople"
                             ng-required="true"
                             ng-pattern="/^[0-9]*$/"
                             ng-max="locationBooking.SelectedFurnituring.MaxPeople"
