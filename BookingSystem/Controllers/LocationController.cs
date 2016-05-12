@@ -78,7 +78,7 @@ namespace BookingSystem.Controllers
                 startTime = Convert.ToDateTime(String.Format("{0} {1}", fromDate, fromTime));
                 endTime = Convert.ToDateTime(String.Format("{0} {1}", toDate, toTime));
 
-                IEnumerable<Location> locations = locationService.GetLocationsFreeForPeriod(startTime.StartOfDay(), endTime.EndOfDay());
+                IEnumerable<Location> locations = locationService.GetLocationsFreeForPeriod(startTime, endTime);
                 if (locations == null)
                 {
                     return NotFound();
