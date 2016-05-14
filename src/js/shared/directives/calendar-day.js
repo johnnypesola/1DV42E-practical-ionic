@@ -20,6 +20,8 @@
       $scope.dayName = calendarDayMomentDate.format( 'ddd' );
       $scope.visibleAddButtonHour = null;
 
+      // TODO: Store number of concurrent events in calendar event. Then let the other concurrent events calculate their width from this previous events value.
+
       /* Declare variables END */
 
       /* Private methods START */
