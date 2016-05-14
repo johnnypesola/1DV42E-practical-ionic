@@ -55,6 +55,32 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   right: 2% !important;
 }
 
+// Custom chips specific START
+
+.custom-chip {
+  background: #eee;
+  border-radius: 16px;
+  line-height: 32px;
+  height: 32px;
+  margin: 8px 8px 0 0;
+  padding: 0 12px;
+  float: left;
+  box-sizing: border-box;
+  max-width: 100%;
+  position: relative;
+  display: block;
+  font-size: 16px;
+  font-family: Roboto,"Helvetica Neue",sans-serif;
+  cursor: pointer;
+}
+
+.custom-chip-active {
+  background-color: rgb(16,108,200) !important;
+  color: #fff !important;
+}
+
+// Custom chips specific END
+
 // Calendar specific START
 
 .booking-calendar {
@@ -162,4 +188,95 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   }
 }
 
-// Calendar specifit END
+// Calendar specific END
+
+// Angular Material input fixes START
+
+input[type=search], input[type=text], input[type=password], input[type=datetime], input[type=datetime-local], input[type=date], input[type=month], input[type=time], input[type=week], input[type=number], input[type=email], input[type=url], input[type=tel], input[type=color], textarea {
+  border: solid;
+  border-width: 0 0 1px;
+  border-color: rgba(0,0,0,0.12);
+}
+
+md-input-container:not(.md-input-has-value) input:not(:focus), md-input-container:not(.md-input-has-value) input:not(:focus)::-webkit-datetime-edit-ampm-field, md-input-container:not(.md-input-has-value) input:not(:focus)::-webkit-datetime-edit-day-field, md-input-container:not(.md-input-has-value) input:not(:focus)::-webkit-datetime-edit-hour-field, md-input-container:not(.md-input-has-value) input:not(:focus)::-webkit-datetime-edit-millisecond-field, md-input-container:not(.md-input-has-value) input:not(:focus)::-webkit-datetime-edit-minute-field, md-input-container:not(.md-input-has-value) input:not(:focus)::-webkit-datetime-edit-month-field, md-input-container:not(.md-input-has-value) input:not(:focus)::-webkit-datetime-edit-second-field, md-input-container:not(.md-input-has-value) input:not(:focus)::-webkit-datetime-edit-text, md-input-container:not(.md-input-has-value) input:not(:focus)::-webkit-datetime-edit-week-field, md-input-container:not(.md-input-has-value) input:not(:focus)::-webkit-datetime-edit-year-field {
+  border-bottom-color: rgba(0,0,0,0.12)
+}
+
+// Angular Material input fixes END
+
+// Angular Material Datepicker fixes START
+
+.md-calendar-day-header th {
+  vertical-align: middle !important;
+}
+
+.md-datepicker-input-mask {
+  width: auto !important;
+  height: 0 !important;
+}
+
+.md-calendar-month-label {
+  vertical-align: middle !important;
+}
+
+.md-datepicker-open .md-datepicker-input {
+  height: 30px !important;
+  margin-left: 0 !important;
+}
+
+.md-datepicker-input {
+  min-width: 84px !important;
+  max-width: 84px !important;
+}
+
+.md-datepicker-input-container {
+  margin-left: 0 !important;
+  padding-bottom: 2px !important;
+}
+
+md-datepicker {
+  position: relative;
+  top: 15px;
+}
+
+.md-button.md-icon-button {
+  padding: 0;
+  margin: 0;
+}
+
+.md-datepicker-calendar-pane.md-pane-open {
+
+}
+
+// Angular Material Datepicker fixes END
+
+// Custom relative position classes START
+.rel-l-20 {
+  position: relative;
+  left: -20px;
+}
+
+// Custom relative position classes END
+
+// Validation messages look START
+.validation-messages {
+  font-size: 12px;
+  color: #dd2c00;
+  padding: 0 0 0 12px;
+  position: absolute;
+  top: -15px;
+  right: 0;
+
+  background: url(../img/validation_arrow.gif) bottom left no-repeat;
+}
+
+.pos-relative {
+  position: relative !important;
+}
+
+md-select span.faded, md-option span.faded {
+  color: #aaa;
+  font-size: 12px;
+}
+
+// Validation messages look END

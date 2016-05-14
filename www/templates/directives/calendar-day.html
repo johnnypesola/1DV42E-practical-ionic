@@ -1,7 +1,7 @@
 <div class="col calendar-day">
     <div class="day-header">
-        <div class="number">25</div>
-        <div class="name">mån</div>
+        <div class="number">{{dayNumber}}</div>
+        <div class="name">{{dayName}}</div>
     </div>
 
     <!-- Background lines with containers below -->
@@ -12,56 +12,33 @@
 
     <!-- Events below -->
     <div class="row">
-        <div class="col event" style="
-        height: 100px;
-        width: 29%;
-        left: 0%;
+        <div
+            ng-repeat="booking in bookings"
+            class="col event"
+            style="
+                top: {{booking.StartHour * 35}}px;
+                height: {{booking.Duration * 35}}px;
+                width: {{95 / booking.ConcurrentBookings }}%;
+                left: {{(100 / booking.ConcurrentBookings) * booking.ConcurrentBookingIndex}}%;
+                z-index: 10;
+                opacity: {{ booking.Provisional === 'true' ? 0.3 : 0.8 }};
         ">
-        Atlas Copco
-        </div>
-        <div class="col event" style="
-        height: 200px;
-        width: 29%;
-        left: 33%;
-        ">
-        </div>
-        <div class="col event" style="
-        height: 200px;
-        width: 29%;
-        left: 66%;
-        ">
-        Tandläkarbesök är bra för att det gillar vi liksom
-        </div>
-        <div class="col event" style="
-        height: 175px;
-        top: 210px;
-        width: 95%;
-        left: 0%;
-        ">
-        Tandläkarbesök är bra för att det gillar vi liksom
-        </div>
-        <div class="col event" style="
-        height: 175px;
-        top: 385px;
-        width: 95%;
-        left: 0%;
-        ">
-            Something Cool {{visibleAddButtonHour}}
+            {{ booking.LocationName }}
         </div>
     </div>
 
     <!-- Event Add button below -->
-
-    <button class="add-button"
-
-            style="margin-top: {{ visibleAddButtonHour * 35 }}px"
-            ng-show="visibleAddButtonHour"
-            ng-click="createEventForHour( visibleAddButtonHour )"
-            >
+    <button
+        class="add-button"
+        style="
+            margin-top: {{ visibleAddButtonHour * 35 }}px;
+            z-index: 11;
+        "
+        ng-show="visibleAddButtonHour || visibleAddButtonHour === 0"
+        ng-click="createEventForHour( visibleAddButtonHour )"
+    >
         +
     </button>
-
-
 </div>
 
 

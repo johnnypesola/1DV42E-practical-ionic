@@ -11,11 +11,16 @@
   )
 
     // Directive specific controllers START
-    .controller( 'CalendarDayCtrl', ['$scope', '$element', '$attrs', '$rootScope', '$location', '$q', function( $scope, $element, $attrs, $rootScope, $location, $q ) {
+    .controller( 'CalendarDayCtrl', ['$scope', '$element', '$attrs', '$rootScope', '$location', '$q', '$state', 'BookingHelper', function( $scope, $element, $attrs, $rootScope, $location, $q, $state, BookingHelper ) {
 
       /* Declare variables START */
+      const calendarDayMomentDate = moment( $scope.date );
 
+      $scope.dayNumber = calendarDayMomentDate.format( 'D' );
+      $scope.dayName = calendarDayMomentDate.format( 'ddd' );
       $scope.visibleAddButtonHour = null;
+
+      // TODO: Store number of concurrent events in calendar event. Then let the other concurrent events calculate their width from this previous events value.
 
       /* Declare variables END */
 
@@ -34,6 +39,48 @@
         }
       };
 
+      const calculateStartHour = function( booking ) {
+
+        const endTimeStartOfDay = moment( booking.EndTime ).startOf( 'day' );
+
+        // If booking start on previous day or earlier.
+        if (
+          calendarDayMomentDate.date() !== moment( booking.StartTime ).date() &&
+          moment( booking.StartTime ).isBefore( endTimeStartOfDay )
+        ) {
+          return 0;
+        }
+
+        return ( Number( moment( booking.StartTime ).format( 'H' ) ) + Number( moment( booking.StartTime ).format( 'mm' ) / 60 ) );
+      };
+
+      const calculateEndHour = function( booking ) {
+
+        // If booking ends on next day or later.
+        if ( moment( booking.EndTime ).isAfter( moment( calendarDayMomentDate ).endOf( 'day' ) ) ) {
+          return 23.99;
+        }
+
+        return ( Number( moment( booking.EndTime ).format( 'H' ) ) + Number( moment( booking.EndTime ).format( 'mm' ) / 60 ) );
+      };
+
+      const setupBookings = function(){
+
+        if ( $scope.bookings !== undefined ) {
+
+          // Loop through all bookings for day.
+          $scope.bookings.forEach( ( booking ) => {
+
+            booking.StartHour = calculateStartHour( booking );
+            booking.EndHour = calculateEndHour( booking );
+            booking.Duration = ( booking.EndHour - booking.StartHour );
+
+            // Make this booking aware of other concurrent bookings
+            BookingHelper.setConcurrentBookingData( booking, $scope.bookings );
+          });
+        }
+      };
+
       /* Private methods END */
 
       /* Public methods START */
@@ -41,7 +88,6 @@
       $scope.showAddHour = function( hour ){
 
         $scope.hideAllAddButtonsCallback();
-
         $scope.visibleAddButtonHour = hour;
       };
 
@@ -51,7 +97,17 @@
       };
 
       $scope.createEventForHour = function( hour ) {
-        console.log( 'Should open dialog to create an event for date and hour', hour );
+
+        calendarDayMomentDate.set({
+          'hour': hour
+        });
+
+        // Redirect to create view
+        $state.go( 'app.location-booking-create', {
+          date: calendarDayMomentDate,
+          locationId: null
+        });
+
       };
 
       /* Public methods END */
@@ -65,6 +121,15 @@
 
         $scope.hideAddButton();
 
+      });
+
+      // Add a watch on bookings. Passed from parent controller.
+      $scope.$watch( 'bookings', ( newValue, oldValue ) => {
+
+        if ( Array.isArray( newValue ) ) {
+
+          setupBookings();
+        }
       });
 
       /* Initialization END */
@@ -83,7 +148,9 @@
         scope: {
           date: '=',
           hideAllAddButtonsCallback: '&',
-          hideAddButton: '='
+          hideAddButton: '=',
+          bookings: '=',
+          bookingsType: '='
         },
         link: function ( scope, element, attrs ) {
 
@@ -96,6 +163,7 @@
     .controller( 'CalendarTimeCtrl', ['$scope', function( $scope ) {
 
       /* Declare variables START */
+      $scope.weekNumber = moment( $scope.date ).isoWeek();
 
       /* Declare variables END */
 
@@ -133,6 +201,9 @@
       return {
         restrict: 'E',
         replace: true,
+        scope: {
+          date: '='
+        },
         templateUrl: function( element, attr ){
           return 'templates/directives/calendar-time.html';
         },
