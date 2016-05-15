@@ -1,5 +1,7 @@
 <div class="col calendar-day">
-    <div class="day-header">
+    <div class="day-header"
+         ng-class="{'active-day': isCurrentDay}"
+    >
         <div class="number">{{dayNumber}}</div>
         <div class="name">{{dayName}}</div>
     </div>
@@ -39,6 +41,16 @@
     >
         +
     </button>
+
+    <div
+        class="time-line"
+        ng-show="isCurrentDay"
+        style="
+            top: {{ currentHour ? currentHour * 35 + 50 : 0}}px;
+        "
+    >
+        <hr />
+    </div>
 </div>
 
 

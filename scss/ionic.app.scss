@@ -88,6 +88,28 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 
   .calendar-day {
     position: relative;
+
+    .active-day {
+      color: #444 !important;
+    }
+
+    .time-line {
+      position: absolute;
+      left: -2px;
+      border-left: 7px solid #c200ce;
+      border-top: 5px solid rgba( 255,255,255,0.15 );
+      border-bottom: 5px solid rgba( 255,255,255,0.15 );
+
+      border-radius: 4px;
+      z-index: 11;
+      width: 100%;
+
+      hr {
+        border: none;
+        border-top: 2px solid #c200ce;
+        margin: 0;
+      }
+    }
   }
 
   .col {

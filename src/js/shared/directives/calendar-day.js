@@ -39,9 +39,30 @@
         }
       };
 
+      const getHourDecimal = function( hour, minute ) {
+        return ( Number( hour ) + Number( minute / 60 ) );
+      };
+
+      const setIsCurrentDayVariables = function () {
+
+        $scope.isCurrentDay = moment().format( 'YYYY-MM-DD' ) === calendarDayMomentDate.format( 'YYYY-MM-DD' );
+
+        if ( $scope.isCurrentDay ) {
+
+          const currentMoment = moment();
+
+          const hour = currentMoment.format( 'H' );
+          const minute = currentMoment.format( 'mm' );
+
+          $scope.currentHour = getHourDecimal( hour, minute );
+        }
+      };
+
       const calculateStartHour = function( booking ) {
 
         const endTimeStartOfDay = moment( booking.EndTime ).startOf( 'day' );
+        const startHour = moment( booking.StartTime ).format( 'H' );
+        const startMinute = moment( booking.StartTime ).format( 'mm' );
 
         // If booking start on previous day or earlier.
         if (
@@ -51,7 +72,7 @@
           return 0;
         }
 
-        return ( Number( moment( booking.StartTime ).format( 'H' ) ) + Number( moment( booking.StartTime ).format( 'mm' ) / 60 ) );
+        return getHourDecimal( startHour, startMinute );
       };
 
       const calculateEndHour = function( booking ) {
@@ -115,6 +136,7 @@
       /* Initialization START */
 
       setupHours();
+      setIsCurrentDayVariables();
 
       // Listen to when AddButton should hide
       $scope.$on( 'hideAllAddButtons', ( event, msg ) => {

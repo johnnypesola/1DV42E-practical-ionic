@@ -15,18 +15,18 @@ angular.module( 'BookingSystem.bookings',
 
     const getBookings = function () {
 
-      const furniturings = Booking.query();
+      const bookings = Booking.query();
 
-      // In case furnituring cannot be fetched, display an error to user.
-      furniturings.$promise.catch( () => {
+      // In case booking cannot be fetched, display an error to user.
+      bookings.$promise.catch( () => {
 
         $rootScope.FlashMessage = {
           type: 'error',
-          message: 'Möbleringar kunde inte hämtas, var god försök igen.'
+          message: 'Bokningstillfällen kunde inte hämtas, var god försök igen.'
         };
       });
 
-      $scope.furniturings = furniturings;
+      $scope.bookings = bookings;
 
     };
 
@@ -50,9 +50,9 @@ angular.module( 'BookingSystem.bookings',
 
     /* Init vars */
 
-    const modalTemplateUrl = 'templates/modals/furnituring-delete.html';
+    const modalTemplateUrl = 'templates/modals/booking-delete.html';
     $scope.editMode = false;
-    $scope.furnituringBackup = {};
+    $scope.bookingBackup = {};
 
     /* Private methods START */
     const setupModal = function(){
@@ -84,22 +84,22 @@ angular.module( 'BookingSystem.bookings',
 
     const getBooking = function () {
 
-      const furnituring = Booking.get(
+      const booking = Booking.get(
         {
-          furnituringId: $stateParams.furnituringId
+          bookingId: $stateParams.bookingId
         }
       );
 
-      // In case furnituring cannot be fetched, display an error to user.
-      furnituring.$promise.catch( () => {
+      // In case booking cannot be fetched, display an error to user.
+      booking.$promise.catch( () => {
 
         $rootScope.FlashMessage = {
           type: 'error',
-          message: 'Möblering kunde inte hämtas, var god försök igen.'
+          message: 'Bokningstillfälle kunde inte hämtas, var god försök igen.'
         };
       });
 
-      $scope.furnituring = furnituring;
+      $scope.booking = booking;
     };
 
     /* Private Methods END */
@@ -112,7 +112,7 @@ angular.module( 'BookingSystem.bookings',
       $scope.isEditMode = true;
 
       // Make backup of data if in editMode.
-      $scope.furnituringBackup = angular.copy( $scope.furnituring );
+      $scope.bookingBackup = angular.copy( $scope.booking );
     };
 
     $scope.endEditMode = function () {
@@ -125,18 +125,18 @@ angular.module( 'BookingSystem.bookings',
       const $scope = this;
 
       $scope.isEditMode = false;
-      $scope.furnituring = $scope.furnituringBackup;
+      $scope.booking = $scope.bookingBackup;
     };
 
     $scope.saveBooking = function() {
 
       const $scope = this;
 
-      // Save furnituring
+      // Save booking
       Booking.save(
         {
-          BookingId: $stateParams.furnituringId,
-          Name: $scope.furnituring.Name
+          BookingId: $stateParams.bookingId,
+          Name: $scope.booking.Name
         }
       ).$promise
 
@@ -147,7 +147,7 @@ angular.module( 'BookingSystem.bookings',
 
           $rootScope.FlashMessage = {
             type: 'success',
-            message: 'Möbleringen "' + $scope.furnituring.Name + '" sparades med ett lyckat resultat'
+            message: 'Bokningstillfället "' + $scope.booking.Name + '" sparades med ett lyckat resultat'
           };
 
           // Something went wrong
@@ -157,7 +157,7 @@ angular.module( 'BookingSystem.bookings',
           if ( response.status === 409 ){
             $rootScope.FlashMessage = {
               type: 'error',
-              message: 'Det finns redan ett bokningstillfälle som heter "' + $scope.furnituring.Name +
+              message: 'Det finns redan ett bokningstillfälle som heter "' + $scope.booking.Name +
               '". Två bokningstillfällen kan inte heta lika.'
             };
           }
@@ -174,7 +174,7 @@ angular.module( 'BookingSystem.bookings',
           if ( response.status === 404 ) {
             $rootScope.FlashMessage = {
               type: 'error',
-              message: 'Möbleringen "' + $scope.furnituring.Name + '" existerar inte längre. Hann kanske någon radera den?'
+              message: 'Bokningstillfället "' + $scope.booking.Name + '" existerar inte längre. Hann kanske någon radera den?'
             };
 
             history.back();
@@ -184,10 +184,10 @@ angular.module( 'BookingSystem.bookings',
 
     $scope.deleteBooking = function() {
 
-      // Delete furnituring
+      // Delete booking
       Booking.delete(
         {
-          furnituringId: $stateParams.furnituringId
+          bookingId: $stateParams.bookingId
         }
       ).$promise
 
@@ -196,7 +196,7 @@ angular.module( 'BookingSystem.bookings',
 
           $rootScope.FlashMessage = {
             type: 'success',
-            message: 'Möbleringen "' + $scope.furnituring.Name + '" raderades med ett lyckat resultat'
+            message: 'Bokningstillfället "' + $scope.booking.Name + '" raderades med ett lyckat resultat'
           };
 
           history.back();
@@ -212,8 +212,8 @@ angular.module( 'BookingSystem.bookings',
           ){
             $rootScope.FlashMessage = {
               type: 'error',
-              message:    'Möbleringen kan inte raderas eftersom det finns' +
-              ' en lokalbokning eller en lokalmöblering som refererar till bokningstillfället'
+              message:    'Bokningstillfället kan inte raderas eftersom det finns' +
+              ' en lokalbokning, resursbokning eller en måltidsbokning som refererar till bokningstillfället'
             };
           }
 
@@ -229,7 +229,7 @@ angular.module( 'BookingSystem.bookings',
           if ( response.status === 404 ) {
             $rootScope.FlashMessage = {
               type: 'error',
-              message: 'Möbleringen "' + $scope.furnituring.Name + '" existerar inte längre. Hann kanske någon radera den?'
+              message: 'Bokningstillfället "' + $scope.booking.Name + '" existerar inte längre. Hann kanske någon radera den?'
             };
           }
 
@@ -252,7 +252,7 @@ angular.module( 'BookingSystem.bookings',
   .controller( 'BookingCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'Booking', ( $rootScope, $stateParams, $scope, $state, Booking ) => {
 
     /* Init vars */
-    $scope.furnituring = {};
+    $scope.booking = {};
 
     /* Private methods START */
 
@@ -264,7 +264,7 @@ angular.module( 'BookingSystem.bookings',
 
       const $scope = this;
 
-      // Save furnituring
+      // Save booking
       Booking.save(
         {
           BookingId: 0,
@@ -277,7 +277,7 @@ angular.module( 'BookingSystem.bookings',
 
           $rootScope.FlashMessage = {
             type: 'success',
-            message: 'Möbleringen "' + $scope.booking.Name + '" skapades med ett lyckat resultat'
+            message: 'Bokningstillfället "' + $scope.booking.Name + '" skapades med ett lyckat resultat'
           };
 
           history.back();
