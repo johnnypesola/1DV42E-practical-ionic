@@ -11,10 +11,12 @@
   )
 
     // Directive specific controllers START
-    .controller( 'CalendarDayCtrl', ['$scope', '$element', '$attrs', '$rootScope', '$location', '$q', '$state', 'BookingHelper', function( $scope, $element, $attrs, $rootScope, $location, $q, $state, BookingHelper ) {
+    .controller( 'CalendarDayCtrl', ['$scope', '$element', '$attrs', '$rootScope', '$location', '$q', '$state', 'BookingHelper', '$interval', function( $scope, $element, $attrs, $rootScope, $location, $q, $state, BookingHelper, $interval ) {
 
       /* Declare variables START */
       const calendarDayMomentDate = moment( $scope.date );
+      const updateIntervalTime = 5000; // Every 60 seconds
+      let updateInterval = null;
 
       $scope.dayNumber = calendarDayMomentDate.format( 'D' );
       $scope.dayName = calendarDayMomentDate.format( 'ddd' );
@@ -35,7 +37,6 @@
         for ( hour = 0; hour < totalDayHours; hour++ ) {
 
           $scope.hoursArray.push( hour );
-
         }
       };
 
@@ -55,6 +56,18 @@
           const minute = currentMoment.format( 'mm' );
 
           $scope.currentHour = getHourDecimal( hour, minute );
+        }
+      };
+
+      const startUpdateInterval = function (){
+
+        if ( $scope.isCurrentDay ) {
+
+          updateInterval = $interval( () => {
+
+            setIsCurrentDayVariables();
+
+          }, updateIntervalTime );
         }
       };
 
@@ -137,6 +150,7 @@
 
       setupHours();
       setIsCurrentDayVariables();
+      startUpdateInterval();
 
       // Listen to when AddButton should hide
       $scope.$on( 'hideAllAddButtons', ( event, msg ) => {
@@ -151,6 +165,14 @@
         if ( Array.isArray( newValue ) ) {
 
           setupBookings();
+        }
+      });
+
+      // Destroy the update interval when we leave parent view
+      $scope.$on( 'leaving-view', ( event ) => {
+
+        if ( updateInterval !== null ) {
+          $interval.cancel( updateInterval );
         }
       });
 
