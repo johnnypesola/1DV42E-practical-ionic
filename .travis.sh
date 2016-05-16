@@ -27,7 +27,7 @@ git reset upstream/gh-pages
 
 # Build
 cd ..
-gulp
+gulp travis
 cd www
 
 # Commit and push to github pages repo
