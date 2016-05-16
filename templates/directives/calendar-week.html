@@ -1,0 +1,20 @@
+<div
+    class="row booking-calendar"
+>
+
+    <calendar-time
+        date="weekDateStart"
+        zoom="zoom"
+        >
+    </calendar-time>
+
+    <calendar-day ng-repeat="day in days"
+        date="day.date"
+        bookings="day.bookings"
+        hide-all-add-buttons-callback="hideAddButtons()"
+        bookings-type="bookingsType"
+        zoom="zoom"
+        >
+    </calendar-day>
+
+</div>

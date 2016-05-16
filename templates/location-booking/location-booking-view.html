@@ -1,4 +1,4 @@
-<ion-view view-title="Lokalbokningar">
+<ion-view view-title="Lokal/Platsbokningar">
     <ion-nav-buttons side="secondary">
         <button
             class="button"
@@ -8,60 +8,16 @@
             editMode: {{isEditMode}}
         </button>
     </ion-nav-buttons>
-    <ion-content padding="false">
+    <ion-content padding="false" id="booking-view-content">
 
-        <div class="row booking-calendar">
-
-            <calendar-time></calendar-time>
-
-            <calendar-day
-                date=""
-                hide-all-add-buttons-callback="hideAddButtons()"
-            >
-            </calendar-day>
-
-            <calendar-day
-                    date=""
-                    hide-all-add-buttons-callback="hideAddButtons()"
-                    >
-            </calendar-day>
-
-            <calendar-day
-                    date=""
-                    hide-all-add-buttons-callback="hideAddButtons()"
-                    >
-            </calendar-day>
-
-            <calendar-day
-                    date=""
-                    hide-all-add-buttons-callback="hideAddButtons()"
-                    >
-            </calendar-day>
-
-            <calendar-day
-                    date=""
-                    hide-all-add-buttons-callback="hideAddButtons()"
-                    >
-            </calendar-day>
-
-            <calendar-day
-                    date=""
-                    hide-all-add-buttons-callback="hideAddButtons()"
-                    >
-            </calendar-day>
-
-            <calendar-day
-                    date=""
-                    hide-all-add-buttons-callback="hideAddButtons()"
-                    >
-            </calendar-day>
-
-        </div>
-
-        Location Bookings:
-        <pre>
-            {{LocationBookings | json}}
-        </pre>
+        <calendar-week
+            date="weekDate"
+            bookings="locationBookings"
+            bookings-type="'location'"
+            new-booking-callback="newBookingCallback(hour)"
+            zoom="zoom"
+        >
+        </calendar-week>
 
     </ion-content>
 
