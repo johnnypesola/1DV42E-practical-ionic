@@ -1,6 +1,6 @@
-<ion-side-menus enable-menu-with-back-views="false">
+<ion-side-menus enable-menu-with-back-views="false" ng-controller="NavigationCtrl">
   <ion-side-menu-content>
-    <ion-nav-bar class="bar-energized" ng-controller="NavBarCtrl">
+    <ion-nav-bar class="bar-energized">
 
       <ion-nav-back-button class="button-clear">
       </ion-nav-back-button>
@@ -18,35 +18,60 @@
     <ion-content>
 
         <div class="item item-avatar menu-background">
-            <img src="">
+            <img src="img/standard_user_pic2.jpg" />
             <h2>Förnamn Efternamn</h2>
             <p>Titel</p>
         </div>
 
-        <ion-list>
+        <ion-list class="menu-list">
+
             <ion-item menu-close href="#/app/start">
-                Start
+                <div class="item-icon-left">
+                    <i class="icon ion-home dark"></i>
+                    <p>Start</p>
+                </div>
             </ion-item>
             <ion-item menu-close href="#/app/customers-list">
-                Kunder
+                <div class="item-icon-left">
+                    <i class="icon ion-briefcase calm"></i>
+                    <p>Kunder</p>
+                </div>
             </ion-item>
             <ion-item menu-close href="#/app/locations-list">
-                Lokaler/platser
+                <div class="item-icon-left">
+                    <i class="icon ion-ios-location balanced"></i>
+                    <p>Lokaler/platser</p>
+                </div>
             </ion-item>
             <ion-item menu-close href="#/app/furnituring-list">
-                Möbleringar
+                <div class="item-icon-left">
+                    <i class="icon ion-ios-grid-view energized"></i>
+                    <p>Möbleringar</p>
+                </div>
             </ion-item>
             <ion-item menu-close href="#/app/meals-list">
-                Måltider
+                <div class="item-icon-left">
+                    <i class="icon ion-android-restaurant assertive"></i>
+                    <p>Måltider</p>
+                </div>
             </ion-item>
             <ion-item menu-close href="#/app/resources-list">
-                Resurser
+                <div class="item-icon-left">
+                    <i class="icon ion-cube royal"></i>
+                    <p>Resurser</p>
+                </div>
             </ion-item>
             <ion-item menu-close href="#/app/bookingtypes-list">
-                Bokningstyper
+                <div class="item-icon-left">
+                    <i class="icon ion-pricetag positive"></i>
+                    <p>Bokningstyper</p>
+                </div>
             </ion-item>
             <ion-item menu-close ng-click="login()">
-                Logga ut
+                <div class="item-icon-left">
+                    <i class="icon ion-log-out"></i>
+                    <p>Logga ut</p>
+                </div>
             </ion-item>
         </ion-list>
 
