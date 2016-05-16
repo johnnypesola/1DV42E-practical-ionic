@@ -67,6 +67,7 @@ BookingSystem.constant( 'DEFAULT_MAP_ZOOM', 5 );
 BookingSystem.constant( 'DEFAULT_LATITUDE', 59.2792 );
 BookingSystem.constant( 'DEFAULT_LONGITUDE', 15.2361 );
 BookingSystem.constant( 'MODAL_ANIMATION', 'slide-in-up' );
+BookingSystem.constant( 'DATA_SYNC_INTERVAL_TIME', 60000 * 5 ); // Every 5 minutes
 
 // Routes
 BookingSystem.config( ['$stateProvider', '$urlRouterProvider', '$mdDateLocaleProvider', ( $stateProvider, $urlRouterProvider, $mdDateLocaleProvider ) => {

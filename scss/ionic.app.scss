@@ -115,7 +115,6 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   .col {
 
     padding: 0 !important;
-    height: 1000px;
     border-right: 1px solid #eee;
 
     .day-header, .time-header {
@@ -154,7 +153,6 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 
         .event-hour {
           border-bottom: 1px solid #f8f8f8;
-          height: 35px;
         }
     }
 
@@ -194,14 +192,20 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
     }
 
     .time {
-      color: #666;
-      margin: 5px 0;
-      padding: 0 !important;
-      height: 30px;
-      font-size: 11px;
-      text-align: center;
-      border-right: none !important;
-      width: 50px;
+
+      // margin: 5px 0;
+      padding: 5px !important;
+      padding-top: 0 !important;
+      // height: 30px;
+
+      div {
+        border-right: none !important;
+        color: #666;
+        font-size: 11px;
+        text-align: center;
+        width: 50px;
+        position: relative;
+      }
     }
 
     .first {

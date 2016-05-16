@@ -15,9 +15,10 @@
 
       /* Declare variables START */
       const calendarDayMomentDate = moment( $scope.date );
-      const updateIntervalTime = 5000; // Every 60 seconds
+      const updateIntervalTime = 60000; // Every 60 seconds
       let updateInterval = null;
 
+      $scope.columnHeight = 35 * $scope.zoom;
       $scope.dayNumber = calendarDayMomentDate.format( 'D' );
       $scope.dayName = calendarDayMomentDate.format( 'ddd' );
       $scope.visibleAddButtonHour = null;
@@ -194,7 +195,8 @@
           hideAllAddButtonsCallback: '&',
           hideAddButton: '=',
           bookings: '=',
-          bookingsType: '='
+          bookingsType: '=',
+          zoom: '='
         },
         link: function ( scope, element, attrs ) {
 
@@ -208,6 +210,7 @@
 
       /* Declare variables START */
       $scope.weekNumber = moment( $scope.date ).isoWeek();
+      $scope.columnHeight = 35 * $scope.zoom;
 
       /* Declare variables END */
 
@@ -246,7 +249,8 @@
         restrict: 'E',
         replace: true,
         scope: {
-          date: '='
+          date: '=',
+          zoom: '='
         },
         templateUrl: function( element, attr ){
           return 'templates/directives/calendar-time.html';

@@ -7,12 +7,13 @@ angular.module( 'BookingSystem.locationBooking',
   )
 
   // Controller
-  .controller( 'LocationBookingViewCtrl', [ '$rootScope', '$scope', '$state', 'LocationBooking', '$interval', ( $rootScope, $scope, $state, LocationBooking, $interval ) => {
+  .controller( 'LocationBookingViewCtrl', [ '$rootScope', '$scope', '$state', 'LocationBooking', '$interval', 'DATA_SYNC_INTERVAL_TIME', ( $rootScope, $scope, $state, LocationBooking, $interval, DATA_SYNC_INTERVAL_TIME ) => {
 
     /* Init vars */
-    const updateIntervalTime = 60000 * 10; // Every 10 minutes
+    const updateIntervalTime = DATA_SYNC_INTERVAL_TIME;
     let updateInterval = null;
     $scope.weekDate = moment();
+    $scope.zoom = 1;
 
     /* Private methods START */
 

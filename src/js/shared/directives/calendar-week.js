@@ -104,7 +104,8 @@ angular.module( 'BookingSystem.calendarWeekDirective',
       scope: {
         date: '=',
         bookings: '=',
-        bookingsType: '='
+        bookingsType: '=',
+        zoom: '='
       },
       link: function ( scope, element, attrs ) {
 
