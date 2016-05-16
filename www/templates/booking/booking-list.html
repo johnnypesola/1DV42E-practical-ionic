@@ -1,0 +1,19 @@
+<ion-view view-title="Bokningstillfälle">
+    <ion-content>
+        <ion-list>
+            <ion-item ng-repeat="booking in bookings" href="#/app/booking-details/{{booking.BookingId}}">
+                {{booking.Name}}
+            </ion-item>
+        </ion-list>
+
+    </ion-content>
+
+    <md-button
+            class="md-fab md-warn md-lower-right-button"
+            aria-label="Skapa"
+            href="#/app/booking-create"
+    >
+        <span class="icon ion-plus-round md-big-icon"></span>
+    </md-button>
+
+</ion-view>

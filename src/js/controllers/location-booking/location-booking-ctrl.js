@@ -7,10 +7,13 @@ angular.module( 'BookingSystem.locationBooking',
   )
 
   // Controller
-  .controller( 'LocationBookingViewCtrl', [ '$rootScope', '$scope', '$state', 'LocationBooking', ( $rootScope, $scope, $state, LocationBooking ) => {
+  .controller( 'LocationBookingViewCtrl', [ '$rootScope', '$scope', '$state', 'LocationBooking', '$interval', 'DATA_SYNC_INTERVAL_TIME', '$ionicGesture', ( $rootScope, $scope, $state, LocationBooking, $interval, DATA_SYNC_INTERVAL_TIME, $ionicGesture ) => {
 
     /* Init vars */
+    const updateIntervalTime = DATA_SYNC_INTERVAL_TIME;
+    let updateInterval = null;
     $scope.weekDate = moment();
+    $scope.zoom = 2;
 
     /* Private methods START */
 
@@ -32,6 +35,16 @@ angular.module( 'BookingSystem.locationBooking',
       });
     };
 
+    const startUpdateInterval = function (){
+
+      updateInterval = $interval( () => {
+
+        getLocationBookings();
+
+      }, updateIntervalTime );
+
+    };
+
     /* Private Methods END */
 
     /* Public Methods START */
@@ -39,12 +52,37 @@ angular.module( 'BookingSystem.locationBooking',
     /* Public Methods END */
 
     /* Initialization START */
+
     $scope.$on( '$ionicView.enter', ( event, data ) => {
 
-      console.log( 'fetched new bookings' );
-
       getLocationBookings();
+      startUpdateInterval();
     });
+
+    // Destroy the update interval when controller is destroyed (when we leave this view)
+    $scope.$on( '$ionicView.leave', ( event ) => {
+
+      // Cancel local update interval
+      if ( updateInterval ) {
+        $interval.cancel( updateInterval );
+      }
+
+      // Broadcast to children to cancel update intervals
+      $scope.$broadcast( 'leaving-view' );
+    });
+
+    const element = angular.element( document.querySelector( '#booking-view-content' ) );
+
+    $ionicGesture.on( 'pinch', ( e ) => {
+
+      e.gesture.srcEvent.preventDefault();
+
+      $scope.$apply( () => {
+
+        $scope.zoom = e.gesture.scale;
+      });
+
+    }, element );
 
     /* Initialization END */
 
@@ -392,8 +430,6 @@ angular.module( 'BookingSystem.locationBooking',
     /* Public Methods START */
 
     $scope.updateFurniturings = function() {
-
-      console.log( 'updateFurniturings', $scope.locationBooking.LocationId );
 
       // Get all available furniturings for selected location
       if ( $scope.locationBooking.LocationId ){

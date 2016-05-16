@@ -11,14 +11,19 @@
   )
 
     // Directive specific controllers START
-    .controller( 'CalendarDayCtrl', ['$scope', '$element', '$attrs', '$rootScope', '$location', '$q', '$state', 'BookingHelper', function( $scope, $element, $attrs, $rootScope, $location, $q, $state, BookingHelper ) {
+    .controller( 'CalendarDayCtrl', ['$scope', '$element', '$attrs', '$rootScope', '$location', '$q', '$state', 'BookingHelper', '$interval', function( $scope, $element, $attrs, $rootScope, $location, $q, $state, BookingHelper, $interval ) {
 
       /* Declare variables START */
       const calendarDayMomentDate = moment( $scope.date );
+      const updateIntervalTime = 60000; // Every 60 seconds
+      const maxColumnHeight = 200;
+      const minColumnHeight = 35;
+      let updateInterval = null;
 
       $scope.dayNumber = calendarDayMomentDate.format( 'D' );
       $scope.dayName = calendarDayMomentDate.format( 'ddd' );
       $scope.visibleAddButtonHour = null;
+      $scope.columnHeight = 35 * $scope.zoom;
 
       // TODO: Store number of concurrent events in calendar event. Then let the other concurrent events calculate their width from this previous events value.
 
@@ -35,13 +40,57 @@
         for ( hour = 0; hour < totalDayHours; hour++ ) {
 
           $scope.hoursArray.push( hour );
+        }
+      };
 
+      const getHourDecimal = function( hour, minute ) {
+        return ( Number( hour ) + Number( minute / 60 ) );
+      };
+
+      const setColumnHeight = function() {
+
+        const newValue = $scope.columnHeight + ( 35 * ( $scope.zoom - 1 ) );
+
+        console.log( 'setColumnHeight', newValue, $scope.columnHeight );
+
+        if ( newValue < maxColumnHeight && newValue > minColumnHeight ) {
+
+          $scope.columnHeight = newValue;
+        }
+      };
+
+      const setIsCurrentDayVariables = function () {
+
+        $scope.isCurrentDay = moment().format( 'YYYY-MM-DD' ) === calendarDayMomentDate.format( 'YYYY-MM-DD' );
+
+        if ( $scope.isCurrentDay ) {
+
+          const currentMoment = moment();
+
+          const hour = currentMoment.format( 'H' );
+          const minute = currentMoment.format( 'mm' );
+
+          $scope.currentHour = getHourDecimal( hour, minute );
+        }
+      };
+
+      const startUpdateInterval = function (){
+
+        if ( $scope.isCurrentDay ) {
+
+          updateInterval = $interval( () => {
+
+            setIsCurrentDayVariables();
+
+          }, updateIntervalTime );
         }
       };
 
       const calculateStartHour = function( booking ) {
 
         const endTimeStartOfDay = moment( booking.EndTime ).startOf( 'day' );
+        const startHour = moment( booking.StartTime ).format( 'H' );
+        const startMinute = moment( booking.StartTime ).format( 'mm' );
 
         // If booking start on previous day or earlier.
         if (
@@ -51,7 +100,7 @@
           return 0;
         }
 
-        return ( Number( moment( booking.StartTime ).format( 'H' ) ) + Number( moment( booking.StartTime ).format( 'mm' ) / 60 ) );
+        return getHourDecimal( startHour, startMinute );
       };
 
       const calculateEndHour = function( booking ) {
@@ -115,6 +164,8 @@
       /* Initialization START */
 
       setupHours();
+      setIsCurrentDayVariables();
+      startUpdateInterval();
 
       // Listen to when AddButton should hide
       $scope.$on( 'hideAllAddButtons', ( event, msg ) => {
@@ -129,6 +180,20 @@
         if ( Array.isArray( newValue ) ) {
 
           setupBookings();
+        }
+      });
+
+      // Add a watch on zoom. Passed from parent controller.
+      $scope.$watch( 'zoom', ( newValue, oldValue ) => {
+
+        setColumnHeight();
+      });
+
+      // Destroy the update interval when we leave parent view
+      $scope.$on( 'leaving-view', ( event ) => {
+
+        if ( updateInterval !== null ) {
+          $interval.cancel( updateInterval );
         }
       });
 
@@ -150,7 +215,8 @@
           hideAllAddButtonsCallback: '&',
           hideAddButton: '=',
           bookings: '=',
-          bookingsType: '='
+          bookingsType: '=',
+          zoom: '='
         },
         link: function ( scope, element, attrs ) {
 
@@ -164,10 +230,22 @@
 
       /* Declare variables START */
       $scope.weekNumber = moment( $scope.date ).isoWeek();
+      $scope.columnHeight = 35 * $scope.zoom;
+      const maxColumnHeight = 200;
+      const minColumnHeight = 35;
 
       /* Declare variables END */
 
       /* Private methods START */
+
+      const setColumnHeight = function() {
+
+        const newValue = $scope.columnHeight + ( 35 * ( $scope.zoom - 1 ) );
+
+        if ( newValue < maxColumnHeight && newValue > minColumnHeight ) {
+          $scope.columnHeight = newValue;
+        }
+      };
 
       const setupHours = function(){
 
@@ -178,7 +256,6 @@
         for ( hour = 1; hour < totalDayHours; hour++ ) {
 
           $scope.hoursArray.push( hour );
-
         }
       };
 
@@ -192,6 +269,12 @@
 
       setupHours();
 
+      // Add a watch on zoom. Passed from parent controller.
+      $scope.$watch( 'zoom', ( newValue, oldValue ) => {
+
+        setColumnHeight();
+      });
+
       /* Initialization END */
 
     }]
@@ -202,7 +285,8 @@
         restrict: 'E',
         replace: true,
         scope: {
-          date: '='
+          date: '=',
+          zoom: '='
         },
         templateUrl: function( element, attr ){
           return 'templates/directives/calendar-time.html';

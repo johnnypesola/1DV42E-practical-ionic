@@ -2,11 +2,20 @@
     <div class="time-header">
         <div class="week">v {{weekNumber}}</div>
     </div>
-    <div class="row">
-        <div class="col time first"></div>
+    <div class="row time">
+        <div class="col time"
+             style="height: {{columnHeight}}px;"
+        ></div>
     </div>
-    <div class="row" ng-repeat="hour in hoursArray">
-        <div class="col time">{{hour | digits}}.00</div>
+    <div class="row time" ng-repeat="hour in hoursArray">
+        <div
+            class="col"
+            style="
+                height: {{columnHeight}}px;
+                top: -10px;
+            "
+
+        >{{hour | digits}}.00</div>
     </div>
 </div>
 
