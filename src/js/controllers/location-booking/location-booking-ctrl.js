@@ -7,7 +7,7 @@ angular.module( 'BookingSystem.locationBooking',
   )
 
   // Controller
-  .controller( 'LocationBookingViewCtrl', [ '$rootScope', '$scope', '$state', 'LocationBooking', '$interval', 'DATA_SYNC_INTERVAL_TIME', '$ionicGesture', ( $rootScope, $scope, $state, LocationBooking, $interval, DATA_SYNC_INTERVAL_TIME, $ionicGesture ) => {
+  .controller( 'LocationBookingViewCtrl', [ '$rootScope', '$scope', '$state', 'LocationBooking', '$interval', 'DATA_SYNC_INTERVAL_TIME', '$ionicGesture', '$mdToast', ( $rootScope, $scope, $state, LocationBooking, $interval, DATA_SYNC_INTERVAL_TIME, $ionicGesture, $mdToast ) => {
 
     /* Init vars */
     const updateIntervalTime = DATA_SYNC_INTERVAL_TIME;
@@ -24,10 +24,10 @@ angular.module( 'BookingSystem.locationBooking',
       // In case LocationBooking cannot be fetched, display an error to user.
       locationBookings.$promise.catch( () => {
 
-        $rootScope.FlashMessage = {
-          type: 'error',
-          message: 'Lokalbokningar kunde inte hämtas, var god försök igen.'
-        };
+        $mdToast.show( $mdToast.simple()
+          .content( 'Lokalbokningar kunde inte hämtas, var god försök igen.' )
+          .position( 'top right' )
+        );
       })
 
       .then( ( locationBookings ) => {
@@ -292,7 +292,7 @@ angular.module( 'BookingSystem.locationBooking',
   }]
   )
 
-  .controller( 'LocationBookingCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'LocationBooking', 'Location', 'BookingHelper', 'LocationFurnituring', 'Customer', '$q', ( $rootScope, $stateParams, $scope, $state, LocationBooking, Location, BookingHelper, LocationFurnituring, Customer, $q ) => {
+  .controller( 'LocationBookingCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'LocationBooking', 'Location', 'BookingHelper', 'LocationFurnituring', 'Customer', '$q', '$mdToast', ( $rootScope, $stateParams, $scope, $state, LocationBooking, Location, BookingHelper, LocationFurnituring, Customer, $q, $mdToast ) => {
 
     /* Init vars */
     $scope.locationBooking = {
@@ -413,10 +413,10 @@ angular.module( 'BookingSystem.locationBooking',
         // Something went wrong
       }).catch( ( response ) => {
 
-        $rootScope.FlashMessage = {
-          type: 'error',
-          message: 'Ett oväntat fel uppstod när bokningstillfället skulle sparas'
-        };
+        $mdToast.show( $mdToast.simple()
+          .content( 'Ett oväntat fel uppstod när bokningstillfället skulle sparas' )
+          .position( 'top right' )
+        );
 
         deferred.reject();
       });
@@ -441,10 +441,11 @@ angular.module( 'BookingSystem.locationBooking',
 
         // If furniturings could not be fetched
         $scope.furniturings.$promise.catch( () => {
-          $rootScope.FlashMessage = {
-            type: 'error',
-            message: 'Möbleringar för vald lokal kunde inte hämtas.'
-          };
+
+          $mdToast.show( $mdToast.simple()
+            .content( 'Möbleringar för vald lokal kunde inte hämtas.' )
+            .position( 'top right' )
+          );
         })
 
         // If furniturings were fetch successfully
@@ -509,10 +510,10 @@ angular.module( 'BookingSystem.locationBooking',
               // If everything went ok
               .then( ( response ) => {
 
-                $rootScope.FlashMessage = {
-                  type: 'success',
-                  message: 'Lokal/plats-bokningen skapades med ett lyckat resultat'
-                };
+                $mdToast.show( $mdToast.simple()
+                  .content( 'Lokal/plats-bokningen skapades med ett lyckat resultat' )
+                  .position( 'top right' )
+                );
 
                 // Resolve promise
                 deferred.resolve();
@@ -522,18 +523,19 @@ angular.module( 'BookingSystem.locationBooking',
 
                 // If there there was a foreign key reference
                 if ( response.status === 409 ){
-                  $rootScope.FlashMessage = {
-                    type: 'error',
-                    message: 'Lokalen är tyvärr redan bokad under vald tidsram.'
-                  };
+
+                  $mdToast.show( $mdToast.simple()
+                    .content( 'Lokalen är tyvärr redan bokad under vald tidsram.' )
+                    .position( 'top right' )
+                  );
                 }
 
                 // If there was a problem with the in-data
                 else {
-                  $rootScope.FlashMessage = {
-                    type: 'error',
-                    message: 'Ett oväntat fel uppstod när lokal/plats-bokningen skulle sparas'
-                  };
+                  $mdToast.show( $mdToast.simple()
+                    .content( 'Ett oväntat fel uppstod när lokal/plats-bokningen skulle sparas' )
+                    .position( 'top right' )
+                  );
                 }
               });
         });
