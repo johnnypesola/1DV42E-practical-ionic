@@ -51,8 +51,6 @@
 
         const newValue = $scope.columnHeight + ( 35 * ( $scope.zoom - 1 ) );
 
-        console.log( 'setColumnHeight', newValue, $scope.columnHeight );
-
         if ( newValue < maxColumnHeight && newValue > minColumnHeight ) {
 
           $scope.columnHeight = newValue;
@@ -156,7 +154,6 @@
           date: calendarDayMomentDate,
           locationId: null
         });
-
       };
 
       /* Public methods END */

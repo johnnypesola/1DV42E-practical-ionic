@@ -310,4 +310,20 @@ BookingSystem.config( ['$mdDateLocaleProvider', ( $mdDateLocaleProvider ) => {
   $mdDateLocaleProvider.msgCalendar = 'Kalender';
   $mdDateLocaleProvider.msgOpenCalendar = 'Öppna kalender';
 }]
-);
+)
+
+  // Controller for nav bar
+  .controller( 'NavBarCtrl', ['$scope', '$ionicHistory', ( $scope, $ionicHistory ) => {
+
+    $scope.goBack = function( $event ) {
+
+      $ionicHistory.goBack();
+    };
+  }]
+  )
+
+  // Fix for double triggering of ng-click, caused by angular material design.
+  .config( ['$mdGestureProvider', ( $mdGestureProvider ) => {
+    $mdGestureProvider.skipClickHijack();
+  }]
+  );
