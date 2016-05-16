@@ -40,6 +40,8 @@
         style="
             margin-top: {{ visibleAddButtonHour * columnHeight }}px;
             z-index: 11;
+            height: {{columnHeight}}px;
+            line-height: {{columnHeight}}px;
         "
         ng-show="visibleAddButtonHour || visibleAddButtonHour === 0"
         ng-click="createEventForHour( visibleAddButtonHour )"

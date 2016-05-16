@@ -16,12 +16,14 @@
       /* Declare variables START */
       const calendarDayMomentDate = moment( $scope.date );
       const updateIntervalTime = 60000; // Every 60 seconds
+      const maxColumnHeight = 200;
+      const minColumnHeight = 35;
       let updateInterval = null;
 
-      $scope.columnHeight = 35 * $scope.zoom;
       $scope.dayNumber = calendarDayMomentDate.format( 'D' );
       $scope.dayName = calendarDayMomentDate.format( 'ddd' );
       $scope.visibleAddButtonHour = null;
+      $scope.columnHeight = 35 * $scope.zoom;
 
       // TODO: Store number of concurrent events in calendar event. Then let the other concurrent events calculate their width from this previous events value.
 
@@ -43,6 +45,18 @@
 
       const getHourDecimal = function( hour, minute ) {
         return ( Number( hour ) + Number( minute / 60 ) );
+      };
+
+      const setColumnHeight = function() {
+
+        const newValue = $scope.columnHeight + ( 35 * ( $scope.zoom - 1 ) );
+
+        console.log( 'setColumnHeight', newValue, $scope.columnHeight );
+
+        if ( newValue < maxColumnHeight && newValue > minColumnHeight ) {
+
+          $scope.columnHeight = newValue;
+        }
       };
 
       const setIsCurrentDayVariables = function () {
@@ -169,6 +183,12 @@
         }
       });
 
+      // Add a watch on zoom. Passed from parent controller.
+      $scope.$watch( 'zoom', ( newValue, oldValue ) => {
+
+        setColumnHeight();
+      });
+
       // Destroy the update interval when we leave parent view
       $scope.$on( 'leaving-view', ( event ) => {
 
@@ -211,10 +231,21 @@
       /* Declare variables START */
       $scope.weekNumber = moment( $scope.date ).isoWeek();
       $scope.columnHeight = 35 * $scope.zoom;
+      const maxColumnHeight = 200;
+      const minColumnHeight = 35;
 
       /* Declare variables END */
 
       /* Private methods START */
+
+      const setColumnHeight = function() {
+
+        const newValue = $scope.columnHeight + ( 35 * ( $scope.zoom - 1 ) );
+
+        if ( newValue < maxColumnHeight && newValue > minColumnHeight ) {
+          $scope.columnHeight = newValue;
+        }
+      };
 
       const setupHours = function(){
 
@@ -225,7 +256,6 @@
         for ( hour = 1; hour < totalDayHours; hour++ ) {
 
           $scope.hoursArray.push( hour );
-
         }
       };
 
@@ -238,6 +268,12 @@
       /* Initialization START */
 
       setupHours();
+
+      // Add a watch on zoom. Passed from parent controller.
+      $scope.$watch( 'zoom', ( newValue, oldValue ) => {
+
+        setColumnHeight();
+      });
 
       /* Initialization END */
 

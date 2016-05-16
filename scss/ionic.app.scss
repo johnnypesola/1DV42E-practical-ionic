@@ -85,6 +85,7 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 
 .booking-calendar {
   padding: 0 !important;
+  margin-bottom: 150px !important;
 
   .calendar-day {
     position: relative;
@@ -168,12 +169,9 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
       margin: 0;
       border-radius: 2px;
       text-align: center;
-      height: 35px;
-      line-height: 35px;
       font-size: 20px;
       border: none;
       display: block;
-      width: 100%;
     }
 
     .event {

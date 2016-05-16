@@ -11,14 +11,12 @@ angular.module( 'BookingSystem.calendarWeekDirective',
 
     /* Init vars */
     $scope.days = [];
-    //$scope.bookings = $scope.bookings || [];
 
     // Set scope time to guaranteed start of week, in case this was missed in parent.
     $scope.weekDateStart = moment( $scope.date ).startOf( 'isoWeek' );
     // const weekDateEnd = moment( $scope.date ).endOf( 'isoWeek' );
 
     /* Private methods START */
-
     const filterDayBookings = function( dayStartTime, dayEndTime, booking ){
 
       // Check if booking is withing day start time and day end time

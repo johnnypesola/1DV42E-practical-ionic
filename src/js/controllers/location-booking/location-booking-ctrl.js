@@ -7,13 +7,13 @@ angular.module( 'BookingSystem.locationBooking',
   )
 
   // Controller
-  .controller( 'LocationBookingViewCtrl', [ '$rootScope', '$scope', '$state', 'LocationBooking', '$interval', 'DATA_SYNC_INTERVAL_TIME', ( $rootScope, $scope, $state, LocationBooking, $interval, DATA_SYNC_INTERVAL_TIME ) => {
+  .controller( 'LocationBookingViewCtrl', [ '$rootScope', '$scope', '$state', 'LocationBooking', '$interval', 'DATA_SYNC_INTERVAL_TIME', '$ionicGesture', ( $rootScope, $scope, $state, LocationBooking, $interval, DATA_SYNC_INTERVAL_TIME, $ionicGesture ) => {
 
     /* Init vars */
     const updateIntervalTime = DATA_SYNC_INTERVAL_TIME;
     let updateInterval = null;
     $scope.weekDate = moment();
-    $scope.zoom = 1;
+    $scope.zoom = 2;
 
     /* Private methods START */
 
@@ -70,6 +70,19 @@ angular.module( 'BookingSystem.locationBooking',
       // Broadcast to children to cancel update intervals
       $scope.$broadcast( 'leaving-view' );
     });
+
+    const element = angular.element( document.querySelector( '#booking-view-content' ) );
+
+    $ionicGesture.on( 'pinch', ( e ) => {
+
+      e.gesture.srcEvent.preventDefault();
+
+      $scope.$apply( () => {
+
+        $scope.zoom = e.gesture.scale;
+      });
+
+    }, element );
 
     /* Initialization END */
 
