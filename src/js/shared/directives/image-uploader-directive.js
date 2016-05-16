@@ -62,6 +62,9 @@ angular.module( 'BookingSystem.imageUploaderDirective',
     };
 
     const checkFile = ( file ) => {
+
+      let returnVal = false;
+
       if (
         file.type === 'image/png' ||
         file.type === 'image/jpg' ||
@@ -69,9 +72,11 @@ angular.module( 'BookingSystem.imageUploaderDirective',
         file.type === 'image/gif'
       ){
         if ( file.size < 10000000 ){ // 10 mb max size
-          return true;
+          returnVal = true;
         }
       }
+
+      return returnVal;
     };
 
     /* Object methods END */
@@ -94,6 +99,7 @@ angular.module( 'BookingSystem.imageUploaderDirective',
 
       const deferred = $q.defer();
       const reader = new FileReader();
+      let returnValue = null;
 
       // Check if uploaded file is valid
       if ( checkFile( file ) ) {
@@ -103,7 +109,7 @@ angular.module( 'BookingSystem.imageUploaderDirective',
 
         reader.readAsDataURL( file );
 
-        return deferred.promise;
+        returnValue = deferred.promise;
       }
       // Uploaded file is invalid
       else {
@@ -115,8 +121,10 @@ angular.module( 'BookingSystem.imageUploaderDirective',
 
         // Return rejected promise
         deferred.reject();
-        return deferred.promise;
+        returnValue = deferred.promise;
       }
+
+      return returnValue;
     };
 
     /* Scope methods END */

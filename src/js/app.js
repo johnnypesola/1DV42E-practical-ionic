@@ -24,13 +24,21 @@ const BookingSystem = angular
     'BookingSystem.bookingTypes',
     'BookingSystem.bookingTypesServices',
     'BookingSystem.imageResizeServices',
+    'BookingSystem.calendarWeekDirective',
+    'BookingSystem.bookingHelperServices',
     'BookingSystem.imageUploaderDirective',
+    'BookingSystem.locationsServices',
+    'BookingSystem.ngMinMaxDirectives',
+    'BookingSystem.filters',
+    'BookingSystem.bookingServices',
     'ngMaterial',
-    'ngResource'
+    'ngResource',
+    'ngMessages'
   ] );
 
 BookingSystem.run( ['$ionicPlatform', ( $ionicPlatform ) => {
   $ionicPlatform.ready( () => {
+
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if ( window.cordova && window.cordova.plugins.Keyboard ) {
@@ -43,10 +51,14 @@ BookingSystem.run( ['$ionicPlatform', ( $ionicPlatform ) => {
       StatusBar.styleDefault();
     }
   });
+
+  // Moment.js locale settngs
+  moment.locale( 'sv' );
 }] );
 
 // Constants
 BookingSystem.constant( 'API_URL', 'http://bokning.vvfors.se/api/' );
+// BookingSystem.constant( 'API_URL', 'http://localhost:6796/api/' );
 BookingSystem.constant( 'API_IMG_PATH_URL', 'http://bokning.vvfors.se/' );
 BookingSystem.constant( 'UPLOAD_IMG_MAX_WIDTH', '400' );
 BookingSystem.constant( 'UPLOAD_IMG_MAX_HEIGHT', '400' );
@@ -55,9 +67,10 @@ BookingSystem.constant( 'DEFAULT_MAP_ZOOM', 5 );
 BookingSystem.constant( 'DEFAULT_LATITUDE', 59.2792 );
 BookingSystem.constant( 'DEFAULT_LONGITUDE', 15.2361 );
 BookingSystem.constant( 'MODAL_ANIMATION', 'slide-in-up' );
+BookingSystem.constant( 'DATA_SYNC_INTERVAL_TIME', 60000 * 5 ); // Every 5 minutes
 
 // Routes
-BookingSystem.config( ['$stateProvider', '$urlRouterProvider', ( $stateProvider, $urlRouterProvider ) => {
+BookingSystem.config( ['$stateProvider', '$urlRouterProvider', '$mdDateLocaleProvider', ( $stateProvider, $urlRouterProvider, $mdDateLocaleProvider ) => {
   $stateProvider
 
   .state( 'app', {
@@ -84,6 +97,20 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', ( $stateProvider,
         'menuContent': {
           templateUrl: 'templates/location-booking/location-booking-view.html',
           controller: 'LocationBookingViewCtrl'
+        }
+      }
+    })
+
+    .state( 'app.location-booking-create', {
+      url: '/location-booking-create',
+      params: {
+        date: null,
+        locationId: null
+      },
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/location-booking/location-booking-create.html',
+          controller: 'LocationBookingCreateCtrl'
         }
       }
     })
@@ -248,46 +275,39 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', ( $stateProvider,
     }
   });
 
-  // Old states below
-  /*
-  .state( 'app.search', {
-    url: '/search',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/search.html'
-      }
-    }
-  })
-
-  .state( 'app.browse', {
-    url: '/browse',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/browse.html'
-      }
-    }
-  })
-  .state( 'app.playlists', {
-    url: '/playlists',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/playlists.html',
-        controller: 'PlaylistsCtrl'
-      }
-    }
-  })
-  .state( 'app.single', {
-    url: '/playlists/:playlistId',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/playlist.html',
-        controller: 'PlaylistCtrl'
-      }
-    }
-  });
-  */
-
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise( '/app/start' );
+}]
+);
+
+// Locatization configuration for Angular Material ( Swedish localization. )
+BookingSystem.config( ['$mdDateLocaleProvider', ( $mdDateLocaleProvider ) => {
+
+  $mdDateLocaleProvider.months = ['januari', 'februari', 'mars', 'april', 'maj', 'juni', 'juli', 'augusti', 'september', 'oktober', 'november', 'december'];
+  $mdDateLocaleProvider.shortMonths = ['jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'];
+  $mdDateLocaleProvider.days = ['söndag', 'måndag', 'tisdag', 'onsdag', 'torsdag', 'fredag', 'lördag'];
+  $mdDateLocaleProvider.shortDays = ['Sö', 'Må', 'Ti', 'On', 'To', 'Fr', 'Lö'];
+
+  // Can change week display to start on Monday.
+  $mdDateLocaleProvider.firstDayOfWeek = 1;
+
+  // Example uses moment.js to parse and format dates.
+  $mdDateLocaleProvider.parseDate = function( dateString ) {
+    const m = moment( dateString, 'L', true );
+    return m.isValid() ? m.toDate() : new Date( NaN );
+  };
+  $mdDateLocaleProvider.formatDate = function( date ) {
+    return moment( date ).format( 'L' );
+  };
+  $mdDateLocaleProvider.monthHeaderFormatter = function( date ) {
+    return $mdDateLocaleProvider.shortMonths[date.getMonth()] + ' ' + date.getFullYear();
+  };
+  // In addition to date display, date components also need localized messages
+  // for aria-labels for screen-reader users.
+  $mdDateLocaleProvider.weekNumberFormatter = function( weekNumber ) {
+    return 'Vecka ' + weekNumber;
+  };
+  $mdDateLocaleProvider.msgCalendar = 'Kalender';
+  $mdDateLocaleProvider.msgOpenCalendar = 'Öppna kalender';
 }]
 );
