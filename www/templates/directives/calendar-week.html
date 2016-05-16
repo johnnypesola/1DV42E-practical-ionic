@@ -1,7 +1,10 @@
-<div class="row booking-calendar">
+<div
+    class="row booking-calendar"
+>
 
     <calendar-time
         date="weekDateStart"
+        zoom="zoom"
         >
     </calendar-time>
 
@@ -10,9 +13,8 @@
         bookings="day.bookings"
         hide-all-add-buttons-callback="hideAddButtons()"
         bookings-type="bookingsType"
+        zoom="zoom"
         >
     </calendar-day>
-
-
 
 </div>

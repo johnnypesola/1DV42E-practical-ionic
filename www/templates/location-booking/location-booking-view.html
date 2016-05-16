@@ -8,13 +8,14 @@
             editMode: {{isEditMode}}
         </button>
     </ion-nav-buttons>
-    <ion-content padding="false">
+    <ion-content padding="false" id="booking-view-content">
 
         <calendar-week
             date="weekDate"
             bookings="locationBookings"
             bookings-type="'location'"
             new-booking-callback="newBookingCallback(hour)"
+            zoom="zoom"
         >
         </calendar-week>
 
