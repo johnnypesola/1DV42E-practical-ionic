@@ -40,6 +40,7 @@ angular.module( 'BookingSystem.bookingHelperServices',
               bookingsArray[i].EndTime
             )
         ){
+
           concurrentBookingsArray.push( bookingsArray[i] );
         }
       }
@@ -67,6 +68,8 @@ angular.module( 'BookingSystem.bookingHelperServices',
       // Set concurrent bookings count
       targetBooking.ConcurrentBookings = concurrentBookingsArray.length; // - concurrentBookingsFalsePositiveCount;
 
+      console.log( targetBooking.ConcurrentBookings );
+
       // Abort if no concurrent bookings were found
       if ( concurrentBookingsArray.length ) {
 
@@ -80,7 +83,7 @@ angular.module( 'BookingSystem.bookingHelperServices',
 
         // Get concurrent booking index
         concurrentBookingIndex = concurrentBookingsArray.findIndex( ( booking ) => {
-          return targetBooking.LocationBookingId === booking.LocationBookingId;
+          return targetBooking.Id === booking.Id;
         });
       }
 

@@ -314,7 +314,7 @@ BookingSystem.config( ['$mdDateLocaleProvider', ( $mdDateLocaleProvider ) => {
 
 // Controller for nav bar
 BookingSystem.controller( 'NavigationCtrl', ['$scope', '$state', ( $scope, $state ) => {
-  
+
 }]
 );
 

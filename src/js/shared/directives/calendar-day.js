@@ -226,7 +226,6 @@
     .controller( 'CalendarTimeCtrl', ['$scope', function( $scope ) {
 
       /* Declare variables START */
-      $scope.weekNumber = moment( $scope.date ).isoWeek();
       $scope.columnHeight = 35 * $scope.zoom;
       const maxColumnHeight = 200;
       const minColumnHeight = 35;
@@ -234,6 +233,10 @@
       /* Declare variables END */
 
       /* Private methods START */
+
+      const setWeekNumber = function () {
+        $scope.weekNumber = moment( $scope.date ).isoWeek();
+      };
 
       const setColumnHeight = function() {
 
@@ -265,11 +268,18 @@
       /* Initialization START */
 
       setupHours();
+      setWeekNumber();
 
       // Add a watch on zoom. Passed from parent controller.
       $scope.$watch( 'zoom', ( newValue, oldValue ) => {
 
         setColumnHeight();
+      });
+
+      // Add a watch on date. Passed from parent controller.
+      $scope.$watch( 'date', ( newValue, oldValue ) => {
+
+        setWeekNumber();
       });
 
       /* Initialization END */

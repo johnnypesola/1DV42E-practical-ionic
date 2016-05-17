@@ -12,10 +12,6 @@ angular.module( 'BookingSystem.calendarWeekDirective',
     /* Init vars */
     $scope.days = [];
 
-    // Set scope time to guaranteed start of week, in case this was missed in parent.
-    $scope.weekDateStart = moment( $scope.date ).startOf( 'isoWeek' );
-    // const weekDateEnd = moment( $scope.date ).endOf( 'isoWeek' );
-
     /* Private methods START */
     const filterDayBookings = function( dayStartTime, dayEndTime, booking ){
 
@@ -52,6 +48,11 @@ angular.module( 'BookingSystem.calendarWeekDirective',
     };
 
     const setDayDates = function() {
+
+      // Set scope time to guaranteed start of week, in case this was missed in parent.
+      $scope.weekDateStart = moment( $scope.date ).startOf( 'isoWeek' );
+      // const weekDateEnd = moment( $scope.date ).endOf( 'isoWeek' );
+
       let dayNum = 0;
       for ( let dayDate = moment( $scope.weekDateStart ); dayNum < 7; dayDate.add( 1, 'days' ) ) {
         $scope.days[ dayNum ] = {};
@@ -85,6 +86,12 @@ angular.module( 'BookingSystem.calendarWeekDirective',
       if ( newValue !== undefined ) {
         setDayBookings();
       }
+    });
+
+    // Add a watch on date. Passed from parent controller.
+    $scope.$watch( 'date', ( newValue, oldValue ) => {
+
+      setDayDates();
     });
 
     /* Initialization END */
