@@ -11,15 +11,36 @@ angular.module( 'BookingSystem.locationBooking',
 
     /* Init vars */
     const updateIntervalTime = DATA_SYNC_INTERVAL_TIME;
-    let updateInterval = null;
+    let updateInterval = null, weekStartDate = null, weekEndDate = null;
     $scope.weekDate = moment();
     $scope.zoom = 2;
 
     /* Private methods START */
 
+    const setupWeekStartAndEndDates = function ( offset = 0 ) {
+
+      // Add or subtract offset weeks from current weekdate object.
+      if ( offset > 0 ) {
+        $scope.weekDate = moment( $scope.weekDate ).add( 1, 'weeks' );
+        $scope.$apply();
+      } else if ( offset < 0 ) {
+        $scope.weekDate = moment( $scope.weekDate ).subtract( 1, 'weeks' );
+        $scope.$apply();
+      }
+
+      weekStartDate = moment( $scope.weekDate ).startOf( 'week' );
+      weekEndDate = moment( $scope.weekDate ).endOf( 'week' );
+    };
+
     const getLocationBookings = function () {
 
-      const locationBookings = LocationBooking.query();
+      const locationBookings = LocationBooking.queryLessForPeriod({
+
+        fromDate: weekStartDate.format( 'YYYY-MM-DD' ),
+        toDate: weekEndDate.format( 'YYYY-MM-DD' )
+      });
+
+      // const locationBookings = LocationBooking.query();
 
       // In case LocationBooking cannot be fetched, display an error to user.
       locationBookings.$promise.catch( () => {
@@ -45,6 +66,41 @@ angular.module( 'BookingSystem.locationBooking',
 
     };
 
+    const setupGestures = function() {
+
+      const element = angular.element( document.querySelector( '#booking-view-content' ) );
+
+      $ionicGesture.on( 'pinch', ( e ) => {
+
+        e.gesture.srcEvent.preventDefault();
+
+        $scope.$apply( () => {
+
+          // Change zoom value after pinch value.
+          $scope.zoom = e.gesture.scale;
+        });
+
+      }, element );
+
+      $ionicGesture.on( 'swipeleft', ( e ) => {
+
+        // Change to previous week
+        setupWeekStartAndEndDates( +1 );
+
+        getLocationBookings();
+
+      }, element );
+
+      $ionicGesture.on( 'swiperight', ( e ) => {
+
+        // Change to next week
+        setupWeekStartAndEndDates( -1 );
+
+        getLocationBookings();
+
+      }, element );
+    };
+
     /* Private Methods END */
 
     /* Public Methods START */
@@ -55,8 +111,14 @@ angular.module( 'BookingSystem.locationBooking',
 
     $scope.$on( '$ionicView.enter', ( event, data ) => {
 
+      setupWeekStartAndEndDates();
       getLocationBookings();
       startUpdateInterval();
+    });
+
+    $scope.$on( '$ionicView.loaded', ( event, data ) => {
+
+      setupGestures();
     });
 
     // Destroy the update interval when controller is destroyed (when we leave this view)
@@ -70,19 +132,6 @@ angular.module( 'BookingSystem.locationBooking',
       // Broadcast to children to cancel update intervals
       $scope.$broadcast( 'leaving-view' );
     });
-
-    const element = angular.element( document.querySelector( '#booking-view-content' ) );
-
-    $ionicGesture.on( 'pinch', ( e ) => {
-
-      e.gesture.srcEvent.preventDefault();
-
-      $scope.$apply( () => {
-
-        $scope.zoom = e.gesture.scale;
-      });
-
-    }, element );
 
     /* Initialization END */
 

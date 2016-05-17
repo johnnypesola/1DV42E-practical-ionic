@@ -40,6 +40,7 @@ angular.module( 'BookingSystem.bookingHelperServices',
               bookingsArray[i].EndTime
             )
         ){
+
           concurrentBookingsArray.push( bookingsArray[i] );
         }
       }
@@ -80,7 +81,7 @@ angular.module( 'BookingSystem.bookingHelperServices',
 
         // Get concurrent booking index
         concurrentBookingIndex = concurrentBookingsArray.findIndex( ( booking ) => {
-          return targetBooking.LocationBookingId === booking.LocationBookingId;
+          return targetBooking.Id === booking.Id;
         });
       }
 
