@@ -7,13 +7,13 @@ angular.module( 'BookingSystem.locationBooking',
   )
 
   // Controller
-  .controller( 'LocationBookingViewCtrl', [ '$rootScope', '$scope', '$state', 'LocationBooking', '$interval', 'DATA_SYNC_INTERVAL_TIME', '$ionicGesture', '$mdToast', ( $rootScope, $scope, $state, LocationBooking, $interval, DATA_SYNC_INTERVAL_TIME, $ionicGesture, $mdToast ) => {
+  .controller( 'LocationBookingViewCtrl', [ '$rootScope', '$scope', '$state', 'LocationBooking', '$interval', 'DATA_SYNC_INTERVAL_TIME', '$ionicGesture', '$mdToast', 'DEFAULT_CALENDAR_ZOOM', ( $rootScope, $scope, $state, LocationBooking, $interval, DATA_SYNC_INTERVAL_TIME, $ionicGesture, $mdToast, DEFAULT_CALENDAR_ZOOM ) => {
 
     /* Init vars */
     const updateIntervalTime = DATA_SYNC_INTERVAL_TIME;
     let updateInterval = null, weekStartDate = null, weekEndDate = null;
+    $scope.zoom = DEFAULT_CALENDAR_ZOOM;
     $scope.weekDate = moment();
-    $scope.zoom = 2;
 
     /* Private methods START */
 
@@ -89,6 +89,9 @@ angular.module( 'BookingSystem.locationBooking',
 
         getLocationBookings();
 
+        // Broadcast to children that a swipe occured
+        $scope.$broadcast( 'swipe-occurred' );
+
       }, element );
 
       $ionicGesture.on( 'swiperight', ( e ) => {
@@ -97,6 +100,9 @@ angular.module( 'BookingSystem.locationBooking',
         setupWeekStartAndEndDates( -1 );
 
         getLocationBookings();
+
+        // Broadcast to children that a swipe occured
+        $scope.$broadcast( 'swipe-occurred' );
 
       }, element );
     };
