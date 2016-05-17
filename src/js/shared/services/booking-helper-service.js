@@ -68,8 +68,6 @@ angular.module( 'BookingSystem.bookingHelperServices',
       // Set concurrent bookings count
       targetBooking.ConcurrentBookings = concurrentBookingsArray.length; // - concurrentBookingsFalsePositiveCount;
 
-      console.log( targetBooking.ConcurrentBookings );
-
       // Abort if no concurrent bookings were found
       if ( concurrentBookingsArray.length ) {
 

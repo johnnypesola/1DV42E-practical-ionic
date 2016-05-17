@@ -89,8 +89,6 @@ angular.module( 'BookingSystem.locationBooking',
 
         getLocationBookings();
 
-        console.log( 'swipeleft', weekStartDate );
-
       }, element );
 
       $ionicGesture.on( 'swiperight', ( e ) => {
@@ -99,8 +97,6 @@ angular.module( 'BookingSystem.locationBooking',
         setupWeekStartAndEndDates( -1 );
 
         getLocationBookings();
-
-        console.log( 'swiperight', weekStartDate );
 
       }, element );
     };
@@ -118,6 +114,10 @@ angular.module( 'BookingSystem.locationBooking',
       setupWeekStartAndEndDates();
       getLocationBookings();
       startUpdateInterval();
+    });
+
+    $scope.$on( '$ionicView.loaded', ( event, data ) => {
+
       setupGestures();
     });
 
