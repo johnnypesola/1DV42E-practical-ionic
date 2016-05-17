@@ -11,7 +11,7 @@
   )
 
     // Directive specific controllers START
-    .controller( 'CalendarDayCtrl', ['$scope', '$element', '$attrs', '$rootScope', '$location', '$q', '$state', 'BookingHelper', '$interval', function( $scope, $element, $attrs, $rootScope, $location, $q, $state, BookingHelper, $interval ) {
+    .controller( 'CalendarDayCtrl', ['$scope', '$element', '$attrs', '$rootScope', '$location', '$q', '$state', 'BookingHelper', '$interval', 'DEFAULT_CALENDAR_ZOOM', function( $scope, $element, $attrs, $rootScope, $location, $q, $state, BookingHelper, $interval, DEFAULT_CALENDAR_ZOOM ) {
 
       /* Declare variables START */
       const calendarDayMomentDate = moment( $scope.date );
@@ -23,7 +23,7 @@
       $scope.dayNumber = calendarDayMomentDate.format( 'D' );
       $scope.dayName = calendarDayMomentDate.format( 'ddd' );
       $scope.visibleAddButtonHour = null;
-      $scope.columnHeight = 35 * $scope.zoom;
+      $scope.columnHeight = minColumnHeight * $scope.zoom;
 
       // TODO: Store number of concurrent events in calendar event. Then let the other concurrent events calculate their width from this previous events value.
 
@@ -49,7 +49,7 @@
 
       const setColumnHeight = function() {
 
-        const newValue = $scope.columnHeight + ( 35 * ( $scope.zoom - 1 ) );
+        const newValue = $scope.columnHeight + ( minColumnHeight * ( $scope.zoom - 1 ) );
 
         if ( newValue < maxColumnHeight && newValue > minColumnHeight ) {
 
@@ -186,6 +186,12 @@
         setColumnHeight();
       });
 
+      // Update column height on swipe
+      $scope.$on( 'swipe-occurred', ( event ) => {
+
+        $scope.columnHeight = minColumnHeight * DEFAULT_CALENDAR_ZOOM;
+      });
+
       // Destroy the update interval when we leave parent view
       $scope.$on( 'leaving-view', ( event ) => {
 
@@ -223,12 +229,12 @@
     }]
     )
 
-    .controller( 'CalendarTimeCtrl', ['$scope', function( $scope ) {
+    .controller( 'CalendarTimeCtrl', ['$scope', 'DEFAULT_CALENDAR_ZOOM', function( $scope, DEFAULT_CALENDAR_ZOOM ) {
 
       /* Declare variables START */
-      $scope.columnHeight = 35 * $scope.zoom;
-      const maxColumnHeight = 200;
       const minColumnHeight = 35;
+      $scope.columnHeight = minColumnHeight * $scope.zoom;
+      const maxColumnHeight = 200;
 
       /* Declare variables END */
 
@@ -240,7 +246,7 @@
 
       const setColumnHeight = function() {
 
-        const newValue = $scope.columnHeight + ( 35 * ( $scope.zoom - 1 ) );
+        const newValue = $scope.columnHeight + ( minColumnHeight * ( $scope.zoom - 1 ) );
 
         if ( newValue < maxColumnHeight && newValue > minColumnHeight ) {
           $scope.columnHeight = newValue;
@@ -280,6 +286,12 @@
       $scope.$watch( 'date', ( newValue, oldValue ) => {
 
         setWeekNumber();
+      });
+
+      // Update column height on swipe
+      $scope.$on( 'swipe-occurred', ( event ) => {
+
+        $scope.columnHeight = minColumnHeight * DEFAULT_CALENDAR_ZOOM;
       });
 
       /* Initialization END */
