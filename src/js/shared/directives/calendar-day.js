@@ -150,7 +150,7 @@
         });
 
         // Redirect to create view
-        $state.go( 'app.location-booking-create', {
+        $state.go( 'app.' + $scope.bookingsType + '-create', {
           date: calendarDayMomentDate,
           locationId: null
         });
