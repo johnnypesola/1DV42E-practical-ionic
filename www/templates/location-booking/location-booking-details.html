@@ -33,6 +33,7 @@
                                 ng-change="checkEndDate()"
                                 ng-model="$parent.bookingStartDate"
                                 ng-required="true"
+                                ng-disabled="!isEditMode"
                                 ></md-datepicker>
                     </div>
 
@@ -41,6 +42,7 @@
                         <md-select
                                 ng-model="$parent.bookingStartHour"
                                 ng-change="checkEndDate()"
+                                ng-disabled="!isEditMode"
                                 >
                             <md-option ng-repeat="hour in selectHours" value="{{hour}}">
                                 {{hour | zpad:2}}
@@ -53,6 +55,7 @@
                         <md-select
                                 ng-model="$parent.bookingStartMinute"
                                 ng-change="checkEndDate()"
+                                ng-disabled="!isEditMode"
                                 >
                             <md-option ng-repeat="minute in selectMinutes" value="{{minute}}">
                                 {{minute | zpad:2}}
@@ -78,6 +81,7 @@
                                 ng-model="$parent.bookingEndDate"
                                 ng-required="true"
                                 md-min-date="bookingStartDate"
+                                ng-disabled="!isEditMode"
                                 ></md-datepicker>
                     </div>
 
@@ -86,6 +90,7 @@
                         <md-select
                                 ng-model="$parent.bookingEndHour"
                                 ng-change="checkEndDate()"
+                                ng-disabled="!isEditMode"
                                 >
                             <md-option ng-repeat="hour in selectHours" value="{{hour}}">
                                 {{hour | zpad:2}}
@@ -98,6 +103,7 @@
                         <md-select
                                 ng-model="$parent.bookingEndMinute"
                                 ng-change="checkEndDate()"
+                                ng-disabled="!isEditMode"
                                 >
                             <md-option
                                     ng-repeat="minute in selectMinutes" value="{{minute}}"
@@ -117,11 +123,12 @@
 
                     <md-input-container class="md-block" flex-gt-sm>
 
-                        <label>Välj kund</label>
+                        <label>Kund</label>
                         <md-select
                                 name="CustomerId"
                                 ng-model="locationBooking.CustomerId"
                                 ng-required="true"
+                                ng-disabled="!isEditMode"
                                 >
                             <md-option ng-repeat="customer in customers" value="{{customer.CustomerId}}">
                                 {{customer.Name}}
@@ -140,12 +147,13 @@
 
                     <md-input-container class="md-block" flex-gt-sm>
 
-                        <label>Välj lokal / plats</label>
+                        <label>Lokal / Plats</label>
                         <md-select
                                 name="LocationId"
                                 ng-model="locationBooking.LocationId"
                                 ng-required="true"
                                 ng-change="updateFurniturings()"
+                                ng-disabled="!isEditMode"
                                 >
                             <md-option ng-repeat="location in locations" value="{{location.LocationId}}">
                                 {{location.Name}}
@@ -160,11 +168,11 @@
 
                     <md-input-container class="md-block" flex-gt-sm>
 
-                        <label>Välj möblering</label>
+                        <label>Möblering</label>
                         <md-select
                                 name="SelectedFurnituring"
                                 ng-model="locationBooking.SelectedFurnituring"
-                                ng-disabled="!furniturings.length"
+                                ng-disabled="!furniturings.length || !isEditMode"
                                 >
                             <md-option ng-repeat="furnituring in furniturings" ng-value="furnituring">
                                 {{furnituring.FurnituringName}} <span class="faded">({{furnituring.MaxPeople}} pers.)</span>
@@ -195,12 +203,17 @@
                                 ng-pattern="/^[0-9]*$/"
                                 ng-max="locationBooking.SelectedFurnituring.MaxPeople"
                                 min="0"
+                                ng-disabled="!isEditMode"
                                 >
                     </md-input-container>
                 </div>
 
                 <div class="row">
-                    <md-checkbox ng-model="locationBooking.Provisional" aria-label="Finished?">
+                    <md-checkbox
+                            ng-model="locationBooking.Provisional"
+                            aria-label="Finished?"
+                            ng-disabled="!isEditMode"
+                    >
                         Preliminär bokning
                     </md-checkbox>
                 </div>

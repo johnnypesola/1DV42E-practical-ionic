@@ -144,7 +144,7 @@ angular.module( 'BookingSystem.locationBooking',
   }]
 )
 
-  .controller( 'LocationBookingDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', 'LocationBooking', '$mdToast', 'Location', 'Customer', 'BookingHelper', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, LocationBooking, $mdToast, Location, Customer, BookingHelper ) => {
+  .controller( 'LocationBookingDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', 'LocationBooking', '$mdToast', 'Location', 'Customer', 'BookingHelper', '$q', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, LocationBooking, $mdToast, Location, Customer, BookingHelper, $q ) => {
 
     /* Init vars */
 
@@ -291,37 +291,6 @@ angular.module( 'BookingSystem.locationBooking',
         .minute( minute );
     };
 
-    const createBookingContainer = function () {
-
-      // Create promise
-      const deferred = $q.defer();
-
-      BookingHelper.createBookingContainer( $scope.locationBooking )
-
-        // If everything went ok
-        .then( ( createdBooking ) => {
-
-          // Make created booking accessible from other metods
-          $scope.locationBooking.BookingId = createdBooking.BookingId;
-
-          // Resolve promise
-          deferred.resolve();
-
-          // Something went wrong
-        }).catch( ( response ) => {
-
-          $mdToast.show( $mdToast.simple()
-            .content( 'Ett oväntat fel uppstod när bokningstillfället skulle sparas.' )
-            .position( 'top right' )
-          );
-
-          deferred.reject();
-        });
-
-      // Return promise
-      return deferred.promise;
-    };
-
     /* Private Methods END */
 
     /* Public Methods START */
@@ -447,57 +416,55 @@ angular.module( 'BookingSystem.locationBooking',
       const deferred = $q.defer();
       const promise = deferred.promise;
 
-      createBookingContainer()
-        .then( () => {
+      // Set a furnituring if if there is a furnituring at all.
+      const furnituringId = ( $scope.locationBooking.SelectedFurnituring ? $scope.locationBooking.SelectedFurnituring.FurnituringId : null );
 
-          // Set a furnituring if if there is a furnituring at all.
-          const furnituringId = ( $scope.locationBooking.SelectedFurnituring ? $scope.locationBooking.SelectedFurnituring.FurnituringId : null );
+      // Save locationBooking
+      LocationBooking.save(
+        {
+          BookingId: $scope.locationBooking.BookingId,
+          LocationBookingId: 0,
+          LocationId: $scope.locationBooking.LocationId,
+          FurnituringId: furnituringId,
+          StartTime: addTimeToDate( $scope.bookingStartDate, $scope.bookingStartHour, $scope.bookingStartMinute ).format(),
+          EndTime: addTimeToDate( $scope.bookingEndDate, $scope.bookingEndHour, $scope.bookingEndMinute ).format(),
+          NumberOfPeople: $scope.locationBooking.NumberOfPeople
+        }
+      ).$promise
 
-          // Save locationBooking
-          LocationBooking.save(
-            {
-              BookingId: $scope.locationBooking.BookingId,
-              LocationBookingId: 0,
-              LocationId: $scope.locationBooking.LocationId,
-              FurnituringId: furnituringId,
-              StartTime: addTimeToDate( $scope.bookingStartDate, $scope.bookingStartHour, $scope.bookingStartMinute ).format(),
-              EndTime: addTimeToDate( $scope.bookingEndDate, $scope.bookingEndHour, $scope.bookingEndMinute ).format(),
-              NumberOfPeople: $scope.locationBooking.NumberOfPeople
-            }
-          ).$promise
+        // If everything went ok
+        .then( ( response ) => {
 
-            // If everything went ok
-            .then( ( response ) => {
+          $mdToast.show( $mdToast.simple()
+              .content( 'Lokal/plats-bokningen sparades med ett lyckat resultat' )
+              .position( 'top right' )
+          );
 
-              $mdToast.show( $mdToast.simple()
-                  .content( 'Lokal/plats-bokningen skapades med ett lyckat resultat' )
-                  .position( 'top right' )
-              );
+          // Resolve promise
+          deferred.resolve();
 
-              // Resolve promise
-              deferred.resolve();
+          $ionicHistory.goBack();
 
-              // Something went wrong
-            }).catch( ( response ) => {
+          // Something went wrong
+        }).catch( ( response ) => {
 
-              // If there there was a foreign key reference
-              if ( response.status === 409 ){
+          // If there there was a foreign key reference
+          if ( response.status === 409 ){
 
-                $mdToast.show( $mdToast.simple()
-                    .content( 'Lokalen är tyvärr redan bokad under vald tidsram.' )
-                    .position( 'top right' )
-                );
-              }
+            $mdToast.show( $mdToast.simple()
+                .content( 'Lokalen är tyvärr redan bokad under vald tidsram.' )
+                .position( 'top right' )
+            );
+          }
 
-              // If there was a problem with the in-data
-              else {
+          // If there was a problem with the in-data
+          else {
 
-                $mdToast.show( $mdToast.simple()
-                    .content( 'Ett oväntat fel uppstod när lokal/plats-bokningen skulle sparas' )
-                    .position( 'top right' )
-                );
-              }
-            });
+            $mdToast.show( $mdToast.simple()
+                .content( 'Ett oväntat fel uppstod när lokal/plats-bokningen skulle sparas' )
+                .position( 'top right' )
+            );
+          }
         });
 
       return promise;
@@ -520,7 +487,7 @@ angular.module( 'BookingSystem.locationBooking',
   }]
   )
 
-  .controller( 'LocationBookingCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'LocationBooking', 'Location', 'BookingHelper', 'LocationFurnituring', 'Customer', '$q', '$mdToast', ( $rootScope, $stateParams, $scope, $state, LocationBooking, Location, BookingHelper, LocationFurnituring, Customer, $q, $mdToast ) => {
+  .controller( 'LocationBookingCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'LocationBooking', 'Location', 'BookingHelper', 'LocationFurnituring', 'Customer', '$q', '$mdToast', '$ionicHistory', ( $rootScope, $stateParams, $scope, $state, LocationBooking, Location, BookingHelper, LocationFurnituring, Customer, $q, $mdToast, $ionicHistory ) => {
 
     /* Init vars */
     $scope.locationBooking = {
@@ -749,6 +716,8 @@ angular.module( 'BookingSystem.locationBooking',
 
                 // Resolve promise
                 deferred.resolve();
+
+                $ionicHistory.goBack();
 
                 // Something went wrong
               }).catch( ( response ) => {
