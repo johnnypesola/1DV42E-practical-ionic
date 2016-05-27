@@ -50,12 +50,13 @@ angular.module( 'BookingSystem.resources',
   )
 
   //Edit controller
-  .controller( 'ResourceDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$ionicModal', '$state', 'Resource', 'ResourceImage',($rootScope, $scope, $stateParams, MODAL_ANIMATION, $ionicModal, $state, Resource, ResourceImage ) => {
+  .controller( 'ResourceDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$ionicModal', '$state', 'Resource', 'ResourceImage', 'API_IMG_PATH_URL', ($rootScope, $scope, $stateParams, MODAL_ANIMATION, $ionicModal, $state, Resource, ResourceImage, API_IMG_PATH_URL ) => {
     /* Init vars */
 
     const modalTemplateUrl = 'templates/modals/resources-delete.html';
     $scope.isEditMode = false;
     $scope.resourceBackup = {};
+      $scope.API_IMG_PATH_URL = API_IMG_PATH_URL;
 
     /* Private methods START */
 
@@ -150,6 +151,7 @@ angular.module( 'BookingSystem.resources',
           ResourceId: $stateParams.resourceId,
           Name: $scope.resource.Name,
           Count: $scope.resource.Count,
+          ImageSrc: $scope.resource.ImageSrc,
           BookingPricePerHour: $scope.resource.BookingPricePerHour,
           MinutesMarginAfterBooking: $scope.resource.MinutesMarginAfterBooking,
           WeekEndCount: $scope.resource.WeekEndCount

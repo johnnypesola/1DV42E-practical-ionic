@@ -7,7 +7,7 @@
 
             <form name="userForm">
               <div layout-gt-xs="row">
-                <img class="show-image" ng-src="{{resource.ImageSrc}}" ng-show="resource.ImageSrc" ng-disabled="isEditMode">
+                <img class="show-image" ng-src="{{API_IMG_PATH_URL + resource.ImageSrc}}" ng-show="resource.ImageSrc" ng-disabled="isEditMode">
                 <div ng-if="isEditMode">
                   <image-uploader type="Resource" id="{{resource.ResourceId}}" image-src="resource.ImageSrc" base64-encoded-image="resource.ImageForUpload"></image-uploader>
                 </div>

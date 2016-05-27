@@ -27,7 +27,7 @@ angular.module( 'BookingSystem.resourcesServices',
         return $http(
           {
             method: 'POST',
-            url: API_URL + 'Customer/image/' + customerId,
+            url: API_URL + 'Resource/image/' + resourceId,
             data: imageData,
             headers: {'Content-Type': undefined}
           }
