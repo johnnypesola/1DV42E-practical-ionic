@@ -56,7 +56,8 @@ angular.module( 'BookingSystem.resources',
     const modalTemplateUrl = 'templates/modals/resources-delete.html';
     $scope.isEditMode = false;
     $scope.resourceBackup = {};
-      $scope.API_IMG_PATH_URL = API_IMG_PATH_URL;
+    $scope.API_IMG_PATH_URL = API_IMG_PATH_URL;
+    $scope.imgTime = Date.now();
 
     /* Private methods START */
 
