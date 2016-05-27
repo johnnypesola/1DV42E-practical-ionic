@@ -21,18 +21,18 @@ angular.module( 'BookingSystem.resourcesServices',
 
   .factory( 'ResourceImage', ['$http', 'API_URL', ( $http, API_URL ) => {
 
-      return {
-        upload : function( imageData, resourceId ) {
+    return {
+      upload : function( imageData, resourceId ) {
 
-          return $http(
-            {
-              method: 'POST',
-              url: API_URL + 'Customer/image/' + customerId,
-              data: imageData,
-              headers: {'Content-Type': undefined}
-            }
-          );
-        }
-      };
-    }]
+        return $http(
+          {
+            method: 'POST',
+            url: API_URL + 'Customer/image/' + customerId,
+            data: imageData,
+            headers: {'Content-Type': undefined}
+          }
+        );
+      }
+    };
+  }]
   );
