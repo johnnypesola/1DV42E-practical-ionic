@@ -102,6 +102,19 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', '$mdDateLocalePro
       }
     })
 
+    .state( 'app.location-booking-details', {
+      url: '/location-booking-details',
+      params: {
+        id: null
+      },
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/location-booking/location-booking-details.html',
+          controller: 'LocationBookingDetailsCtrl'
+        }
+      }
+    })
+
     .state( 'app.location-booking-create', {
       url: '/location-booking-create',
       params: {

@@ -152,7 +152,15 @@
         // Redirect to create view
         $state.go( 'app.' + $scope.bookingsType + '-create', {
           date: calendarDayMomentDate,
-          locationId: null
+          id: null
+        });
+      };
+
+      $scope.showEvent = function( id ) {
+
+        // Redirect to edit view
+        $state.go( 'app.' + $scope.bookingsType + '-details', {
+          id: id
         });
       };
 
