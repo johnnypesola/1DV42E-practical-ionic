@@ -7,27 +7,48 @@ angular.module( 'BookingSystem.locationBooking',
   )
 
   // Controller
-  .controller( 'LocationBookingViewCtrl', [ '$rootScope', '$scope', '$state', 'LocationBooking', '$interval', 'DATA_SYNC_INTERVAL_TIME', '$ionicGesture', ( $rootScope, $scope, $state, LocationBooking, $interval, DATA_SYNC_INTERVAL_TIME, $ionicGesture ) => {
+  .controller( 'LocationBookingViewCtrl', [ '$rootScope', '$scope', '$state', 'LocationBooking', '$interval', 'DATA_SYNC_INTERVAL_TIME', '$ionicGesture', '$mdToast', 'DEFAULT_CALENDAR_ZOOM', ( $rootScope, $scope, $state, LocationBooking, $interval, DATA_SYNC_INTERVAL_TIME, $ionicGesture, $mdToast, DEFAULT_CALENDAR_ZOOM ) => {
 
     /* Init vars */
     const updateIntervalTime = DATA_SYNC_INTERVAL_TIME;
-    let updateInterval = null;
+    let updateInterval = null, weekStartDate = null, weekEndDate = null;
+    $scope.zoom = DEFAULT_CALENDAR_ZOOM;
     $scope.weekDate = moment();
-    $scope.zoom = 2;
 
     /* Private methods START */
 
+    const setupWeekStartAndEndDates = function ( offset = 0 ) {
+
+      // Add or subtract offset weeks from current weekdate object.
+      if ( offset > 0 ) {
+        $scope.weekDate = moment( $scope.weekDate ).add( 1, 'weeks' );
+        $scope.$apply();
+      } else if ( offset < 0 ) {
+        $scope.weekDate = moment( $scope.weekDate ).subtract( 1, 'weeks' );
+        $scope.$apply();
+      }
+
+      weekStartDate = moment( $scope.weekDate ).startOf( 'week' );
+      weekEndDate = moment( $scope.weekDate ).endOf( 'week' );
+    };
+
     const getLocationBookings = function () {
 
-      const locationBookings = LocationBooking.query();
+      const locationBookings = LocationBooking.queryLessForPeriod({
+
+        fromDate: weekStartDate.format( 'YYYY-MM-DD' ),
+        toDate: weekEndDate.format( 'YYYY-MM-DD' )
+      });
+
+      // const locationBookings = LocationBooking.query();
 
       // In case LocationBooking cannot be fetched, display an error to user.
       locationBookings.$promise.catch( () => {
 
-        $rootScope.FlashMessage = {
-          type: 'error',
-          message: 'Lokalbokningar kunde inte hämtas, var god försök igen.'
-        };
+        $mdToast.show( $mdToast.simple()
+          .content( 'Lokalbokningar kunde inte hämtas, var god försök igen.' )
+          .position( 'top right' )
+        );
       })
 
       .then( ( locationBookings ) => {
@@ -45,6 +66,47 @@ angular.module( 'BookingSystem.locationBooking',
 
     };
 
+    const setupGestures = function() {
+
+      const element = angular.element( document.querySelector( '#booking-view-content' ) );
+
+      $ionicGesture.on( 'pinch', ( e ) => {
+
+        e.gesture.srcEvent.preventDefault();
+
+        $scope.$apply( () => {
+
+          // Change zoom value after pinch value.
+          $scope.zoom = e.gesture.scale;
+        });
+
+      }, element );
+
+      $ionicGesture.on( 'swipeleft', ( e ) => {
+
+        // Change to previous week
+        setupWeekStartAndEndDates( +1 );
+
+        getLocationBookings();
+
+        // Broadcast to children that a swipe occured
+        $scope.$broadcast( 'swipe-occurred' );
+
+      }, element );
+
+      $ionicGesture.on( 'swiperight', ( e ) => {
+
+        // Change to next week
+        setupWeekStartAndEndDates( -1 );
+
+        getLocationBookings();
+
+        // Broadcast to children that a swipe occured
+        $scope.$broadcast( 'swipe-occurred' );
+
+      }, element );
+    };
+
     /* Private Methods END */
 
     /* Public Methods START */
@@ -55,8 +117,14 @@ angular.module( 'BookingSystem.locationBooking',
 
     $scope.$on( '$ionicView.enter', ( event, data ) => {
 
+      setupWeekStartAndEndDates();
       getLocationBookings();
       startUpdateInterval();
+    });
+
+    $scope.$on( '$ionicView.loaded', ( event, data ) => {
+
+      setupGestures();
     });
 
     // Destroy the update interval when controller is destroyed (when we leave this view)
@@ -70,19 +138,6 @@ angular.module( 'BookingSystem.locationBooking',
       // Broadcast to children to cancel update intervals
       $scope.$broadcast( 'leaving-view' );
     });
-
-    const element = angular.element( document.querySelector( '#booking-view-content' ) );
-
-    $ionicGesture.on( 'pinch', ( e ) => {
-
-      e.gesture.srcEvent.preventDefault();
-
-      $scope.$apply( () => {
-
-        $scope.zoom = e.gesture.scale;
-      });
-
-    }, element );
 
     /* Initialization END */
 
@@ -524,7 +579,7 @@ angular.module( 'BookingSystem.locationBooking',
   }]
   )
 
-  .controller( 'LocationBookingCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'LocationBooking', 'Location', 'BookingHelper', 'LocationFurnituring', 'Customer', '$q', ( $rootScope, $stateParams, $scope, $state, LocationBooking, Location, BookingHelper, LocationFurnituring, Customer, $q ) => {
+  .controller( 'LocationBookingCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'LocationBooking', 'Location', 'BookingHelper', 'LocationFurnituring', 'Customer', '$q', '$mdToast', ( $rootScope, $stateParams, $scope, $state, LocationBooking, Location, BookingHelper, LocationFurnituring, Customer, $q, $mdToast ) => {
 
     /* Init vars */
     $scope.locationBooking = {
@@ -645,10 +700,10 @@ angular.module( 'BookingSystem.locationBooking',
         // Something went wrong
       }).catch( ( response ) => {
 
-        $rootScope.FlashMessage = {
-          type: 'error',
-          message: 'Ett oväntat fel uppstod när bokningstillfället skulle sparas'
-        };
+        $mdToast.show( $mdToast.simple()
+          .content( 'Ett oväntat fel uppstod när bokningstillfället skulle sparas' )
+          .position( 'top right' )
+        );
 
         deferred.reject();
       });
@@ -673,10 +728,11 @@ angular.module( 'BookingSystem.locationBooking',
 
         // If furniturings could not be fetched
         $scope.furniturings.$promise.catch( () => {
-          $rootScope.FlashMessage = {
-            type: 'error',
-            message: 'Möbleringar för vald lokal kunde inte hämtas.'
-          };
+
+          $mdToast.show( $mdToast.simple()
+            .content( 'Möbleringar för vald lokal kunde inte hämtas.' )
+            .position( 'top right' )
+          );
         })
 
         // If furniturings were fetch successfully
@@ -740,10 +796,10 @@ angular.module( 'BookingSystem.locationBooking',
               // If everything went ok
               .then( ( response ) => {
 
-                $rootScope.FlashMessage = {
-                  type: 'success',
-                  message: 'Lokal/plats-bokningen skapades med ett lyckat resultat'
-                };
+                $mdToast.show( $mdToast.simple()
+                  .content( 'Lokal/plats-bokningen skapades med ett lyckat resultat' )
+                  .position( 'top right' )
+                );
 
                 // Resolve promise
                 deferred.resolve();
@@ -753,18 +809,19 @@ angular.module( 'BookingSystem.locationBooking',
 
                 // If there there was a foreign key reference
                 if ( response.status === 409 ){
-                  $rootScope.FlashMessage = {
-                    type: 'error',
-                    message: 'Lokalen är tyvärr redan bokad under vald tidsram.'
-                  };
+
+                  $mdToast.show( $mdToast.simple()
+                    .content( 'Lokalen är tyvärr redan bokad under vald tidsram.' )
+                    .position( 'top right' )
+                  );
                 }
 
                 // If there was a problem with the in-data
                 else {
-                  $rootScope.FlashMessage = {
-                    type: 'error',
-                    message: 'Ett oväntat fel uppstod när lokal/plats-bokningen skulle sparas'
-                  };
+                  $mdToast.show( $mdToast.simple()
+                    .content( 'Ett oväntat fel uppstod när lokal/plats-bokningen skulle sparas' )
+                    .position( 'top right' )
+                  );
                 }
               });
         });
