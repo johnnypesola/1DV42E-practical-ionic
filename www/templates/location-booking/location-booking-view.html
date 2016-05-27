@@ -1,0 +1,32 @@
+<ion-view view-title="Lokal/Platsbokningar">
+    <ion-nav-buttons side="secondary">
+        <button
+            class="button"
+            ng-click="abortEditMode()"
+            ng-show="true"
+        >
+            editMode: {{isEditMode}}
+        </button>
+    </ion-nav-buttons>
+    <ion-content padding="false" id="booking-view-content">
+
+        <calendar-week
+            date="weekDate"
+            bookings="locationBookings"
+            bookings-type="'location-booking'"
+            new-booking-callback="newBookingCallback(hour)"
+            zoom="zoom"
+        >
+        </calendar-week>
+
+    </ion-content>
+
+  <md-button
+    class="md-fab md-warn md-lower-right-button"
+    aria-label="Skapa"
+    href="#/app/location-booking-create"
+    >
+    <span class="icon ion-plus-round md-big-icon"></span>
+  </md-button>
+
+</ion-view>

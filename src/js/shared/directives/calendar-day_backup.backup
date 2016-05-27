@@ -1,0 +1,415 @@
+/**
+ * Created by jopes on 2015-04-16.
+ */
+
+  // Declare module
+  angular.module( 'bookingSystem.calendarDayDirective',
+
+    // Dependencies
+    [
+      'bookingSystem.bookingServices',
+      'bookingSystem.locationBookingServices',
+      'bookingSystem.resourceBookingServices'
+    ]
+  )
+
+    // Directive specific controllers START
+    .controller( 'BookingCalendarDayCtrl', ['$scope', '$element', '$attrs', 'Booking', 'LocationBooking', 'ResourceBooking', '$rootScope', '$location', '$q', function( $scope, $element, $attrs, Booking, LocationBooking, ResourceBooking, $rootScope, $location, $q ) {
+
+      /* Declare variables START */
+
+      let i;
+      const bookingType = $attrs.bookingType;
+
+      /* Declare variables END */
+
+      /* Object methods START */
+
+      const declareTypeOfBookingService = function(){
+
+        // Find out what type of data to get
+        if ( bookingType === 'booking' ){
+          typeOfBookingService = Booking;
+        }
+        else if ( bookingType === 'location-booking' ){
+          typeOfBookingService = LocationBooking;
+        }
+        else if ( bookingType === 'resource-booking' ){
+          typeOfBookingService = ResourceBooking;
+        }
+      };
+
+      const updateSelectedDateIfNeeded = function(){
+        if ( typeof selectedMonth == 'undefined' || typeof selectedDay == 'undefined' ){
+          selectedMonth = $location.search().manad;
+          selectedDay = $location.search().dag;
+        }
+      };
+
+      const initDateVariables = function (){
+
+        // Get date strings from url params
+        const yearParam = $location.search().ar;
+        const monthParam = $location.search().manad;
+        const dayParam = $location.search().dag || 1;
+
+        // Convert url params to current date object, with fallback.
+        if (
+          typeof yearParam !== 'undefined' &&
+          typeof monthParam !== 'undefined'
+        ) {
+          currentDateObj = moment(
+            yearParam + '-' +
+            $BookSysUtil.String.addLeadingZero( monthParam ) + '-' +
+            $BookSysUtil.String.addLeadingZero( dayParam )
+          ).toDate();
+        }
+        // Could not convert. Set fall back to defaults.
+        else {
+          currentDateObj = new Date();
+          setDefaultUrlParams();
+        }
+
+        // Set a selected date in calendar, if there is none.
+        updateSelectedDateIfNeeded();
+
+        // Define a lot of values with currentDateObj as base.
+        const currentYear = currentDateObj.getFullYear();
+        const currentMonth = currentDateObj.getMonth();
+        const currentMonthName = moment( currentDateObj ).format( 'MMMM' );
+        const currentMonthDay = currentDateObj.getDate();
+        const currentMonthDayName = moment( currentDateObj ).format( 'dddd' );
+        const currentMonthNumberOfDays = moment( currentDateObj ).daysInMonth();
+        const currentMonthStartDateObj = new Date( currentYear,  currentMonth, 1 );
+        const currentMonthEndDateObj = new Date( currentYear, currentMonth, currentMonthNumberOfDays );
+        const currentMonthStartWeekDay = ( currentMonthStartDateObj.getDay() === 0 ? 7 : currentMonthStartDateObj.getDay() );
+        const currentMonthEndWeekDay = ( currentMonthEndDateObj.getDay() === 0 ? 7 : currentMonthEndDateObj.getDay() );
+        const prevMonthNumberOfDays = new Date( currentYear,  currentMonth, 0 ).getDate();
+
+        // String to display when bookings are showed.
+        $scope.dateHeaderString = moment( currentDateObj ).format( 'dddd, Do MMMM YYYY' );
+      };
+
+      // Check if specific day is today.
+      const isSelectedDay = function( dayNumber ) {
+
+        return ( +selectedMonth === +currentMonth + 1 && +selectedDay === dayNumber );
+      };
+
+      // Check if a specific day has bookings
+      const dayHasBookings = function( dayNumber ) {
+
+        if ( typeof dayNumber !== 'undefined' ) {
+
+          // Add leading zero if needed
+          dayNumber = $BookSysUtil.String.addLeadingZero( dayNumber );
+          const monthNumber = $BookSysUtil.String.addLeadingZero( currentMonth + 1 );
+
+          // Generate start of day date and end of day date objects.
+          const startOfDay = moment( currentYear + '-' + monthNumber + '-' + dayNumber + ' 00:00' ).toDate();
+          const endOfDay = moment( currentYear + '-' + monthNumber + '-' + dayNumber + ' 23:59' ).toDate();
+
+          // Loop through bookings for month
+          return bookingsForMonthArray.some( ( element ) => {
+
+            // Check if days overlap
+            return (
+              element.StartTime >= startOfDay &&
+              element.StartTime <= endOfDay ||
+
+              element.EndTime >= startOfDay &&
+              element.EndTime <= endOfDay ||
+
+              element.StartTime < startOfDay &&
+              element.EndTime > endOfDay
+            );
+          });
+        }
+      };
+
+      const prepareCalendarDays = function (){
+        const calendarDaysArray = [];
+
+        // Add calendar days from previous month
+        for ( i = 1; i < currentMonthStartWeekDay; i++ ) {
+          calendarDaysArray.push(
+            {
+              number: prevMonthNumberOfDays - ( currentMonthStartWeekDay - i - 1 ),
+              cssClassName: 'inactive'
+            }
+          );
+        }
+
+        // Add calendar days for current month
+        for ( i = 1; i <= currentMonthNumberOfDays; i++ ) {
+          calendarDaysArray.push(
+            {
+              number: i,
+              cssClassName: ( isSelectedDay( i ) ? 'active' : ( dayHasBookings( i ) ? 'has-events' : '' ) )
+            }
+          );
+        }
+
+        // Add calendar days for next month
+        for ( i = 1; i <= 7 - currentMonthEndWeekDay; i++ ) {
+          calendarDaysArray.push(
+            {
+              number: i,
+              cssClassName: 'inactive'
+            }
+          );
+        }
+      };
+
+      const getBookingsForMonth = function() {
+        const deferred = $q.defer(),
+          promise = deferred.promise;
+
+        // Get bookings
+        const bookingsForMonthArray = typeOfBookingService.queryLessForPeriod(
+          {
+            fromDate: moment( currentMonthStartDateObj ).format( 'YYYY-MM-DD' ),
+            toDate: moment( currentMonthEndDateObj ).format( 'YYYY-MM-DD' )
+          }
+        );
+
+        // In case bookings cannot be fetched, display an error to user.
+        bookingsForMonthArray.$promise.catch( () => {
+
+          $rootScope.FlashMessage = {
+            type: 'error',
+            message: 'Bokningarna kunde inte hämtas, var god försök igen.'
+          };
+        });
+
+        // Convert date strings to date objects
+        bookingsForMonthArray.$promise.then( () => {
+
+          // Resolve promise
+          deferred.resolve();
+        });
+
+        return promise;
+      };
+
+      // Make public variables accessible in template
+      const addVarsToScope = function () {
+
+        $scope.datedata = {
+          currentYear: currentYear,
+          currentMonth: currentMonth,
+          currentMonthName: currentMonthName,
+          currentDayName: currentMonthDayName,
+          currentMonthNumberOfDays: currentMonthNumberOfDays,
+          calendarDays: calendarDaysArray
+        };
+
+      };
+
+      const setDefaultUrlParams = function() {
+
+        // Check if url params are not set.
+        if (
+          typeof $location.search().ar === 'undefined' &&
+          typeof $location.search().manad === 'undefined' &&
+          typeof $location.search().dag === 'undefined'
+        ) {
+          // Set default url params
+          $location.search( 'ar', moment().format( 'YYYY' ) );
+          $location.search( 'manad', moment().format( 'M' ) );
+          $location.search( 'dag', moment().format( 'D' ) );
+        }
+      };
+
+      const updateCalendarContent = function() {
+
+        const deferred = $q.defer(),
+          promise = deferred.promise;
+
+        initDateVariables();
+
+        getBookingsForMonth()
+
+          // Success
+          .then( () => {
+
+            $BookSysUtil.Date.convertStringsToDates( bookingsForMonthArray );
+
+            prepareCalendarDays();
+            addVarsToScope();
+
+            // Resolve promise
+            deferred.resolve();
+          });
+
+        return promise;
+      };
+
+      const getDataForDay = function(){
+
+        // Fetch data
+
+        const bookings = typeOfBookingService.queryMoreForPeriod(
+          {
+            fromDate: moment( currentDateObj ).format( 'YYYY-MM-DD' ),
+            toDate: moment( currentDateObj ).format( 'YYYY-MM-DD' )
+          }
+        );
+
+        // In case bookings cannot be fetched, display an error to user.
+        bookings.$promise.catch( () => {
+
+          $rootScope.FlashMessage = {
+            type: 'error',
+            message: 'Bokningarna kunde inte hämtas, var god försök igen.'
+          };
+        });
+
+        $scope.datedata.bookings = bookings;
+      };
+
+      /* Object methods END */
+
+      /* Scope methods START */
+
+      $scope.changeToPreviousMonth = function(){
+
+        // Year overlap adjustment code
+        if ( currentMonth === 0 ) {
+          currentMonth = 12;
+          currentYear -= 1;
+        }
+
+        $location.search( 'ar', currentYear );
+        $location.search( 'manad', currentMonth );
+        $location.search( 'dag', null );
+
+        updateCalendarContent();
+      };
+
+      $scope.changeToNextMonth = function(){
+
+        // Year overlap adjustment code
+        if ( currentMonth === 11 ) {
+
+          currentYear += 1;
+          currentMonth = -1;
+        }
+
+        $location.search( 'ar', currentYear );
+        $location.search( 'manad', currentMonth + 2 );
+        $location.search( 'dag', null );
+
+        updateCalendarContent();
+      };
+
+      $scope.changeToDay = function( $element, $attrs, event ){
+
+        const clickedDayElement = angular.element( event.target );
+
+        // Only apply click events to this months days
+        if ( !clickedDayElement.hasClass( 'inactive' ) ) {
+
+          // Change selected date variables
+          currentDateObj = new Date( currentYear, currentMonth, $attrs.number );
+
+          // Url day param
+          $location.search( 'dag', $attrs.number );
+
+          selectedMonth = $location.search().manad;
+          selectedDay = $location.search().dag;
+
+          // Prevent url change
+          event.preventDefault();
+
+          // Change bound calendar model data
+          initDateVariables();
+          prepareCalendarDays();
+          addVarsToScope();
+
+          // Get data for day
+          getDataForDay();
+        }
+      };
+
+      /* Scope methods END */
+
+      /* Initialization START */
+
+      declareTypeOfBookingService();
+      updateCalendarContent()
+        .then( () => {
+
+          getDataForDay();
+        });
+
+      /* Initialization END */
+
+    }]
+    )
+    // Directive specific controllers END
+
+    // Directives START
+    .directive('bookingCalendar', ['Booking', function(Booking) {
+      return {
+        restrict: 'E',
+        replace: true,
+        templateUrl: function(element, attr){
+          if(attr.bookingType == 'booking') {
+            return 'shared/directives/calendarDirectiveBooking.html';
+          }
+          else if (attr.bookingType == 'location-booking') {
+            return 'shared/directives/calendarDirectiveLocationBooking.html';
+          }
+          else if (attr.bookingType == 'resource-booking') {
+            return 'shared/directives/calendarDirectiveResourceBooking.html';
+          }
+        },
+        scope: true,
+        link: function(){
+
+        },
+        controller: 'BookingCalendarInternalCtrl'
+      };
+    }])
+    .directive('changeMonthButton', function() {
+      return {
+        restrict: 'A',
+        replace: false,
+        scope: false,
+        link: function (scope, element, attr) {
+          // Prevent select element on double click
+          element.bind('mousedown', function (e) {
+            e.preventDefault();
+          });
+        },
+        controller: ['$scope', '$element', '$attrs', function($scope, $element, $attrs) {
+
+          if($attrs.direction === 'next') {
+            $element.bind('click', function(){
+              $scope.changeToNextMonth();
+              $scope.$digest();
+            });
+          }
+          else if($attrs.direction === 'prev') {
+            $element.bind('click', function(){
+              $scope.changeToPreviousMonth();
+              $scope.$digest();
+            });
+          }
+        }]
+      }
+    })
+    .directive('bookingCalendarDay', function() {
+      return {
+        restrict: 'A',
+        replace: false,
+        scope: false,
+        controller: ['$scope', '$element', '$attrs', function($scope, $element, $attrs) {
+
+          $element.bind('click', function(event) {
+            $scope.changeToDay($element, $attrs, event);
+          });
+        }]
+      }
+    });

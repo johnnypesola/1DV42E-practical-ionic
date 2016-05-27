@@ -1,0 +1,13 @@
+language: node_js
+
+node_js:
+  - 5.0.0
+
+before_install:
+- chmod +x ./.travis.sh
+
+after_success: "./.travis.sh"
+
+branches:
+  only:
+  - master
