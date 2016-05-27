@@ -18,7 +18,7 @@ namespace BookingSystem.Models
 
         [Required(ErrorMessage = "BookingTypeId is required.")]
         [Range(0, Int16.MaxValue, ErrorMessage = "BookingTypeId is out of range.")]
-        public int BookingTypeId { get; set; }
+        public int? BookingTypeId { get; set; }
 
         [Range(0, int.MaxValue, ErrorMessage = "CustomerId is out of range.")]
         public int? CustomerId { get; set; }

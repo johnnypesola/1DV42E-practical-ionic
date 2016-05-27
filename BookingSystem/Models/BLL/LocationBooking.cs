@@ -39,7 +39,7 @@ namespace BookingSystem.Models
         public string LocationImageSrc { get; set; }
 
         [Range(0, Int16.MaxValue, ErrorMessage = "FurnituringId is out of range.")]
-        public int FurnituringId { get; set; }
+        public int? FurnituringId { get; set; }
 
         public string FurnituringName { get; set; }
 
@@ -53,6 +53,8 @@ namespace BookingSystem.Models
         public int MinutesMarginAfterBooking { get; set; }
 
         public decimal CalculatedBookingPrice { get; set; }
-        
+
+        [Range(0, int.MaxValue, ErrorMessage = "CustomerId is out of range.")]
+        public int CustomerId { get; set; }
     }
 }

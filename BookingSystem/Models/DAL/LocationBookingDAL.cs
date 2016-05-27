@@ -272,6 +272,7 @@ namespace BookingSystem.Models
                                 NumberOfPeople = reader.GetSafeInt16(reader.GetOrdinal("NumberOfPeople")),
                                 MaxPeople = reader.GetSafeInt32(reader.GetOrdinal("MaxPeople")),
                                 CalculatedBookingPrice = reader.GetSafeDecimal(reader.GetOrdinal("CalculatedBookingPrice")),
+                                CustomerId = reader.GetSafeInt32(reader.GetOrdinal("CustomerId")),
 
                                 LocationName = reader.GetSafeString(reader.GetOrdinal("LocationName")),
                                 FurnituringName = reader.GetSafeString(reader.GetOrdinal("FurnituringName"))
@@ -329,6 +330,7 @@ namespace BookingSystem.Models
                                 NumberOfPeople = reader.GetSafeInt16(reader.GetOrdinal("NumberOfPeople")),
                                 MaxPeople = reader.GetSafeInt32(reader.GetOrdinal("MaxPeople")),
                                 CalculatedBookingPrice = reader.GetSafeDecimal(reader.GetOrdinal("CalculatedBookingPrice")),
+                                CustomerId = reader.GetSafeInt32(reader.GetOrdinal("CustomerId")),
 
                                 LocationName = reader.GetSafeString(reader.GetOrdinal("LocationName")),
                                 FurnituringName = reader.GetSafeString(reader.GetOrdinal("FurnituringName"))

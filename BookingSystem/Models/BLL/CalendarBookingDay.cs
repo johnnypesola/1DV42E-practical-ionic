@@ -17,5 +17,10 @@ namespace BookingSystem.Models
 
         [RegularExpression(ValidationExtensions.BOOKING_TYPE_REGEXP, ErrorMessage = "Type has to be one of the following: location, meal, resource, all")]
         public String Type { get; set; }
+
+        // Extra value recieved from Stored Procedure
+        public int Id { get; set; }
+
+        public String Name { get; set; }
     }
 }

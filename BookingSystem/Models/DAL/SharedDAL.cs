@@ -46,7 +46,9 @@ namespace BookingSystem.Models
                                     // Create new Booking object from database values and add to list
                                     StartTime = reader.GetSafeDateTime(reader.GetOrdinal("StartTime")),
                                     EndTime = reader.GetSafeDateTime(reader.GetOrdinal("EndTime")),
-                                    Type = reader.GetSafeString(reader.GetOrdinal("Type"))
+                                    Type = reader.GetSafeString(reader.GetOrdinal("Type")),
+                                    Name = reader.GetSafeString(reader.GetOrdinal("Name")),
+                                    Id = reader.GetSafeInt32(reader.GetOrdinal("Id"))
                                 }
                             );
                         }

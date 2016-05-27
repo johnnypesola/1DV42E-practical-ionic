@@ -147,42 +147,36 @@ namespace BookingSystem.Controllers
         }
 
         // POST a picture for a resource
-        [Route("api/Resource/image/{id:int}")]
+        [Route("api/Resource/image/{ResourceId:int}")]
         [AcceptVerbs("POST")]
         [HttpPost]
-        public IHttpActionResult Post(int id)
+        public IHttpActionResult Post(int ResourceId)
         {
-            MemoryStream ms;
             string base64string;
-            byte[] bytes;
-            Image image;
-            string UploadImagePath;
             JObject returnData;
+            ImageService imageService = new ImageService();
+            string UploadImagePath;
 
             try
             {
+                // Check that location with specific Id exists
+                Resource resource = resourceService.GetResource(ResourceId);
+                if (resource == null)
+                {
+                    return NotFound();
+                }
+
+                // Process image data
                 base64string = Request.Content.ReadAsStringAsync().Result;
 
-                bytes = Convert.FromBase64String(base64string);
+                // Save image
+                UploadImagePath = imageService.SaveImage(IMAGE_PATH, base64string, ResourceId);
 
-                using (ms = new MemoryStream(bytes))
-                {
-                    image = Image.FromStream(ms);
+                // Attach path to object
+                resource.ImageSrc = UploadImagePath;
 
-                    if (
-                        image.Width > 400 ||
-                        image.Height > 400 ||
-                        image.Width < 10 ||
-                        image.Height < 10
-                       )
-                    {
-                        throw new BadImageFormatException();
-                    }
-
-                    UploadImagePath = HttpContext.Current.Server.MapPath(String.Format(@"~/{0}", IMAGE_PATH));
-
-                    image.Save(String.Format("{0}/{1}.jpg", UploadImagePath, id), System.Drawing.Imaging.ImageFormat.Jpeg);
-                }
+                // Save location
+                resourceService.SaveResource(resource);
             }
             catch (Exception e)
             {
@@ -190,7 +184,7 @@ namespace BookingSystem.Controllers
             }
 
             // Build return JSON object
-            returnData = JObject.Parse(String.Format("{{ 'imgpath' : '{0}/{1}.jpg'}}", IMAGE_PATH, id));
+            returnData = JObject.Parse(String.Format("{{ 'imgpath' : '{0}/{1}.jpg'}}", IMAGE_PATH, ResourceId));
 
             // Return path to uploaded image
             return Ok(returnData);
