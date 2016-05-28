@@ -89,7 +89,7 @@ namespace BookingSystem.Controllers
                 else if (moreOrLess == "less")
                 {
                     // Get bookings
-                    IEnumerable<CalendarBookingDay> bookings = mealBookingService.CheckDayBookingsForPeriod(startTime, endTime);
+                    IEnumerable<CalendarBookingDay> bookings = mealBookingService.CheckDayBookingsForPeriod(startTime.StartOfDay(), endTime.EndOfDay());
 
                     if (bookings == null)
                     {
