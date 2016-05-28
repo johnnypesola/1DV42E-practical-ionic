@@ -22,10 +22,8 @@ angular.module( 'BookingSystem.locationBooking',
       // Add or subtract offset weeks from current weekdate object.
       if ( offset > 0 ) {
         $scope.weekDate = moment( $scope.weekDate ).add( 1, 'weeks' );
-        $scope.$apply();
       } else if ( offset < 0 ) {
         $scope.weekDate = moment( $scope.weekDate ).subtract( 1, 'weeks' );
-        $scope.$apply();
       }
 
       weekStartDate = moment( $scope.weekDate ).startOf( 'week' );
@@ -84,10 +82,9 @@ angular.module( 'BookingSystem.locationBooking',
 
       $ionicGesture.on( 'swipeleft', ( e ) => {
 
-        // Change to previous week
-        setupWeekStartAndEndDates( +1 );
+        $scope.toNextWeek();
 
-        getLocationBookings();
+        $scope.$apply();
 
         // Broadcast to children that a swipe occured
         $scope.$broadcast( 'swipe-occurred' );
@@ -96,10 +93,9 @@ angular.module( 'BookingSystem.locationBooking',
 
       $ionicGesture.on( 'swiperight', ( e ) => {
 
-        // Change to next week
-        setupWeekStartAndEndDates( -1 );
+        $scope.toPreviousWeek();
 
-        getLocationBookings();
+        $scope.$apply();
 
         // Broadcast to children that a swipe occured
         $scope.$broadcast( 'swipe-occurred' );
@@ -110,6 +106,18 @@ angular.module( 'BookingSystem.locationBooking',
     /* Private Methods END */
 
     /* Public Methods START */
+
+    $scope.toNextWeek = function() {
+      setupWeekStartAndEndDates( 1 );
+
+      getLocationBookings();
+    };
+
+    $scope.toPreviousWeek = function() {
+      setupWeekStartAndEndDates( -1 );
+
+      getLocationBookings();
+    };
 
     /* Public Methods END */
 
@@ -144,7 +152,7 @@ angular.module( 'BookingSystem.locationBooking',
   }]
 )
 
-  .controller( 'LocationBookingDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', 'LocationBooking', '$mdToast', 'Location', 'Customer', 'BookingHelper', '$q', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, LocationBooking, $mdToast, Location, Customer, BookingHelper, $q ) => {
+  .controller( 'LocationBookingDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', 'LocationBooking', '$mdToast', 'Location', 'Customer', 'BookingHelper', '$q', '$ionicHistory', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, LocationBooking, $mdToast, Location, Customer, BookingHelper, $q, $ionicHistory ) => {
 
     /* Init vars */
 
@@ -188,33 +196,23 @@ angular.module( 'BookingSystem.locationBooking',
       });
 
       $scope.locationBooking = locationBooking;
+
+      // Return promise
+      return locationBooking.$promise;
     };
 
     const initDate = function() {
 
-      // Initialize date if its not set in incoming state params.
-      // It does not matter if its a normal date object or moment.js object. Make it a regular date object either way.
-      // We need to make it to a regular date object since that's what angular material date picker requires.
-      if ( $state.params.date ) {
+      const startTime = $scope.locationBooking.StartTime;
+      const endTime = $scope.locationBooking.EndTime;
 
-        $scope.bookingStartDate = moment( $state.params.date ).toDate();
-        $scope.bookingStartHour = moment( $state.params.date ).hour();
-        $scope.bookingStartMinute = moment( $state.params.date ).minute();
+      $scope.bookingStartDate = moment( startTime ).toDate();
+      $scope.bookingStartHour = moment( startTime ).hour();
+      $scope.bookingStartMinute = moment( startTime ).minute();
 
-        $scope.bookingEndDate = moment( $state.params.date ).toDate();
-        $scope.bookingEndHour = moment( $state.params.date ).hour();
-        $scope.bookingEndMinute = moment( $state.params.date ).add( 59, 'minutes' ).minute();
-
-      } else {
-
-        $scope.bookingStartDate = new Date();
-        $scope.bookingStartHour = 8;
-        $scope.bookingStartMinute = 0;
-
-        $scope.bookingEndDate = new Date();
-        $scope.bookingEndHour = 8;
-        $scope.bookingEndMinute = 59;
-      }
+      $scope.bookingEndDate = moment( endTime ).toDate();
+      $scope.bookingEndHour = moment( endTime ).hour();
+      $scope.bookingEndMinute = moment( endTime ).minute();
     };
 
     const areDateVariablesDefined = function() {
@@ -423,12 +421,13 @@ angular.module( 'BookingSystem.locationBooking',
       LocationBooking.save(
         {
           BookingId: $scope.locationBooking.BookingId,
-          LocationBookingId: 0,
+          LocationBookingId: $scope.locationBooking.LocationBookingId,
           LocationId: $scope.locationBooking.LocationId,
           FurnituringId: furnituringId,
           StartTime: addTimeToDate( $scope.bookingStartDate, $scope.bookingStartHour, $scope.bookingStartMinute ).format(),
           EndTime: addTimeToDate( $scope.bookingEndDate, $scope.bookingEndHour, $scope.bookingEndMinute ).format(),
-          NumberOfPeople: $scope.locationBooking.NumberOfPeople
+          NumberOfPeople: $scope.locationBooking.NumberOfPeople,
+          Provisional: $scope.locationBooking.Provisional
         }
       ).$promise
 
@@ -475,9 +474,7 @@ angular.module( 'BookingSystem.locationBooking',
     /* Initialization START */
 
     setupModal();
-    getLocationBooking();
-
-    initDate();
+    getLocationBooking().then( () => { initDate(); });
     getLocations();
     getCustomers();
     initTimeSelectData();
