@@ -297,7 +297,7 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', '$mdDateLocalePro
 // Locatization configuration for Angular Material ( Swedish localization. )
 BookingSystem.config( ['$mdDateLocaleProvider', ( $mdDateLocaleProvider ) => {
 
-  $mdDateLocaleProvider.months = ['januari', 'februari', 'mars', 'april', 'maj', 'juni', 'juli', 'augusti', 'september', 'oktober', 'november', 'december'];
+  $mdDateLocaleProvider.months = ['Januari', 'Februari', 'Mars', 'April', 'Maj', 'Juni', 'Juli', 'Augusti', 'September', 'Oktober', 'November', 'December'];
   $mdDateLocaleProvider.shortMonths = ['jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'];
   $mdDateLocaleProvider.days = ['söndag', 'måndag', 'tisdag', 'onsdag', 'torsdag', 'fredag', 'lördag'];
   $mdDateLocaleProvider.shortDays = ['Sö', 'Må', 'Ti', 'On', 'To', 'Fr', 'Lö'];
