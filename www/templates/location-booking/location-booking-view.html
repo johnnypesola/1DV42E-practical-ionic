@@ -21,12 +21,28 @@
 
     </ion-content>
 
-  <md-button
-    class="md-fab md-warn md-lower-right-button"
-    aria-label="Skapa"
-    href="#/app/location-booking-create"
+    <md-button
+        class="md-fab md-warn md-lower-right-button md-lower-right-3rd-button"
+        aria-label="Skapa"
+        ng-click="toPreviousWeek()"
     >
-    <span class="icon ion-plus-round md-big-icon"></span>
-  </md-button>
+        <span class="icon ion-arrow-left-c md-big-icon"></span>
+    </md-button>
+
+    <md-button
+        class="md-fab md-warn md-lower-right-button md-lower-right-2nd-button"
+        aria-label="Skapa"
+        ng-click="toNextWeek()"
+    >
+        <span class="icon ion-arrow-right-c md-big-icon"></span>
+    </md-button>
+
+    <md-button
+        class="md-fab md-warn md-lower-right-button"
+        aria-label="Skapa"
+        href="#/app/location-booking-create"
+    >
+        <span class="icon ion-plus-round md-big-icon"></span>
+    </md-button>
 
 </ion-view>
