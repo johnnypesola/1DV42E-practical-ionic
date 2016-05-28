@@ -67,8 +67,18 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 
 .md-lower-right-button {
   position: fixed !important;
-  bottom: 2% !important;
-  right: 2% !important;
+  bottom: 20px !important;
+  right: 20px !important;
+}
+
+.md-lower-right-2nd-button {
+  right: 80px !important;
+  background-color: #25C54F !important;
+}
+
+.md-lower-right-3rd-button {
+  right: 140px !important;
+  background-color: #25C54F !important;
 }
 
 // Custom chips specific START

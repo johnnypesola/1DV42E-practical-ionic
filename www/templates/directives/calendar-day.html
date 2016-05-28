@@ -22,6 +22,7 @@
         <div
             ng-repeat="booking in bookings"
             class="col event"
+            ng-click="showEvent( booking.Id )"
             style="
                 top: {{booking.StartHour * columnHeight}}px;
                 height: {{booking.Duration * columnHeight}}px;
