@@ -31,6 +31,8 @@ const BookingSystem = angular
     'BookingSystem.ngMinMaxDirectives',
     'BookingSystem.filters',
     'BookingSystem.bookingServices',
+    'BookingSystem.resourceBooking',
+    'BookingSystem.resourceBookingServices',
     'ngMaterial',
     'ngResource',
     'ngMessages'
@@ -89,6 +91,45 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', '$mdDateLocalePro
       }
     }
   })
+
+  // Resource Bookings
+
+    .state( 'app.resource-booking-view', {
+      url: '/resource-booking-view',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/resource-booking/resource-booking-view.html',
+          controller: 'ResourceBookingViewCtrl'
+        }
+      }
+    })
+
+    .state( 'app.resource-booking-details', {
+      url: '/resource-booking-details',
+      params: {
+        id: null
+      },
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/resource-booking/resource-booking-details.html',
+          controller: 'ResourceBookingDetailsCtrl'
+        }
+      }
+    })
+
+    .state( 'app.resource-booking-create', {
+      url: '/resource-booking-create',
+      params: {
+        date: null,
+        locationId: null
+      },
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/resource-booking/resource-booking-create.html',
+          controller: 'ResourceBookingCreateCtrl'
+        }
+      }
+    })
 
   // Location Bookings
 
