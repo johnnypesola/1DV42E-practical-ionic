@@ -156,7 +156,7 @@ angular.module( 'BookingSystem.resourceBooking',
 
   /* Init vars */
 
-  const modalTemplateUrl = 'templates/modals/resourceBooking-delete.html';
+  const modalTemplateUrl = 'templates/modals/resource-booking-delete.html';
   $scope.editMode = false;
   $scope.resourceBookingBackup = {};
 
@@ -636,10 +636,10 @@ angular.module( 'BookingSystem.resourceBooking',
           {
             BookingId: $scope.resourceBooking.BookingId,
             ResourceBookingId: 0,
-            ResourceId: $scope.resourceBooking.ResourceId,
+            ResourceId: $scope.resourceBooking.Resource.ResourceId,
+            ResourceCount: $scope.resourceBooking.ResourceCount,
             StartTime: addTimeToDate( $scope.bookingStartDate, $scope.bookingStartHour, $scope.bookingStartMinute ).format(),
-            EndTime: addTimeToDate( $scope.bookingEndDate, $scope.bookingEndHour, $scope.bookingEndMinute ).format(),
-            NumberOfPeople: $scope.resourceBooking.NumberOfPeople
+            EndTime: addTimeToDate( $scope.bookingEndDate, $scope.bookingEndHour, $scope.bookingEndMinute ).format()
           }
         ).$promise
 

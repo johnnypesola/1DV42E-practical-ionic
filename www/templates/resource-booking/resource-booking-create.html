@@ -1,4 +1,4 @@
-<ion-view view-title="Skapa lokal/platsbokning">
+<ion-view view-title="Skapa resursbokning">
     <ion-nav-buttons side="secondary">
         <button
                 class="button"
@@ -12,13 +12,13 @@
 
         <div class="row">
 
-            <form name="locationBookingForm" class="col">
+            <form name="resourceBookingForm" class="col">
 
                 Starttidpunkt
 
                 <div class="row rel-l-20 pos-relative">
 
-                    <div class="validation-messages" ng-messages="locationBookingForm.bookingStartDate.$error">
+                    <div class="validation-messages" ng-messages="resourceBookingForm.bookingStartDate.$error">
                         <div ng-message="valid">Ange ett giltigt startdatum</div>
                         <div ng-message="required">Ett startdatum måste anges</div>
                     </div>
@@ -61,7 +61,7 @@
 
                 <div class="row rel-l-20 pos-relative">
 
-                    <div class="validation-messages" ng-messages="locationBookingForm.bookingEndDate.$error">
+                    <div class="validation-messages" ng-messages="resourceBookingForm.bookingEndDate.$error">
                         <div ng-message="valid">Ange ett giltigt slutdatum</div>
                         <div ng-message="required">Ett slutdatum måste anges</div>
                         <div ng-message="mindate">Slutdatumet kan inte vara före startdatumet</div>
@@ -107,7 +107,7 @@
 
                 <div layout-gt-xs="row" class="pos-relative">
 
-                    <div class="validation-messages" ng-messages="locationBookingForm.CustomerId.$error">
+                    <div class="validation-messages" ng-messages="resourceBookingForm.CustomerId.$error">
                         <div ng-message="required">Var god ange kund</div>
                     </div>
 
@@ -116,7 +116,7 @@
                         <label>Välj kund</label>
                         <md-select
                                 name="CustomerId"
-                                ng-model="locationBooking.CustomerId"
+                                ng-model="resourceBooking.CustomerId"
                                 ng-required="true"
                         >
                             <md-option ng-repeat="customer in customers" value="{{customer.CustomerId}}">
@@ -130,21 +130,20 @@
 
                 <div layout-gt-xs="row" class="pos-relative">
 
-                    <div class="validation-messages" ng-messages="locationBookingForm.LocationId.$error">
-                        <div ng-message="required">Var god ange lokal / plats</div>
+                    <div class="validation-messages" ng-messages="resourceBookingForm.ResourceId.$error">
+                        <div ng-message="required">Var god ange resurs</div>
                     </div>
 
                     <md-input-container class="md-block" flex-gt-sm>
 
-                        <label>Välj lokal / plats</label>
+                        <label>Välj resurs</label>
                         <md-select
-                                name="LocationId"
-                                ng-model="locationBooking.LocationId"
-                                ng-required="true"
-                                ng-change="updateFurniturings()"
+                            name="ResourceId"
+                            ng-model="resourceBooking.Resource"
+                            ng-required="true"
                         >
-                            <md-option ng-repeat="location in locations" value="{{location.LocationId}}">
-                                {{location.Name}}
+                            <md-option ng-repeat="resource in resources" ng-value="resource">
+                                {{resource.Name}} <span class="faded">({{resource.Count}} lediga)</span>
                             </md-option>
                         </md-select>
 
@@ -154,49 +153,30 @@
 
                 <div layout-gt-xs="row" class="pos-relative">
 
-                    <md-input-container class="md-block" flex-gt-sm>
-
-                        <label>Välj möblering</label>
-                        <md-select
-                                name="SelectedFurnituring"
-                                ng-model="locationBooking.SelectedFurnituring"
-                                ng-disabled="!furniturings.length"
-                        >
-                            <md-option ng-repeat="furnituring in furniturings" ng-value="furnituring">
-                                {{furnituring.FurnituringName}} <span class="faded">({{furnituring.MaxPeople}} pers.)</span>
-                            </md-option>
-                        </md-select>
-
-                    </md-input-container>
-
-                </div>
-
-                <div layout-gt-xs="row" class="pos-relative">
-
-                    <div class="validation-messages" ng-messages="locationBookingForm.NumberOfPeople.$error">
-                        <div ng-message="required">Var god ange antal personer</div>
+                    <div class="validation-messages" ng-messages="resourceBookingForm.ResourceCount.$error">
+                        <div ng-message="required">Var god ange antal resurser</div>
                         <div ng-message="pattern">Endast nummer tillåtna</div>
-                        <div ng-message="max">Får vara max {{locationBooking.SelectedFurnituring.MaxPeople}}</div>
-                        <div ng-message="min">Får vara minst 0</div>
+                        <div ng-message="max">Får vara max {{resourceBooking.Resource.Count}}</div>
+                        <div ng-message="min">Måste vara minst 1</div>
                     </div>
 
                     <md-input-container class="md-block" flex-gt-xs>
 
-                        <label>Antal personer</label>
+                        <label>Antal resurser</label>
                         <input
                                 type="number"
-                                name="NumberOfPeople"
-                                ng-model="locationBooking.NumberOfPeople"
+                                name="ResourceCount"
+                                ng-model="resourceBooking.ResourceCount"
                                 ng-required="true"
                                 ng-pattern="/^[0-9]*$/"
-                                ng-max="locationBooking.SelectedFurnituring.MaxPeople"
-                                min="0"
+                                ng-max="resourceBooking.Resource.Count"
+                                min="1"
                         >
                     </md-input-container>
                 </div>
 
                 <div class="row">
-                    <md-checkbox ng-model="locationBooking.Provisional" aria-label="Finished?">
+                    <md-checkbox ng-model="resourceBooking.Provisional" aria-label="Finished?">
                         Preliminär bokning
                     </md-checkbox>
                 </div>
@@ -207,8 +187,8 @@
 
         <md-button
                 class="md-raised md-primary"
-                ng-click="saveLocationBooking()"
-                ng-disabled="locationBookingForm.$invalid"
+                ng-click="saveResourceBooking()"
+                ng-disabled="resourceBookingForm.$invalid"
         >
             Spara
         </md-button>
