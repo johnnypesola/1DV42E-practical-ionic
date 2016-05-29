@@ -139,6 +139,58 @@ namespace BookingSystem.Models
             }
         }
 
+        public IEnumerable<Resource> GetResourcesFreeForPeriod(DateTime startTime, DateTime endTime)
+        {
+            // Create connection object
+            using (this.CreateConnection())
+            {
+                try
+                {
+                    List<Resource> resourcesReturnList;
+                    SqlCommand cmd;
+
+                    // Create list object
+                    resourcesReturnList = new List<Resource>(50);
+
+                    // Connect to database and execute given stored procedure
+                    cmd = this.Setup("appSchema.usp_ResourcesFreeForPeriod");
+
+                    // Add parameter for Stored procedure
+                    cmd.Parameters.Add("@StartTime", SqlDbType.SmallDateTime).Value = startTime;
+                    cmd.Parameters.Add("@EndTime", SqlDbType.SmallDateTime).Value = endTime;
+
+                    // Get all data from stored procedure
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        // Get all data rows
+                        while (reader.Read())
+                        {
+                            // Create new Location object from database values and add to list
+                            resourcesReturnList.Add(new Resource
+                            {
+                                ResourceId = reader.GetSafeInt32(reader.GetOrdinal("ResourceId")),
+                                Name = reader.GetSafeString(reader.GetOrdinal("Name")),
+                                Count = reader.GetSafeInt16(reader.GetOrdinal("Count")),
+                                ImageSrc = reader.GetSafeString(reader.GetOrdinal("ImageSrc")),
+                                BookingPricePerHour = reader.GetSafeDecimal(reader.GetOrdinal("BookingPricePerHour")),
+                                WeekEndCount = reader.GetSafeInt16(reader.GetOrdinal("WeekEndCount"))
+                            });
+                        }
+                    }
+
+                    // Remove unused list rows, free memory.
+                    resourcesReturnList.TrimExcess();
+
+                    // Return list
+                    return resourcesReturnList;
+                }
+                catch
+                {
+                    throw new ApplicationException(DAL_ERROR_MSG);
+                }
+            }
+        }
+
         public IEnumerable<Resource> GetResourcesPageWise(string sortColumn, int pageSize, int pageIndex, out int totalRowCount)
         {
             // Create connection object

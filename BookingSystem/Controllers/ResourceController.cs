@@ -65,6 +65,32 @@ namespace BookingSystem.Controllers
             }
         }
 
+        // GET: api/Resource/free/2015-01-01/2015-01-02
+        // GET: api/Resource/free/2015-01-01/2015-01-02?fromTime=10.00&toTime=10.00
+        [Route("api/Resource/free/{fromDate:datetime}/{toDate:datetime}")]
+        [AcceptVerbs("GET")]
+        public IHttpActionResult Get(string fromDate, string toDate, string fromTime = "00:00:00", string toTime = "23:59:59")
+        {
+            DateTime startTime, endTime;
+
+            try
+            {
+                startTime = Convert.ToDateTime(String.Format("{0} {1}", fromDate, fromTime));
+                endTime = Convert.ToDateTime(String.Format("{0} {1}", toDate, toTime));
+
+                IEnumerable<Resource> resources = resourceService.GetResourcesFreeForPeriod(startTime, endTime);
+                if (resources == null)
+                {
+                    return NotFound();
+                }
+                return Ok(resources);
+            }
+            catch
+            {
+                return InternalServerError();
+            }
+        }
+
         // POST: api/Resource
         [Route("api/Resource")]
         [AcceptVerbs("POST")]

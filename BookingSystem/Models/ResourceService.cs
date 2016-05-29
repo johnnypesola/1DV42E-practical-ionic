@@ -62,6 +62,11 @@ namespace BookingSystem.Models
             return ResourceDAL.GetResources();
         }
 
+        public IEnumerable<Resource> GetResourcesFreeForPeriod(DateTime startTime, DateTime endTime)
+        {
+            return ResourceDAL.GetResourcesFreeForPeriod(startTime, endTime);
+        }
+
         public IEnumerable<Resource> GetPageWise(string sortColumn, int pageSize, int pageIndex, out int totalRowCount)
         {
             return ResourceDAL.GetResourcesPageWise(sortColumn, pageSize, pageIndex, out totalRowCount);
