@@ -156,7 +156,7 @@ angular.module( 'BookingSystem.locationBooking',
 
     /* Init vars */
 
-    const modalTemplateUrl = 'templates/modals/locationBooking-delete.html';
+    const modalTemplateUrl = 'templates/modals/location-booking-delete.html';
     $scope.editMode = false;
     $scope.locationBookingBackup = {};
 

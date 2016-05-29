@@ -56,6 +56,14 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   }
 }
 
+// NavBar styles
+
+.title-small-text {
+  line-height: 34px;
+  font-size: 15px;
+  opacity: 0.5;
+}
+
 // Big icon for material design MB buttons
 .md-big-icon {
   font-size: 150% !important;
@@ -213,6 +221,7 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
       border-right: none !important;
       line-height: 12px;
       overflow: hidden;
+      cursor: pointer;
     }
 
     .time {

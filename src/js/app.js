@@ -31,6 +31,8 @@ const BookingSystem = angular
     'BookingSystem.ngMinMaxDirectives',
     'BookingSystem.filters',
     'BookingSystem.bookingServices',
+    'BookingSystem.resourceBooking',
+    'BookingSystem.resourceBookingServices',
     'ngMaterial',
     'ngResource',
     'ngMessages'
@@ -57,8 +59,8 @@ BookingSystem.run( ['$ionicPlatform', ( $ionicPlatform ) => {
 }] );
 
 // Constants
-// BookingSystem.constant( 'API_URL', 'http://bokning.vvfors.se/api/' );
-BookingSystem.constant( 'API_URL', 'http://localhost:6796/api/' );
+BookingSystem.constant( 'API_URL', 'http://bokning.vvfors.se/api/' );
+// BookingSystem.constant( 'API_URL', 'http://localhost:6796/api/' );
 BookingSystem.constant( 'API_IMG_PATH_URL', 'http://bokning.vvfors.se/' );
 BookingSystem.constant( 'UPLOAD_IMG_MAX_WIDTH', '400' );
 BookingSystem.constant( 'UPLOAD_IMG_MAX_HEIGHT', '400' );
@@ -89,6 +91,45 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', '$mdDateLocalePro
       }
     }
   })
+
+  // Resource Bookings
+
+    .state( 'app.resource-booking-view', {
+      url: '/resource-booking-view',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/resource-booking/resource-booking-view.html',
+          controller: 'ResourceBookingViewCtrl'
+        }
+      }
+    })
+
+    .state( 'app.resource-booking-details', {
+      url: '/resource-booking-details',
+      params: {
+        id: null
+      },
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/resource-booking/resource-booking-details.html',
+          controller: 'ResourceBookingDetailsCtrl'
+        }
+      }
+    })
+
+    .state( 'app.resource-booking-create', {
+      url: '/resource-booking-create',
+      params: {
+        date: null,
+        locationId: null
+      },
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/resource-booking/resource-booking-create.html',
+          controller: 'ResourceBookingCreateCtrl'
+        }
+      }
+    })
 
   // Location Bookings
 
@@ -297,7 +338,7 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', '$mdDateLocalePro
 // Locatization configuration for Angular Material ( Swedish localization. )
 BookingSystem.config( ['$mdDateLocaleProvider', ( $mdDateLocaleProvider ) => {
 
-  $mdDateLocaleProvider.months = ['januari', 'februari', 'mars', 'april', 'maj', 'juni', 'juli', 'augusti', 'september', 'oktober', 'november', 'december'];
+  $mdDateLocaleProvider.months = ['Januari', 'Februari', 'Mars', 'April', 'Maj', 'Juni', 'Juli', 'Augusti', 'September', 'Oktober', 'November', 'December'];
   $mdDateLocaleProvider.shortMonths = ['jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'];
   $mdDateLocaleProvider.days = ['söndag', 'måndag', 'tisdag', 'onsdag', 'torsdag', 'fredag', 'lördag'];
   $mdDateLocaleProvider.shortDays = ['Sö', 'Må', 'Ti', 'On', 'To', 'Fr', 'Lö'];

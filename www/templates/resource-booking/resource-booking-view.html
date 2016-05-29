@@ -1,4 +1,4 @@
-<ion-view view-title="Lokal/Platsbokningar">
+<ion-view view-title="Resursbokningar">
     <ion-nav-buttons side="secondary">
 
     </ion-nav-buttons>
@@ -6,8 +6,8 @@
     <div class="bar bar-subheader">
 
         <button
-            class="button"
-            ng-click="toPreviousWeek()"
+                class="button"
+                ng-click="toPreviousWeek()"
         >
             <span class="icon ion-arrow-left-c md-big-icon"></span>
         </button>
@@ -15,8 +15,8 @@
         <h2 class="title">{{weekDate.format('MMMM YYYY' ) }} <span class="title-small-text"> vecka {{weekDate.week()}}</span></h2>
 
         <button
-            class="button"
-            ng-click="toNextWeek()"
+                class="button"
+                ng-click="toNextWeek()"
         >
             <span class="icon ion-arrow-right-c md-big-icon"></span>
         </button>
@@ -26,20 +26,20 @@
     <ion-content class="has-subheader" padding="false" id="booking-view-content">
 
         <calendar-week
-            date="weekDate"
-            bookings="locationBookings"
-            bookings-type="'location-booking'"
-            new-booking-callback="newBookingCallback(hour)"
-            zoom="zoom"
+                date="weekDate"
+                bookings="resourceBookings"
+                bookings-type="'resource-booking'"
+                new-booking-callback="newBookingCallback(hour)"
+                zoom="zoom"
         >
         </calendar-week>
 
     </ion-content>
 
     <md-button
-        class="md-fab md-warn md-lower-right-button md-ink-ripple"
-        aria-label="Skapa"
-        href="#/app/location-booking-create"
+            class="md-fab md-warn md-lower-right-button md-ink-ripple"
+            aria-label="Skapa"
+            href="#/app/resource-booking-create"
     >
         <span class="icon ion-plus-round md-big-icon"></span>
     </md-button>
