@@ -121,7 +121,7 @@ angular.module( 'BookingSystem.bookingHelperServices',
           BookingTypeId: bookingInfoObj.BookingTypeId,
           CustomerId: bookingInfoObj.CustomerId,
           Provisional: 1,
-          NumberOfPeople: bookingInfoObj.NumberOfPeople,
+          NumberOfPeople: bookingInfoObj.NumberOfPeople || 0,
           Discount: 0,
           CreatedByUserId: 1, //Temporary value, users not implemented
           ModifiedByUserId: 1, //Temporary value, users not implemented
