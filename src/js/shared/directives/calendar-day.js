@@ -11,7 +11,7 @@
   )
 
     // Directive specific controllers START
-    .controller( 'CalendarDayCtrl', ['$scope', '$element', '$attrs', '$rootScope', '$location', '$q', '$state', 'BookingHelper', '$interval', 'DEFAULT_CALENDAR_ZOOM', function( $scope, $element, $attrs, $rootScope, $location, $q, $state, BookingHelper, $interval, DEFAULT_CALENDAR_ZOOM ) {
+    .controller( 'CalendarDayCtrl', ['$scope', '$element', '$attrs', '$rootScope', '$location', '$q', '$state', 'BookingHelper', '$interval', 'DEFAULT_CALENDAR_ZOOM', '$ionicScrollDelegate', '$window', '$document', function( $scope, $element, $attrs, $rootScope, $location, $q, $state, BookingHelper, $interval, DEFAULT_CALENDAR_ZOOM, $ionicScrollDelegate, $window, $document ) {
 
       /* Declare variables START */
       const calendarDayMomentDate = moment( $scope.date );
@@ -57,18 +57,31 @@
         }
       };
 
+      const scrollToTimeLine = function() {
+
+        $document.ready( () => {
+
+          // Get offset from time-line element
+          const offsetTop = angular.element( document.querySelector( '.time-line' ) ).prop( 'offsetTop' );
+
+          $ionicScrollDelegate.scrollTo( 0, offsetTop - $scope.columnHeight, false );
+        });
+      };
+
       const setIsCurrentDayVariables = function () {
 
         $scope.isCurrentDay = moment().format( 'YYYY-MM-DD' ) === calendarDayMomentDate.format( 'YYYY-MM-DD' );
 
         if ( $scope.isCurrentDay ) {
 
-          const currentMoment = moment();
-
+          const currentMoment = moment().subtract( 12, 'hours' );
           const hour = currentMoment.format( 'H' );
           const minute = currentMoment.format( 'mm' );
 
           $scope.currentHour = getHourDecimal( hour, minute );
+
+          // Scroll to current hour
+          scrollToTimeLine();
         }
       };
 
