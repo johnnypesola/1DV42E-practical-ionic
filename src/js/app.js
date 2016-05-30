@@ -18,6 +18,8 @@ const BookingSystem = angular
     'BookingSystem.resourcesServices',
     'BookingSystem.locationBooking',
     'BookingSystem.locationBookingServices',
+    'BookingSystem.locations',
+    'BookingSystem.locationsServices',
     'BookingSystem.calendarDayDirective',
     'BookingSystem.customers',
     'BookingSystem.customersServices',
@@ -244,6 +246,17 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', ( $stateProvider,
       'menuContent': {
         templateUrl: 'templates/bookingtypes/bookingtype-create.html',
         controller: 'BookingTypeCreateCtrl'
+      }
+    }
+  })
+
+  //Locations
+  .state( 'app.locations-list', {
+    url: '/locations-list',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/locations/locations-list.html',
+        controller: 'LocationsListCtrl'
       }
     }
   });
