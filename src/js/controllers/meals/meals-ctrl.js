@@ -105,6 +105,7 @@ angular.module( 'BookingSystem.meals',
       $scope.mealProperties = MealProperty.query();
     };
 
+    /*
     const saveMealProperties = function(){
       let mealPropertiesToSave;
       const postDataArray = [];
@@ -141,6 +142,7 @@ angular.module( 'BookingSystem.meals',
       return mealPropertyResource.$promise;
 
     };
+    */
 
     /* Private Methods END */
 

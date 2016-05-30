@@ -24,7 +24,7 @@ angular.module( 'BookingSystem.mealsServices',
 
       // Get location specific mealProperties and all mealProperties combined. (specific mealProperties selected)
       // For use in checkboxes and such.
-      getCombined : ( mealId ) =>{
+      getCombined : ( mealId ) => {
 
         // Get all available mealProperties
         const mealProperties = MealProperty.query();

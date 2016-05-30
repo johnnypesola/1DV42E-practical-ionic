@@ -1,76 +1,47 @@
-<ion-view view-title="Lokalbokningar">
+<ion-view view-title="Lokal/Platsbokningar">
     <ion-nav-buttons side="secondary">
+
+    </ion-nav-buttons>
+
+    <div class="bar bar-subheader">
+
         <button
             class="button"
-            ng-click="abortEditMode()"
-            ng-show="true"
+            ng-click="toPreviousWeek()"
         >
-            editMode: {{isEditMode}}
+            <span class="icon ion-arrow-left-c md-big-icon"></span>
         </button>
-    </ion-nav-buttons>
-    <ion-content padding="false">
 
-        <div class="row booking-calendar">
+        <h2 class="title">{{weekDate.format('MMMM YYYY' ) }} <span class="title-small-text"> vecka {{weekDate.week()}}</span></h2>
 
-            <calendar-time></calendar-time>
+        <button
+            class="button"
+            ng-click="toNextWeek()"
+        >
+            <span class="icon ion-arrow-right-c md-big-icon"></span>
+        </button>
 
-            <calendar-day
-                date=""
-                hide-all-add-buttons-callback="hideAddButtons()"
-            >
-            </calendar-day>
+    </div>
 
-            <calendar-day
-                    date=""
-                    hide-all-add-buttons-callback="hideAddButtons()"
-                    >
-            </calendar-day>
+    <ion-content class="has-subheader" padding="false" id="booking-view-content">
 
-            <calendar-day
-                    date=""
-                    hide-all-add-buttons-callback="hideAddButtons()"
-                    >
-            </calendar-day>
-
-            <calendar-day
-                    date=""
-                    hide-all-add-buttons-callback="hideAddButtons()"
-                    >
-            </calendar-day>
-
-            <calendar-day
-                    date=""
-                    hide-all-add-buttons-callback="hideAddButtons()"
-                    >
-            </calendar-day>
-
-            <calendar-day
-                    date=""
-                    hide-all-add-buttons-callback="hideAddButtons()"
-                    >
-            </calendar-day>
-
-            <calendar-day
-                    date=""
-                    hide-all-add-buttons-callback="hideAddButtons()"
-                    >
-            </calendar-day>
-
-        </div>
-
-        Location Bookings:
-        <pre>
-            {{LocationBookings | json}}
-        </pre>
+        <calendar-week
+            date="weekDate"
+            bookings="locationBookings"
+            bookings-type="'location-booking'"
+            new-booking-callback="newBookingCallback(hour)"
+            zoom="zoom"
+        >
+        </calendar-week>
 
     </ion-content>
 
-  <md-button
-    class="md-fab md-warn md-lower-right-button"
-    aria-label="Skapa"
-    href="#/app/furnituring-create"
+    <md-button
+        class="md-fab md-warn md-lower-right-button md-ink-ripple"
+        aria-label="Skapa"
+        href="#/app/location-booking-create"
     >
-    <span class="icon ion-plus-round md-big-icon"></span>
-  </md-button>
+        <span class="icon ion-plus-round md-big-icon"></span>
+    </md-button>
 
 </ion-view>
