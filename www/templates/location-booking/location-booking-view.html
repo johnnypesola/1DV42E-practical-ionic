@@ -5,14 +5,18 @@
 
     <div class="bar bar-subheader">
 
+        <h2 class="title">{{weekDate.format('MMMM YYYY' ) }} <span class="title-small-text"> vecka {{weekDate.week()}}</span></h2>
+
+        <calendar-days-header date="weekDate"
+        >
+        </calendar-days-header>
+
         <button
             class="button"
             ng-click="toPreviousWeek()"
         >
             <span class="icon ion-arrow-left-c md-big-icon"></span>
         </button>
-
-        <h2 class="title">{{weekDate.format('MMMM YYYY' ) }} <span class="title-small-text"> vecka {{weekDate.week()}}</span></h2>
 
         <button
             class="button"

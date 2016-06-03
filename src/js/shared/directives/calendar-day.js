@@ -81,7 +81,11 @@
           const minute = currentMoment.format( 'mm' );
 
           $scope.currentHour = getHourDecimal( hour, minute );
+
+        } else {
+          $scope.isDayOld = calendarDayMomentDate.isBefore( moment() );
         }
+
       };
 
       const startUpdateInterval = function (){
