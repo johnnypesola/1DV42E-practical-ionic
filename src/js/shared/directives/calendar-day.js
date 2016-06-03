@@ -57,15 +57,17 @@
         }
       };
 
-      const scrollToTimeLine = function() {
+      const scrollToTimeLineIfNeeded = function() {
 
-        $document.ready( () => {
+        if ( $scope.isCurrentDay ) {
+          $document.ready( () => {
 
-          // Get offset from time-line element
-          const offsetTop = angular.element( document.querySelector( '.time-line' ) ).prop( 'offsetTop' );
+            // Get offset from time-line element
+            const offsetTop = angular.element( document.querySelector( '.time-line' ) ).prop( 'offsetTop' );
 
-          $ionicScrollDelegate.scrollTo( 0, offsetTop - $scope.columnHeight, false );
-        });
+            $ionicScrollDelegate.scrollTo( 0, offsetTop - $scope.columnHeight, false );
+          });
+        }
       };
 
       const setIsCurrentDayVariables = function () {
@@ -74,14 +76,11 @@
 
         if ( $scope.isCurrentDay ) {
 
-          const currentMoment = moment().subtract( 12, 'hours' );
+          const currentMoment = moment();
           const hour = currentMoment.format( 'H' );
           const minute = currentMoment.format( 'mm' );
 
           $scope.currentHour = getHourDecimal( hour, minute );
-
-          // Scroll to current hour
-          scrollToTimeLine();
         }
       };
 
@@ -167,6 +166,8 @@
           date: calendarDayMomentDate,
           id: null
         });
+
+        $scope.hideAddButton();
       };
 
       $scope.showEvent = function( id ) {
@@ -184,6 +185,7 @@
       setupHours();
       setIsCurrentDayVariables();
       startUpdateInterval();
+      scrollToTimeLineIfNeeded();
 
       // Listen to when AddButton should hide
       $scope.$on( 'hideAllAddButtons', ( event, msg ) => {

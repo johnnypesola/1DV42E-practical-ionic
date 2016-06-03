@@ -8,6 +8,13 @@
         >
     </calendar-time>
 
+    <div class="booking-calendar-day-headers">
+        <calendar-day-header ng-repeat="day in days"
+                             date="day.date"
+        >
+        </calendar-day-header>
+    </div>
+
     <calendar-day ng-repeat="day in days"
         date="day.date"
         bookings="day.bookings"
