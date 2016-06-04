@@ -9,53 +9,6 @@ namespace BookingSystem.Models
 {
     public class MealBookingDAL : DALBase
     {
-        public bool IsMealBooked(Booking booking)
-        {
-         
-            
-            //// Create connection object
-            //using (this.CreateConnection())
-            //{
-            //    try
-            //    {
-            //        SqlCommand cmd;
-
-            //        // Connect to database and execute given stored procedure
-            //        cmd = this.Setup("appSchema.usp_MealBookedCheck", DALOptions.closedConnection);
-
-            //        // Add parameters for Stored procedure
-            //        if (booking.BookingId > 0)
-            //        {
-            //            cmd.Parameters.Add("@BookingId", SqlDbType.Int).Value = booking.BookingId;
-            //        }
-            //        cmd.Parameters.Add("@MealId", SqlDbType.Int).Value = booking.MealId;
-            //        cmd.Parameters.Add("@StartDate", SqlDbType.VarChar, 10).Value = booking.StartDate;
-            //        cmd.Parameters.Add("@StartTime", SqlDbType.VarChar, 5).Value = booking.StartTime;
-            //        cmd.Parameters.Add("@EndDate", SqlDbType.VarChar, 10).Value = booking.EndDate;
-            //        cmd.Parameters.Add("@EndTime", SqlDbType.VarChar, 5).Value = booking.EndTime;
-
-            //        // Open DB connection
-            //        connection.Open();
-
-            //        // Get and evaluate response from stored procedure
-            //        object returnValue = cmd.ExecuteScalar();
-
-            //        if (returnValue.ToString() == "1")
-            //        {
-            //            return true;
-            //        }
-
-            //        return false;
-            //    }
-            //    catch
-            //    {
-            //        throw new ApplicationException(DAL_ERROR_MSG);
-            //    }
-            //}
-
-            return false;
-        }
-
         public void DeleteMealBooking(int mealBookingId)
         {
             // Create connection object
@@ -163,6 +116,7 @@ namespace BookingSystem.Models
                     cmd.Parameters.Add("@DeliveryAddress", SqlDbType.VarChar, 200).Value = mealBooking.DeliveryAddress;
                     cmd.Parameters.Add("@StartTime", SqlDbType.SmallDateTime).Value = mealBooking.StartTime;
                     cmd.Parameters.Add("@EndTime", SqlDbType.SmallDateTime).Value = mealBooking.EndTime;
+                    cmd.Parameters.Add("@Notes", SqlDbType.VarChar, 200).Value = mealBooking.Notes;
 
                     // Add out parameter for Stored procedure
                     cmd.Parameters.Add("@InsertId", SqlDbType.Int).Direction = ParameterDirection.Output;
@@ -210,6 +164,7 @@ namespace BookingSystem.Models
                     cmd.Parameters.Add("@DeliveryAddress", SqlDbType.VarChar, 200).Value = mealBooking.DeliveryAddress;
                     cmd.Parameters.Add("@StartTime", SqlDbType.SmallDateTime).Value = mealBooking.StartTime;
                     cmd.Parameters.Add("@EndTime", SqlDbType.SmallDateTime).Value = mealBooking.EndTime;
+                    cmd.Parameters.Add("@Notes", SqlDbType.VarChar, 200).Value = mealBooking.Notes;
 
                     // Open DB connection
                     connection.Open();
@@ -269,9 +224,12 @@ namespace BookingSystem.Models
                                 MealName = reader.GetSafeString(reader.GetOrdinal("MealName")),
                                 MealImageSrc = reader.GetSafeString(reader.GetOrdinal("MealImageSrc")),
                                 MealCount = reader.GetSafeInt16(reader.GetOrdinal("MealCount")),
-
+                                LocationId = reader.GetSafeInt32(reader.GetOrdinal("LocationId")),
+                                LocationName = reader.GetSafeString(reader.GetOrdinal("LocationName")),
                                 StartTime = reader.GetSafeDateTime(reader.GetOrdinal("StartTime")),
-                                EndTime = reader.GetSafeDateTime(reader.GetOrdinal("EndTime"))
+                                EndTime = reader.GetSafeDateTime(reader.GetOrdinal("EndTime")),
+                                Notes = reader.GetSafeString(reader.GetOrdinal("Notes")),
+                                CustomerId = reader.GetSafeInt32(reader.GetOrdinal("CustomerId"))
                             });
                         }
                     }
@@ -323,9 +281,13 @@ namespace BookingSystem.Models
                                 MealName = reader.GetSafeString(reader.GetOrdinal("MealName")),
                                 MealImageSrc = reader.GetSafeString(reader.GetOrdinal("MealImageSrc")),
                                 MealCount = reader.GetSafeInt16(reader.GetOrdinal("MealCount")),
-
+                                LocationId = reader.GetSafeInt32(reader.GetOrdinal("LocationId")),
+                                LocationName = reader.GetSafeString(reader.GetOrdinal("LocationName")),
                                 StartTime = reader.GetSafeDateTime(reader.GetOrdinal("StartTime")),
-                                EndTime = reader.GetSafeDateTime(reader.GetOrdinal("EndTime"))
+                                EndTime = reader.GetSafeDateTime(reader.GetOrdinal("EndTime")),
+                                Notes = reader.GetSafeString(reader.GetOrdinal("Notes")),
+                                DeliveryAddress = reader.GetSafeString(reader.GetOrdinal("DeliveryAddress")),
+                                CustomerId = reader.GetSafeInt32(reader.GetOrdinal("CustomerId"))
                             };
                         }
                     }

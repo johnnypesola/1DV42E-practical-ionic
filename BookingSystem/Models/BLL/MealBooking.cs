@@ -27,9 +27,8 @@ namespace BookingSystem.Models
         [Range(0, Int16.MaxValue, ErrorMessage = "MealCount is out of range.")]
         public int MealCount { get; set; }
 
-        [Required(ErrorMessage = "LocationId is required.")]
         [Range(0, int.MaxValue, ErrorMessage = "LocationId is out of range.")]
-        public int LocationId { get; set; }
+        public int? LocationId { get; set; }
 
         [StringLength(200, ErrorMessage = "DeliveryAddress must not exceed 200 chars.")]
         [RegularExpression(ValidationExtensions.TEXT_FIELD_REGEXP, ErrorMessage = "DeliveryAddress must be alphanumeric and may also contain the following chars: &_-.,@")]
@@ -41,6 +40,10 @@ namespace BookingSystem.Models
         [Required(ErrorMessage = "EndTime is required.")]
         public DateTime EndTime { get; set; }
 
+        [StringLength(200, ErrorMessage = "Notes must not exceed 200 chars.")]
+        [RegularExpression(ValidationExtensions.TEXT_FIELD_REGEXP, ErrorMessage = "Notes must be alphanumeric and may also contain the following chars: &_-.,@")]
+        public string Notes { get; set; }
+
         // Extra datafields retrieved from database/stored procedure
         public string BookingName { get; set; }
 
@@ -49,6 +52,9 @@ namespace BookingSystem.Models
         public string MealName { get; set; }
 
         public string MealImageSrc { get; set; }
+
+        [Range(0, int.MaxValue, ErrorMessage = "CustomerId is out of range.")]
+        public int CustomerId { get; set; }
         
     }
 }
