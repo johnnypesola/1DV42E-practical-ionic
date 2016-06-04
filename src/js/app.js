@@ -341,6 +341,26 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', '$mdDateLocalePro
         controller: 'LocationsListCtrl'
       }
     }
+  })
+
+  .state( 'app.location-details', {
+    url: '/location-details/:locationId',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/locations/location-details.html',
+        controller: 'LocationDetailsCtrl'
+      }
+    }
+  })
+
+  .state( 'app.location-create', {
+    url: '/location-create',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/locations/location-create.html',
+        controller: 'LocationCreateCtrl'
+      }
+    }
   });
 
   // if none of the above states are matched, use this as the fallback
