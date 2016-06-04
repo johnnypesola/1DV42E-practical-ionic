@@ -1,3 +1,57 @@
+<ion-view view-title="Alla bokningar">
+    <ion-nav-buttons side="secondary">
+
+    </ion-nav-buttons>
+
+    <div class="bar bar-subheader">
+
+        <calendar-days-header date="weekDate"
+        >
+        </calendar-days-header>
+
+        <button
+                class="button"
+                ng-click="toPreviousWeek()"
+        >
+            <span class="icon ion-arrow-left-c md-big-icon"></span>
+        </button>
+
+        <h2 class="title">{{weekDate.format('MMMM YYYY' ) }} <span class="title-small-text"> vecka {{weekDate.week()}}</span></h2>
+
+        <button
+                class="button"
+                ng-click="toNextWeek()"
+        >
+            <span class="icon ion-arrow-right-c md-big-icon"></span>
+        </button>
+
+    </div>
+
+    <ion-content class="has-subheader" padding="false" id="booking-view-content">
+
+        <calendar-week
+                date="weekDate"
+                bookings="bookings"
+                bookings-type="'booking'"
+                new-booking-callback="newBookingCallback(hour)"
+                zoom="zoom"
+        >
+        </calendar-week>
+
+    </ion-content>
+
+    <md-button
+            class="md-fab md-warn md-lower-right-button md-ink-ripple"
+            aria-label="Skapa"
+            href="#/app/booking-create"
+    >
+        <span class="icon ion-plus-round md-big-icon"></span>
+    </md-button>
+
+</ion-view>
+
+
+<!--
 <ion-view view-title="Vad vill du göra?">
     <ion-content padding="true">
         <div layout-gt-xs="row">
@@ -36,3 +90,4 @@
         </div>
     </ion-content>
 </ion-view>
+-->
