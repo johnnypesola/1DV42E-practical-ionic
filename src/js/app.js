@@ -35,6 +35,7 @@ const BookingSystem = angular
     'BookingSystem.bookingServices',
     'BookingSystem.resourceBooking',
     'BookingSystem.resourceBookingServices',
+    'BookingSystem.calendarDaysHeaderDirective',
     'ngMaterial',
     'ngResource',
     'ngMessages'

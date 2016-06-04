@@ -1,12 +1,9 @@
-<div class="col calendar-day">
-    <div class="day-header"
-         ng-class="{'active-day': isCurrentDay}"
-    >
-        <div class="number">{{dayNumber}}</div>
-        <div class="name">{{dayName}}</div>
-    </div>
+<div
+    class="calendar-day col"
+    ng-class="isDayOld ? 'old-day' : ''"
+>
 
-    <!-- Background lines with containers below -->
+  <!-- Background lines with containers below -->
     <div class="event-hours">
         <div
             class="event-hour"
@@ -51,7 +48,7 @@
     </button>
 
     <div
-        class="time-line"
+        ng-class="isCurrentDay ? 'time-line' : ''"
         ng-show="isCurrentDay"
         style="
             top: {{ currentHour ? currentHour * columnHeight + 50 : 0}}px;

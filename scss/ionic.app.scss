@@ -117,16 +117,57 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 
 // Calendar specific START
 
+.booking-calendar-day-headers {
+  background: #fff;
+  position: absolute;
+  top: 43px;
+  left: 0;
+  padding: 0;
+}
+
+.day-header, .time-header {
+
+  height: 50px;
+  padding: 5px;
+  border-bottom: 1px solid #eee;
+  color: #aaa;
+
+  .week {
+    margin-top: 12px;
+    text-align: center;
+  }
+
+  .number {
+    margin: 2px;
+    font-size: 24px !important;
+  }
+
+  .name {
+    margin: 2px;
+    font-size: 14px !important;
+  }
+}
+
+.active-day {
+  color: #444 !important;
+}
+
 .booking-calendar {
+  position: relative;
+  top: 50px;
   padding: 0 !important;
   margin-bottom: 150px !important;
 
+  .calendar-time {
+    position: relative;
+  }
+
+  .old-day {
+    background: #fbfbfb;
+  }
+
   .calendar-day {
     position: relative;
-
-    .active-day {
-      color: #444 !important;
-    }
 
     .time-line {
       position: absolute;
@@ -152,29 +193,6 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
     padding: 0 !important;
     border-right: 1px solid #eee;
 
-    .day-header, .time-header {
-
-      height: 50px;
-      padding: 5px;
-      border-bottom: 1px solid #eee;
-      color: #aaa;
-
-      .week {
-        margin-top: 12px;
-        text-align: center;
-      }
-
-      .number {
-        margin: 2px;
-        font-size: 24px !important;
-      }
-
-      .name {
-        margin: 2px;
-        font-size: 14px !important;
-      }
-    }
-
     .row {
       padding: 0px;
       position: relative;
@@ -182,18 +200,16 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 
     .event-hours {
       position: absolute;
-      top: 50px;
       left: 0;
       width: 100%;
 
         .event-hour {
-          border-bottom: 1px solid #f8f8f8;
+          border-bottom: 1px solid #f7f7f7;
         }
     }
 
     .add-button {
       position: absolute;
-      top: 50px;
       left: 0;
       width: 100%;
       opacity: 0.98;
