@@ -49,13 +49,14 @@ angular.module( 'BookingSystem.locations',
   }]
   )
 
-  .controller( 'LocationDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', 'Location', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, Location ) => {
+  .controller( 'LocationDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', 'Location', 'LocationImage', 'API_IMG_PATH_URL', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, Location, LocationImage, API_IMG_PATH_URL ) => {
 
     /* Init vars */
 
     const modalTemplateUrl = 'templates/modals/location-delete.html';
     $scope.editMode = false;
     $scope.locationBackup = {};
+    $scope.API_IMG_PATH_URL = API_IMG_PATH_URL;
 
     /* Private methods START */
     const setupModal = function(){
@@ -73,6 +74,23 @@ angular.module( 'BookingSystem.locations',
       $scope.$on( '$destroy', () => {
         $scope.modal.remove();
       });
+    };
+
+    const uploadImage = function( LocationId ){
+
+      return LocationImage.upload( $scope.location.ImageForUpload, LocationId );
+
+    };
+
+    const saveSuccess = function() {
+      // Display success message
+      $rootScope.FlashMessage = {
+        type: 'success',
+        message: 'Lokalen/Platsen "' + $scope.location.Name + '" sparades med ett lyckat resultat'
+      };
+
+      // Redirect
+      history.back();
     };
 
     const getLocation = function () {
@@ -129,7 +147,12 @@ angular.module( 'BookingSystem.locations',
       Location.save(
         {
           LocationId: $stateParams.locationId,
-          Name: $scope.location.Name
+          Name: $scope.location.Name,
+          MaxPeople: $scope.location.MaxPeople,
+          ImageSrc: $scope.location.ImageSrc,
+          BookingPricePerHour: $scope.location.BookingPricePerHour,
+          MinutesMarginBeforeBooking: $scope.location.MinutesMarginBeforeBooking,
+          MinutesMarginAfterBooking: $scope.location.MinutesMarginAfterBooking
         }
       ).$promise
 
@@ -138,10 +161,28 @@ angular.module( 'BookingSystem.locations',
 
           $scope.endEditMode();
 
-          $rootScope.FlashMessage = {
-            type: 'success',
-            message: 'Lokalen/platsen "' + $scope.location.Name + '" sparades med ett lyckat resultat'
-          };
+          // Upload image
+          if ( typeof $scope.location.ImageForUpload !== 'undefined' ){
+
+            uploadImage( response.LocationId )
+
+            // Image upload successful
+              .success( () => {
+                saveSuccess();
+              })
+              // Image upload failed
+              .error( () => {
+
+                $rootScope.FlashMessage = {
+                  type: 'error',
+                  message: 'Lokalen/Platsen sparades, men det gick inte att ladda upp och spara den önskade bilden.'
+                };
+              });
+          }
+          else {
+
+            saveSuccess();
+          }
 
           // Something went wrong
         }).catch( ( response ) => {
@@ -256,12 +297,18 @@ angular.module( 'BookingSystem.locations',
     $scope.saveLocation = function() {
 
       const $scope = this;
+      console.log( $scope.location );
 
       // Save furnituring
       Location.save(
         {
           LocationId: 0,
-          Name: $scope.location.Name
+          Name: $scope.location.Name,
+          MaxPeople: Number( $scope.location.MaxPeople ),
+          ImageSrc: $scope.location.ImageSrc,
+          BookingPricePerHour: Number( $scope.location.BookingPricePerHour ),
+          MinutesMarginBeforeBooking: Number( $scope.location.MinutesMarginBeforeBooking ),
+          MinutesMarginAfterBooking: Number( $scope.location.MinutesMarginAfterBooking )
         }
       ).$promise
 
