@@ -18,6 +18,8 @@ const BookingSystem = angular
     'BookingSystem.resourcesServices',
     'BookingSystem.locationBooking',
     'BookingSystem.locationBookingServices',
+    'BookingSystem.locations',
+    'BookingSystem.locationsServices',
     'BookingSystem.calendarDayDirective',
     'BookingSystem.customers',
     'BookingSystem.customersServices',
@@ -61,7 +63,7 @@ BookingSystem.run( ['$ionicPlatform', ( $ionicPlatform ) => {
 
 // Constants
 BookingSystem.constant( 'API_URL', 'http://bokning.vvfors.se/api/' );
-// BookingSystem.constant( 'API_URL', 'http://localhost:6796/api/' );
+//BookingSystem.constant( 'API_URL', 'http://localhost:6796/api/' );
 BookingSystem.constant( 'API_IMG_PATH_URL', 'http://bokning.vvfors.se/' );
 BookingSystem.constant( 'UPLOAD_IMG_MAX_WIDTH', '400' );
 BookingSystem.constant( 'UPLOAD_IMG_MAX_HEIGHT', '400' );
@@ -327,6 +329,37 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', '$mdDateLocalePro
       'menuContent': {
         templateUrl: 'templates/bookingtypes/bookingtype-create.html',
         controller: 'BookingTypeCreateCtrl'
+      }
+    }
+  })
+
+  //Locations
+  .state( 'app.locations-list', {
+    url: '/locations-list',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/locations/locations-list.html',
+        controller: 'LocationsListCtrl'
+      }
+    }
+  })
+
+  .state( 'app.location-details', {
+    url: '/location-details/:locationId',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/locations/location-details.html',
+        controller: 'LocationDetailsCtrl'
+      }
+    }
+  })
+
+  .state( 'app.location-create', {
+    url: '/location-create',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/locations/location-create.html',
+        controller: 'LocationCreateCtrl'
       }
     }
   });
