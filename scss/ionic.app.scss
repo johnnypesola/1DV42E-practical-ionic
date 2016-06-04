@@ -277,6 +277,10 @@ md-input-container:not(.md-input-has-value) input:not(:focus), md-input-containe
   border-bottom-color: rgba(0,0,0,0.12)
 }
 
+input[type=search], input[type=text], input[type=password], input[type=datetime], input[type=datetime-local], input[type=date], input[type=month], input[type=time], input[type=week], input[type=number], input[type=email], input[type=url], input[type=tel], input[type=color], textarea {
+  height: 30px !important;
+}
+
 // Angular Material input fixes END
 
 // Angular Material Datepicker fixes START

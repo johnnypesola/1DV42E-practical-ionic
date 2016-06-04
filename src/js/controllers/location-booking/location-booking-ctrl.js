@@ -233,8 +233,6 @@ angular.module( 'BookingSystem.locationBooking',
 
     const getLocations = function() {
 
-      $scope.locations = Location.query();
-
       if ( areDateVariablesDefined() ){
 
         const startMomentDate = addTimeToDate( $scope.bookingStartDate, $scope.bookingStartHour, $scope.bookingStartMinute );
@@ -539,8 +537,6 @@ angular.module( 'BookingSystem.locationBooking',
       $scope.selectMinutes = BookingHelper.getMinutesForSelect();};
 
     const getLocations = function() {
-
-      $scope.locations = Location.query();
 
       if ( areDateVariablesDefined() ){
 

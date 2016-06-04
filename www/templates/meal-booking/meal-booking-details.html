@@ -141,12 +141,12 @@
                         <div ng-message="required">Var god ange måltid</div>
                     </div>
 
-                    <md-input-container class="md-block" flex-gt-sm>
+                    <md-input-container class="md-block col" flex-gt-sm>
 
-                        <label>Måltid</label>
+                        <label>Välj måltid</label>
                         <md-select
                                 name="MealId"
-                                ng-model="meaöBooking.MealId"
+                                ng-model="mealBooking.MealId"
                                 ng-required="true"
                                 ng-disabled="!isEditMode"
                         >
@@ -158,7 +158,6 @@
                     </md-input-container>
 
                 </div>
-
                 <div layout-gt-xs="row" class="pos-relative">
 
                     <div class="validation-messages" ng-messages="mealBookingForm.MealCount.$error">
@@ -167,7 +166,7 @@
                         <div ng-message="min">Får vara minst 0</div>
                     </div>
 
-                    <md-input-container class="md-block" flex-gt-xs>
+                    <md-input-container class="md-block col" flex-gt-xs>
 
                         <label>Antal</label>
                         <input
@@ -179,6 +178,53 @@
                                 min="0"
                                 ng-disabled="!isEditMode"
                         >
+                    </md-input-container>
+
+                </div>
+
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <md-input-container class="md-block col" flex-gt-sm>
+
+                        <label>Eventuell lokal/plats dit måltid ska levereras</label>
+                        <md-select
+                                name="LocationId"
+                                ng-model="mealBooking.LocationId"
+                                ng-disabled="!isEditMode"
+                        >
+                            <md-option value="" selected="selected"><span class="faded">(Ingen)</span></md-option>
+                            <md-option ng-repeat="location in locations" value="{{location.LocationId}}">
+                                {{location.Name}}
+                            </md-option>
+                        </md-select>
+
+                    </md-input-container>
+
+                </div>
+
+                <div>
+                    <md-input-container class="md-block">
+                        <label>Eventuell leveransadress</label>
+                        <textarea
+                            ng-model="mealBooking.DeliveryAddress"
+                            md-maxlength="200"
+                            rows="5"
+                            md-select-on-focus
+                            ng-disabled="!isEditMode"
+                        ></textarea>
+                    </md-input-container>
+                </div>
+
+                <div>
+                    <md-input-container class="md-block">
+                        <label>Anteckningar</label>
+                        <textarea
+                            ng-model="mealBooking.Notes"
+                            md-maxlength="200"
+                            rows="5"
+                            md-select-on-focus
+                            ng-disabled="!isEditMode"
+                        ></textarea>
                     </md-input-container>
                 </div>
 
