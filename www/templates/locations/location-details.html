@@ -23,22 +23,36 @@
                     </div>
                 </div>
                 <div layout-gt-xs="row">
+
+                    <div class="validation-messages" ng-messages="locationForm.Name.$error">
+                        <div ng-message="required">Var god ange namn</div>
+                    </div>
+
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Namn</label>
                         <input
                                 type="text"
                                 name="Name"
+                                ng-required="true"
                                 ng-model="location.Name"
                                 ng-disabled="!isEditMode"
                         >
                     </md-input-container>
                 </div>
                 <div layout-gt-xs="row">
+
+                    <div class="validation-messages" ng-messages="locationForm.MaxPeople.$error">
+                        <div ng-message="required">Var god ange max antal personer</div>
+                        <div ng-message="pattern">Endast nummer tillåtna</div>
+                        <div ng-message="min">Får vara minst 0</div>
+                    </div>
+
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Max antal personer</label>
                         <input
                                 type="number"
                                 name="MaxPeople"
+                                ng-required="true"
                                 ng-model="location.MaxPeople"
                                 ng-pattern="/^[0-9]*$/"
                                 min="0"
@@ -47,11 +61,17 @@
                     </md-input-container>
                 </div>
                 <div layout-gt-xs="row">
+                    <div class="validation-messages" ng-messages="locationForm.BookingPricePerHour.$error">
+                        <div ng-message="required">Var god ange pris per timme</div>
+                        <div ng-message="pattern">Endast nummer tillåtna</div>
+                        <div ng-message="min">Får vara minst 0</div>
+                    </div>
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Pris per timme</label>
                         <input
                                 type="number"
                                 name="BookingPricePerHour"
+                                ng-required="true"
                                 ng-model="location.BookingPricePerHour"
                                 ng-pattern="/^[0-9]*$/"
                                 min="0"
@@ -60,22 +80,34 @@
                     </md-input-container>
                 </div>
                 <div layout-gt-xs="row">
+                    <div class="validation-messages" ng-messages="locationForm.MinutesMarginBeforeBooking.$error">
+                        <div ng-message="required">Var god ange minuters marginal före bokning</div>
+                        <div ng-message="pattern">Endast nummer tillåtna</div>
+                        <div ng-message="min">Får vara minst 0</div>
+                    </div>
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Minuters marginal före bokning</label>
                         <input
                                 type="number"
                                 name="MinutesMarginBeforeBooking"
+                                ng-required="true"
                                 ng-model="location.MinutesMarginBeforeBooking"
                                 ng-disabled="!isEditMode"
                         >
                     </md-input-container>
                 </div>
                 <div layout-gt-xs="row">
+                    <div class="validation-messages" ng-messages="locationForm.MinutesMarginAfterBooking.$error">
+                        <div ng-message="required">Var god ange minuters marginal efter bokning</div>
+                        <div ng-message="pattern">Endast nummer tillåtna</div>
+                        <div ng-message="min">Får vara minst 0</div>
+                    </div>
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Minuters marginal efter bokning</label>
                         <input
                                 type="number"
                                 name="MinutesMarginAfterBooking"
+                                ng-required="true"
                                 ng-model="location.MinutesMarginAfterBooking"
                                 ng-disabled="!isEditMode"
                         >
