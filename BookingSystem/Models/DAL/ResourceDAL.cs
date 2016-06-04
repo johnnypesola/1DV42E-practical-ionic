@@ -139,7 +139,7 @@ namespace BookingSystem.Models
             }
         }
 
-        public IEnumerable<Resource> GetResourcesFreeForPeriod(DateTime startTime, DateTime endTime)
+        public IEnumerable<Resource> GetResourcesFreeForPeriod(DateTime startTime, DateTime endTime, int resourceBookingExceptionId)
         {
             // Create connection object
             using (this.CreateConnection())
@@ -158,6 +158,7 @@ namespace BookingSystem.Models
                     // Add parameter for Stored procedure
                     cmd.Parameters.Add("@StartTime", SqlDbType.SmallDateTime).Value = startTime;
                     cmd.Parameters.Add("@EndTime", SqlDbType.SmallDateTime).Value = endTime;
+                    cmd.Parameters.Add("@ExceptionId", SqlDbType.Int).Value = resourceBookingExceptionId;
 
                     // Get all data from stored procedure
                     using (SqlDataReader reader = cmd.ExecuteReader())

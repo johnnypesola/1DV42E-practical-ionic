@@ -67,9 +67,9 @@ namespace BookingSystem.Controllers
 
         // GET: api/Resource/free/2015-01-01/2015-01-02
         // GET: api/Resource/free/2015-01-01/2015-01-02?fromTime=10.00&toTime=10.00
-        [Route("api/Resource/free/{fromDate:datetime}/{toDate:datetime}")]
+        [Route("api/Resource/free/{fromDate:datetime}/{toDate:datetime}/{resourceBookingExceptionId:int?}")]
         [AcceptVerbs("GET")]
-        public IHttpActionResult Get(string fromDate, string toDate, string fromTime = "00:00:00", string toTime = "23:59:59")
+        public IHttpActionResult Get(string fromDate, string toDate, string fromTime = "00:00:00", string toTime = "23:59:59", int resourceBookingExceptionId = 0)
         {
             DateTime startTime, endTime;
 
@@ -78,7 +78,7 @@ namespace BookingSystem.Controllers
                 startTime = Convert.ToDateTime(String.Format("{0} {1}", fromDate, fromTime));
                 endTime = Convert.ToDateTime(String.Format("{0} {1}", toDate, toTime));
 
-                IEnumerable<Resource> resources = resourceService.GetResourcesFreeForPeriod(startTime, endTime);
+                IEnumerable<Resource> resources = resourceService.GetResourcesFreeForPeriod(startTime, endTime, resourceBookingExceptionId);
                 if (resources == null)
                 {
                     return NotFound();
