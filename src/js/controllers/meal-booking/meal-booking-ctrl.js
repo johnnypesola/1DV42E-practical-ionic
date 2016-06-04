@@ -1,13 +1,13 @@
 'use strict';
 
-angular.module( 'BookingSystem.locationBooking',
+angular.module( 'BookingSystem.mealBooking',
 
   // Dependencies
   [ 'ngMessages' ]
   )
 
   // Controller
-  .controller( 'LocationBookingViewCtrl', [ '$rootScope', '$scope', '$state', 'LocationBooking', '$interval', 'DATA_SYNC_INTERVAL_TIME', '$ionicGesture', '$mdToast', 'DEFAULT_CALENDAR_ZOOM', ( $rootScope, $scope, $state, LocationBooking, $interval, DATA_SYNC_INTERVAL_TIME, $ionicGesture, $mdToast, DEFAULT_CALENDAR_ZOOM ) => {
+  .controller( 'MealBookingViewCtrl', [ '$rootScope', '$scope', '$state', 'MealBooking', '$interval', 'DATA_SYNC_INTERVAL_TIME', '$ionicGesture', '$mdToast', 'DEFAULT_CALENDAR_ZOOM', ( $rootScope, $scope, $state, MealBooking, $interval, DATA_SYNC_INTERVAL_TIME, $ionicGesture, $mdToast, DEFAULT_CALENDAR_ZOOM ) => {
 
     /* Init vars */
     const updateIntervalTime = DATA_SYNC_INTERVAL_TIME;
@@ -30,27 +30,27 @@ angular.module( 'BookingSystem.locationBooking',
       weekEndDate = moment( $scope.weekDate ).endOf( 'week' );
     };
 
-    const getLocationBookings = function () {
+    const getMealBookings = function () {
 
-      const locationBookings = LocationBooking.queryLessForPeriod({
+      const mealBookings = MealBooking.queryLessForPeriod({
 
         fromDate: weekStartDate.format( 'YYYY-MM-DD' ),
         toDate: weekEndDate.format( 'YYYY-MM-DD' )
       });
 
-      // const locationBookings = LocationBooking.query();
+      // const mealBookings = MealBooking.query();
 
-      // In case LocationBooking cannot be fetched, display an error to user.
-      locationBookings.$promise.catch( () => {
+      // In case MealBooking cannot be fetched, display an error to user.
+      mealBookings.$promise.catch( () => {
 
         $mdToast.show( $mdToast.simple()
-          .content( 'Lokalbokningar kunde inte hämtas, var god försök igen.' )
+          .content( 'Måltidsbokningar kunde inte hämtas, var god försök igen.' )
           .position( 'top right' )
         );
       })
 
-      .then( ( locationBookings ) => {
-        $scope.locationBookings = locationBookings;
+      .then( ( mealBookings ) => {
+        $scope.mealBookings = mealBookings;
       });
     };
 
@@ -58,7 +58,7 @@ angular.module( 'BookingSystem.locationBooking',
 
       updateInterval = $interval( () => {
 
-        getLocationBookings();
+        getMealBookings();
 
       }, updateIntervalTime );
 
@@ -110,13 +110,13 @@ angular.module( 'BookingSystem.locationBooking',
     $scope.toNextWeek = function() {
       setupWeekStartAndEndDates( 1 );
 
-      getLocationBookings();
+      getMealBookings();
     };
 
     $scope.toPreviousWeek = function() {
       setupWeekStartAndEndDates( -1 );
 
-      getLocationBookings();
+      getMealBookings();
     };
 
     /* Public Methods END */
@@ -126,7 +126,7 @@ angular.module( 'BookingSystem.locationBooking',
     $scope.$on( '$ionicView.enter', ( event, data ) => {
 
       setupWeekStartAndEndDates();
-      getLocationBookings();
+      getMealBookings();
       startUpdateInterval();
     });
 
@@ -152,13 +152,13 @@ angular.module( 'BookingSystem.locationBooking',
   }]
 )
 
-  .controller( 'LocationBookingDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', 'LocationBooking', '$mdToast', 'Location', 'Customer', 'BookingHelper', '$q', '$ionicHistory', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, LocationBooking, $mdToast, Location, Customer, BookingHelper, $q, $ionicHistory ) => {
+  .controller( 'MealBookingDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', 'MealBooking', '$mdToast', 'Meal', 'Customer', 'BookingHelper', '$q', '$ionicHistory', 'Location', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, MealBooking, $mdToast, Meal, Customer, BookingHelper, $q, $ionicHistory, Location ) => {
 
     /* Init vars */
 
-    const modalTemplateUrl = 'templates/modals/location-booking-delete.html';
+    const modalTemplateUrl = 'templates/modals/meal-booking-delete.html';
     $scope.editMode = false;
-    $scope.locationBookingBackup = {};
+    $scope.mealBookingBackup = {};
 
     /* Private methods START */
     const setupModal = function(){
@@ -178,33 +178,33 @@ angular.module( 'BookingSystem.locationBooking',
       });
     };
 
-    const getLocationBooking = function () {
+    const getMealBooking = function () {
 
-      const locationBooking = LocationBooking.get(
+      const mealBooking = MealBooking.get(
         {
-          locationBookingId: $stateParams.id
+          mealBookingId: $stateParams.id
         }
       );
 
-      // In case locationBooking cannot be fetched, display an error to user.
-      locationBooking.$promise.catch( () => {
+      // In case mealBooking cannot be fetched, display an error to user.
+      mealBooking.$promise.catch( () => {
 
         $mdToast.show( $mdToast.simple()
-            .content( 'Lokalbokning kunde inte hämtas, var god försök igen.' )
+            .content( 'Måltidsbokning kunde inte hämtas, var god försök igen.' )
             .position( 'top right' )
         );
       });
 
-      $scope.locationBooking = locationBooking;
+      $scope.mealBooking = mealBooking;
 
       // Return promise
-      return locationBooking.$promise;
+      return mealBooking.$promise;
     };
 
     const initDate = function() {
 
-      const startTime = $scope.locationBooking.StartTime;
-      const endTime = $scope.locationBooking.EndTime;
+      const startTime = $scope.mealBooking.StartTime;
+      const endTime = $scope.mealBooking.EndTime;
 
       $scope.bookingStartDate = moment( startTime ).toDate();
       $scope.bookingStartHour = moment( startTime ).hour();
@@ -233,36 +233,48 @@ angular.module( 'BookingSystem.locationBooking',
 
     const getLocations = function() {
 
-      if ( areDateVariablesDefined() ){
+      Location.query().$promise
 
-        const startMomentDate = addTimeToDate( $scope.bookingStartDate, $scope.bookingStartHour, $scope.bookingStartMinute );
-        const endMomentDate = addTimeToDate( $scope.bookingEndDate, $scope.bookingEndHour, $scope.bookingEndMinute );
+        // Success
+        .then( ( response ) => {
 
-        Location.queryFreeForPeriod(
-          {
-            fromDate: startMomentDate.format( 'YYYY-MM-DD' ),
-            fromTime: startMomentDate.format( 'HH:mm' ),
-            toDate: endMomentDate.format( 'YYYY-MM-DD' ),
-            toTime: endMomentDate.format( 'HH:mm' )
-          }
-        ).$promise
+          // Add locations to scope
+          $scope.locations = response;
+        })
 
-          // Success
-          .then( ( response ) => {
+        // Could not get free locations
+        .catch( ( response ) => {
 
-            // Add free locations to scope
-            $scope.locations = response;
-          })
+          $mdToast.show( $mdToast.simple()
+            .content( 'Ett oväntat fel uppstod när lokaler skulle hämtas' )
+            .position( 'top right' )
+          );
+        });
+    };
 
-          // Could not get free locations
-          .catch( ( response ) => {
+    const getMeals = function() {
 
-            $mdToast.show( $mdToast.simple()
-              .content( 'Ett oväntat fel uppstod när uppgifter om lediga lokaler skulle hämtas' )
-              .position( 'top right' )
-            );
-          });
-      }
+      $scope.meals = Meal.query();
+
+      Meal.query().$promise
+
+        // Success
+        .then( ( response ) => {
+
+          // Add free meals to scope
+          $scope.meals = response;
+        })
+
+        // Could not get free meals
+        .catch( ( response ) => {
+
+          $mdToast.show( $mdToast.simple()
+            .content( 'Ett oväntat fel uppstod när uppgifter om måltider skulle hämtas' )
+            .position( 'top right' )
+          );
+        });
+
+      return Meal.query().$promise;
     };
 
     const getCustomers = function(){
@@ -278,6 +290,8 @@ angular.module( 'BookingSystem.locationBooking',
       });
 
       $scope.customers = customers;
+
+      return customers.$promise;
     };
 
     const addTimeToDate = function( dateObj, hour, minute ) {
@@ -297,7 +311,7 @@ angular.module( 'BookingSystem.locationBooking',
       $scope.isEditMode = true;
 
       // Make backup of data if in editMode.
-      $scope.locationBookingBackup = angular.copy( $scope.locationBooking );
+      $scope.mealBookingBackup = angular.copy( $scope.mealBooking );
     };
 
     $scope.endEditMode = function () {
@@ -310,15 +324,15 @@ angular.module( 'BookingSystem.locationBooking',
       const $scope = this;
 
       $scope.isEditMode = false;
-      $scope.locationBooking = $scope.locationBookingBackup;
+      $scope.mealBooking = $scope.mealBookingBackup;
     };
 
-    $scope.deleteLocationBooking = function() {
+    $scope.deleteMealBooking = function() {
 
-      // Delete locationBooking
-      LocationBooking.delete(
+      // Delete mealBooking
+      MealBooking.delete(
         {
-          locationBookingId: $stateParams.id
+          mealBookingId: $stateParams.id
         }
       ).$promise
 
@@ -326,7 +340,7 @@ angular.module( 'BookingSystem.locationBooking',
         .then( ( response ) => {
 
           $mdToast.show( $mdToast.simple()
-              .content( 'Lokalbokningen raderades med ett lyckat resultat' )
+              .content( 'Måltidsbokningen raderades med ett lyckat resultat' )
               .position( 'top right' )
           );
 
@@ -339,7 +353,7 @@ angular.module( 'BookingSystem.locationBooking',
           if ( response.status === 400 || response.status === 500 ){
 
             $mdToast.show( $mdToast.simple()
-                .content( 'Ett oväntat fel uppstod när Lokalbokningen skulle tas bort' )
+                .content( 'Ett oväntat fel uppstod när Måltidsbokningen skulle tas bort' )
                 .position( 'top right' )
             );
           }
@@ -348,39 +362,13 @@ angular.module( 'BookingSystem.locationBooking',
           if ( response.status === 404 ) {
 
             $mdToast.show( $mdToast.simple()
-                .content( 'Lokalbokningen existerar inte längre. Hann kanske någon radera den?' )
+                .content( 'Måltidsbokningen existerar inte längre. Hann kanske någon radera den?' )
                 .position( 'top right' )
             );
           }
 
           history.back();
         });
-    };
-
-    //
-
-    $scope.updateFurniturings = function() {
-
-      // Get all available furniturings for selected location
-      if ( $scope.locationBooking.LocationId ){
-        $scope.furniturings = LocationFurnituring.queryForLocation(
-          {
-            locationId: $scope.locationBooking.LocationId
-          }
-        );
-
-        // If furniturings could not be fetched
-        $scope.furniturings.$promise.catch( () => {
-
-          $mdToast.show( $mdToast.simple()
-              .content( 'Möbleringar för vald lokal kunde inte hämtas.' )
-              .position( 'top right' )
-          );
-        });
-      }
-      else {
-        $scope.furnituring = [];
-      }
     };
 
     $scope.checkEndDate = function() {
@@ -402,30 +390,30 @@ angular.module( 'BookingSystem.locationBooking',
         $scope.bookingEndMinute = $scope.bookingStartMinute + 15;
       }
 
-      // Get free locations for this new time.
-      getLocations();
+      // Get free meals for this new time.
+      getMeals();
     };
 
-    $scope.saveLocationBooking = function(){
+    $scope.saveMealBooking = function(){
 
       const $scope = this;
       const deferred = $q.defer();
       const promise = deferred.promise;
 
-      // Set a furnituring if if there is a furnituring at all.
-      const furnituringId = ( $scope.locationBooking.SelectedFurnituring ? $scope.locationBooking.SelectedFurnituring.FurnituringId : null );
-
-      // Save locationBooking
-      LocationBooking.save(
+      // Save mealBooking
+      MealBooking.save(
         {
-          BookingId: $scope.locationBooking.BookingId,
-          LocationBookingId: $scope.locationBooking.LocationBookingId,
-          LocationId: $scope.locationBooking.LocationId,
-          FurnituringId: furnituringId,
+          BookingId: $scope.mealBooking.BookingId,
+          MealBookingId: $scope.mealBooking.MealBookingId,
+          MealId: $scope.mealBooking.MealId,
           StartTime: addTimeToDate( $scope.bookingStartDate, $scope.bookingStartHour, $scope.bookingStartMinute ).format(),
           EndTime: addTimeToDate( $scope.bookingEndDate, $scope.bookingEndHour, $scope.bookingEndMinute ).format(),
-          NumberOfPeople: $scope.locationBooking.NumberOfPeople,
-          Provisional: $scope.locationBooking.Provisional
+          NumberOfPeople: $scope.mealBooking.NumberOfPeople,
+          Provisional: $scope.mealBooking.Provisional,
+          LocationId: $scope.mealBooking.LocationId,
+          DeliveryAddress: $scope.mealBooking.DeliveryAddress,
+          MealCount: $scope.mealBooking.MealCount,
+          Notes: $scope.mealBooking.Notes
         }
       ).$promise
 
@@ -433,7 +421,7 @@ angular.module( 'BookingSystem.locationBooking',
         .then( ( response ) => {
 
           $mdToast.show( $mdToast.simple()
-              .content( 'Lokal/plats-bokningen sparades med ett lyckat resultat' )
+              .content( 'Måltidsbokningen sparades med ett lyckat resultat' )
               .position( 'top right' )
           );
 
@@ -445,23 +433,10 @@ angular.module( 'BookingSystem.locationBooking',
           // Something went wrong
         }).catch( ( response ) => {
 
-          // If there there was a foreign key reference
-          if ( response.status === 409 ){
-
-            $mdToast.show( $mdToast.simple()
-                .content( 'Lokalen är tyvärr redan bokad under vald tidsram.' )
-                .position( 'top right' )
-            );
-          }
-
-          // If there was a problem with the in-data
-          else {
-
-            $mdToast.show( $mdToast.simple()
-                .content( 'Ett oväntat fel uppstod när lokal/plats-bokningen skulle sparas' )
-                .position( 'top right' )
-            );
-          }
+          $mdToast.show( $mdToast.simple()
+              .content( 'Ett oväntat fel uppstod när lokal/plats-bokningen skulle sparas' )
+              .position( 'top right' )
+          );
         });
 
       return promise;
@@ -472,24 +447,32 @@ angular.module( 'BookingSystem.locationBooking',
     /* Initialization START */
 
     setupModal();
-    getLocationBooking().then( () => { initDate(); });
-    getLocations();
-    getCustomers();
-    initTimeSelectData();
+
+    getMealBooking()
+      .then( () => {
+        initDate();
+        return getMeals();
+      })
+      .then( () => {
+        return getCustomers();
+      })
+      .then( () => {
+        getLocations();
+        initTimeSelectData();
+      });
 
     /* Initialization END */
 
   }]
   )
 
-  .controller( 'LocationBookingCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'LocationBooking', 'Location', 'BookingHelper', 'LocationFurnituring', 'Customer', '$q', '$mdToast', '$ionicHistory', ( $rootScope, $stateParams, $scope, $state, LocationBooking, Location, BookingHelper, LocationFurnituring, Customer, $q, $mdToast, $ionicHistory ) => {
+  .controller( 'MealBookingCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'MealBooking', 'Meal', 'BookingHelper', 'Customer', '$q', '$mdToast', '$ionicHistory', 'Location', ( $rootScope, $stateParams, $scope, $state, MealBooking, Meal, BookingHelper, Customer, $q, $mdToast, $ionicHistory, Location ) => {
 
     /* Init vars */
-    $scope.locationBooking = {
+    $scope.mealBooking = {
       Provisional: true,
       BookingTypeId: 1
     };
-    $scope.furnituring = [];
 
     /* Private methods START */
 
@@ -538,36 +521,52 @@ angular.module( 'BookingSystem.locationBooking',
 
     const getLocations = function() {
 
-      if ( areDateVariablesDefined() ){
+      const locations = Location.query();
 
-        const startMomentDate = addTimeToDate( $scope.bookingStartDate, $scope.bookingStartHour, $scope.bookingStartMinute );
-        const endMomentDate = addTimeToDate( $scope.bookingEndDate, $scope.bookingEndHour, $scope.bookingEndMinute );
+      locations.$promise
 
-        Location.queryFreeForPeriod(
-          {
-            fromDate: startMomentDate.format( 'YYYY-MM-DD' ),
-            fromTime: startMomentDate.format( 'HH:mm' ),
-            toDate: endMomentDate.format( 'YYYY-MM-DD' ),
-            toTime: endMomentDate.format( 'HH:mm' )
-          }
-        ).$promise
+        // Success
+        .then( ( response ) => {
 
-          // Success
-          .then( ( response ) => {
+          // Add locations to scope
+          $scope.locations = response;
+        })
 
-            // Add free locations to scope
-            $scope.locations = response;
-          })
+        // Could not get free locations
+        .catch( ( response ) => {
 
-          // Could not get free locations
-          .catch( ( response ) => {
+          $mdToast.show( $mdToast.simple()
+            .content( 'Ett oväntat fel uppstod när lokaler skulle hämtas' )
+            .position( 'top right' )
+          );
+        });
 
-            $mdToast.show( $mdToast.simple()
-              .content( 'Ett oväntat fel uppstod när uppgifter om lediga lokaler skulle hämtas' )
-              .position( 'top right' )
-            );
-          });
-      }
+      return locations.$promise;
+    };
+
+    const getMeals = function() {
+
+      $scope.meals = Meal.query();
+
+      $scope.meals.$promise
+
+        // Success
+        .then( ( response ) => {
+
+          // Add free meals to scope
+          $scope.meals = response;
+        })
+
+        // Could not get free meals
+        .catch( ( response ) => {
+
+          $mdToast.show( $mdToast.simple()
+            .content( 'Ett oväntat fel uppstod när uppgifter om måltider skulle hämtas' )
+            .position( 'top right' )
+          );
+        });
+
+      return $scope.meals.$promise;
     };
 
     const getCustomers = function(){
@@ -583,6 +582,8 @@ angular.module( 'BookingSystem.locationBooking',
       });
 
       $scope.customers = customers;
+
+      return customers.$promise;
     };
 
     const addTimeToDate = function( dateObj, hour, minute ) {
@@ -597,13 +598,13 @@ angular.module( 'BookingSystem.locationBooking',
       // Create promise
       const deferred = $q.defer();
 
-      BookingHelper.createBookingContainer( $scope.locationBooking )
+      BookingHelper.createBookingContainer( $scope.mealBooking )
 
       // If everything went ok
       .then( ( createdBooking ) => {
 
         // Make created booking accessible from other metods
-        $scope.locationBooking.BookingId = createdBooking.BookingId;
+        $scope.mealBooking.BookingId = createdBooking.BookingId;
 
         // Resolve promise
         deferred.resolve();
@@ -627,30 +628,6 @@ angular.module( 'BookingSystem.locationBooking',
 
     /* Public Methods START */
 
-    $scope.updateFurniturings = function() {
-
-      // Get all available furniturings for selected location
-      if ( $scope.locationBooking.LocationId ){
-        $scope.furniturings = LocationFurnituring.queryForLocation(
-          {
-            locationId: $scope.locationBooking.LocationId
-          }
-        );
-
-        // If furniturings could not be fetched
-        $scope.furniturings.$promise.catch( () => {
-
-          $mdToast.show( $mdToast.simple()
-            .content( 'Möbleringar för vald lokal kunde inte hämtas.' )
-            .position( 'top right' )
-          );
-        });
-      }
-      else {
-        $scope.furnituring = [];
-      }
-    };
-
     $scope.checkEndDate = function() {
 
       if ( !areDateVariablesDefined() ){
@@ -670,11 +647,11 @@ angular.module( 'BookingSystem.locationBooking',
         $scope.bookingEndMinute = $scope.bookingStartMinute + 15;
       }
 
-      // Get free locations for this new time.
-      getLocations();
+      // Get free meals for this new time.
+      getMeals();
     };
 
-    $scope.saveLocationBooking = function(){
+    $scope.saveMealBooking = function(){
 
       const $scope = this;
       const deferred = $q.defer();
@@ -683,19 +660,19 @@ angular.module( 'BookingSystem.locationBooking',
       createBookingContainer()
         .then( () => {
 
-          // Set a furnituring if if there is a furnituring at all.
-          const furnituringId = ( $scope.locationBooking.SelectedFurnituring ? $scope.locationBooking.SelectedFurnituring.FurnituringId : null );
-
-          // Save locationBooking
-          LocationBooking.save(
+          // Save mealBooking
+          MealBooking.save(
             {
-              BookingId: $scope.locationBooking.BookingId,
-              LocationBookingId: 0,
-              LocationId: $scope.locationBooking.LocationId,
-              FurnituringId: furnituringId,
+              BookingId: $scope.mealBooking.BookingId,
+              MealBookingId: 0,
+              MealId: $scope.mealBooking.MealId,
               StartTime: addTimeToDate( $scope.bookingStartDate, $scope.bookingStartHour, $scope.bookingStartMinute ).format(),
               EndTime: addTimeToDate( $scope.bookingEndDate, $scope.bookingEndHour, $scope.bookingEndMinute ).format(),
-              NumberOfPeople: $scope.locationBooking.NumberOfPeople
+              LocationId: $scope.mealBooking.LocationId,
+              DeliveryAddress: $scope.mealBooking.DeliveryAddress,
+              MealCount: $scope.mealBooking.MealCount,
+              Provisional: $scope.mealBooking.Provisional,
+              Notes: $scope.mealBooking.Notes
             }
             ).$promise
 
@@ -703,7 +680,7 @@ angular.module( 'BookingSystem.locationBooking',
               .then( ( response ) => {
 
                 $mdToast.show( $mdToast.simple()
-                  .content( 'Lokal/plats-bokningen skapades med ett lyckat resultat' )
+                  .content( 'Måltidsbokningen skapades med ett lyckat resultat' )
                   .position( 'top right' )
                 );
 
@@ -715,22 +692,10 @@ angular.module( 'BookingSystem.locationBooking',
                 // Something went wrong
               }).catch( ( response ) => {
 
-                // If there there was a foreign key reference
-                if ( response.status === 409 ){
-
-                  $mdToast.show( $mdToast.simple()
-                    .content( 'Lokalen är tyvärr redan bokad under vald tidsram.' )
-                    .position( 'top right' )
-                  );
-                }
-
-                // If there was a problem with the in-data
-                else {
-                  $mdToast.show( $mdToast.simple()
-                    .content( 'Ett oväntat fel uppstod när lokal/plats-bokningen skulle sparas' )
-                    .position( 'top right' )
-                  );
-                }
+                $mdToast.show( $mdToast.simple()
+                  .content( 'Ett oväntat fel uppstod när måltidsbokningen skulle sparas' )
+                  .position( 'top right' )
+                );
               });
         });
 
@@ -742,9 +707,14 @@ angular.module( 'BookingSystem.locationBooking',
     /* Initialization START */
 
     initDate();
-    getLocations();
-    getCustomers();
-    initTimeSelectData();
+    getMeals()
+      .then( () => {
+        return getCustomers();
+      })
+      .then( () => {
+        getLocations();
+        initTimeSelectData();
+      });
 
     /* Initialization END */
 
