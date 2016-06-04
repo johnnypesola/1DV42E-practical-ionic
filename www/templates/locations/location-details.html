@@ -1,0 +1,156 @@
+<ion-view view-title="Lokal/plats">
+    <ion-nav-buttons side="secondary">
+        <button
+                class="button"
+                ng-click="abortEditMode()"
+                ng-show="true"
+        >
+            editMode: {{isEditMode}}
+        </button>
+    </ion-nav-buttons>
+    <ion-content padding="true">
+
+        <h1>{{location.Name}}</h1>
+        <div class="row padding">
+            <form name="locationForm">
+                <div layout-gt-xs="row">
+                    <img class="show-image" ng-src="{{API_IMG_PATH_URL + location.ImageSrc}}" ng-show="location.ImageSrc" ng-disabled="isEditMode">
+                    <div ng-if="isEditMode">
+                        <image-uploader type="Location" id="{{location.LocationId}}" image-src="location.ImageSrc" base64-encoded-image="location.ImageForUpload"></image-uploader>
+                    </div>
+                </div>
+                <div layout-gt-xs="row">
+
+                    <div class="validation-messages" ng-messages="locationForm.Name.$error">
+                        <div ng-message="required">Var god ange namn</div>
+                    </div>
+
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Namn</label>
+                        <input
+                                type="text"
+                                name="Name"
+                                ng-required="true"
+                                ng-model="location.Name"
+                                ng-disabled="!isEditMode"
+                        >
+                    </md-input-container>
+                </div>
+                <div layout-gt-xs="row">
+
+                    <div class="validation-messages" ng-messages="locationForm.MaxPeople.$error">
+                        <div ng-message="required">Var god ange max antal personer</div>
+                        <div ng-message="pattern">Endast nummer tillåtna</div>
+                        <div ng-message="min">Får vara minst 0</div>
+                    </div>
+
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Max antal personer</label>
+                        <input
+                                type="number"
+                                name="MaxPeople"
+                                ng-required="true"
+                                ng-model="location.MaxPeople"
+                                ng-pattern="/^[0-9]*$/"
+                                min="0"
+                                ng-disabled="!isEditMode"
+                        >
+                    </md-input-container>
+                </div>
+                <div layout-gt-xs="row">
+
+                    <div class="validation-messages" ng-messages="locationForm.BookingPricePerHour.$error">
+                        <div ng-message="required">Var god ange pris per timme</div>
+                        <div ng-message="pattern">Endast nummer tillåtna</div>
+                        <div ng-message="min">Får vara minst 0</div>
+                    </div>
+
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Pris per timme</label>
+                        <input
+                                type="number"
+                                name="BookingPricePerHour"
+                                ng-required="true"
+                                ng-model="location.BookingPricePerHour"
+                                ng-pattern="/^[0-9]*$/"
+                                min="0"
+                                ng-disabled="!isEditMode"
+                        >
+                    </md-input-container>
+                </div>
+                <div layout-gt-xs="row">
+
+                    <div class="validation-messages" ng-messages="locationForm.MinutesMarginBeforeBooking.$error">
+                        <div ng-message="required">Var god ange minuters marginal före bokning</div>
+                        <div ng-message="pattern">Endast nummer tillåtna</div>
+                        <div ng-message="min">Får vara minst 0</div>
+                    </div>
+
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Minuters marginal före bokning</label>
+                        <input
+                                type="number"
+                                name="MinutesMarginBeforeBooking"
+                                ng-required="true"
+                                ng-model="location.MinutesMarginBeforeBooking"
+                                ng-disabled="!isEditMode"
+                        >
+                    </md-input-container>
+                </div>
+                <div layout-gt-xs="row">
+
+                    <div class="validation-messages" ng-messages="locationForm.MinutesMarginAfterBooking.$error">
+                        <div ng-message="required">Var god ange minuters marginal efter bokning</div>
+                        <div ng-message="pattern">Endast nummer tillåtna</div>
+                        <div ng-message="min">Får vara minst 0</div>
+                    </div>
+
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Minuters marginal efter bokning</label>
+                        <input
+                                type="number"
+                                name="MinutesMarginAfterBooking"
+                                ng-required="true"
+                                ng-model="location.MinutesMarginAfterBooking"
+                                ng-disabled="!isEditMode"
+                        >
+                    </md-input-container>
+                </div>
+            </form>
+        </div>
+
+        <md-button
+                ng-show="isEditMode"
+                ng-click="abortEditMode()"
+                class="md-raised"
+        >
+            Avbryt
+        </md-button>
+
+        <md-button
+                ng-show="isEditMode"
+                class="md-raised md-primary"
+                ng-click="saveLocation()"
+        >
+            Spara
+        </md-button>
+
+        <md-button
+                ng-show="isEditMode"
+                class="md-fab md-mini md-warn"
+                ng-click="modal.show()"
+        >
+            <span class="icon ion-trash-a md-medium-icon"></span>
+        </md-button>
+
+        <md-button
+                class="md-fab md-warn md-lower-right-button"
+                aria-label="Redigera"
+                ng-click="startEditMode()"
+                ng-show="!isEditMode"
+        >
+            <span class="icon ion-edit md-big-icon"></span>
+        </md-button>
+
+    </ion-content>
+</ion-view>
