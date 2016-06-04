@@ -142,6 +142,7 @@ namespace BookingSystem.Models
                                 BookingPricePerHour = reader.GetSafeDecimal(reader.GetOrdinal("BookingPricePerHour")),
                                 TotalBookings = reader.GetSafeInt32(reader.GetOrdinal("TotalBookings")),
                                 TotalBookingValue = reader.GetSafeDecimal(reader.GetOrdinal("TotalBookingValue")),
+                                MinutesMarginBeforeBooking = reader.GetSafeInt16(reader.GetOrdinal("MinutesMarginBeforeBooking")),
                                 MinutesMarginAfterBooking = reader.GetSafeInt16(reader.GetOrdinal("MinutesMarginAfterBooking"))
                             };
                         }
@@ -301,6 +302,7 @@ namespace BookingSystem.Models
                                 BookingPricePerHour = reader.GetSafeDecimal(reader.GetOrdinal("BookingPricePerHour")),
                                 TotalBookings = reader.GetSafeInt32(reader.GetOrdinal("TotalBookings")),
                                 TotalBookingValue = reader.GetSafeDecimal(reader.GetOrdinal("TotalBookingValue")),
+                                MinutesMarginBeforeBooking = reader.GetSafeInt16(reader.GetOrdinal("MinutesMarginBeforeBooking")),
                                 MinutesMarginAfterBooking = reader.GetSafeInt16(reader.GetOrdinal("MinutesMarginAfterBooking"))
                             });
                         }
@@ -341,6 +343,7 @@ namespace BookingSystem.Models
                     cmd.Parameters.Add("@GPSLatitude", SqlDbType.Decimal).Value = location.GPSLatitude;
                     cmd.Parameters.Add("@ImageSrc", SqlDbType.VarChar, 50).Value = location.ImageSrc;
                     cmd.Parameters.Add("@BookingPricePerHour", SqlDbType.Decimal).Value = location.BookingPricePerHour;
+                    cmd.Parameters.Add("@MinutesMarginBeforeBooking", SqlDbType.SmallInt).Value = location.MinutesMarginBeforeBooking;
                     cmd.Parameters.Add("@MinutesMarginAfterBooking", SqlDbType.SmallInt).Value = location.MinutesMarginAfterBooking;
 
                     // Add out parameter for Stored procedure
@@ -387,6 +390,7 @@ namespace BookingSystem.Models
                     cmd.Parameters.Add("@GPSLatitude", SqlDbType.Decimal).Value = location.GPSLatitude;
                     cmd.Parameters.Add("@ImageSrc", SqlDbType.VarChar, 50).Value = location.ImageSrc;
                     cmd.Parameters.Add("@BookingPricePerHour", SqlDbType.Decimal).Value = location.BookingPricePerHour;
+                    cmd.Parameters.Add("@MinutesMarginBeforeBooking", SqlDbType.SmallInt).Value = location.MinutesMarginBeforeBooking;
                     cmd.Parameters.Add("@MinutesMarginAfterBooking", SqlDbType.Decimal).Value = location.MinutesMarginAfterBooking;
 
                     // Open DB connection
