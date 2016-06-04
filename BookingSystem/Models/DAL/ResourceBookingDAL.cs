@@ -267,8 +267,8 @@ namespace BookingSystem.Models
                                 ResourceCount = reader.GetSafeInt16(reader.GetOrdinal("ResourceCount")),
                                 StartTime = reader.GetSafeDateTime(reader.GetOrdinal("StartTime")),
                                 EndTime = reader.GetSafeDateTime(reader.GetOrdinal("EndTime")),
-                                CalculatedBookingPrice = reader.GetSafeDecimal(reader.GetOrdinal("CalculatedBookingPrice"))
-                                
+                                CalculatedBookingPrice = reader.GetSafeDecimal(reader.GetOrdinal("CalculatedBookingPrice")),
+                                CustomerId = reader.GetSafeInt32(reader.GetOrdinal("CustomerId")),
                             });
                         }
                     }
@@ -321,7 +321,8 @@ namespace BookingSystem.Models
                                 ResourceCount = reader.GetSafeInt16(reader.GetOrdinal("ResourceCount")),
                                 StartTime = reader.GetSafeDateTime(reader.GetOrdinal("StartTime")),
                                 EndTime = reader.GetSafeDateTime(reader.GetOrdinal("EndTime")),
-                                CalculatedBookingPrice = reader.GetSafeDecimal(reader.GetOrdinal("CalculatedBookingPrice"))
+                                CalculatedBookingPrice = reader.GetSafeDecimal(reader.GetOrdinal("CalculatedBookingPrice")),
+                                CustomerId = reader.GetSafeInt32(reader.GetOrdinal("CustomerId")),
                             };
                         }
                     }

@@ -49,5 +49,8 @@ namespace BookingSystem.Models
 
         public decimal CalculatedBookingPrice { get; set; }
 
+        [Range(0, int.MaxValue, ErrorMessage = "CustomerId is out of range.")]
+        public int CustomerId { get; set; }
+
     }
 }
