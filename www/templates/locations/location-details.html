@@ -11,9 +11,6 @@
     <ion-content padding="true">
 
         <h1>{{location.Name}}</h1>
-        <pre>
-            {{location.ImageSrc|json}}
-        </pre>
         <div class="row padding">
             <form name="locationForm">
                 <div layout-gt-xs="row">
@@ -61,11 +58,13 @@
                     </md-input-container>
                 </div>
                 <div layout-gt-xs="row">
+
                     <div class="validation-messages" ng-messages="locationForm.BookingPricePerHour.$error">
                         <div ng-message="required">Var god ange pris per timme</div>
                         <div ng-message="pattern">Endast nummer tillåtna</div>
                         <div ng-message="min">Får vara minst 0</div>
                     </div>
+
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Pris per timme</label>
                         <input
@@ -80,11 +79,13 @@
                     </md-input-container>
                 </div>
                 <div layout-gt-xs="row">
+
                     <div class="validation-messages" ng-messages="locationForm.MinutesMarginBeforeBooking.$error">
                         <div ng-message="required">Var god ange minuters marginal före bokning</div>
                         <div ng-message="pattern">Endast nummer tillåtna</div>
                         <div ng-message="min">Får vara minst 0</div>
                     </div>
+
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Minuters marginal före bokning</label>
                         <input
@@ -97,11 +98,13 @@
                     </md-input-container>
                 </div>
                 <div layout-gt-xs="row">
+
                     <div class="validation-messages" ng-messages="locationForm.MinutesMarginAfterBooking.$error">
                         <div ng-message="required">Var god ange minuters marginal efter bokning</div>
                         <div ng-message="pattern">Endast nummer tillåtna</div>
                         <div ng-message="min">Får vara minst 0</div>
                     </div>
+
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Minuters marginal efter bokning</label>
                         <input

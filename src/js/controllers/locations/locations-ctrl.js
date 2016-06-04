@@ -49,6 +49,7 @@ angular.module( 'BookingSystem.locations',
   }]
   )
 
+  //Edit
   .controller( 'LocationDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', '$mdToast', 'Location', 'LocationImage', 'API_IMG_PATH_URL', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, $mdToast, Location, LocationImage, API_IMG_PATH_URL ) => {
 
     /* Init vars */
@@ -283,12 +284,30 @@ angular.module( 'BookingSystem.locations',
   }]
   )
 
-  .controller( 'LocationCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', '$mdToast', 'Location', ( $rootScope, $stateParams, $scope, $state, $mdToast, Location ) => {
+  //Create
+  .controller( 'LocationCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', '$mdToast', 'Location', 'LocationImage', ( $rootScope, $stateParams, $scope, $state, $mdToast, Location, LocationImage ) => {
 
     /* Init vars */
     $scope.location = {};
 
     /* Private methods START */
+
+    const uploadImage = function( LocationId ){
+
+      return LocationImage.upload( $scope.location.ImageForUpload, LocationId );
+
+    };
+
+    const saveSuccess = function() {
+      // Display success message
+      $mdToast.show( $mdToast.simple()
+        .content( 'Lokalen/Platsen "' + $scope.location.Name + '" sparades med ett lyckat resultat' )
+        .position( 'top right' )
+      );
+
+      // Redirect
+      history.back();
+    };
 
     /* Private Methods END */
 
@@ -314,12 +333,28 @@ angular.module( 'BookingSystem.locations',
         // If everything went ok
         .then( ( response ) => {
 
-          $mdToast.show( $mdToast.simple()
-            .content( 'Lokalen/Platsen "' + $scope.location.Name + '" sparades med ett lyckat resultat' )
-            .position( 'top right' )
-          );
+          // Upload image
+          if ( typeof $scope.location.ImageForUpload !== 'undefined' ){
 
-          history.back();
+            uploadImage( response.LocationId )
+
+            // Image upload successful
+              .success( () => {
+                saveSuccess();
+              })
+              // Image upload failed
+              .error( () => {
+
+                $mdToast.show( $mdToast.simple()
+                  .content( 'Lokalen/Platsen sparades, men det gick inte att ladda upp och spara den önskade bilden.' )
+                  .position( 'top right' )
+                );
+              });
+          }
+          else {
+
+            saveSuccess();
+          }
 
           // Something went wrong
         }).catch( ( response ) => {
