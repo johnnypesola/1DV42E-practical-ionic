@@ -10,7 +10,7 @@ angular.module( 'BookingSystem.locations',
   )
 
   // Controller
-  .controller( 'LocationsListCtrl', [ '$rootScope', '$scope', '$state', 'Location', ( $rootScope, $scope, $state, Location ) => {
+  .controller( 'LocationsListCtrl', [ '$rootScope', '$scope', '$state', '$mdToast', 'Location', ( $rootScope, $scope, $state, $mdToast, Location ) => {
 
     /* Init vars */
 
@@ -23,10 +23,10 @@ angular.module( 'BookingSystem.locations',
       // In case locations cannot be fetched, display an error to user.
       locations.$promise.catch( () => {
 
-        $rootScope.FlashMessage = {
-          type: 'error',
-          message: 'Lokaler och platser kunde inte hämtas, var god försök igen.'
-        };
+        $mdToast.show( $mdToast.simple()
+          .content( 'Lokaler och platser kunde inte hämtas, var god försök igen.' )
+          .position( 'top right' )
+        );
       });
 
       $scope.locations = locations;
@@ -49,7 +49,7 @@ angular.module( 'BookingSystem.locations',
   }]
   )
 
-  .controller( 'LocationDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', 'Location', 'LocationImage', 'API_IMG_PATH_URL', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, Location, LocationImage, API_IMG_PATH_URL ) => {
+  .controller( 'LocationDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', '$mdToast', 'Location', 'LocationImage', 'API_IMG_PATH_URL', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, $mdToast, Location, LocationImage, API_IMG_PATH_URL ) => {
 
     /* Init vars */
 
@@ -84,10 +84,10 @@ angular.module( 'BookingSystem.locations',
 
     const saveSuccess = function() {
       // Display success message
-      $rootScope.FlashMessage = {
-        type: 'success',
-        message: 'Lokalen/Platsen "' + $scope.location.Name + '" sparades med ett lyckat resultat'
-      };
+      $mdToast.show( $mdToast.simple()
+        .content( 'Lokalen/Platsen "' + $scope.location.Name + '" sparades med ett lyckat resultat' )
+        .position( 'top right' )
+      );
 
       // Redirect
       history.back();
@@ -104,10 +104,10 @@ angular.module( 'BookingSystem.locations',
       // In case location cannot be fetched, display an error to user.
       location.$promise.catch( () => {
 
-        $rootScope.FlashMessage = {
-          type: 'error',
-          message: 'Lokal/plats kunde inte hämtas, var god försök igen.'
-        };
+        $mdToast.show( $mdToast.simple()
+          .content( 'Lokal/plats kunde inte hämtas, var god försök igen.' )
+          .position( 'top right' )
+        );
       });
 
       $scope.location = location;
@@ -173,10 +173,10 @@ angular.module( 'BookingSystem.locations',
               // Image upload failed
               .error( () => {
 
-                $rootScope.FlashMessage = {
-                  type: 'error',
-                  message: 'Lokalen/Platsen sparades, men det gick inte att ladda upp och spara den önskade bilden.'
-                };
+                $mdToast.show( $mdToast.simple()
+                  .content( 'Lokalen/Platsen sparades, men det gick inte att ladda upp och spara den önskade bilden.' )
+                  .position( 'top right' )
+                );
               });
           }
           else {
@@ -189,27 +189,27 @@ angular.module( 'BookingSystem.locations',
 
           // If there there was a foreign key reference
           if ( response.status === 409 ){
-            $rootScope.FlashMessage = {
-              type: 'error',
-              message: 'Det finns redan en lokal/plats som heter "' + $scope.location.Name +
-              '". Två lokaler eller platser kan inte heta lika.'
-            };
+            $mdToast.show( $mdToast.simple()
+              .content( 'Det finns redan en lokal/plats som heter "' + $scope.location.Name +
+                '". Två lokaler eller platser kan inte heta lika.' )
+              .position( 'top right' )
+            );
           }
 
           // If there was a problem with the in-data
           else if ( response.status === 400 || response.status === 500 ){
-            $rootScope.FlashMessage = {
-              type: 'error',
-              message: 'Ett oväntat fel uppstod när lokalen/platsen skulle sparas'
-            };
+            $mdToast.show( $mdToast.simple()
+              .content( 'Ett oväntat fel uppstod när lokalen/platsen skulle sparas' )
+              .position( 'top right' )
+            );
           }
 
           // If the entry was not found
           if ( response.status === 404 ) {
-            $rootScope.FlashMessage = {
-              type: 'error',
-              message: 'Lokalen/platsen "' + $scope.furnituring.Name + '" existerar inte längre. Hann kanske någon radera den?'
-            };
+            $mdToast.show( $mdToast.simple()
+              .content( 'Lokalen/platsen "' + $scope.location.Name + '" existerar inte längre. Hann kanske någon radera den?' )
+              .position( 'top right' )
+            );
 
             history.back();
           }
@@ -228,10 +228,10 @@ angular.module( 'BookingSystem.locations',
         // If everything went ok
         .then( ( response ) => {
 
-          $rootScope.FlashMessage = {
-            type: 'success',
-            message: 'Lokalen/platsen "' + $scope.location.Name + '" raderades med ett lyckat resultat'
-          };
+          $mdToast.show( $mdToast.simple()
+            .content( 'Lokalen/platsen "' + $scope.location.Name + '" raderades med ett lyckat resultat' )
+            .position( 'top right' )
+          );
 
           history.back();
         })
@@ -244,27 +244,27 @@ angular.module( 'BookingSystem.locations',
             response.data.Message !== 'undefined' &&
             response.data.Message === 'Foreign key references exists'
           ){
-            $rootScope.FlashMessage = {
-              type: 'error',
-              message:    'Lokalen/platsen kan inte raderas eftersom det finns' +
-              ' en bokning eller en lokalmöblering som refererar till lokalen/platsen'
-            };
+            $mdToast.show( $mdToast.simple()
+              .content( 'Lokalen/platsen kan inte raderas eftersom det finns' +
+                ' en bokning eller en lokalmöblering som refererar till lokalen/platsen' )
+              .position( 'top right' )
+            );
           }
 
           // If there was a problem with the in-data
           else if ( response.status === 400 || response.status === 500 ){
-            $rootScope.FlashMessage = {
-              type: 'error',
-              message: 'Ett oväntat fel uppstod när lokalen/platsen skulle tas bort'
-            };
+            $mdToast.show( $mdToast.simple()
+              .content( 'Ett oväntat fel uppstod när lokalen/platsen skulle tas bort' )
+              .position( 'top right' )
+            );
           }
 
           // If the entry was not found
           if ( response.status === 404 ) {
-            $rootScope.FlashMessage = {
-              type: 'error',
-              message: 'Lokalen/platsen "' + $scope.furnituring.Name + '" existerar inte längre. Hann kanske någon radera den?'
-            };
+            $mdToast.show( $mdToast.simple()
+              .content( 'Lokalen/platsen "' + $scope.location.Name + '" existerar inte längre. Hann kanske någon radera den?' )
+              .position( 'top right' )
+            );
           }
 
           history.back();
@@ -283,7 +283,7 @@ angular.module( 'BookingSystem.locations',
   }]
   )
 
-  .controller( 'LocationCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'Location', ( $rootScope, $stateParams, $scope, $state, Location ) => {
+  .controller( 'LocationCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', '$mdToast', 'Location', ( $rootScope, $stateParams, $scope, $state, $mdToast, Location ) => {
 
     /* Init vars */
     $scope.location = {};
@@ -297,28 +297,27 @@ angular.module( 'BookingSystem.locations',
     $scope.saveLocation = function() {
 
       const $scope = this;
-      console.log( $scope.location );
 
-      // Save furnituring
+      // Save location
       Location.save(
         {
           LocationId: 0,
           Name: $scope.location.Name,
-          MaxPeople: Number( $scope.location.MaxPeople ),
+          MaxPeople: $scope.location.MaxPeople,
           ImageSrc: $scope.location.ImageSrc,
-          BookingPricePerHour: Number( $scope.location.BookingPricePerHour ),
-          MinutesMarginBeforeBooking: Number( $scope.location.MinutesMarginBeforeBooking ),
-          MinutesMarginAfterBooking: Number( $scope.location.MinutesMarginAfterBooking )
+          BookingPricePerHour: $scope.location.BookingPricePerHour,
+          MinutesMarginBeforeBooking: $scope.location.MinutesMarginBeforeBooking,
+          MinutesMarginAfterBooking: $scope.location.MinutesMarginAfterBooking
         }
       ).$promise
 
         // If everything went ok
         .then( ( response ) => {
 
-          $rootScope.FlashMessage = {
-            type: 'success',
-            message: 'Lokalen/platsen "' + $scope.location.Name + '" skapades med ett lyckat resultat'
-          };
+          $mdToast.show( $mdToast.simple()
+            .content( 'Lokalen/Platsen "' + $scope.location.Name + '" sparades med ett lyckat resultat' )
+            .position( 'top right' )
+          );
 
           history.back();
 
@@ -327,19 +326,19 @@ angular.module( 'BookingSystem.locations',
 
           // If there there was a foreign key reference
           if ( response.status === 409 ){
-            $rootScope.FlashMessage = {
-              type: 'error',
-              message: 'Det finns redan en lokal eller plats som heter "' + $scope.location.Name +
-              '". Två lokaler/platser kan inte heta lika.'
-            };
+            $mdToast.show( $mdToast.simple()
+              .content( 'Det finns redan en lokal eller plats som heter "' + $scope.location.Name +
+                '". Två lokaler/platser kan inte heta lika.' )
+              .position( 'top right' )
+            );
           }
 
           // If there was a problem with the in-data
           else {
-            $rootScope.FlashMessage = {
-              type: 'error',
-              message: 'Ett oväntat fel uppstod när lokalen/platsen skulle sparas'
-            };
+            $mdToast.show( $mdToast.simple()
+              .content( 'Ett oväntat fel uppstod när lokalen/platsen skulle sparas' )
+              .position( 'top right' )
+            );
           }
         });
     };

@@ -11,9 +11,11 @@
     <ion-content padding="true">
 
         <h1>{{location.Name}}</h1>
-
+        <pre>
+            {{location.ImageSrc|json}}
+        </pre>
         <div class="row padding">
-            <form name="userForm">
+            <form name="locationForm">
                 <div layout-gt-xs="row">
                     <img class="show-image" ng-src="{{API_IMG_PATH_URL + location.ImageSrc}}" ng-show="location.ImageSrc" ng-disabled="isEditMode">
                     <div ng-if="isEditMode">
@@ -23,31 +25,60 @@
                 <div layout-gt-xs="row">
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Namn</label>
-                        <input ng-model="location.Name" ng-disabled="!isEditMode">
+                        <input
+                                type="text"
+                                name="Name"
+                                ng-model="location.Name"
+                                ng-disabled="!isEditMode"
+                        >
                     </md-input-container>
                 </div>
                 <div layout-gt-xs="row">
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Max antal personer</label>
-                        <input ng-model="location.MaxPeople" ng-disabled="!isEditMode">
+                        <input
+                                type="number"
+                                name="MaxPeople"
+                                ng-model="location.MaxPeople"
+                                ng-pattern="/^[0-9]*$/"
+                                min="0"
+                                ng-disabled="!isEditMode"
+                        >
                     </md-input-container>
                 </div>
                 <div layout-gt-xs="row">
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Pris per timme</label>
-                        <input ng-model="location.BookingPricePerHour" ng-disabled="!isEditMode">
+                        <input
+                                type="number"
+                                name="BookingPricePerHour"
+                                ng-model="location.BookingPricePerHour"
+                                ng-pattern="/^[0-9]*$/"
+                                min="0"
+                                ng-disabled="!isEditMode"
+                        >
                     </md-input-container>
                 </div>
                 <div layout-gt-xs="row">
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Minuters marginal före bokning</label>
-                        <input ng-model="location.MinutesMarginBeforeBooking" ng-disabled="!isEditMode">
+                        <input
+                                type="number"
+                                name="MinutesMarginBeforeBooking"
+                                ng-model="location.MinutesMarginBeforeBooking"
+                                ng-disabled="!isEditMode"
+                        >
                     </md-input-container>
                 </div>
                 <div layout-gt-xs="row">
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Minuters marginal efter bokning</label>
-                        <input ng-model="location.MinutesMarginAfterBooking" ng-disabled="!isEditMode">
+                        <input
+                                type="number"
+                                name="MinutesMarginAfterBooking"
+                                ng-model="location.MinutesMarginAfterBooking"
+                                ng-disabled="!isEditMode"
+                        >
                     </md-input-container>
                 </div>
             </form>
