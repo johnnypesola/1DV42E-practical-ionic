@@ -233,8 +233,6 @@ angular.module( 'BookingSystem.resourceBooking',
 
   const getResources = function() {
 
-    $scope.resources = Resource.query();
-
     if ( areDateVariablesDefined() ){
 
       const startMomentDate = addTimeToDate( $scope.bookingStartDate, $scope.bookingStartHour, $scope.bookingStartMinute );
@@ -245,7 +243,8 @@ angular.module( 'BookingSystem.resourceBooking',
           fromDate: startMomentDate.format( 'YYYY-MM-DD' ),
           fromTime: startMomentDate.format( 'HH:mm' ),
           toDate: endMomentDate.format( 'YYYY-MM-DD' ),
-          toTime: endMomentDate.format( 'HH:mm' )
+          toTime: endMomentDate.format( 'HH:mm' ),
+          resourceBookingExceptionId: $scope.resourceBooking.ResourceBookingId
         }
       ).$promise
 
@@ -394,6 +393,7 @@ angular.module( 'BookingSystem.resourceBooking',
         BookingId: $scope.resourceBooking.BookingId,
         ResourceBookingId: $scope.resourceBooking.ResourceBookingId,
         ResourceId: $scope.resourceBooking.ResourceId,
+        ResourceCount: $scope.resourceBooking.ResourceCount,
         StartTime: addTimeToDate( $scope.bookingStartDate, $scope.bookingStartHour, $scope.bookingStartMinute ).format(),
         EndTime: addTimeToDate( $scope.bookingEndDate, $scope.bookingEndHour, $scope.bookingEndMinute ).format(),
         Provisional: $scope.resourceBooking.Provisional
@@ -443,8 +443,7 @@ angular.module( 'BookingSystem.resourceBooking',
   /* Initialization START */
 
   setupModal();
-  getResourceBooking().then( () => { initDate(); });
-  getResources();
+  getResourceBooking().then( () => { initDate(); getResources(); });
   getCustomers();
   initTimeSelectData();
 
@@ -507,8 +506,6 @@ angular.module( 'BookingSystem.resourceBooking',
     $scope.selectMinutes = BookingHelper.getMinutesForSelect();};
 
   const getResources = function() {
-
-    $scope.resources = Resource.query();
 
     if ( areDateVariablesDefined() ){
 
