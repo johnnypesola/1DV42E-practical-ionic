@@ -253,6 +253,9 @@ angular.module( 'BookingSystem.resourceBooking',
 
           // Add free resources to scope
           $scope.resources = response;
+
+          // Set selected resource from fetched resource
+          $scope.setSelectedResourceFromId( $scope.resourceBooking.ResourceId );
         })
 
         // Could not get free resources
@@ -436,6 +439,14 @@ angular.module( 'BookingSystem.resourceBooking',
       });
 
     return promise;
+  };
+
+  $scope.setSelectedResourceFromId = function( resourceId ){
+
+    $scope.selectedResource = $scope.resources.find( ( resource ) => {
+
+      return resource.ResourceId === Number( resourceId );
+    });
   };
 
   /* Public Methods END */

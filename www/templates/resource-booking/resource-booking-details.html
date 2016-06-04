@@ -149,6 +149,7 @@
                                 ng-model="resourceBooking.ResourceId"
                                 ng-required="true"
                                 ng-disabled="!isEditMode"
+                                ng-change="setSelectedResourceFromId( resourceBooking.ResourceId )"
                         >
                             <md-option ng-repeat="resource in resources" value="{{resource.ResourceId}}">
                                 {{resource.Name}} <span class="faded">({{resource.Count}} lediga)</span>
@@ -164,7 +165,7 @@
                     <div class="validation-messages" ng-messages="resourceBookingForm.ResourceCount.$error">
                         <div ng-message="required">Var god ange antal resurser</div>
                         <div ng-message="pattern">Endast nummer tillåtna</div>
-                        <div ng-message="max">Får vara max {{resourceBooking.Resource.Count}}</div>
+                        <div ng-message="max">Får vara max {{selectedResource.Count}}</div>
                         <div ng-message="min">Måste vara minst 1</div>
                     </div>
 
@@ -177,7 +178,7 @@
                                 ng-model="resourceBooking.ResourceCount"
                                 ng-required="true"
                                 ng-pattern="/^[0-9]*$/"
-                                ng-max="resourceBooking.Resource.Count"
+                                ng-max="selectedResource.Count"
                                 min="1"
                                 ng-disabled="!isEditMode"
                         >
