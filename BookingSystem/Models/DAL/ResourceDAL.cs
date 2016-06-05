@@ -71,6 +71,7 @@ namespace BookingSystem.Models
                                 Count = reader.GetSafeInt16(reader.GetOrdinal("Count")),
                                 ImageSrc = reader.GetSafeString(reader.GetOrdinal("ImageSrc")),
                                 BookingPricePerHour = reader.GetSafeDecimal(reader.GetOrdinal("BookingPricePerHour")),
+                                MinutesMarginBeforeBooking = reader.GetSafeInt16(reader.GetOrdinal("MinutesMarginBeforeBooking")),
                                 MinutesMarginAfterBooking = reader.GetSafeInt16(reader.GetOrdinal("MinutesMarginAfterBooking")),
                                 WeekEndCount = reader.GetSafeInt16(reader.GetOrdinal("WeekEndCount")),
                                 TotalBookings = reader.GetSafeInt32(reader.GetOrdinal("TotalBookings")),
@@ -119,6 +120,7 @@ namespace BookingSystem.Models
                                 Count = reader.GetSafeInt16(reader.GetOrdinal("Count")),
                                 ImageSrc = reader.GetSafeString(reader.GetOrdinal("ImageSrc")),
                                 BookingPricePerHour = reader.GetSafeDecimal(reader.GetOrdinal("BookingPricePerHour")),
+                                MinutesMarginBeforeBooking = reader.GetSafeInt16(reader.GetOrdinal("MinutesMarginBeforeBooking")),
                                 MinutesMarginAfterBooking = reader.GetSafeInt16(reader.GetOrdinal("MinutesMarginAfterBooking")),
                                 WeekEndCount = reader.GetSafeInt16(reader.GetOrdinal("WeekEndCount")),
                                 TotalBookings = reader.GetSafeInt32(reader.GetOrdinal("TotalBookings"))
@@ -231,6 +233,7 @@ namespace BookingSystem.Models
                                 Count = reader.GetSafeInt16(reader.GetOrdinal("Count")),
                                 ImageSrc = reader.GetSafeString(reader.GetOrdinal("ImageSrc")),
                                 BookingPricePerHour = reader.GetSafeDecimal(reader.GetOrdinal("BookingPricePerHour")),
+                                MinutesMarginBeforeBooking = reader.GetSafeInt16(reader.GetOrdinal("MinutesMarginBeforeBooking")),
                                 MinutesMarginAfterBooking = reader.GetSafeInt16(reader.GetOrdinal("MinutesMarginAfterBooking")),
                                 WeekEndCount = reader.GetSafeInt16(reader.GetOrdinal("WeekEndCount"))
                             });
@@ -270,6 +273,7 @@ namespace BookingSystem.Models
                     cmd.Parameters.Add("@Count", SqlDbType.SmallInt).Value = Resource.Count;
                     cmd.Parameters.Add("@ImageSrc", SqlDbType.VarChar, 50).Value = Resource.ImageSrc;
                     cmd.Parameters.Add("@BookingPricePerHour", SqlDbType.Decimal).Value = Resource.BookingPricePerHour;
+                    cmd.Parameters.Add("@MinutesMarginBeforeBooking", SqlDbType.SmallInt).Value = Resource.MinutesMarginBeforeBooking;
                     cmd.Parameters.Add("@MinutesMarginAfterBooking", SqlDbType.SmallInt).Value = Resource.MinutesMarginAfterBooking;
                     cmd.Parameters.Add("@WeekEndCount", SqlDbType.SmallInt).Value = Resource.WeekEndCount;
 
@@ -315,6 +319,7 @@ namespace BookingSystem.Models
                     cmd.Parameters.Add("@Count", SqlDbType.SmallInt).Value = Resource.Count;
                     cmd.Parameters.Add("@ImageSrc", SqlDbType.VarChar, 50).Value = Resource.ImageSrc;
                     cmd.Parameters.Add("@BookingPricePerHour", SqlDbType.Decimal).Value = Resource.BookingPricePerHour;
+                    cmd.Parameters.Add("@MinutesMarginBeforeBooking", SqlDbType.SmallInt).Value = Resource.MinutesMarginAfterBooking;
                     cmd.Parameters.Add("@MinutesMarginAfterBooking", SqlDbType.SmallInt).Value = Resource.MinutesMarginAfterBooking;
                     cmd.Parameters.Add("@WeekEndCount", SqlDbType.SmallInt).Value = Resource.WeekEndCount;
 
