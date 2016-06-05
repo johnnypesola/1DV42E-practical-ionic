@@ -14,6 +14,29 @@
 
             <form name="locationBookingForm" class="col">
 
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="locationBookingForm.CustomerId.$error">
+                        <div ng-message="required">Var god ange kund</div>
+                    </div>
+
+                    <md-input-container class="md-block" flex-gt-sm>
+
+                        <label>Välj kund</label>
+                        <md-select
+                                name="CustomerId"
+                                ng-model="locationBooking.CustomerId"
+                                ng-required="true"
+                        >
+                            <md-option ng-repeat="customer in customers" value="{{customer.CustomerId}}">
+                                {{customer.Name}}
+                            </md-option>
+                        </md-select>
+
+                    </md-input-container>
+
+                </div>
+
                 Starttidpunkt
 
                 <div class="row rel-l-20 pos-relative">
@@ -101,29 +124,6 @@
                                 {{minute | zpad:2}}
                             </md-option>
                         </md-select>
-                    </md-input-container>
-
-                </div>
-
-                <div layout-gt-xs="row" class="pos-relative">
-
-                    <div class="validation-messages" ng-messages="locationBookingForm.CustomerId.$error">
-                        <div ng-message="required">Var god ange kund</div>
-                    </div>
-
-                    <md-input-container class="md-block" flex-gt-sm>
-
-                        <label>Välj kund</label>
-                        <md-select
-                            name="CustomerId"
-                            ng-model="locationBooking.CustomerId"
-                            ng-required="true"
-                        >
-                            <md-option ng-repeat="customer in customers" value="{{customer.CustomerId}}">
-                                {{customer.Name}}
-                            </md-option>
-                        </md-select>
-
                     </md-input-container>
 
                 </div>
