@@ -89,6 +89,10 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   background-color: #25C54F !important;
 }
 
+.md-top-right-button {
+
+}
+
 // Custom chips specific START
 
 .custom-chip {
@@ -116,6 +120,12 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 // Custom chips specific END
 
 // Calendar specific START
+
+.start-calendar-footer {
+  .button {
+    padding: 0 !important;
+  }
+}
 
 .booking-calendar-day-headers {
   background: #fff;
