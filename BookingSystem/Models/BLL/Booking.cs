@@ -63,5 +63,9 @@ namespace BookingSystem.Models
 
         // Extra field for children arrays
         public IEnumerable<LocationBooking> LocationBookings { get; set; }
+
+        public IEnumerable<ResourceBooking> ResourceBookings { get; set; }
+
+        public IEnumerable<MealBooking> MealBookings { get; set; }
     }
 }

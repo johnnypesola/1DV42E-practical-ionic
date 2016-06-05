@@ -16,12 +16,16 @@ namespace BookingSystem.Controllers
     {
         public IBookingService bookingService;
         public LocationBookingService locationBookingService;
+        public ResourceBookingService resourceBookingService;
+        public MealBookingService mealBookingService;
 
         // Constructor
         public BookingController()
         {
             bookingService = new BookingService();
             locationBookingService = new LocationBookingService();
+            resourceBookingService = new ResourceBookingService();
+            mealBookingService = new MealBookingService();
         }
 
         // Constructor for testing (mocking service)
@@ -113,11 +117,15 @@ namespace BookingSystem.Controllers
                     return NotFound();
                 }
 
-                // Create list to cointain location bookings
+                // Create lists to contain bookings
                 booking.LocationBookings = new List<LocationBooking>(50);
+                booking.ResourceBookings = new List<ResourceBooking>(50);
+                booking.MealBookings = new List<MealBooking>(50);
 
-                // Get all location bookings
+                // Get all types of bookings
                 booking.LocationBookings = locationBookingService.GetLocationBookings(booking.BookingId);
+                booking.ResourceBookings = resourceBookingService.GetResourceBookings(booking.BookingId);
+                booking.MealBookings = mealBookingService.GetMealBookings(booking.BookingId);
 
                 return Ok(booking);
             }
