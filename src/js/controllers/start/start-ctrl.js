@@ -15,6 +15,8 @@ angular.module( 'BookingSystem.start',
     $scope.zoom = DEFAULT_CALENDAR_ZOOM;
     $scope.weekDate = moment();
 
+    $scope.isBookingTypeSelectOpen = false;
+
     /* Private methods START */
 
     const setupWeekStartAndEndDates = function ( offset = 0 ) {
