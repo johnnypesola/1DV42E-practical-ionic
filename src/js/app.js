@@ -91,6 +91,9 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', '$mdDateLocalePro
 
   .state( 'app.start', {
     url: '/start',
+    params: {
+      bookingType: 'booking'
+    },
     views: {
       'menuContent': {
         templateUrl: 'templates/start/start.html',

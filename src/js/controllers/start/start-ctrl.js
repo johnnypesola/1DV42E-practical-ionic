@@ -7,15 +7,14 @@ angular.module( 'BookingSystem.start',
   )
 
   // Controller
-  .controller( 'StartViewCtrl', [ '$rootScope', '$scope', '$state', 'Booking', '$interval', 'DATA_SYNC_INTERVAL_TIME', '$ionicGesture', '$mdToast', 'DEFAULT_CALENDAR_ZOOM', ( $rootScope, $scope, $state, Booking, $interval, DATA_SYNC_INTERVAL_TIME, $ionicGesture, $mdToast, DEFAULT_CALENDAR_ZOOM ) => {
+  .controller( 'StartViewCtrl', [ '$rootScope', '$scope', '$state', 'Booking', '$interval', 'DATA_SYNC_INTERVAL_TIME', '$ionicGesture', '$mdToast', 'DEFAULT_CALENDAR_ZOOM', '$stateParams', ( $rootScope, $scope, $state, Booking, $interval, DATA_SYNC_INTERVAL_TIME, $ionicGesture, $mdToast, DEFAULT_CALENDAR_ZOOM, $stateParams ) => {
 
     /* Init vars */
     const updateIntervalTime = DATA_SYNC_INTERVAL_TIME;
     let updateInterval = null, weekStartDate = null, weekEndDate = null;
     $scope.zoom = DEFAULT_CALENDAR_ZOOM;
     $scope.weekDate = moment();
-
-    $scope.isBookingTypeSelectOpen = false;
+    $scope.bookingsType = $stateParams.bookingType;
 
     /* Private methods START */
 
