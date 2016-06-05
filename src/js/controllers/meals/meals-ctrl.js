@@ -110,33 +110,32 @@ angular.module( 'BookingSystem.meals',
       let mealPropertiesToSave;
       const postDataArray = [];
 
-      // Delete previous location furniturings
-      const mealPropertyResource = LocationFurnituring.removeForLocation(
+      // Delete previous meal properties
+      const mealPropertyResource = MealHasProperty.removeForMealProperty(
         {
           mealId: $scope.meal.MealId
         }
       );
 
-      // After previous furniturings were deleted. Save new furniturings for location
+      // After previous meal properties were deleted. Save new meal properties for meal
       mealPropertyResource.$promise.finally( () => {
 
-        // Filter out furniturings to save
+        // Filter out meal properties to save
         mealPropertiesToSave = $scope.mealProperties.filter( ( mealProperty ) => {
           return mealProperty.Selected;
         });
 
-        // Process each and one of the furniturings
+        // Process each and every one of the meal properties
         mealPropertiesToSave.forEach( ( mealProperty ) => {
 
           postDataArray.push({
-            LocationId: $routeParams.locationId,
-            FurnituringId: furnituring.FurnituringId,
-            MaxPeople: furnituring.MaxPeople
+            MealId: $stateParams.mealId,
+            MealPropertyId: mealProperty.MealPropertyId
           });
         });
 
         // Save
-        LocationFurnituring.saveForLocation( postDataArray );
+        MealHasProperty.saveForMealProperty( postDataArray );
       });
 
       // Return promise
@@ -187,11 +186,22 @@ angular.module( 'BookingSystem.meals',
         .then( ( response ) => {
 
           $scope.endEditMode();
+          saveMealProperties( response.MealId )
 
-          $rootScope.FlashMessage = {
-            type: 'success',
-            message: 'Måltiden "' + $scope.meal.Name + '" sparades med ett lyckat resultat'
-          };
+          .then( () => {
+
+            $rootScope.FlashMessage = {
+              type: 'success',
+              message: 'Måltiden "' + $scope.meal.Name + '" sparades med ett lyckat resultat'
+            };
+
+          }).catch( () => {
+
+            $rootScope.FlashMessage = {
+              type: 'error',
+              message: 'Uppgifter om måltiden sparades, men kostinformationen kunde inte sparas. Var god försök igen.'
+            };
+          });
 
           // Something went wrong
         }).catch( ( response ) => {

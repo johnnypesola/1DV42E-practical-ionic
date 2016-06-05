@@ -38,4 +38,22 @@ angular.module( 'BookingSystem.locationsServices',
       }
     );
   }]
+  )
+
+  .factory( 'LocationImage', ['$http', 'API_URL', ( $http, API_URL ) => {
+
+    return {
+      upload : function( imageData, locationId ) {
+
+        return $http(
+          {
+            method: 'POST',
+            url: API_URL + 'Location/image/' + locationId,
+            data: imageData,
+            headers: {'Content-Type': undefined}
+          }
+        );
+      }
+    };
+  }]
   );
