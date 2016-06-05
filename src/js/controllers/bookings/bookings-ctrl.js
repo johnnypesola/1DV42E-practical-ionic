@@ -70,16 +70,6 @@ angular.module( 'BookingSystem.bookings',
       $scope.$on( '$destroy', () => {
         $scope.modal.remove();
       });
-
-      // Execute action on hide modal
-      // $scope.$on( 'modal.hidden', () => {
-      // Execute action
-      // });
-
-      // Execute action on remove modal
-      // $scope.$on( 'modal.removed', () => {
-      // Execute action
-      // });
     };
 
     const getBooking = function () {

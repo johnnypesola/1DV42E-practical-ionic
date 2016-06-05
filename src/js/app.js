@@ -39,6 +39,7 @@ const BookingSystem = angular
     'BookingSystem.start',
     'BookingSystem.mealBookingServices',
     'BookingSystem.mealBooking',
+    'BookingSystem.bookings',
     'ngMaterial',
     'ngResource',
     'ngMessages'
@@ -100,6 +101,21 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', '$mdDateLocalePro
       'menuContent': {
         templateUrl: 'templates/start/start.html',
         controller: 'StartViewCtrl'
+      }
+    }
+  })
+
+  // Bookings
+
+  .state( 'app.booking-details', {
+    url: '/booking-details',
+    params: {
+      id: null
+    },
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/booking/booking-details.html',
+        controller: 'BookingDetailsCtrl'
       }
     }
   })
