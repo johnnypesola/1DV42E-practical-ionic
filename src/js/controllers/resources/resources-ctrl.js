@@ -154,6 +154,7 @@ angular.module( 'BookingSystem.resources',
           Count: $scope.resource.Count,
           ImageSrc: $scope.resource.ImageSrc,
           BookingPricePerHour: $scope.resource.BookingPricePerHour,
+          MinutesMarginBeforeBooking: $scope.resource.MinutesMarginBeforeBooking,
           MinutesMarginAfterBooking: $scope.resource.MinutesMarginAfterBooking,
           WeekEndCount: $scope.resource.WeekEndCount
         }
@@ -308,6 +309,7 @@ angular.module( 'BookingSystem.resources',
           Name: $scope.resource.Name,
           Count: $scope.resource.Count,
           BookingPricePerHour: $scope.resource.BookingPricePerHour,
+          MinutesMarginBeforeBooking: $scope.resource.MinutesMarginBeforeBooking,
           MinutesMarginAfterBooking: $scope.resource.MinutesMarginAfterBooking,
           WeekEndCount: $scope.resource.WeekEndCount
         }
