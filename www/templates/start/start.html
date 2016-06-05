@@ -1,0 +1,112 @@
+<ion-view view-title="Bokningstillfällen">
+    <ion-nav-buttons side="secondary">
+
+    </ion-nav-buttons>
+
+    <div class="bar bar-subheader">
+
+        <calendar-days-header date="weekDate"
+        >
+        </calendar-days-header>
+
+        <button
+                class="button"
+                ng-click="toPreviousWeek()"
+        >
+            <span class="icon ion-arrow-left-c md-big-icon"></span>
+        </button>
+
+        <h2 class="title">{{weekDate.format('MMMM YYYY' ) }} <span class="title-small-text"> vecka {{weekDate.week()}}</span></h2>
+
+        <button
+                class="button"
+                ng-click="toNextWeek()"
+        >
+            <span class="icon ion-arrow-right-c md-big-icon"></span>
+        </button>
+
+    </div>
+
+    <ion-content class="has-subheader" padding="false" id="booking-view-content">
+
+        <calendar-week
+                date="weekDate"
+                bookings="bookings"
+                bookings-type="bookingsType"
+                new-booking-callback="newBookingCallback(hour)"
+                zoom="zoom"
+        >
+        </calendar-week>
+
+    </ion-content>
+
+    <md-button
+            class="md-fab md-warn md-lower-right-button md-ink-ripple"
+            aria-label="Skapa"
+            href="#/app/booking-create"
+    >
+        <span class="icon ion-plus-round md-big-icon"></span>
+    </md-button>
+
+    <div class="bar bar-footer start-calendar-footer">
+
+        <div class="button-bar">
+            <a class="button button-small button-balanced">
+                <i class="icon ion-android-expand"></i> Tillfällen
+            </a>
+            <a class="button button-small button-stable">
+                <i class="icon ion-ios-location balanced"></i> Lokaler
+            </a>
+            <a class="button button-small button-stable">
+                <i class="icon ion-cube royal"></i> Resurser
+            </a>
+            <a class="button button-small button-stable">
+                <i class="icon ion-android-restaurant assertive"></i> Måltider
+            </a>
+        </div>
+
+    </div>
+
+</ion-view>
+
+
+<!--
+<ion-view view-title="Vad vill du göra?">
+    <ion-content padding="true">
+        <div layout-gt-xs="row">
+            <md-input-container style="margin-right: 10px;">
+                <label>Boka</label>
+                <md-select ng-model="bookings">
+                    <md-option ng-repeat="bookingType in bookingTypes" value="{{bookingType.Name}}">Boka {{bookingType.Name}}</md-option>
+                    <md-option>Boka Konferenslokal</md-option>
+                    <md-option>Boka Begravning</md-option>
+                    <md-option>Boka Kyrka</md-option>
+                    <md-option>Boka Resurs</md-option>
+                    <md-option>Boka Måltid</md-option>
+                </md-select>
+            </md-input-container>
+        </div>
+
+        <a href="#/app/location-booking-view">Visa Lokalbokningar</a><br>
+        <a href="#/app/resource-booking-view">Visa Resursbokningar</a>
+
+        <div class="loggedInAsAdmin">
+            <div layout-gt-xs="row">
+                <md-input-container style="margin-right: 10px;">
+                    <label>Administration</label>
+                    <md-select ng-model="bookings">
+                        <md-option>Preliminära bokningar</md-option>
+                        <md-option>Hantera användare</md-option>
+                        <md-option>Hantera lokaler/platser</md-option>
+                        <md-option>Hantera möbleringar</md-option>
+                        <md-option>Hantera kunder</md-option>
+                        <md-option>Hantera måltider</md-option>
+                        <md-option>Hantera resurser</md-option>
+                        <md-option>Hantera bokningstyper</md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>
+-->
