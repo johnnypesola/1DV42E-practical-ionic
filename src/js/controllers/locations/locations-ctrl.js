@@ -6,7 +6,22 @@
 angular.module( 'BookingSystem.locations',
 
   // Dependencies
-  []
+  [
+    'uiGmapgoogle-maps' // Google maps API
+  ]
+  )
+
+  // Config for module
+  .config( ['$stateProvider', 'uiGmapGoogleMapApiProvider', ( $stateProvider, uiGmapGoogleMapApiProvider ) => {
+
+    // Google maps API
+    uiGmapGoogleMapApiProvider.configure({
+      //    key: 'your api key',
+      v: '3.17',
+      libraries: 'weather,geometry,visualization',
+      language: 'sv'
+    });
+  }]
   )
 
   // Controller
@@ -50,7 +65,7 @@ angular.module( 'BookingSystem.locations',
   )
 
   //Edit
-  .controller( 'LocationDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', '$mdToast', 'Location', 'LocationImage', 'API_IMG_PATH_URL', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, $mdToast, Location, LocationImage, API_IMG_PATH_URL ) => {
+  .controller( 'LocationDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', '$mdToast', 'Location', 'LocationImage', 'API_IMG_PATH_URL', 'DEFAULT_MAP_ZOOM', 'DEFAULT_LONGITUDE', 'DEFAULT_LATITUDE', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, $mdToast, Location, LocationImage, API_IMG_PATH_URL, DEFAULT_MAP_ZOOM, DEFAULT_LONGITUDE, DEFAULT_LATITUDE ) => {
 
     /* Init vars */
 
@@ -58,6 +73,7 @@ angular.module( 'BookingSystem.locations',
     $scope.editMode = false;
     $scope.locationBackup = {};
     $scope.API_IMG_PATH_URL = API_IMG_PATH_URL;
+    $scope.markers = [];
 
     /* Private methods START */
     const setupModal = function(){
@@ -93,6 +109,38 @@ angular.module( 'BookingSystem.locations',
       // Redirect
       history.back();
     };
+    const initMapVariables = function() {
+
+      $scope.map = {
+        center: {
+          latitude: DEFAULT_LATITUDE,
+          longitude: DEFAULT_LONGITUDE
+        },
+        zoom: DEFAULT_MAP_ZOOM,
+        bounds: {},
+        options: { mapTypeId: google.maps.MapTypeId.SATELLITE } // Make satellite view default
+      };
+    };
+
+      // Convert markers from data fetched from backend to match google maps format.
+    const convertMarkers = function() {
+
+      $scope.markers[0] =
+      {
+        id: $scope.location.LocationId,
+        coords: {
+          latitude: $scope.location.GPSLatitude,
+          longitude: $scope.location.GPSLongitude
+        }
+      };
+
+      $scope.map.center = {
+        latitude: $scope.location.GPSLatitude,
+        longitude: $scope.location.GPSLongitude
+      };
+
+      $scope.map.zoom = 18;
+    };
 
     const getLocation = function () {
 
@@ -110,7 +158,6 @@ angular.module( 'BookingSystem.locations',
           .position( 'top right' )
         );
       });
-
       $scope.location = location;
     };
 
@@ -278,6 +325,24 @@ angular.module( 'BookingSystem.locations',
 
     setupModal();
     getLocation();
+    initMapVariables();
+    // Add watch on $scope.map.bounds to check (every time it changes) if return boundary data is received from google maps
+    $scope.$watch(
+
+      // Get $scope.map.bounds on change
+      () => {return $scope.map.bounds;},
+
+      // Do the following on change
+      ( nv, ov ) => {
+
+        // Only need to regenerate once
+        if ( !ov.southwest && nv.southwest ) {
+
+          convertMarkers();
+        }
+      },
+      true
+    );
 
     /* Initialization END */
 

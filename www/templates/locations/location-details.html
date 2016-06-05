@@ -116,7 +116,20 @@
                         >
                     </md-input-container>
                 </div>
+
+
+                <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" options="map.options" bounds="map.bounds" events="map.events">
+                    <ui-gmap-markers
+                            models="markers"
+                            coords="'coords'"
+                            options="options"
+                            events="events"
+                    >
+                    </ui-gmap-markers>
+                </ui-gmap-google-map>
+
             </form>
+
         </div>
 
         <md-button
