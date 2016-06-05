@@ -4,7 +4,44 @@
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
     <meta http-equiv="Content-Security-Policy"
-          content="default-src 'self' http://bokning.vvfors.se http://localhost:6796/api/ ws://localhost:35729 data: gap: https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *;script-src 'self' localhost:35729 'unsafe-eval' 'unsafe-inline';"
+          content="
+                script-src 'self'
+                  https://maps.googleapis.com/
+                  https://maps.gstatic.com/
+                  https://mts0.googleapis.com/
+                  https://csi.gstatic.com/
+                  https://maps.google.com/
+                  localhost:35729
+                  127.0.0.1:*
+                  'unsafe-inline' 'unsafe-eval';
+
+                default-src 'self'
+                  https://fonts.gstatic.com/
+                  http://bokning.vvfors.se
+                  https://maps.googleapis.com/maps/api/
+                  https://maps.googleapis.com/
+                  http://localhost:6796/api/
+                  ws://localhost:35729 data:
+                  gap: ;
+
+                media-src *;
+                img-src 'self'
+                  data:*
+                  https://maps.googleapis.com/
+                  https://khms0.googleapis.com/
+                  https://khms1.googleapis.com/
+                  https://khms2.googleapis.com/
+                  https://khms3.googleapis.com/
+                  https://khms4.googleapis.com/
+                  https://khms5.googleapis.com/
+                  http://bokning.vvfors.se/
+                  https://maps.gstatic.com/
+                  https://csi.gstatic.com/;
+
+                style-src  'self' 'unsafe-inline'
+                  https://fonts.googleapis.com/
+                  127.0.0.1
+          "
     >
     <title></title>
 
@@ -28,6 +65,9 @@
     <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>
 
+    <!-- google maps API -->
+    <script src="https://maps.google.com/maps/api/js"></script>
+
     <!-- build:js js/vendor.js -->
     <script src="../www/lib/babel-polyfill/browser-polyfill.js"></script>
     <script src="../www/lib/angular-aria/angular-aria.min.js"></script>
@@ -36,6 +76,9 @@
     <script src="../www/lib/angular-resource/angular-resource.min.js"></script>
     <script src="../www/lib/angular-messages/angular-messages.min.js"></script>
     <script src="../www/lib/moment/min/moment-with-locales.min.js"></script>
+    <script src='../www/lib/lodash/lodash.js'></script>
+    <script src='../www/lib/angular-simple-logger/dist/angular-simple-logger.min.js'></script>
+    <script src='../www/lib/angular-google-maps/dist/angular-google-maps.min.js'></script>
     <!-- endbuild -->
 
     <!-- build:js js/app.min.js -->
@@ -70,6 +113,8 @@
     <script src="js/shared/services/resource-booking-service.js"></script>
     <script src="js/shared/directives/calendar-days-header.js"></script>
     <script src="js/controllers/start/start-ctrl.js"></script>
+    <script src="js/shared/services/meal-booking-service.js"></script>
+    <script src="js/controllers/meal-booking/meal-booking-ctrl.js"></script>
     <!-- endbuild -->
 
   </body>

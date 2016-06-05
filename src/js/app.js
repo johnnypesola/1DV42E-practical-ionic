@@ -37,6 +37,8 @@ const BookingSystem = angular
     'BookingSystem.resourceBookingServices',
     'BookingSystem.calendarDaysHeaderDirective',
     'BookingSystem.start',
+    'BookingSystem.mealBookingServices',
+    'BookingSystem.mealBooking',
     'ngMaterial',
     'ngResource',
     'ngMessages'
@@ -101,6 +103,45 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', '$mdDateLocalePro
       }
     }
   })
+
+  // Meal Bookings
+
+    .state( 'app.meal-booking-view', {
+      url: '/meal-booking-view',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/meal-booking/meal-booking-view.html',
+          controller: 'MealBookingViewCtrl'
+        }
+      }
+    })
+
+    .state( 'app.meal-booking-details', {
+      url: '/meal-booking-details',
+      params: {
+        id: null
+      },
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/meal-booking/meal-booking-details.html',
+          controller: 'MealBookingDetailsCtrl'
+        }
+      }
+    })
+
+    .state( 'app.meal-booking-create', {
+      url: '/meal-booking-create',
+      params: {
+        date: null,
+        locationId: null
+      },
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/meal-booking/meal-booking-create.html',
+          controller: 'MealBookingCreateCtrl'
+        }
+      }
+    })
 
   // Resource Bookings
 
