@@ -1,4 +1,4 @@
-<ion-view view-title="Bokningstillfällen">
+<ion-view view-title="{{calendarTitle}}">
     <ion-nav-buttons side="secondary">
 
     </ion-nav-buttons>
@@ -33,7 +33,6 @@
                 date="weekDate"
                 bookings="bookings"
                 bookings-type="bookingsType"
-                new-booking-callback="newBookingCallback(hour)"
                 zoom="zoom"
         >
         </calendar-week>
@@ -41,7 +40,7 @@
     </ion-content>
 
     <md-button
-            class="md-fab md-warn md-lower-right-button md-ink-ripple"
+            class="md-fab md-warn md-lower-right-button-footer md-ink-ripple"
             aria-label="Skapa"
             href="#/app/booking-create"
     >
@@ -51,16 +50,32 @@
     <div class="bar bar-footer start-calendar-footer">
 
         <div class="button-bar">
-            <a class="button button-small button-balanced">
+            <a
+                class="button button-small "
+                ng-class="{ 'button-dark': bookingsType === bookingTypes.booking }"
+                ng-click="changeBookingTypeTo( bookingTypes.booking )"
+            >
                 <i class="icon ion-android-expand"></i> Tillfällen
             </a>
-            <a class="button button-small button-stable">
+            <a
+                class="button button-small"
+                ng-class="{ 'button-dark': bookingsType === bookingTypes.location }"
+                ng-click="changeBookingTypeTo( bookingTypes.location )"
+            >
                 <i class="icon ion-ios-location balanced"></i> Lokaler
             </a>
-            <a class="button button-small button-stable">
+            <a
+                class="button button-small"
+                ng-class="{ 'button-dark': bookingsType === bookingTypes.resource }"
+                ng-click="changeBookingTypeTo( bookingTypes.resource )"
+            >
                 <i class="icon ion-cube royal"></i> Resurser
             </a>
-            <a class="button button-small button-stable">
+            <a
+                class="button button-small"
+                ng-class="{ 'button-dark': bookingsType === bookingTypes.meal }"
+                ng-click="changeBookingTypeTo( bookingTypes.meal )"
+            >
                 <i class="icon ion-android-restaurant assertive"></i> Måltider
             </a>
         </div>
