@@ -29,4 +29,22 @@ angular.module( 'BookingSystem.resourcesServices',
       }
     );
   }]
+  )
+
+  .factory( 'ResourceImage', ['$http', 'API_URL', ( $http, API_URL ) => {
+
+    return {
+      upload : function( imageData, resourceId ) {
+
+        return $http(
+          {
+            method: 'POST',
+            url: API_URL + 'Resource/image/' + resourceId,
+            data: imageData,
+            headers: {'Content-Type': undefined}
+          }
+        );
+      }
+    };
+  }]
   );

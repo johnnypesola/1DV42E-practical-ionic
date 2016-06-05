@@ -7,7 +7,7 @@ angular.module( 'BookingSystem.start',
   )
 
   // Controller
-  .controller( 'StartViewCtrl', [ '$rootScope', '$scope', '$state', 'Booking', '$interval', 'DATA_SYNC_INTERVAL_TIME', '$ionicGesture', '$mdToast', 'DEFAULT_CALENDAR_ZOOM', '$stateParams', ( $rootScope, $scope, $state, Booking, $interval, DATA_SYNC_INTERVAL_TIME, $ionicGesture, $mdToast, DEFAULT_CALENDAR_ZOOM, $stateParams ) => {
+  .controller( 'StartViewCtrl', [ '$rootScope', '$scope', '$state', 'Booking', 'LocationBooking', 'ResourceBooking', 'MealBooking', '$interval', 'DATA_SYNC_INTERVAL_TIME', '$ionicGesture', '$mdToast', 'DEFAULT_CALENDAR_ZOOM', '$stateParams', '$ionicHistory', ( $rootScope, $scope, $state, Booking, LocationBooking, ResourceBooking, MealBooking, $interval, DATA_SYNC_INTERVAL_TIME, $ionicGesture, $mdToast, DEFAULT_CALENDAR_ZOOM, $stateParams, $ionicHistory ) => {
 
     /* Init vars */
     const updateIntervalTime = DATA_SYNC_INTERVAL_TIME;
@@ -15,6 +15,12 @@ angular.module( 'BookingSystem.start',
     $scope.zoom = DEFAULT_CALENDAR_ZOOM;
     $scope.weekDate = moment();
     $scope.bookingsType = $stateParams.bookingType;
+    $scope.bookingTypes = {
+      booking : 'booking',
+      location : 'location-booking',
+      resource : 'resource-booking',
+      meal : 'meal-booking'
+    };
 
     /* Private methods START */
 
@@ -31,13 +37,70 @@ angular.module( 'BookingSystem.start',
       weekEndDate = moment( $scope.weekDate ).endOf( 'week' );
     };
 
+    const setCalendarTitle = function () {
+
+      switch ( $scope.bookingsType ) {
+        case $scope.bookingTypes.booking:
+          $scope.calendarTitle = 'Bokningstillfällen';
+          break;
+        case $scope.bookingTypes.location:
+          $scope.calendarTitle = 'Lokalbokningar';
+          break;
+        case $scope.bookingTypes.resource:
+          $scope.calendarTitle = 'Resursbokningar';
+          break;
+        case $scope.bookingTypes.meal:
+          $scope.calendarTitle = 'Måltidsbokningar';
+          break;
+        default:
+          $scope.calendarTitle = 'Bokningstillfällen';
+      }
+    };
+
     const getBookings = function () {
 
-      const bookings = Booking.queryLessForPeriod({
+      let bookings;
 
-        fromDate: weekStartDate.format( 'YYYY-MM-DD' ),
-        toDate: weekEndDate.format( 'YYYY-MM-DD' )
-      });
+      switch ( $scope.bookingsType ) {
+
+        // If its a booking
+        case $scope.bookingTypes.booking:
+
+          bookings = Booking.queryLessForPeriod({
+            fromDate: weekStartDate.format( 'YYYY-MM-DD' ),
+            toDate: weekEndDate.format( 'YYYY-MM-DD' )
+          });
+          break;
+
+        // If its a location booking
+        case $scope.bookingTypes.location:
+
+          bookings = LocationBooking.queryLessForPeriod({
+            fromDate: weekStartDate.format( 'YYYY-MM-DD' ),
+            toDate: weekEndDate.format( 'YYYY-MM-DD' )
+          });
+          break;
+
+        // If its a resource booking
+        case $scope.bookingTypes.resource:
+
+          bookings = ResourceBooking.queryLessForPeriod({
+            fromDate: weekStartDate.format( 'YYYY-MM-DD' ),
+            toDate: weekEndDate.format( 'YYYY-MM-DD' )
+          });
+          break;
+
+        // If its a meal booking
+        case $scope.bookingTypes.meal:
+          bookings = MealBooking.queryLessForPeriod({
+            fromDate: weekStartDate.format( 'YYYY-MM-DD' ),
+            toDate: weekEndDate.format( 'YYYY-MM-DD' )
+          });
+          break;
+
+        default:
+          bookings = {};
+      }
 
       // const bookings = Booking.query();
 
@@ -45,7 +108,7 @@ angular.module( 'BookingSystem.start',
       bookings.$promise.catch( () => {
 
         $mdToast.show( $mdToast.simple()
-          .content( 'Bokningstillfällen kunde inte hämtas, var god försök igen.' )
+          .content( 'Bokningar kunde inte hämtas, var god försök igen.' )
           .position( 'top right' )
         );
       })
@@ -120,6 +183,20 @@ angular.module( 'BookingSystem.start',
       getBookings();
     };
 
+    $scope.changeBookingTypeTo = function( bookingTypeStr ) {
+
+      $ionicHistory.nextViewOptions({
+        disableAnimate: true,
+        disableBack: true
+      });
+
+      $state.go( 'app.start', {
+        bookingType: bookingTypeStr
+      });
+
+//      $scope.bookingsType = bookingTypeStr;
+    };
+
     /* Public Methods END */
 
     /* Initialization START */
@@ -129,6 +206,7 @@ angular.module( 'BookingSystem.start',
       setupWeekStartAndEndDates();
       getBookings();
       startUpdateInterval();
+      setCalendarTitle();
     });
 
     $scope.$on( '$ionicView.loaded', ( event, data ) => {
