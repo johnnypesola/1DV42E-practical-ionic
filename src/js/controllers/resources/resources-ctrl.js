@@ -10,7 +10,7 @@ angular.module( 'BookingSystem.resources',
   )
 
   //List controller
-  .controller( 'ResourcesListCtrl', [ '$rootScope', '$scope', '$state', 'Resource', ($rootScope, $scope, $state, Resource) => {
+  .controller( 'ResourcesListCtrl', [ '$rootScope', '$scope', '$state', '$mdToast', 'Resource', ($rootScope, $scope, $state, $mdToast, Resource) => {
 
     /* Init vars */
 
@@ -23,10 +23,10 @@ angular.module( 'BookingSystem.resources',
       // In case resources cannot be fetched, display an error to user.
       resources.$promise.catch( () => {
 
-        $rootScope.FlashMessage = {
-          type: 'error',
-          message: 'Resurser kunde inte hämtas, var god försök igen.'
-        };
+        $mdToast.show( $mdToast.simple()
+          .content( 'Resurser kunde inte hämtas, var god försök igen.' )
+          .position( 'top right' )
+        );
       });
 
       $scope.resources = resources;
@@ -50,12 +50,14 @@ angular.module( 'BookingSystem.resources',
   )
 
   //Edit controller
-  .controller( 'ResourceDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$ionicModal', '$state', 'Resource', ($rootScope, $scope, $stateParams, MODAL_ANIMATION, $ionicModal, $state, Resource ) => {
+  .controller( 'ResourceDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$ionicModal', '$state', 'Resource', 'ResourceImage', 'API_IMG_PATH_URL', ($rootScope, $scope, $stateParams, MODAL_ANIMATION, $ionicModal, $state, Resource, ResourceImage, API_IMG_PATH_URL ) => {
     /* Init vars */
 
     const modalTemplateUrl = 'templates/modals/resources-delete.html';
     $scope.isEditMode = false;
     $scope.resourceBackup = {};
+    $scope.API_IMG_PATH_URL = API_IMG_PATH_URL;
+    $scope.imgTime = Date.now();
 
     /* Private methods START */
 
@@ -74,6 +76,23 @@ angular.module( 'BookingSystem.resources',
       $scope.$on( '$destroy', () => {
         $scope.modal.remove();
       });
+    };
+
+    const uploadImage = function( ResourceId ){
+
+      return ResourceImage.upload( $scope.resource.ImageForUpload, ResourceId );
+
+    };
+
+    const saveSuccess = function() {
+      // Display success message
+      $rootScope.FlashMessage = {
+        type: 'success',
+        message: 'Resursen "' + $scope.resource.Name + '" sparades med ett lyckat resultat'
+      };
+
+      // Redirect
+      history.back();
     };
 
     const getResource = function () {
@@ -133,7 +152,9 @@ angular.module( 'BookingSystem.resources',
           ResourceId: $stateParams.resourceId,
           Name: $scope.resource.Name,
           Count: $scope.resource.Count,
+          ImageSrc: $scope.resource.ImageSrc,
           BookingPricePerHour: $scope.resource.BookingPricePerHour,
+          MinutesMarginBeforeBooking: $scope.resource.MinutesMarginBeforeBooking,
           MinutesMarginAfterBooking: $scope.resource.MinutesMarginAfterBooking,
           WeekEndCount: $scope.resource.WeekEndCount
         }
@@ -144,10 +165,28 @@ angular.module( 'BookingSystem.resources',
 
           $scope.endEditMode();
 
-          $rootScope.FlashMessage = {
-            type: 'success',
-            message: 'Resursen "' + $scope.resource.Name + '" sparades med ett lyckat resultat'
-          };
+          // Upload image
+          if ( typeof $scope.resource.ImageForUpload !== 'undefined' ){
+
+            uploadImage( response.ResourceId )
+
+            // Image upload successful
+              .success( () => {
+                saveSuccess();
+              })
+              // Image upload failed
+              .error( () => {
+
+                $rootScope.FlashMessage = {
+                  type: 'error',
+                  message: 'Resursen sparades, men det gick inte att ladda upp och spara den önskade bilden.'
+                };
+              });
+          }
+          else {
+
+            saveSuccess();
+          }
 
           // Something went wrong
         }).catch( ( response ) => {
@@ -270,6 +309,7 @@ angular.module( 'BookingSystem.resources',
           Name: $scope.resource.Name,
           Count: $scope.resource.Count,
           BookingPricePerHour: $scope.resource.BookingPricePerHour,
+          MinutesMarginBeforeBooking: $scope.resource.MinutesMarginBeforeBooking,
           MinutesMarginAfterBooking: $scope.resource.MinutesMarginAfterBooking,
           WeekEndCount: $scope.resource.WeekEndCount
         }

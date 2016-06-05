@@ -293,8 +293,6 @@ angular.module( 'BookingSystem.customers',
     /* Init vars */
     $scope.customer = {};
 
-    console.log( API_IMG_PATH_URL );
-
     /* Private methods START */
 
     // Upload image
