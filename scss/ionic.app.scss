@@ -79,14 +79,10 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   right: 20px !important;
 }
 
-.md-lower-right-2nd-button {
-  right: 80px !important;
-  background-color: #25C54F !important;
-}
-
-.md-lower-right-3rd-button {
-  right: 140px !important;
-  background-color: #25C54F !important;
+.md-lower-right-button-footer {
+  position: fixed !important;
+  bottom: 64px !important;
+  right: 20px !important;
 }
 
 // Custom chips specific START
@@ -116,6 +112,12 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 // Custom chips specific END
 
 // Calendar specific START
+
+.start-calendar-footer {
+  .button {
+    padding: 0 !important;
+  }
+}
 
 .booking-calendar-day-headers {
   background: #fff;

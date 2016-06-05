@@ -36,6 +36,7 @@ const BookingSystem = angular
     'BookingSystem.resourceBooking',
     'BookingSystem.resourceBookingServices',
     'BookingSystem.calendarDaysHeaderDirective',
+    'BookingSystem.start',
     'BookingSystem.mealBookingServices',
     'BookingSystem.mealBooking',
     'ngMaterial',
@@ -64,8 +65,8 @@ BookingSystem.run( ['$ionicPlatform', ( $ionicPlatform ) => {
 }] );
 
 // Constants
-BookingSystem.constant( 'API_URL', 'http://bokning.vvfors.se/api/' );
-//BookingSystem.constant( 'API_URL', 'http://localhost:6796/api/' );
+// BookingSystem.constant( 'API_URL', 'http://bokning.vvfors.se/api/' );
+BookingSystem.constant( 'API_URL', 'http://localhost:6796/api/' );
 BookingSystem.constant( 'API_IMG_PATH_URL', 'http://bokning.vvfors.se/' );
 BookingSystem.constant( 'UPLOAD_IMG_MAX_WIDTH', '400' );
 BookingSystem.constant( 'UPLOAD_IMG_MAX_HEIGHT', '400' );
@@ -88,11 +89,17 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', '$mdDateLocalePro
     controller: 'AppCtrl'
   })
 
+  // Start
+
   .state( 'app.start', {
     url: '/start',
+    params: {
+      bookingType: 'booking'
+    },
     views: {
       'menuContent': {
-        templateUrl: 'templates/start.html'
+        templateUrl: 'templates/start/start.html',
+        controller: 'StartViewCtrl'
       }
     }
   })
