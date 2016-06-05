@@ -7,7 +7,7 @@ angular.module( 'BookingSystem.bookings',
   )
 
   // Controller
-  .controller( 'BookingListCtrl', [ '$rootScope', '$scope', '$state', 'Booking', ( $rootScope, $scope, $state, Booking ) => {
+  .controller( 'BookingListCtrl', [ '$rootScope', '$scope', '$state', 'Booking', '$mdToast', ( $rootScope, $scope, $state, Booking, $mdToast ) => {
 
     /* Init vars */
 
@@ -20,10 +20,10 @@ angular.module( 'BookingSystem.bookings',
       // In case booking cannot be fetched, display an error to user.
       bookings.$promise.catch( () => {
 
-        $rootScope.FlashMessage = {
-          type: 'error',
-          message: 'Bokningstillfällen kunde inte hämtas, var god försök igen.'
-        };
+        $mdToast.show( $mdToast.simple()
+          .content( 'Bokningstillfällen kunde inte hämtas, var god försök igen.' )
+          .position( 'top right' )
+        );
       });
 
       $scope.bookings = bookings;
@@ -46,7 +46,7 @@ angular.module( 'BookingSystem.bookings',
   }]
   )
 
-  .controller( 'BookingDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', 'Booking', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, Booking ) => {
+  .controller( 'BookingDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', 'Booking', '$mdToast', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, Booking, $mdToast ) => {
 
     /* Init vars */
 
@@ -93,10 +93,10 @@ angular.module( 'BookingSystem.bookings',
       // In case booking cannot be fetched, display an error to user.
       booking.$promise.catch( () => {
 
-        $rootScope.FlashMessage = {
-          type: 'error',
-          message: 'Bokningstillfälle kunde inte hämtas, var god försök igen.'
-        };
+        $mdToast.show( $mdToast.simple()
+          .content( 'Bokningstillfälle kunde inte hämtas, var god försök igen.' )
+          .position( 'top right' )
+        );
       });
 
       $scope.booking = booking;
@@ -145,37 +145,37 @@ angular.module( 'BookingSystem.bookings',
 
           $scope.endEditMode();
 
-          $rootScope.FlashMessage = {
-            type: 'success',
-            message: 'Bokningstillfället "' + $scope.booking.Name + '" sparades med ett lyckat resultat'
-          };
+          $mdToast.show( $mdToast.simple()
+            .content( 'Bokningstillfället "' + $scope.booking.Name + '" sparades med ett lyckat resultat' )
+            .position( 'top right' )
+          );
 
           // Something went wrong
         }).catch( ( response ) => {
 
           // If there there was a foreign key reference
           if ( response.status === 409 ){
-            $rootScope.FlashMessage = {
-              type: 'error',
-              message: 'Det finns redan ett bokningstillfälle som heter "' + $scope.booking.Name +
-              '". Två bokningstillfällen kan inte heta lika.'
-            };
+            $mdToast.show( $mdToast.simple()
+              .content( 'Det finns redan ett bokningstillfälle som heter "' + $scope.booking.Name +
+                '". Två bokningstillfällen kan inte heta lika.' )
+              .position( 'top right' )
+            );
           }
 
           // If there was a problem with the in-data
           else if ( response.status === 400 || response.status === 500 ){
-            $rootScope.FlashMessage = {
-              type: 'error',
-              message: 'Ett oväntat fel uppstod när bokningstillfället skulle sparas'
-            };
+            $mdToast.show( $mdToast.simple()
+              .content( 'Ett oväntat fel uppstod när bokningstillfället skulle sparas' )
+              .position( 'top right' )
+            );
           }
 
           // If the entry was not found
           if ( response.status === 404 ) {
-            $rootScope.FlashMessage = {
-              type: 'error',
-              message: 'Bokningstillfället "' + $scope.booking.Name + '" existerar inte längre. Hann kanske någon radera den?'
-            };
+            $mdToast.show( $mdToast.simple()
+              .content( 'Bokningstillfället "' + $scope.booking.Name + '" existerar inte längre. Hann kanske någon radera den?' )
+              .position( 'top right' )
+            );
 
             history.back();
           }
@@ -194,10 +194,10 @@ angular.module( 'BookingSystem.bookings',
         // If everything went ok
         .then( ( response ) => {
 
-          $rootScope.FlashMessage = {
-            type: 'success',
-            message: 'Bokningstillfället "' + $scope.booking.Name + '" raderades med ett lyckat resultat'
-          };
+          $mdToast.show( $mdToast.simple()
+            .content( 'Bokningstillfället "' + $scope.booking.Name + '" raderades med ett lyckat resultat' )
+            .position( 'top right' )
+          );
 
           history.back();
         })
@@ -210,27 +210,27 @@ angular.module( 'BookingSystem.bookings',
             response.data.Message !== 'undefined' &&
             response.data.Message === 'Foreign key references exists'
           ){
-            $rootScope.FlashMessage = {
-              type: 'error',
-              message:    'Bokningstillfället kan inte raderas eftersom det finns' +
-              ' en lokalbokning, resursbokning eller en måltidsbokning som refererar till bokningstillfället'
-            };
+            $mdToast.show( $mdToast.simple()
+              .content( 'Bokningstillfället kan inte raderas eftersom det finns' +
+                ' en lokalbokning, resursbokning eller en måltidsbokning som refererar till bokningstillfället' )
+              .position( 'top right' )
+            );
           }
 
           // If there was a problem with the in-data
           else if ( response.status === 400 || response.status === 500 ){
-            $rootScope.FlashMessage = {
-              type: 'error',
-              message: 'Ett oväntat fel uppstod när bokningstillfället skulle tas bort'
-            };
+            $mdToast.show( $mdToast.simple()
+              .content( 'Ett oväntat fel uppstod när bokningstillfället skulle tas bort' )
+              .position( 'top right' )
+            );
           }
 
           // If the entry was not found
           if ( response.status === 404 ) {
-            $rootScope.FlashMessage = {
-              type: 'error',
-              message: 'Bokningstillfället "' + $scope.booking.Name + '" existerar inte längre. Hann kanske någon radera den?'
-            };
+            $mdToast.show( $mdToast.simple()
+              .content( 'Bokningstillfället "' + $scope.booking.Name + '" existerar inte längre. Hann kanske någon radera den?' )
+              .position( 'top right' )
+            );
           }
 
           history.back();
@@ -249,7 +249,7 @@ angular.module( 'BookingSystem.bookings',
   }]
   )
 
-  .controller( 'BookingCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'Booking', ( $rootScope, $stateParams, $scope, $state, Booking ) => {
+  .controller( 'BookingCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'Booking', '$mdToast', ( $rootScope, $stateParams, $scope, $state, Booking, $mdToast ) => {
 
     /* Init vars */
     $scope.booking = {};
@@ -275,10 +275,10 @@ angular.module( 'BookingSystem.bookings',
         // If everything went ok
         .then( ( response ) => {
 
-          $rootScope.FlashMessage = {
-            type: 'success',
-            message: 'Bokningstillfället "' + $scope.booking.Name + '" skapades med ett lyckat resultat'
-          };
+          $mdToast.show( $mdToast.simple()
+            .content( 'Bokningstillfället "' + $scope.booking.Name + '" skapades med ett lyckat resultat' )
+            .position( 'top right' )
+          );
 
           history.back();
 
@@ -287,19 +287,19 @@ angular.module( 'BookingSystem.bookings',
 
           // If there there was a foreign key reference
           if ( response.status === 409 ){
-            $rootScope.FlashMessage = {
-              type: 'error',
-              message: 'Det finns redan ett bokningstillfälle som heter "' + $scope.booking.Name +
-              '". Två bokningstillfällen kan inte heta lika.'
-            };
+            $mdToast.show( $mdToast.simple()
+              .content( 'Det finns redan ett bokningstillfälle som heter "' + $scope.booking.Name +
+                '". Två bokningstillfällen kan inte heta lika.' )
+              .position( 'top right' )
+            );
           }
 
           // If there was a problem with the in-data
           else {
-            $rootScope.FlashMessage = {
-              type: 'error',
-              message: 'Ett oväntat fel uppstod när bokningstillfället skulle sparas'
-            };
+            $mdToast.show( $mdToast.simple()
+              .content( 'Ett oväntat fel uppstod när bokningstillfället skulle sparas' )
+              .position( 'top right' )
+            );
           }
         });
     };
