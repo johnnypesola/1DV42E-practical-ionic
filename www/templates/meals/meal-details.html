@@ -2,10 +2,6 @@
     <ion-content padding="true">
 
         <h1>{{meal.Name}}</h1>
-        <pre>
-            {{meal|json}}
-        </pre>
-
         <div class="row padding">
 
             <form name="userForm">
@@ -18,13 +14,15 @@
             </form>
         </div>
 
-        <div
-            class="custom-chip"
-            ng-repeat="mealProperty in meal.mealProperties"
-            ng-class="{ 'custom-chip-active' : mealProperty.active }"
-            ng-click="mealProperty.active = !mealProperty.active"
-        >
-            {{mealProperty.MealPropertyName}}
+        <div layout-gt-xs="row">
+            <div
+                    class="custom-chip"
+                    ng-repeat="mealProperty in meal.mealProperties"
+                    ng-class="{ 'custom-chip-active' : mealProperty.active }"
+                    ng-click="mealProperty.active = !mealProperty.active"
+            >
+                {{mealProperty.MealPropertyName}}
+            </div>
         </div>
 
         <md-button

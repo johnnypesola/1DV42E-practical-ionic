@@ -11,7 +11,7 @@
   )
 
     // Directive specific controllers START
-    .controller( 'CalendarDayCtrl', ['$scope', '$element', '$attrs', '$rootScope', '$location', '$q', '$state', 'BookingHelper', '$interval', 'DEFAULT_CALENDAR_ZOOM', function( $scope, $element, $attrs, $rootScope, $location, $q, $state, BookingHelper, $interval, DEFAULT_CALENDAR_ZOOM ) {
+    .controller( 'CalendarDayCtrl', ['$scope', '$element', '$attrs', '$rootScope', '$location', '$q', '$state', 'BookingHelper', '$interval', 'DEFAULT_CALENDAR_ZOOM', '$ionicScrollDelegate', '$window', '$document', function( $scope, $element, $attrs, $rootScope, $location, $q, $state, BookingHelper, $interval, DEFAULT_CALENDAR_ZOOM, $ionicScrollDelegate, $window, $document ) {
 
       /* Declare variables START */
       const calendarDayMomentDate = moment( $scope.date );
@@ -57,6 +57,19 @@
         }
       };
 
+      const scrollToTimeLineIfNeeded = function() {
+
+        if ( $scope.isCurrentDay ) {
+          $document.ready( () => {
+
+            // Get offset from time-line element
+            const offsetTop = angular.element( document.querySelector( '.time-line' ) ).prop( 'offsetTop' );
+
+            $ionicScrollDelegate.scrollTo( 0, offsetTop - $scope.columnHeight, false );
+          });
+        }
+      };
+
       const setIsCurrentDayVariables = function () {
 
         $scope.isCurrentDay = moment().format( 'YYYY-MM-DD' ) === calendarDayMomentDate.format( 'YYYY-MM-DD' );
@@ -64,12 +77,15 @@
         if ( $scope.isCurrentDay ) {
 
           const currentMoment = moment();
-
           const hour = currentMoment.format( 'H' );
           const minute = currentMoment.format( 'mm' );
 
           $scope.currentHour = getHourDecimal( hour, minute );
+
+        } else {
+          $scope.isDayOld = calendarDayMomentDate.isBefore( moment() );
         }
+
       };
 
       const startUpdateInterval = function (){
@@ -152,7 +168,17 @@
         // Redirect to create view
         $state.go( 'app.' + $scope.bookingsType + '-create', {
           date: calendarDayMomentDate,
-          locationId: null
+          id: null
+        });
+
+        $scope.hideAddButton();
+      };
+
+      $scope.showEvent = function( id ) {
+
+        // Redirect to edit view
+        $state.go( 'app.' + $scope.bookingsType + '-details', {
+          id: id
         });
       };
 
@@ -163,6 +189,7 @@
       setupHours();
       setIsCurrentDayVariables();
       startUpdateInterval();
+      scrollToTimeLineIfNeeded();
 
       // Listen to when AddButton should hide
       $scope.$on( 'hideAllAddButtons', ( event, msg ) => {

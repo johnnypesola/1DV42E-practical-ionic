@@ -1,12 +1,9 @@
-<div class="col calendar-day">
-    <div class="day-header"
-         ng-class="{'active-day': isCurrentDay}"
-    >
-        <div class="number">{{dayNumber}}</div>
-        <div class="name">{{dayName}}</div>
-    </div>
+<div
+    class="calendar-day col"
+    ng-class="isDayOld ? 'old-day' : ''"
+>
 
-    <!-- Background lines with containers below -->
+  <!-- Background lines with containers below -->
     <div class="event-hours">
         <div
             class="event-hour"
@@ -22,6 +19,7 @@
         <div
             ng-repeat="booking in bookings"
             class="col event"
+            ng-click="showEvent( booking.Id )"
             style="
                 top: {{booking.StartHour * columnHeight}}px;
                 height: {{booking.Duration * columnHeight}}px;
@@ -50,10 +48,10 @@
     </button>
 
     <div
-        class="time-line"
+        ng-class="isCurrentDay ? 'time-line' : ''"
         ng-show="isCurrentDay"
         style="
-            top: {{ currentHour ? currentHour * columnHeight + 50 : 0}}px;
+            top: {{ currentHour ? currentHour * columnHeight : 0}}px;
         "
     >
         <hr />

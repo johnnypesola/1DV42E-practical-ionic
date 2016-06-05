@@ -14,7 +14,19 @@ angular.module( 'BookingSystem.resourcesServices',
 
     return $resource(
       API_URL + 'Resource/:resourceId',
-      {resourceId: '@resourceId'}
+      {resourceId: '@resourceId'},
+      {
+        queryFreeForPeriod: {
+          url: API_URL + 'Resource/free/:fromDate/:toDate',
+          id: '@id',
+          method: 'GET',
+          isArray: true,
+          params: {
+            fromDate: '@fromDate',
+            toDate: '@toDate'
+          }
+        }
+      }
     );
   }]
   )

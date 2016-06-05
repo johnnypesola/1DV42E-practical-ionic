@@ -1,0 +1,257 @@
+<ion-view view-title="Lokal/Platsbokning">
+    <ion-nav-buttons side="secondary">
+        <button
+                class="button"
+                ng-click="abortEditMode()"
+                ng-show="true"
+                >
+            editMode: {{isEditMode}}
+        </button>
+    </ion-nav-buttons>
+    <ion-content padding="true">
+
+        <div class="row">
+
+            <form name="locationBookingForm" class="col">
+
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="locationBookingForm.CustomerId.$error">
+                        <div ng-message="required">Var god ange kund</div>
+                    </div>
+
+                    <md-input-container class="md-block" flex-gt-sm>
+
+                        <label>Kund</label>
+                        <md-select
+                                name="CustomerId"
+                                ng-model="locationBooking.CustomerId"
+                                ng-required="true"
+                                ng-disabled="!isEditMode"
+                        >
+                            <md-option ng-repeat="customer in customers" value="{{customer.CustomerId}}">
+                                {{customer.Name}}
+                            </md-option>
+                        </md-select>
+
+                    </md-input-container>
+
+                </div>
+
+                Starttidpunkt
+
+                <div class="row rel-l-20 pos-relative">
+
+                    <div class="validation-messages" ng-messages="locationBookingForm.bookingStartDate.$error">
+                        <div ng-message="valid">Ange ett giltigt startdatum</div>
+                        <div ng-message="required">Ett startdatum måste anges</div>
+                    </div>
+
+                    <div class="col">
+                        <md-datepicker
+                                name="bookingStartDate"
+                                ng-change="checkEndDate()"
+                                ng-model="$parent.bookingStartDate"
+                                ng-required="true"
+                                ng-disabled="!isEditMode"
+                                ></md-datepicker>
+                    </div>
+
+                    <md-input-container class="col">
+                        <label>Timme</label>
+                        <md-select
+                                ng-model="$parent.bookingStartHour"
+                                ng-change="checkEndDate()"
+                                ng-disabled="!isEditMode"
+                                >
+                            <md-option ng-repeat="hour in selectHours" value="{{hour}}">
+                                {{hour | zpad:2}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+
+                    <md-input-container class="col">
+                        <label>Minut</label>
+                        <md-select
+                                ng-model="$parent.bookingStartMinute"
+                                ng-change="checkEndDate()"
+                                ng-disabled="!isEditMode"
+                                >
+                            <md-option ng-repeat="minute in selectMinutes" value="{{minute}}">
+                                {{minute | zpad:2}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+
+                Sluttidpunkt
+
+                <div class="row rel-l-20 pos-relative">
+
+                    <div class="validation-messages" ng-messages="locationBookingForm.bookingEndDate.$error">
+                        <div ng-message="valid">Ange ett giltigt slutdatum</div>
+                        <div ng-message="required">Ett slutdatum måste anges</div>
+                        <div ng-message="mindate">Slutdatumet kan inte vara före startdatumet</div>
+                    </div>
+
+                    <div class="col">
+                        <md-datepicker
+                                name="bookingEndDate"
+                                ng-change="checkEndDate()"
+                                ng-model="$parent.bookingEndDate"
+                                ng-required="true"
+                                md-min-date="bookingStartDate"
+                                ng-disabled="!isEditMode"
+                                ></md-datepicker>
+                    </div>
+
+                    <md-input-container class="col">
+                        <label>Timme</label>
+                        <md-select
+                                ng-model="$parent.bookingEndHour"
+                                ng-change="checkEndDate()"
+                                ng-disabled="!isEditMode"
+                                >
+                            <md-option ng-repeat="hour in selectHours" value="{{hour}}">
+                                {{hour | zpad:2}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+
+                    <md-input-container class="col">
+                        <label>Minut</label>
+                        <md-select
+                                ng-model="$parent.bookingEndMinute"
+                                ng-change="checkEndDate()"
+                                ng-disabled="!isEditMode"
+                                >
+                            <md-option
+                                    ng-repeat="minute in selectMinutes" value="{{minute}}"
+                                    >
+                                {{minute | zpad:2}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+
+                </div>
+
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="locationBookingForm.LocationId.$error">
+                        <div ng-message="required">Var god ange lokal / plats</div>
+                    </div>
+
+                    <md-input-container class="md-block" flex-gt-sm>
+
+                        <label>Lokal / Plats</label>
+                        <md-select
+                                name="LocationId"
+                                ng-model="locationBooking.LocationId"
+                                ng-required="true"
+                                ng-change="updateFurniturings()"
+                                ng-disabled="!isEditMode"
+                                >
+                            <md-option ng-repeat="location in locations" value="{{location.LocationId}}">
+                                {{location.Name}}
+                            </md-option>
+                        </md-select>
+
+                    </md-input-container>
+
+                </div>
+
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <md-input-container class="md-block" flex-gt-sm>
+
+                        <label>Möblering</label>
+                        <md-select
+                                name="SelectedFurnituring"
+                                ng-model="locationBooking.SelectedFurnituring"
+                                ng-disabled="!furniturings.length || !isEditMode"
+                                >
+                            <md-option ng-repeat="furnituring in furniturings" ng-value="furnituring">
+                                {{furnituring.FurnituringName}} <span class="faded">({{furnituring.MaxPeople}} pers.)</span>
+                            </md-option>
+                        </md-select>
+
+                    </md-input-container>
+
+                </div>
+
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="locationBookingForm.NumberOfPeople.$error">
+                        <div ng-message="required">Var god ange antal personer</div>
+                        <div ng-message="pattern">Endast nummer tillåtna</div>
+                        <div ng-message="max">Får vara max {{locationBooking.SelectedFurnituring.MaxPeople}}</div>
+                        <div ng-message="min">Får vara minst 0</div>
+                    </div>
+
+                    <md-input-container class="md-block" flex-gt-xs>
+
+                        <label>Antal personer</label>
+                        <input
+                                type="number"
+                                name="NumberOfPeople"
+                                ng-model="locationBooking.NumberOfPeople"
+                                ng-required="true"
+                                ng-pattern="/^[0-9]*$/"
+                                ng-max="locationBooking.SelectedFurnituring.MaxPeople"
+                                min="0"
+                                ng-disabled="!isEditMode"
+                                >
+                    </md-input-container>
+                </div>
+
+                <div class="row">
+                    <md-checkbox
+                            ng-model="locationBooking.Provisional"
+                            aria-label="Finished?"
+                            ng-disabled="!isEditMode"
+                    >
+                        Preliminär bokning
+                    </md-checkbox>
+                </div>
+
+            </form>
+
+        </div>
+
+        <md-button
+                ng-show="isEditMode"
+                ng-click="abortEditMode()"
+                class="md-raised"
+                >
+            Avbryt
+        </md-button>
+
+        <md-button
+                ng-show="isEditMode"
+                class="md-raised md-primary"
+                ng-click="saveLocationBooking()"
+                ng-disabled="locationBookingForm.$invalid"
+                >
+            Spara
+        </md-button>
+
+        <md-button
+                ng-show="isEditMode"
+                class="md-fab md-mini md-warn"
+                ng-click="modal.show()"
+                >
+            <span class="icon ion-trash-a md-medium-icon"></span>
+        </md-button>
+
+        <md-button
+                class="md-fab md-warn md-lower-right-button"
+                aria-label="Redigera"
+                ng-click="startEditMode()"
+                ng-show="!isEditMode"
+                >
+            <span class="icon ion-edit md-big-icon"></span>
+        </md-button>
+
+    </ion-content>
+
+</ion-view>

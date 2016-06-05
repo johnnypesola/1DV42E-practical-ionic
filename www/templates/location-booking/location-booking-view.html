@@ -1,14 +1,33 @@
 <ion-view view-title="Lokal/Platsbokningar">
     <ion-nav-buttons side="secondary">
+
+    </ion-nav-buttons>
+
+    <div class="bar bar-subheader">
+
+        <h2 class="title">{{weekDate.format('MMMM YYYY' ) }} <span class="title-small-text"> vecka {{weekDate.week()}}</span></h2>
+
+        <calendar-days-header date="weekDate"
+        >
+        </calendar-days-header>
+
         <button
             class="button"
-            ng-click="abortEditMode()"
-            ng-show="true"
+            ng-click="toPreviousWeek()"
         >
-            editMode: {{isEditMode}}
+            <span class="icon ion-arrow-left-c md-big-icon"></span>
         </button>
-    </ion-nav-buttons>
-    <ion-content padding="false" id="booking-view-content">
+
+        <button
+            class="button"
+            ng-click="toNextWeek()"
+        >
+            <span class="icon ion-arrow-right-c md-big-icon"></span>
+        </button>
+
+    </div>
+
+    <ion-content class="has-subheader" padding="false" id="booking-view-content">
 
         <calendar-week
             date="weekDate"
@@ -21,12 +40,12 @@
 
     </ion-content>
 
-  <md-button
-    class="md-fab md-warn md-lower-right-button"
-    aria-label="Skapa"
-    href="#/app/location-booking-create"
+    <md-button
+        class="md-fab md-warn md-lower-right-button md-ink-ripple"
+        aria-label="Skapa"
+        href="#/app/location-booking-create"
     >
-    <span class="icon ion-plus-round md-big-icon"></span>
-  </md-button>
+        <span class="icon ion-plus-round md-big-icon"></span>
+    </md-button>
 
 </ion-view>

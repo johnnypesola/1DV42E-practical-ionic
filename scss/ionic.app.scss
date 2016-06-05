@@ -56,6 +56,14 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   }
 }
 
+// NavBar styles
+
+.title-small-text {
+  line-height: 34px;
+  font-size: 15px;
+  opacity: 0.5;
+}
+
 // Big icon for material design MB buttons
 .md-big-icon {
   font-size: 150% !important;
@@ -67,8 +75,18 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 
 .md-lower-right-button {
   position: fixed !important;
-  bottom: 2% !important;
-  right: 2% !important;
+  bottom: 20px !important;
+  right: 20px !important;
+}
+
+.md-lower-right-2nd-button {
+  right: 80px !important;
+  background-color: #25C54F !important;
+}
+
+.md-lower-right-3rd-button {
+  right: 140px !important;
+  background-color: #25C54F !important;
 }
 
 // Custom chips specific START
@@ -99,16 +117,57 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 
 // Calendar specific START
 
+.booking-calendar-day-headers {
+  background: #fff;
+  position: absolute;
+  top: 43px;
+  left: 0;
+  padding: 0;
+}
+
+.day-header, .time-header {
+
+  height: 50px;
+  padding: 5px;
+  border-bottom: 1px solid #eee;
+  color: #aaa;
+
+  .week {
+    margin-top: 12px;
+    text-align: center;
+  }
+
+  .number {
+    margin: 2px;
+    font-size: 24px !important;
+  }
+
+  .name {
+    margin: 2px;
+    font-size: 14px !important;
+  }
+}
+
+.active-day {
+  color: #444 !important;
+}
+
 .booking-calendar {
+  position: relative;
+  top: 50px;
   padding: 0 !important;
   margin-bottom: 150px !important;
 
+  .calendar-time {
+    position: relative;
+  }
+
+  .old-day {
+    background: #fbfbfb;
+  }
+
   .calendar-day {
     position: relative;
-
-    .active-day {
-      color: #444 !important;
-    }
 
     .time-line {
       position: absolute;
@@ -134,29 +193,6 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
     padding: 0 !important;
     border-right: 1px solid #eee;
 
-    .day-header, .time-header {
-
-      height: 50px;
-      padding: 5px;
-      border-bottom: 1px solid #eee;
-      color: #aaa;
-
-      .week {
-        margin-top: 12px;
-        text-align: center;
-      }
-
-      .number {
-        margin: 2px;
-        font-size: 24px !important;
-      }
-
-      .name {
-        margin: 2px;
-        font-size: 14px !important;
-      }
-    }
-
     .row {
       padding: 0px;
       position: relative;
@@ -164,18 +200,16 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 
     .event-hours {
       position: absolute;
-      top: 50px;
       left: 0;
       width: 100%;
 
         .event-hour {
-          border-bottom: 1px solid #f8f8f8;
+          border-bottom: 1px solid #f7f7f7;
         }
     }
 
     .add-button {
       position: absolute;
-      top: 50px;
       left: 0;
       width: 100%;
       opacity: 0.98;
@@ -203,6 +237,7 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
       border-right: none !important;
       line-height: 12px;
       overflow: hidden;
+      cursor: pointer;
     }
 
     .time {
@@ -240,6 +275,10 @@ input[type=search], input[type=text], input[type=password], input[type=datetime]
 
 md-input-container:not(.md-input-has-value) input:not(:focus), md-input-container:not(.md-input-has-value) input:not(:focus)::-webkit-datetime-edit-ampm-field, md-input-container:not(.md-input-has-value) input:not(:focus)::-webkit-datetime-edit-day-field, md-input-container:not(.md-input-has-value) input:not(:focus)::-webkit-datetime-edit-hour-field, md-input-container:not(.md-input-has-value) input:not(:focus)::-webkit-datetime-edit-millisecond-field, md-input-container:not(.md-input-has-value) input:not(:focus)::-webkit-datetime-edit-minute-field, md-input-container:not(.md-input-has-value) input:not(:focus)::-webkit-datetime-edit-month-field, md-input-container:not(.md-input-has-value) input:not(:focus)::-webkit-datetime-edit-second-field, md-input-container:not(.md-input-has-value) input:not(:focus)::-webkit-datetime-edit-text, md-input-container:not(.md-input-has-value) input:not(:focus)::-webkit-datetime-edit-week-field, md-input-container:not(.md-input-has-value) input:not(:focus)::-webkit-datetime-edit-year-field {
   border-bottom-color: rgba(0,0,0,0.12)
+}
+
+input[type=search], input[type=text], input[type=password], input[type=datetime], input[type=datetime-local], input[type=date], input[type=month], input[type=time], input[type=week], input[type=number], input[type=email], input[type=url], input[type=tel], input[type=color], textarea {
+  height: 30px !important;
 }
 
 // Angular Material input fixes END
@@ -320,3 +359,12 @@ md-select span.faded, md-option span.faded {
 }
 
 // Validation messages look END
+
+// Angular google maps specific START
+
+.angular-google-map-container {
+  width: 800px !important;
+  height: 600px !important;
+}
+
+// Angular google maps specific END

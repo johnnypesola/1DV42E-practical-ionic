@@ -18,6 +18,8 @@ const BookingSystem = angular
     'BookingSystem.resourcesServices',
     'BookingSystem.locationBooking',
     'BookingSystem.locationBookingServices',
+    'BookingSystem.locations',
+    'BookingSystem.locationsServices',
     'BookingSystem.calendarDayDirective',
     'BookingSystem.customers',
     'BookingSystem.customersServices',
@@ -31,6 +33,11 @@ const BookingSystem = angular
     'BookingSystem.ngMinMaxDirectives',
     'BookingSystem.filters',
     'BookingSystem.bookingServices',
+    'BookingSystem.resourceBooking',
+    'BookingSystem.resourceBookingServices',
+    'BookingSystem.calendarDaysHeaderDirective',
+    'BookingSystem.mealBookingServices',
+    'BookingSystem.mealBooking',
     'ngMaterial',
     'ngResource',
     'ngMessages'
@@ -58,7 +65,7 @@ BookingSystem.run( ['$ionicPlatform', ( $ionicPlatform ) => {
 
 // Constants
 BookingSystem.constant( 'API_URL', 'http://bokning.vvfors.se/api/' );
-// BookingSystem.constant( 'API_URL', 'http://localhost:6796/api/' );
+//BookingSystem.constant( 'API_URL', 'http://localhost:6796/api/' );
 BookingSystem.constant( 'API_IMG_PATH_URL', 'http://bokning.vvfors.se/' );
 BookingSystem.constant( 'UPLOAD_IMG_MAX_WIDTH', '400' );
 BookingSystem.constant( 'UPLOAD_IMG_MAX_HEIGHT', '400' );
@@ -90,6 +97,84 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', '$mdDateLocalePro
     }
   })
 
+  // Meal Bookings
+
+    .state( 'app.meal-booking-view', {
+      url: '/meal-booking-view',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/meal-booking/meal-booking-view.html',
+          controller: 'MealBookingViewCtrl'
+        }
+      }
+    })
+
+    .state( 'app.meal-booking-details', {
+      url: '/meal-booking-details',
+      params: {
+        id: null
+      },
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/meal-booking/meal-booking-details.html',
+          controller: 'MealBookingDetailsCtrl'
+        }
+      }
+    })
+
+    .state( 'app.meal-booking-create', {
+      url: '/meal-booking-create',
+      params: {
+        date: null,
+        locationId: null
+      },
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/meal-booking/meal-booking-create.html',
+          controller: 'MealBookingCreateCtrl'
+        }
+      }
+    })
+
+  // Resource Bookings
+
+    .state( 'app.resource-booking-view', {
+      url: '/resource-booking-view',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/resource-booking/resource-booking-view.html',
+          controller: 'ResourceBookingViewCtrl'
+        }
+      }
+    })
+
+    .state( 'app.resource-booking-details', {
+      url: '/resource-booking-details',
+      params: {
+        id: null
+      },
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/resource-booking/resource-booking-details.html',
+          controller: 'ResourceBookingDetailsCtrl'
+        }
+      }
+    })
+
+    .state( 'app.resource-booking-create', {
+      url: '/resource-booking-create',
+      params: {
+        date: null,
+        locationId: null
+      },
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/resource-booking/resource-booking-create.html',
+          controller: 'ResourceBookingCreateCtrl'
+        }
+      }
+    })
+
   // Location Bookings
 
     .state( 'app.location-booking-view', {
@@ -98,6 +183,19 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', '$mdDateLocalePro
         'menuContent': {
           templateUrl: 'templates/location-booking/location-booking-view.html',
           controller: 'LocationBookingViewCtrl'
+        }
+      }
+    })
+
+    .state( 'app.location-booking-details', {
+      url: '/location-booking-details',
+      params: {
+        id: null
+      },
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/location-booking/location-booking-details.html',
+          controller: 'LocationBookingDetailsCtrl'
         }
       }
     })
@@ -274,6 +372,37 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', '$mdDateLocalePro
         controller: 'BookingTypeCreateCtrl'
       }
     }
+  })
+
+  //Locations
+  .state( 'app.locations-list', {
+    url: '/locations-list',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/locations/locations-list.html',
+        controller: 'LocationsListCtrl'
+      }
+    }
+  })
+
+  .state( 'app.location-details', {
+    url: '/location-details/:locationId',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/locations/location-details.html',
+        controller: 'LocationDetailsCtrl'
+      }
+    }
+  })
+
+  .state( 'app.location-create', {
+    url: '/location-create',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/locations/location-create.html',
+        controller: 'LocationCreateCtrl'
+      }
+    }
   });
 
   // if none of the above states are matched, use this as the fallback
@@ -284,7 +413,7 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', '$mdDateLocalePro
 // Locatization configuration for Angular Material ( Swedish localization. )
 BookingSystem.config( ['$mdDateLocaleProvider', ( $mdDateLocaleProvider ) => {
 
-  $mdDateLocaleProvider.months = ['januari', 'februari', 'mars', 'april', 'maj', 'juni', 'juli', 'augusti', 'september', 'oktober', 'november', 'december'];
+  $mdDateLocaleProvider.months = ['Januari', 'Februari', 'Mars', 'April', 'Maj', 'Juni', 'Juli', 'Augusti', 'September', 'Oktober', 'November', 'December'];
   $mdDateLocaleProvider.shortMonths = ['jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'];
   $mdDateLocaleProvider.days = ['söndag', 'måndag', 'tisdag', 'onsdag', 'torsdag', 'fredag', 'lördag'];
   $mdDateLocaleProvider.shortDays = ['Sö', 'Må', 'Ti', 'On', 'To', 'Fr', 'Lö'];

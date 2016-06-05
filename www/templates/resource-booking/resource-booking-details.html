@@ -1,0 +1,237 @@
+<ion-view view-title="Resursbokning">
+    <ion-nav-buttons side="secondary">
+        <button
+                class="button"
+                ng-click="abortEditMode()"
+                ng-show="true"
+        >
+            editMode: {{isEditMode}}
+        </button>
+    </ion-nav-buttons>
+    <ion-content padding="true">
+
+        <div class="row">
+
+            <form name="resourceBookingForm" class="col">
+
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="resourceBookingForm.CustomerId.$error">
+                        <div ng-message="required">Var god ange kund</div>
+                    </div>
+
+                    <md-input-container class="md-block" flex-gt-sm>
+
+                        <label>Kund</label>
+                        <md-select
+                                name="CustomerId"
+                                ng-model="resourceBooking.CustomerId"
+                                ng-required="true"
+                                ng-disabled="!isEditMode"
+                        >
+                            <md-option ng-repeat="customer in customers" value="{{customer.CustomerId}}">
+                                {{customer.Name}}
+                            </md-option>
+                        </md-select>
+
+                    </md-input-container>
+
+                </div>
+
+                Starttidpunkt
+
+                <div class="row rel-l-20 pos-relative">
+
+                    <div class="validation-messages" ng-messages="resourceBookingForm.bookingStartDate.$error">
+                        <div ng-message="valid">Ange ett giltigt startdatum</div>
+                        <div ng-message="required">Ett startdatum måste anges</div>
+                    </div>
+
+                    <div class="col">
+                        <md-datepicker
+                                name="bookingStartDate"
+                                ng-change="checkEndDate()"
+                                ng-model="$parent.bookingStartDate"
+                                ng-required="true"
+                                ng-disabled="!isEditMode"
+                        ></md-datepicker>
+                    </div>
+
+                    <md-input-container class="col">
+                        <label>Timme</label>
+                        <md-select
+                                ng-model="$parent.bookingStartHour"
+                                ng-change="checkEndDate()"
+                                ng-disabled="!isEditMode"
+                        >
+                            <md-option ng-repeat="hour in selectHours" value="{{hour}}">
+                                {{hour | zpad:2}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+
+                    <md-input-container class="col">
+                        <label>Minut</label>
+                        <md-select
+                                ng-model="$parent.bookingStartMinute"
+                                ng-change="checkEndDate()"
+                                ng-disabled="!isEditMode"
+                        >
+                            <md-option ng-repeat="minute in selectMinutes" value="{{minute}}">
+                                {{minute | zpad:2}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+
+                Sluttidpunkt
+
+                <div class="row rel-l-20 pos-relative">
+
+                    <div class="validation-messages" ng-messages="resourceBookingForm.bookingEndDate.$error">
+                        <div ng-message="valid">Ange ett giltigt slutdatum</div>
+                        <div ng-message="required">Ett slutdatum måste anges</div>
+                        <div ng-message="mindate">Slutdatumet kan inte vara före startdatumet</div>
+                    </div>
+
+                    <div class="col">
+                        <md-datepicker
+                                name="bookingEndDate"
+                                ng-change="checkEndDate()"
+                                ng-model="$parent.bookingEndDate"
+                                ng-required="true"
+                                md-min-date="bookingStartDate"
+                                ng-disabled="!isEditMode"
+                        ></md-datepicker>
+                    </div>
+
+                    <md-input-container class="col">
+                        <label>Timme</label>
+                        <md-select
+                                ng-model="$parent.bookingEndHour"
+                                ng-change="checkEndDate()"
+                                ng-disabled="!isEditMode"
+                        >
+                            <md-option ng-repeat="hour in selectHours" value="{{hour}}">
+                                {{hour | zpad:2}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+
+                    <md-input-container class="col">
+                        <label>Minut</label>
+                        <md-select
+                                ng-model="$parent.bookingEndMinute"
+                                ng-change="checkEndDate()"
+                                ng-disabled="!isEditMode"
+                        >
+                            <md-option
+                                    ng-repeat="minute in selectMinutes" value="{{minute}}"
+                            >
+                                {{minute | zpad:2}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+
+                </div>
+
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="resourceBookingForm.ResourceId.$error">
+                        <div ng-message="required">Var god ange resurs</div>
+                    </div>
+
+                    <md-input-container class="md-block" flex-gt-sm>
+
+                        <label>Resurs</label>
+                        <md-select
+                                name="ResourceId"
+                                ng-model="resourceBooking.ResourceId"
+                                ng-required="true"
+                                ng-disabled="!isEditMode"
+                                ng-change="setSelectedResourceFromId( resourceBooking.ResourceId )"
+                        >
+                            <md-option ng-repeat="resource in resources" value="{{resource.ResourceId}}">
+                                {{resource.Name}} <span class="faded">({{resource.Count}} lediga)</span>
+                            </md-option>
+                        </md-select>
+
+                    </md-input-container>
+
+                </div>
+
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="resourceBookingForm.ResourceCount.$error">
+                        <div ng-message="required">Var god ange antal resurser</div>
+                        <div ng-message="pattern">Endast nummer tillåtna</div>
+                        <div ng-message="max">Får vara max {{selectedResource.Count}}</div>
+                        <div ng-message="min">Måste vara minst 1</div>
+                    </div>
+
+                    <md-input-container class="md-block" flex-gt-xs>
+
+                        <label>Antal resurser</label>
+                        <input
+                                type="number"
+                                name="ResourceCount"
+                                ng-model="resourceBooking.ResourceCount"
+                                ng-required="true"
+                                ng-pattern="/^[0-9]*$/"
+                                ng-max="selectedResource.Count"
+                                min="1"
+                                ng-disabled="!isEditMode"
+                        >
+                    </md-input-container>
+                </div>
+
+                <div class="row">
+                    <md-checkbox
+                            ng-model="resourceBooking.Provisional"
+                            aria-label="Finished?"
+                            ng-disabled="!isEditMode">
+                        Preliminär bokning
+                    </md-checkbox>
+                </div>
+
+            </form>
+
+        </div>
+
+        <md-button
+                ng-show="isEditMode"
+                ng-click="abortEditMode()"
+                class="md-raised"
+        >
+            Avbryt
+        </md-button>
+
+        <md-button
+                ng-show="isEditMode"
+                class="md-raised md-primary"
+                ng-click="saveResourceBooking()"
+                ng-disabled="resourceBookingForm.$invalid"
+        >
+            Spara
+        </md-button>
+
+        <md-button
+                ng-show="isEditMode"
+                class="md-fab md-mini md-warn"
+                ng-click="modal.show()"
+        >
+            <span class="icon ion-trash-a md-medium-icon"></span>
+        </md-button>
+
+        <md-button
+                class="md-fab md-warn md-lower-right-button"
+                aria-label="Redigera"
+                ng-click="startEditMode()"
+                ng-show="!isEditMode"
+        >
+            <span class="icon ion-edit md-big-icon"></span>
+        </md-button>
+
+    </ion-content>
+
+</ion-view>
