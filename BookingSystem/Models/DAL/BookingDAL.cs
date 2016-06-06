@@ -63,7 +63,6 @@ namespace BookingSystem.Models
                             return new Booking
                             {
                                 BookingId = reader.GetSafeInt32(reader.GetOrdinal("BookingId")),
-                                Name = reader.GetSafeString(reader.GetOrdinal("Name")),
                                 BookingTypeId = reader.GetSafeInt16(reader.GetOrdinal("BookingTypeId")),
                                 CustomerId = reader.GetSafeInt32(reader.GetOrdinal("CustomerId")),
                                 Provisional = reader.GetBoolean(reader.GetOrdinal("Provisional")),
@@ -137,7 +136,6 @@ namespace BookingSystem.Models
                             bookingsReturnList.Add(new Booking
                             {
                                 BookingId = reader.GetSafeInt32(reader.GetOrdinal("BookingId")),
-                                Name = reader.GetSafeString(reader.GetOrdinal("Name")),
                                 CustomerId = reader.GetSafeInt32(reader.GetOrdinal("CustomerId")),
                                 CustomerName = reader.GetSafeString(reader.GetOrdinal("CustomerName")),
                                 Provisional = reader.GetBoolean(reader.GetOrdinal("Provisional")),
@@ -193,7 +191,6 @@ namespace BookingSystem.Models
                             bookingsReturnList.Add(new Booking
                             {
                                 BookingId = reader.GetSafeInt32(reader.GetOrdinal("BookingId")),
-                                Name = reader.GetSafeString(reader.GetOrdinal("Name")),
                                 CustomerId = reader.GetSafeInt32(reader.GetOrdinal("CustomerId")),
                                 CustomerName = reader.GetSafeString(reader.GetOrdinal("CustomerName")),
                                 Provisional = reader.GetBoolean(reader.GetOrdinal("Provisional")),
@@ -249,7 +246,6 @@ namespace BookingSystem.Models
                             bookingsReturnList.Add(new Booking
                             {
                                 BookingId = reader.GetSafeInt32(reader.GetOrdinal("BookingId")),
-                                Name = reader.GetSafeString(reader.GetOrdinal("Name")),
                                 CustomerId = reader.GetSafeInt32(reader.GetOrdinal("CustomerId")),
                                 CustomerName = reader.GetSafeString(reader.GetOrdinal("CustomerName")),
                                 Provisional = reader.GetBoolean(reader.GetOrdinal("Provisional")),
@@ -363,7 +359,6 @@ namespace BookingSystem.Models
                             bookingsReturnList.Add(new Booking
                             {
                                 BookingId = reader.GetSafeInt32(reader.GetOrdinal("BookingId")),
-                                Name = reader.GetSafeString(reader.GetOrdinal("Name")),
                                 CustomerId = reader.GetSafeInt32(reader.GetOrdinal("CustomerId")),
                                 CustomerName = reader.GetSafeString(reader.GetOrdinal("CustomerName")),
                                 Provisional = reader.GetBoolean(reader.GetOrdinal("Provisional")),
@@ -427,7 +422,6 @@ namespace BookingSystem.Models
                             bookingsReturnList.Add(new Booking
                             {                               
                                 BookingId = reader.GetSafeInt32(reader.GetOrdinal("BookingId")),
-                                Name = reader.GetSafeString(reader.GetOrdinal("Name")),
                                 BookingTypeId = reader.GetSafeInt16(reader.GetOrdinal("BookingTypeId")),
                                 CustomerId = reader.GetSafeInt32(reader.GetOrdinal("CustomerId")),
                                 Provisional = reader.GetBoolean(reader.GetOrdinal("Provisional")),
@@ -473,7 +467,6 @@ namespace BookingSystem.Models
                     cmd = this.Setup("appSchema.usp_BookingCreate", DALOptions.closedConnection);
 
                     // Add in parameters for Stored procedure
-                    cmd.Parameters.Add("@Name", SqlDbType.VarChar, 50).Value = booking.Name;
                     cmd.Parameters.Add("@BookingTypeId", SqlDbType.SmallInt).Value = booking.BookingTypeId;
                     cmd.Parameters.Add("@CustomerId", SqlDbType.Int).Value = booking.CustomerId;
                     cmd.Parameters.Add("@Provisional", SqlDbType.Bit).Value = booking.Provisional;
@@ -517,7 +510,6 @@ namespace BookingSystem.Models
 
                     // Add in parameters for Stored procedure
                     cmd.Parameters.Add("@BookingId", SqlDbType.Int).Value = booking.BookingId;
-                    cmd.Parameters.Add("@Name", SqlDbType.VarChar, 50).Value = booking.Name;
                     cmd.Parameters.Add("@BookingTypeId", SqlDbType.SmallInt).Value = booking.BookingTypeId;
                     cmd.Parameters.Add("@CustomerId", SqlDbType.Int).Value = booking.CustomerId;
                     cmd.Parameters.Add("@Provisional", SqlDbType.Bit).Value = booking.Provisional;

@@ -12,10 +12,6 @@ namespace BookingSystem.Models
         [Range(0, int.MaxValue, ErrorMessage = "BookingId is out of range.")]
         public int BookingId { get; set; }
 
-        [StringLength(50, ErrorMessage = "Name must not exceed 50 chars.")]
-        [RegularExpression(ValidationExtensions.TEXT_FIELD_REGEXP, ErrorMessage = "Name must be alphanumeric and may also contain the following chars: &_-.,@")]
-        public string Name { get; set; }
-
         [Required(ErrorMessage = "BookingTypeId is required.")]
         [Range(0, Int16.MaxValue, ErrorMessage = "BookingTypeId is out of range.")]
         public int? BookingTypeId { get; set; }
@@ -23,7 +19,6 @@ namespace BookingSystem.Models
         [Range(0, int.MaxValue, ErrorMessage = "CustomerId is out of range.")]
         public int? CustomerId { get; set; }
 
-        [Required(ErrorMessage = "Provisional is required.")]
         public bool Provisional { get; set; }
 
         [Required(ErrorMessage = "NumberOfPeople is required.")]
