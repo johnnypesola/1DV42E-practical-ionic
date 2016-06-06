@@ -50,7 +50,7 @@ angular.module( 'BookingSystem.resources',
   )
 
   //Edit controller
-  .controller( 'ResourceDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$ionicModal', '$state', 'Resource', 'ResourceImage', 'API_IMG_PATH_URL', ($rootScope, $scope, $stateParams, MODAL_ANIMATION, $ionicModal, $state, Resource, ResourceImage, API_IMG_PATH_URL ) => {
+  .controller( 'ResourceDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$ionicModal', '$state', 'Resource', 'ResourceImage', 'API_IMG_PATH_URL', '$mdToast', ($rootScope, $scope, $stateParams, MODAL_ANIMATION, $ionicModal, $state, Resource, ResourceImage, API_IMG_PATH_URL, $mdToast ) => {
     /* Init vars */
 
     const modalTemplateUrl = 'templates/modals/resources-delete.html';
@@ -86,10 +86,10 @@ angular.module( 'BookingSystem.resources',
 
     const saveSuccess = function() {
       // Display success message
-      $rootScope.FlashMessage = {
-        type: 'success',
-        message: 'Resursen "' + $scope.resource.Name + '" sparades med ett lyckat resultat'
-      };
+      $mdToast.show( $mdToast.simple()
+        .content( 'Resursen "' + $scope.resource.Name + '" sparades med ett lyckat resultat' )
+        .position( 'top right' )
+      );
 
       // Redirect
       history.back();
@@ -106,10 +106,10 @@ angular.module( 'BookingSystem.resources',
       // In case resource cannot be fetched, display an error to user.
       resource.$promise.catch( () => {
 
-        $rootScope.FlashMessage = {
-          type: 'error',
-          message: 'Resurs kunde inte hämtas, var god försök igen.'
-        };
+        $mdToast.show( $mdToast.simple()
+          .content( 'Resurs kunde inte hämtas, var god försök igen.' )
+          .position( 'top right' )
+        );
       });
 
       $scope.resource = resource;
@@ -176,10 +176,10 @@ angular.module( 'BookingSystem.resources',
               // Image upload failed
               .error( () => {
 
-                $rootScope.FlashMessage = {
-                  type: 'error',
-                  message: 'Resursen sparades, men det gick inte att ladda upp och spara den önskade bilden.'
-                };
+                $mdToast.show( $mdToast.simple()
+                  .content( 'Resursen sparades, men det gick inte att ladda upp och spara den önskade bilden.' )
+                  .position( 'top right' )
+                );
               });
           }
           else {
@@ -192,27 +192,27 @@ angular.module( 'BookingSystem.resources',
 
         // If there there was a foreign key reference
         if ( response.status === 409 ){
-          $rootScope.FlashMessage = {
-            type: 'error',
-            message: 'Det finns redan en resurs som heter "' + $scope.resource.Name +
-            '". Två resurser kan inte heta lika.'
-          };
+          $mdToast.show( $mdToast.simple()
+            .content( 'Det finns redan en resurs som heter "' + $scope.resource.Name +
+              '". Två resurser kan inte heta lika.' )
+            .position( 'top right' )
+          );
         }
 
         // If there was a problem with the in-data
         else if ( response.status === 400 || response.status === 500 ){
-          $rootScope.FlashMessage = {
-            type: 'error',
-            message: 'Ett oväntat fel uppstod när resursen skulle sparas'
-          };
+          $mdToast.show( $mdToast.simple()
+            .content( 'Ett oväntat fel uppstod när resursen skulle sparas' )
+            .position( 'top right' )
+          );
         }
 
         // If the entry was not found
         if ( response.status === 404 ) {
-          $rootScope.FlashMessage = {
-            type: 'error',
-            message: 'Resursen "' + $scope.resource.Name + '" existerar inte längre. Hann kanske någon radera den?'
-          };
+          $mdToast.show( $mdToast.simple()
+            .content( 'Resursen "' + $scope.resource.Name + '" existerar inte längre. Hann kanske någon radera den?' )
+            .position( 'top right' )
+          );
 
           history.back();
         }
@@ -231,10 +231,10 @@ angular.module( 'BookingSystem.resources',
         // If everything went ok
         .then( ( response ) => {
 
-          $rootScope.FlashMessage = {
-            type: 'success',
-            message: 'Resursen "' + $scope.resource.Name + '" raderades med ett lyckat resultat'
-          };
+          $mdToast.show( $mdToast.simple()
+            .content( 'Resursen "' + $scope.resource.Name + '" raderades med ett lyckat resultat' )
+            .position( 'top right' )
+          );
 
           history.back();
         })
@@ -247,27 +247,27 @@ angular.module( 'BookingSystem.resources',
             response.data.Message !== 'undefined' &&
             response.data.Message === 'Foreign key references exists'
           ){
-            $rootScope.FlashMessage = {
-              type: 'error',
-              message:    'Resursen kan inte raderas eftersom det finns' +
-              ' en lokalbokning eller en lokalresurs som refererar till resursen'
-            };
+            $mdToast.show( $mdToast.simple()
+              .content( 'Resursen kan inte raderas eftersom det finns' +
+                ' en lokalbokning eller en lokalresurs som refererar till resursen' )
+              .position( 'top right' )
+            );
           }
 
           // If there was a problem with the in-data
           else if ( response.status === 400 || response.status === 500 ){
-            $rootScope.FlashMessage = {
-              type: 'error',
-              message: 'Ett oväntat fel uppstod när resursen skulle tas bort'
-            };
+            $mdToast.show( $mdToast.simple()
+              .content( 'Ett oväntat fel uppstod när resursen skulle tas bort' )
+              .position( 'top right' )
+            );
           }
 
           // If the entry was not found
           if ( response.status === 404 ) {
-            $rootScope.FlashMessage = {
-              type: 'error',
-              message: 'Resursen "' + $scope.resource.Name + '" existerar inte längre. Hann kanske någon radera den?'
-            };
+            $mdToast.show( $mdToast.simple()
+              .content( 'Resursen "' + $scope.resource.Name + '" existerar inte längre. Hann kanske någon radera den?' )
+              .position( 'top right' )
+            );
           }
 
           history.back();
@@ -286,7 +286,7 @@ angular.module( 'BookingSystem.resources',
   )
 
   //Create controller
-  .controller( 'ResourceCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'Resource', ( $rootScope, $stateParams, $scope, $state, Resource ) => {
+  .controller( 'ResourceCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'Resource', '$mdToast', ( $rootScope, $stateParams, $scope, $state, Resource, $mdToast ) => {
 
     /* Init vars */
     $scope.resource = {};
@@ -316,10 +316,10 @@ angular.module( 'BookingSystem.resources',
         // If everything went ok
         .then( ( response ) => {
 
-          $rootScope.FlashMessage = {
-            type: 'success',
-            message: 'Resursen "' + $scope.resource.Name + '" skapades med ett lyckat resultat'
-          };
+          $mdToast.show( $mdToast.simple()
+            .content( 'Resursen "' + $scope.resource.Name + '" skapades med ett lyckat resultat' )
+            .position( 'top right' )
+          );
 
           history.back();
 
@@ -328,19 +328,19 @@ angular.module( 'BookingSystem.resources',
 
         // If there there was a foreign key reference
         if ( response.status === 409 ){
-          $rootScope.FlashMessage = {
-            type: 'error',
-            message: 'Det finns redan en resurs som heter "' + $scope.resource.Name +
-            '". Två resurser kan inte heta lika.'
-          };
+          $mdToast.show( $mdToast.simple()
+            .content( 'Det finns redan en resurs som heter "' + $scope.resource.Name +
+              '". Två resurser kan inte heta lika.' )
+            .position( 'top right' )
+          );
         }
 
         // If there was a problem with the in-data
         else {
-          $rootScope.FlashMessage = {
-            type: 'error',
-            message: 'Ett oväntat fel uppstod när resursen skulle sparas'
-          };
+          $mdToast.show( $mdToast.simple()
+            .content( 'Ett oväntat fel uppstod när resursen skulle sparas' )
+            .position( 'top right' )
+          );
         }
       });
     };
