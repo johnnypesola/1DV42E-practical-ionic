@@ -46,13 +46,13 @@ angular.module( 'BookingSystem.bookings',
   }]
   )
 
-  .controller( 'BookingDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', 'Booking', '$mdToast', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, Booking, $mdToast ) => {
+  .controller( 'BookingDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', 'Booking', 'API_IMG_PATH_URL', '$mdToast', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, Booking, API_IMG_PATH_URL, $mdToast ) => {
 
     /* Init vars */
-
     const modalTemplateUrl = 'templates/modals/booking-delete.html';
     $scope.editMode = false;
     $scope.bookingBackup = {};
+    $scope.API_IMG_PATH_URL = API_IMG_PATH_URL;
 
     /* Private methods START */
     const setupModal = function(){
@@ -70,23 +70,13 @@ angular.module( 'BookingSystem.bookings',
       $scope.$on( '$destroy', () => {
         $scope.modal.remove();
       });
-
-      // Execute action on hide modal
-      // $scope.$on( 'modal.hidden', () => {
-      // Execute action
-      // });
-
-      // Execute action on remove modal
-      // $scope.$on( 'modal.removed', () => {
-      // Execute action
-      // });
     };
 
     const getBooking = function () {
 
       const booking = Booking.get(
         {
-          bookingId: $stateParams.bookingId
+          bookingId: $stateParams.id
         }
       );
 
