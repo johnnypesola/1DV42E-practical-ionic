@@ -56,7 +56,7 @@ x      "CalculatedBookingPrice": 9.83,
 
         -->
 
-        <h2>{{booking.Name || "(Utan namn)" }}</h2>
+        <h2>{{booking.Name || "(Namnlös)" }}</h2>
 
         <div class="row padding">
 
@@ -90,32 +90,6 @@ x      "CalculatedBookingPrice": 9.83,
 
                 <div class="list card">
                     <div class="item item-divider">
-                        Summering
-                    </div>
-                    <div class="item item-icon-left">
-                        <i class="icon ion-ios-time-outline"></i>
-                        <span>Starttidpunkt:</span>
-                        <strong>{{ booking.StartTime | date:'yyyy-MM-dd \k\l\. HH:mm'}}</strong>
-                    </div>
-                    <div class="item item-icon-left ">
-                        <i class="icon ion-ios-time"></i>
-                        <span>Sluttidpunkt:</span>
-                        <strong>{{ booking.EndTime | date:'yyyy-MM-dd \k\l\. HH:mm'}}</strong>
-                    </div>
-                    <div class="item item-icon-left">
-                        <i class="icon ion-stats-bars"></i>
-                        <span>Antal bokningar:</span>
-                        <strong>{{ booking.LocationBookings.length + booking.ResourceBookings.length + booking.MealBookings.length | count }}</strong>
-                    </div>
-                    <div class="item item-icon-left">
-                        <i class="icon ion-ios-cart-outline"></i>
-                        <span>Uträknat bokningspris:</span>
-                        <strong>{{ booking.CalculatedBookingPrice | kr }}</strong>
-                    </div>
-                </div>
-
-                <div class="list card">
-                    <div class="item item-divider">
                         Lokalbokningar <span class="faded">{{ booking.LocationBookings.length | count }}</span>
                     </div>
 
@@ -124,8 +98,8 @@ x      "CalculatedBookingPrice": 9.83,
                         <img src="img/photo_missing.svg" ng-if="!locationBooking.LocationImageSrc">
                         <h2>{{ locationBooking.LocationName }}</h2>
                         <p>
-                            Start: <strong>{{ locationBooking.StartTime | date:'yyyy-MM-dd \k\l\. HH:mm'}}</strong><br>
-                            Slut: <strong>{{ locationBooking.EndTime | date:'yyyy-MM-dd \k\l\. HH:mm'}}</strong>
+                            Börjar: <strong>{{ locationBooking.StartTime | date:'yyyy-MM-dd \k\l\. HH:mm'}}</strong><br>
+                            Slutar: <strong>{{ locationBooking.EndTime | date:'yyyy-MM-dd \k\l\. HH:mm'}}</strong>
                         </p>
 
                     </a>
@@ -147,10 +121,6 @@ x      "CalculatedBookingPrice": 9.83,
                     <a class="item button icon-left ion-plus-circled button-clear button-positive">Ny resursbokning</a>
                 </div>
 
-
-
-
-
                 <div class="list card">
                     <div class="item item-divider">
                         Måltidsbokningar  <span class="faded">{{ booking.MealBookings.length | count }}</span>
@@ -164,6 +134,31 @@ x      "CalculatedBookingPrice": 9.83,
                     <a class="item button icon-left ion-plus-circled button-clear button-positive">Ny måltidsbokning</a>
                 </div>
 
+                <div class="list card">
+                    <div class="item item-divider">
+                        Summering
+                    </div>
+                    <div class="item item-icon-left">
+                        <i class="icon ion-ios-time-outline"></i>
+                        <span>Börjar:</span>
+                        <strong>{{ booking.StartTime | date:'yyyy-MM-dd \k\l\. HH:mm'}}</strong>
+                    </div>
+                    <div class="item item-icon-left ">
+                        <i class="icon ion-ios-time"></i>
+                        <span>Slutar:</span>
+                        <strong>{{ booking.EndTime | date:'yyyy-MM-dd \k\l\. HH:mm'}}</strong>
+                    </div>
+                    <div class="item item-icon-left">
+                        <i class="icon ion-stats-bars"></i>
+                        <span>Antal bokningar:</span>
+                        <strong>{{ booking.LocationBookings.length + booking.ResourceBookings.length + booking.MealBookings.length | count }}</strong>
+                    </div>
+                    <div class="item item-icon-left">
+                        <i class="icon ion-ios-cart-outline"></i>
+                        <span>Bokningspris:</span>
+                        <strong>{{ booking.CalculatedBookingPrice | kr }}</strong>
+                    </div>
+                </div>
 
             </form>
         </div>
