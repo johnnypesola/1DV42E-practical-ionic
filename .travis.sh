@@ -1,9 +1,14 @@
 #!/bin/sh
 
-# Only deploy when merged to master
- if [ "$TRAVIS_BRANCH" != "master" ]
+# Return success when branch is dev, without actually executing anything
+ if [ "$TRAVIS_BRANCH" = "dev" ]
  then
    exit 0
+
+# Only deploy when merged to master
+ elif [ "$TRAVIS_BRANCH" != "master" ]
+ then
+   exit 1
 
  elif [ "$TRAVIS_PULL_REQUEST" != "false" ]
  then
