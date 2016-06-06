@@ -46,13 +46,13 @@ angular.module( 'BookingSystem.bookings',
   }]
   )
 
-  .controller( 'BookingDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', 'Booking', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, Booking ) => {
+  .controller( 'BookingDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', 'Booking', 'API_IMG_PATH_URL', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, Booking, API_IMG_PATH_URL ) => {
 
     /* Init vars */
-
     const modalTemplateUrl = 'templates/modals/booking-delete.html';
     $scope.editMode = false;
     $scope.bookingBackup = {};
+    $scope.API_IMG_PATH_URL = API_IMG_PATH_URL;
 
     /* Private methods START */
     const setupModal = function(){
@@ -76,7 +76,7 @@ angular.module( 'BookingSystem.bookings',
 
       const booking = Booking.get(
         {
-          bookingId: $stateParams.bookingId
+          bookingId: $stateParams.id
         }
       );
 
