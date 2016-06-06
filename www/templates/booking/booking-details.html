@@ -92,6 +92,12 @@ x      "LocationBookings": [
                             <input ng-model="booking.NumberOfPeople" type="number" ng-disabled="!isEditMode">
                         </md-input-container>
 
+
+                        <md-input-container class="md-block">
+                            <label>Rabatt (procent)</label>
+                            <input ng-model="booking.Discount" type="number" ng-disabled="!isEditMode">
+                        </md-input-container>
+
                         <md-input-container class="md-block">
                             <label>Anteckningar</label>
                         <textarea
@@ -181,8 +187,6 @@ x      "LocationBookings": [
 
                 </div>
 
-
-
             </form>
         </div>
 
@@ -197,7 +201,7 @@ x      "LocationBookings": [
         <md-button
                 ng-show="isEditMode"
                 class="md-raised md-primary"
-                ng-click="saveFurnituring()"
+                ng-click="saveBooking()"
         >
             Spara
         </md-button>
@@ -210,15 +214,15 @@ x      "LocationBookings": [
             <span class="icon ion-trash-a md-medium-icon"></span>
         </md-button>
 
-        <md-button
-                class="md-fab md-warn md-lower-right-button"
-                aria-label="Redigera"
-                ng-click="startEditMode()"
-                ng-show="!isEditMode"
-        >
-            <span class="icon ion-edit md-big-icon"></span>
-        </md-button>
-
     </ion-content>
+
+    <md-button
+            class="md-fab md-warn md-lower-right-button"
+            aria-label="Redigera"
+            ng-click="startEditMode()"
+            ng-show="!isEditMode"
+            >
+        <span class="icon ion-edit md-big-icon"></span>
+    </md-button>
 
 </ion-view>

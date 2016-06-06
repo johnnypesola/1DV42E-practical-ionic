@@ -105,7 +105,7 @@ angular.module( 'BookingSystem.bookings',
       })
 
         .then( () => {
-
+          $scope.booking.Discount *= 100;
         });
 
       $scope.booking = booking;
@@ -117,14 +117,10 @@ angular.module( 'BookingSystem.bookings',
 
     $scope.updateCustomerImageSrc = function() {
 
-      console.log( 'updateCustomerImageSrc' );
-
       const currentCustomer = $scope.customers.find( ( customer ) => {
 
         return customer.CustomerId === Number( $scope.booking.CustomerId );
       });
-
-      console.log( currentCustomer );
 
       $scope.customerImageSrc = (
         currentCustomer.ImageSrc !== null && currentCustomer.ImageSrc.length > 1 ? API_IMG_PATH_URL + currentCustomer.ImageSrc : PHOTO_MISSING_SRC
@@ -149,7 +145,7 @@ angular.module( 'BookingSystem.bookings',
     $scope.abortEditMode = function() {
       const $scope = this;
 
-      $scope.isEditMode = false;
+      $scope.$parent.isEditMode = false;
       $scope.booking = $scope.bookingBackup;
     };
 
@@ -160,8 +156,12 @@ angular.module( 'BookingSystem.bookings',
       // Save booking
       Booking.save(
         {
-          BookingId: $stateParams.bookingId,
-          Name: $scope.booking.Name
+          BookingTypeId: 1, // TODO: Implement booking types
+          BookingId: $stateParams.id,
+          CustomerId: $scope.booking.CustomerId,
+          NumberOfPeople: $scope.booking.NumberOfPeople,
+          Notes: $scope.booking.Notes,
+          Discount: ( $scope.booking.Discount / 100 )
         }
       ).$promise
 
@@ -171,24 +171,15 @@ angular.module( 'BookingSystem.bookings',
           $scope.endEditMode();
 
           $mdToast.show( $mdToast.simple()
-            .content( 'Bokningstillfället "' + $scope.booking.Name + '" sparades med ett lyckat resultat' )
+            .content( 'Bokningstillfället sparades med ett lyckat resultat' )
             .position( 'top right' )
           );
 
           // Something went wrong
         }).catch( ( response ) => {
 
-          // If there there was a foreign key reference
-          if ( response.status === 409 ){
-            $mdToast.show( $mdToast.simple()
-              .content( 'Det finns redan ett bokningstillfälle som heter "' + $scope.booking.Name +
-                '". Två bokningstillfällen kan inte heta lika.' )
-              .position( 'top right' )
-            );
-          }
-
           // If there was a problem with the in-data
-          else if ( response.status === 400 || response.status === 500 ){
+          if ( response.status === 400 || response.status === 500 ){
             $mdToast.show( $mdToast.simple()
               .content( 'Ett oväntat fel uppstod när bokningstillfället skulle sparas' )
               .position( 'top right' )
@@ -198,7 +189,7 @@ angular.module( 'BookingSystem.bookings',
           // If the entry was not found
           if ( response.status === 404 ) {
             $mdToast.show( $mdToast.simple()
-              .content( 'Bokningstillfället "' + $scope.booking.Name + '" existerar inte längre. Hann kanske någon radera den?' )
+              .content( 'Bokningstillfället existerar inte längre. Hann kanske någon radera den?' )
               .position( 'top right' )
             );
 
