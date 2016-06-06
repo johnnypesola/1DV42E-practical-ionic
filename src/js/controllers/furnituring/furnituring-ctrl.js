@@ -7,7 +7,7 @@ angular.module( 'BookingSystem.furnituring',
     )
 
     // Controller
-    .controller( 'FurnituringListCtrl', [ '$rootScope', '$scope', '$state', 'Furnituring', ( $rootScope, $scope, $state, Furnituring ) => {
+    .controller( 'FurnituringListCtrl', [ '$rootScope', '$scope', '$state', 'Furnituring', '$mdToast', ( $rootScope, $scope, $state, Furnituring, $mdToast ) => {
 
       /* Init vars */
 
@@ -20,10 +20,10 @@ angular.module( 'BookingSystem.furnituring',
         // In case furnituring cannot be fetched, display an error to user.
         furniturings.$promise.catch( () => {
 
-          $rootScope.FlashMessage = {
-            type: 'error',
-            message: 'Möbleringar kunde inte hämtas, var god försök igen.'
-          };
+          $mdToast.show( $mdToast.simple()
+            .content( 'Möbleringar kunde inte hämtas, var god försök igen.' )
+            .position( 'top right' )
+          );
         });
 
         $scope.furniturings = furniturings;
@@ -46,7 +46,7 @@ angular.module( 'BookingSystem.furnituring',
     }]
     )
 
-    .controller( 'FurnituringDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', 'Furnituring', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, Furnituring ) => {
+    .controller( 'FurnituringDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', 'Furnituring', '$mdToast', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, Furnituring, $mdToast ) => {
 
       /* Init vars */
 
@@ -93,10 +93,10 @@ angular.module( 'BookingSystem.furnituring',
         // In case furnituring cannot be fetched, display an error to user.
         furnituring.$promise.catch( () => {
 
-          $rootScope.FlashMessage = {
-            type: 'error',
-            message: 'Möblering kunde inte hämtas, var god försök igen.'
-          };
+          $mdToast.show( $mdToast.simple()
+            .content( 'Möblering kunde inte hämtas, var god försök igen.' )
+            .position( 'top right' )
+          );
         });
 
         $scope.furnituring = furnituring;
@@ -145,37 +145,37 @@ angular.module( 'BookingSystem.furnituring',
 
             $scope.endEditMode();
 
-            $rootScope.FlashMessage = {
-              type: 'success',
-              message: 'Möbleringen "' + $scope.furnituring.Name + '" sparades med ett lyckat resultat'
-            };
+            $mdToast.show( $mdToast.simple()
+              .content( 'Möbleringen "' + $scope.furnituring.Name + '" sparades med ett lyckat resultat' )
+              .position( 'top right' )
+            );
 
             // Something went wrong
           }).catch( ( response ) => {
 
             // If there there was a foreign key reference
             if ( response.status === 409 ){
-              $rootScope.FlashMessage = {
-                type: 'error',
-                message: 'Det finns redan en möblering som heter "' + $scope.furnituring.Name +
-                '". Två möbleringar kan inte heta lika.'
-              };
+              $mdToast.show( $mdToast.simple()
+                .content( 'Det finns redan en möblering som heter "' + $scope.furnituring.Name +
+                  '". Två möbleringar kan inte heta lika.' )
+                .position( 'top right' )
+              );
             }
 
             // If there was a problem with the in-data
             else if ( response.status === 400 || response.status === 500 ){
-              $rootScope.FlashMessage = {
-                type: 'error',
-                message: 'Ett oväntat fel uppstod när möbleringen skulle sparas'
-              };
+              $mdToast.show( $mdToast.simple()
+                .content( 'Ett oväntat fel uppstod när möbleringen skulle sparas' )
+                .position( 'top right' )
+              );
             }
 
             // If the entry was not found
             if ( response.status === 404 ) {
-              $rootScope.FlashMessage = {
-                type: 'error',
-                message: 'Möbleringen "' + $scope.furnituring.Name + '" existerar inte längre. Hann kanske någon radera den?'
-              };
+              $mdToast.show( $mdToast.simple()
+                .content( 'Möbleringen "' + $scope.furnituring.Name + '" existerar inte längre. Hann kanske någon radera den?' )
+                .position( 'top right' )
+              );
 
               history.back();
             }
@@ -194,10 +194,10 @@ angular.module( 'BookingSystem.furnituring',
           // If everything went ok
           .then( ( response ) => {
 
-            $rootScope.FlashMessage = {
-              type: 'success',
-              message: 'Möbleringen "' + $scope.furnituring.Name + '" raderades med ett lyckat resultat'
-            };
+            $mdToast.show( $mdToast.simple()
+              .content( 'Möbleringen "' + $scope.furnituring.Name + '" raderades med ett lyckat resultat' )
+              .position( 'top right' )
+            );
 
             history.back();
           })
@@ -210,27 +210,27 @@ angular.module( 'BookingSystem.furnituring',
               response.data.Message !== 'undefined' &&
               response.data.Message === 'Foreign key references exists'
             ){
-              $rootScope.FlashMessage = {
-                type: 'error',
-                message:    'Möbleringen kan inte raderas eftersom det finns' +
-                ' en lokalbokning eller en lokalmöblering som refererar till möbleringen'
-              };
+              $mdToast.show( $mdToast.simple()
+                .content( 'Möbleringen kan inte raderas eftersom det finns' +
+                  ' en lokalbokning eller en lokalmöblering som refererar till möbleringen' )
+                .position( 'top right' )
+              );
             }
 
             // If there was a problem with the in-data
             else if ( response.status === 400 || response.status === 500 ){
-              $rootScope.FlashMessage = {
-                type: 'error',
-                message: 'Ett oväntat fel uppstod när möbleringen skulle tas bort'
-              };
+              $mdToast.show( $mdToast.simple()
+                .content( 'Ett oväntat fel uppstod när möbleringen skulle tas bort' )
+                .position( 'top right' )
+              );
             }
 
             // If the entry was not found
             if ( response.status === 404 ) {
-              $rootScope.FlashMessage = {
-                type: 'error',
-                message: 'Möbleringen "' + $scope.furnituring.Name + '" existerar inte längre. Hann kanske någon radera den?'
-              };
+              $mdToast.show( $mdToast.simple()
+                .content( 'Möbleringen "' + $scope.furnituring.Name + '" existerar inte längre. Hann kanske någon radera den?' )
+                .position( 'top right' )
+              );
             }
 
             history.back();
@@ -249,7 +249,7 @@ angular.module( 'BookingSystem.furnituring',
     }]
     )
 
-    .controller( 'FurnituringCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'Furnituring', ( $rootScope, $stateParams, $scope, $state, Furnituring ) => {
+    .controller( 'FurnituringCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'Furnituring', '$mdToast', ( $rootScope, $stateParams, $scope, $state, Furnituring, $mdToast ) => {
 
       /* Init vars */
       $scope.furnituring = {};
@@ -275,10 +275,10 @@ angular.module( 'BookingSystem.furnituring',
           // If everything went ok
           .then( ( response ) => {
 
-            $rootScope.FlashMessage = {
-              type: 'success',
-              message: 'Möbleringen "' + $scope.furnituring.Name + '" skapades med ett lyckat resultat'
-            };
+            $mdToast.show( $mdToast.simple()
+              .content( 'Möbleringen "' + $scope.furnituring.Name + '" skapades med ett lyckat resultat' )
+              .position( 'top right' )
+            );
 
             history.back();
 
@@ -287,19 +287,19 @@ angular.module( 'BookingSystem.furnituring',
 
             // If there there was a foreign key reference
             if ( response.status === 409 ){
-              $rootScope.FlashMessage = {
-                type: 'error',
-                message: 'Det finns redan en möblering som heter "' + $scope.furnituring.Name +
-                '". Två möbleringar kan inte heta lika.'
-              };
+              $mdToast.show( $mdToast.simple()
+                .content( 'Det finns redan en möblering som heter "' + $scope.furnituring.Name +
+                  '". Två möbleringar kan inte heta lika.' )
+                .position( 'top right' )
+              );
             }
 
             // If there was a problem with the in-data
             else {
-              $rootScope.FlashMessage = {
-                type: 'error',
-                message: 'Ett oväntat fel uppstod när möbleringen skulle sparas'
-              };
+              $mdToast.show( $mdToast.simple()
+                .content( 'Ett oväntat fel uppstod när möbleringen skulle sparas' )
+                .position( 'top right' )
+              );
             }
           });
       };
