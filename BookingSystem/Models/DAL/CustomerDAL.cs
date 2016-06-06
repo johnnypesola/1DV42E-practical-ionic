@@ -215,6 +215,7 @@ namespace BookingSystem.Models
                                 CustomerId = reader.GetSafeInt32(reader.GetOrdinal("CustomerId")),
                                 Name = reader.GetSafeString(reader.GetOrdinal("Name")),
                                 City = reader.GetSafeString(reader.GetOrdinal("City")),
+                                ImageSrc = reader.GetSafeString(reader.GetOrdinal("ImageSrc")),
                                 ParentCustomerId = reader.GetSafeInt32(reader.GetOrdinal("ParentCustomerId")),
                                 ParentCustomerName = reader.GetSafeString(reader.GetOrdinal("ParentCustomerName"))
                             });
