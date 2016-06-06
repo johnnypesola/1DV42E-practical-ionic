@@ -27,7 +27,6 @@ angular.module( 'BookingSystem.bookings',
       });
 
       $scope.bookings = bookings;
-
     };
 
     /* Private Methods END */
@@ -46,13 +45,14 @@ angular.module( 'BookingSystem.bookings',
   }]
   )
 
-  .controller( 'BookingDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', 'Booking', 'API_IMG_PATH_URL', '$mdToast', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, Booking, API_IMG_PATH_URL, $mdToast ) => {
+  .controller( 'BookingDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', 'Booking', 'API_IMG_PATH_URL', '$mdToast', 'Customer', 'PHOTO_MISSING_SRC', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, Booking, API_IMG_PATH_URL, $mdToast, Customer, PHOTO_MISSING_SRC ) => {
 
     /* Init vars */
     const modalTemplateUrl = 'templates/modals/booking-delete.html';
     $scope.editMode = false;
     $scope.bookingBackup = {};
     $scope.API_IMG_PATH_URL = API_IMG_PATH_URL;
+    $scope.customerImageSrc = PHOTO_MISSING_SRC;
 
     /* Private methods START */
     const setupModal = function(){
@@ -72,6 +72,21 @@ angular.module( 'BookingSystem.bookings',
       });
     };
 
+    const getCustomers = function(){
+
+      const customers = Customer.query();
+
+      customers.$promise.catch( () => {
+
+        $mdToast.show( $mdToast.simple()
+            .content( 'Kunder kunde inte hämtas, var god försök igen.' )
+            .position( 'top right' )
+        );
+      });
+
+      $scope.customers = customers;
+    };
+
     const getBooking = function () {
 
       const booking = Booking.get(
@@ -87,7 +102,11 @@ angular.module( 'BookingSystem.bookings',
           .content( 'Bokningstillfälle kunde inte hämtas, var god försök igen.' )
           .position( 'top right' )
         );
-      });
+      })
+
+        .then( () => {
+
+        });
 
       $scope.booking = booking;
     };
@@ -95,6 +114,22 @@ angular.module( 'BookingSystem.bookings',
     /* Private Methods END */
 
     /* Public Methods START */
+
+    $scope.updateCustomerImageSrc = function() {
+
+      console.log( 'updateCustomerImageSrc' );
+
+      const currentCustomer = $scope.customers.find( ( customer ) => {
+
+        return customer.CustomerId === Number( $scope.booking.CustomerId );
+      });
+
+      console.log( currentCustomer );
+
+      $scope.customerImageSrc = (
+        currentCustomer.ImageSrc !== null && currentCustomer.ImageSrc.length > 1 ? API_IMG_PATH_URL + currentCustomer.ImageSrc : PHOTO_MISSING_SRC
+      );
+    };
 
     $scope.startEditMode = function () {
       const $scope = this;
@@ -233,6 +268,7 @@ angular.module( 'BookingSystem.bookings',
 
     setupModal();
     getBooking();
+    getCustomers();
 
     /* Initialization END */
 
