@@ -9,7 +9,7 @@
 
         <div class="row padding">
 
-            <form name="userForm">
+            <form name="customerForm">
                 <div layout-gt-xs="row">
                     <img class="show-image" ng-src="{{API_IMG_PATH_URL + customer.ImageSrc}}" ng-show="customer.ImageSrc" ng-hide="isEditMode">
                     <div ng-if="isEditMode">
@@ -17,7 +17,12 @@
                         <image-uploader type="Customer" id="{{customer.CustomerId}}" image-src="customer.ImageSrc" base64-encoded-image="customer.ImageForUpload"></image-uploader>
                     </div>
                 </div>
-                <div layout-gt-xs="row">
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="customerForm.Name.$error">
+                      <div ng-message="required">Var god ange kund</div>
+                    </div>
+
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Namn</label>
                         <input ng-model="customer.Name" ng-disabled="!isEditMode">
