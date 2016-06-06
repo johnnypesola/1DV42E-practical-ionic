@@ -9,7 +9,7 @@ angular.module( 'BookingSystem.customers',
   )
 
   // List controller
-  .controller( 'CustomersListCtrl', [ '$rootScope', '$scope', '$state', 'Customer', ( $rootScope, $scope, $state, Customer ) => {
+  .controller( 'CustomersListCtrl', [ '$rootScope', '$scope', '$state', 'Customer', '$mdToast', ( $rootScope, $scope, $state, Customer, $mdToast ) => {
 
     /* Init vars */
 
@@ -22,10 +22,10 @@ angular.module( 'BookingSystem.customers',
       // In case customers cannot be fetched, display an error to user.
       customers.$promise.catch( () => {
 
-        $rootScope.FlashMessage = {
-          type: 'error',
-          message: 'Kunder kunde inte hämtas, var god försök igen.'
-        };
+        $mdToast.show( $mdToast.simple()
+          .content( 'Kunder kunde inte hämtas, var god försök igen.' )
+          .position( 'top right' )
+        );
       });
 
       $scope.customers = customers;
@@ -49,7 +49,7 @@ angular.module( 'BookingSystem.customers',
   )
 
   //Edit controller
-  .controller( 'CustomerDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$ionicModal', '$state', 'Customer', 'CustomerImage', 'API_IMG_PATH_URL', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $ionicModal, $state, Customer, CustomerImage, API_IMG_PATH_URL ) => {
+  .controller( 'CustomerDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$ionicModal', '$state', 'Customer', 'CustomerImage', 'API_IMG_PATH_URL', '$mdToast', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $ionicModal, $state, Customer, CustomerImage, API_IMG_PATH_URL, $mdToast ) => {
     /* Init vars */
 
     const modalTemplateUrl = 'templates/modals/customers-delete.html';
@@ -84,10 +84,10 @@ angular.module( 'BookingSystem.customers',
 
     const saveSuccess = function() {
       // Display success message
-      $rootScope.FlashMessage = {
-        type: 'success',
-        message: 'Kunden "' + $scope.customer.Name + '" sparades med ett lyckat resultat'
-      };
+      $mdToast.show( $mdToast.simple()
+        .content( 'Kunden "' + $scope.customer.Name + '" sparades med ett lyckat resultat' )
+        .position( 'top right' )
+      );
 
       // Redirect
       history.back();
@@ -104,10 +104,10 @@ angular.module( 'BookingSystem.customers',
       // In case customer cannot be fetched, display an error to user.
       customer.$promise.catch( () => {
 
-        $rootScope.FlashMessage = {
-          type: 'error',
-          message: 'Kunden kunde inte hämtas, var god försök igen.'
-        };
+        $mdToast.show( $mdToast.simple()
+          .content( 'Kunden kunde inte hämtas, var god försök igen.' )
+          .position( 'top right' )
+        );
       });
 
       $scope.customer = customer;
@@ -178,10 +178,10 @@ angular.module( 'BookingSystem.customers',
               // Image upload failed
               .error( () => {
 
-                $rootScope.FlashMessage = {
-                  type: 'error',
-                  message: 'Kunden sparades, men det gick inte att ladda upp och spara den önskade bilden.'
-                };
+                $mdToast.show( $mdToast.simple()
+                  .content( 'Kunden sparades, men det gick inte att ladda upp och spara den önskade bilden.' )
+                  .position( 'top right' )
+                );
               });
           }
           else {
@@ -194,27 +194,27 @@ angular.module( 'BookingSystem.customers',
 
         // If there there was a foreign key reference
           if ( response.status === 409 ){
-            $rootScope.FlashMessage = {
-              type: 'error',
-              message: 'Det finns redan en kund som heter "' + $scope.customer.Name +
-              '". Två kunder kan inte heta lika.'
-            };
+            $mdToast.show( $mdToast.simple()
+              .content( 'Det finns redan en kund som heter "' + $scope.customer.Name +
+                '". Två kunder kan inte heta lika.' )
+              .position( 'top right' )
+            );
           }
 
           // If there was a problem with the in-data
           else if ( response.status === 400 || response.status === 500 ){
-            $rootScope.FlashMessage = {
-              type: 'error',
-              message: 'Ett oväntat fel uppstod när kunden skulle sparas'
-            };
+            $mdToast.show( $mdToast.simple()
+              .content( 'Ett oväntat fel uppstod när kunden skulle sparas' )
+              .position( 'top right' )
+            );
           }
 
           // If the entry was not found
           if ( response.status === 404 ) {
-            $rootScope.FlashMessage = {
-              type: 'error',
-              message: 'Kunden "' + $scope.customer.Name + '" existerar inte längre. Hann kanske någon radera den?'
-            };
+            $mdToast.show( $mdToast.simple()
+              .content( 'Kunden "' + $scope.customer.Name + '" existerar inte längre. Hann kanske någon radera den?' )
+              .position( 'top right' )
+            );
 
             history.back();
           }
@@ -233,10 +233,10 @@ angular.module( 'BookingSystem.customers',
         // If everything went ok
         .then( ( response ) => {
 
-          $rootScope.FlashMessage = {
-            type: 'success',
-            message: 'Kunden "' + $scope.customer.Name + '" raderades med ett lyckat resultat'
-          };
+          $mdToast.show( $mdToast.simple()
+            .content( 'Kunden "' + $scope.customer.Name + '" raderades med ett lyckat resultat' )
+            .position( 'top right' )
+          );
 
           history.back();
         })
@@ -249,26 +249,30 @@ angular.module( 'BookingSystem.customers',
             response.data.Message !== 'undefined' &&
             response.data.Message === 'Foreign key references exists'
           ){
-            $rootScope.FlashMessage = {
-              type: 'error',
-              message:    'Kunden kan inte raderas eftersom det finns' +
-              ' en bokning som refererar till kunden'
-            };
+            $mdToast.show( $mdToast.simple()
+              .content( 'Kunden kan inte raderas eftersom det finns' +
+                ' en bokning som refererar till kunden' )
+              .position( 'top right' )
+            );
           }
 
           // If there was a problem with the in-data
           else if ( response.status === 400 || response.status === 500 ){
-            $rootScope.FlashMessage = {
-              type: 'error',
-              message: 'Ett oväntat fel uppstod när kunden skulle tas bort'
-            };
+            $mdToast.show( $mdToast.simple()
+              .content( 'Ett oväntat fel uppstod när kunden skulle tas bort' )
+              .position( 'top right' )
+            );
           }
 
           // If the entry was not found
           if ( response.status === 404 ) {
+            $mdToast.show( $mdToast.simple()
+              .content( 'Kunden "' + $scope.customer.Name + '" existerar inte längre. Hann kanske någon radera den?' )
+              .position( 'top right' )
+            );
             $rootScope.FlashMessage = {
               type: 'error',
-              message: 'Kunden "' + $scope.customer.Name + '" existerar inte längre. Hann kanske någon radera den?'
+              message: ''
             };
           }
 
@@ -288,7 +292,7 @@ angular.module( 'BookingSystem.customers',
   )
 
   //Create controller
-  .controller( 'CustomerCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'Customer', 'CustomerImage', ( $rootScope, $stateParams, $scope, $state, Customer, CustomerImage ) => {
+  .controller( 'CustomerCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'Customer', 'CustomerImage', '$mdToast', ( $rootScope, $stateParams, $scope, $state, Customer, CustomerImage, $mdToast ) => {
 
     /* Init vars */
     $scope.customer = {};
@@ -306,10 +310,10 @@ angular.module( 'BookingSystem.customers',
     const saveSuccess = () => {
 
       // Display success message
-      $rootScope.FlashMessage = {
-        type: 'success',
-        message: 'Kunden "' + $scope.customer.Name + '" sparades med ett lyckat resultat'
-      };
+      $mdToast.show( $mdToast.simple()
+        .content( 'Kunden "' + $scope.customer.Name + '" sparades med ett lyckat resultat' )
+        .position( 'top right' )
+      );
 
       // Redirect
       history.back();
@@ -356,10 +360,10 @@ angular.module( 'BookingSystem.customers',
               // Image upload failed
               .error( () => {
 
-                $rootScope.FlashMessage = {
-                  type: 'error',
-                  message: 'Kunden "' + $scope.customer.Name + '" skapades, men det gick inte att ladda upp och spara den önskade bilden.'
-                };
+                $mdToast.show( $mdToast.simple()
+                  .content( 'Kunden "' + $scope.customer.Name + '" skapades, men det gick inte att ladda upp och spara den önskade bilden.' )
+                  .position( 'top right' )
+                );
 
                 // Redirect
                 history.back();
@@ -374,19 +378,19 @@ angular.module( 'BookingSystem.customers',
 
           // If there there was a foreign key reference
           if ( response.status === 409 ){
-            $rootScope.FlashMessage = {
-              type: 'error',
-              message: 'Det finns redan en kund som heter "' + $scope.customer.Name +
-              '". Två kunder kan inte heta lika.'
-            };
+            $mdToast.show( $mdToast.simple()
+              .content( 'Det finns redan en kund som heter "' + $scope.customer.Name +
+                '". Två kunder kan inte heta lika.' )
+              .position( 'top right' )
+            );
           }
 
           // If there was a problem with the in-data
           else {
-            $rootScope.FlashMessage = {
-              type: 'error',
-              message: 'Ett oväntat fel uppstod när kunden skulle sparas'
-            };
+            $mdToast.show( $mdToast.simple()
+              .content( 'Ett oväntat fel uppstod när kunden skulle sparas' )
+              .position( 'top right' )
+            );
           }
         });
     };
