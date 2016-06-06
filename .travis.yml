@@ -6,7 +6,7 @@ node_js:
 before_install:
 - chmod +x ./.travis.sh
 
-after_success: "./.travis.sh"
+script: "./.travis.sh"
 
 branches:
   only:
