@@ -266,6 +266,7 @@ namespace BookingSystem.Models
                                 LocationBookingId = reader.GetSafeInt32(reader.GetOrdinal("LocationBookingId")),
                                 BookingId = reader.GetSafeInt32(reader.GetOrdinal("BookingId")),
                                 LocationId = reader.GetSafeInt32(reader.GetOrdinal("LocationId")),
+                                LocationImageSrc = reader.GetSafeString(reader.GetOrdinal("LocationImageSrc")),
                                 FurnituringId = reader.GetSafeInt16(reader.GetOrdinal("FurnituringId")),
                                 StartTime = reader.GetSafeDateTime(reader.GetOrdinal("StartTime")),
                                 EndTime = reader.GetSafeDateTime(reader.GetOrdinal("EndTime")),
