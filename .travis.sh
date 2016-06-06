@@ -3,11 +3,13 @@
 # Return success when branch is dev, without actually executing anything
  if [ "$TRAVIS_BRANCH" = "dev" ]
  then
+   echo "branch is dev"
    exit 0
 
 # Only deploy when merged to master
  elif [ "$TRAVIS_BRANCH" != "master" ]
  then
+    echo "branch is not master"
    exit 1
 
  elif [ "$TRAVIS_PULL_REQUEST" != "false" ]
