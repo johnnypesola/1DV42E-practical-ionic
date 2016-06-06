@@ -7,7 +7,7 @@ angular.module( 'BookingSystem.meals',
   )
 
   //Controller
-  .controller( 'MealsListCtrl', [ '$rootScope', '$scope', '$state', 'Meal', ( $rootScope, $scope, $state, Meal ) => {
+  .controller( 'MealsListCtrl', [ '$rootScope', '$scope', '$state', 'Meal', '$mdToast', ( $rootScope, $scope, $state, Meal, $mdToast ) => {
 
     /* Init vars */
 
@@ -20,10 +20,10 @@ angular.module( 'BookingSystem.meals',
       // In case meals cannot be fetched, display an error to user.
       meals.$promise.catch( () => {
 
-        $rootScope.FlashMessage = {
-          type: 'error',
-          message: 'Måltider kunde inte hämtas, var god försök igen.'
-        };
+        $mdToast.show( $mdToast.simple()
+          .content( 'Måltider kunde inte hämtas, var god försök igen.' )
+          .position( 'top right' )
+        );
       });
 
       $scope.meals = meals;
@@ -47,7 +47,7 @@ angular.module( 'BookingSystem.meals',
   )
 
   //Edit controller
-  .controller( 'MealDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$ionicModal', '$state', 'Meal', 'MealProperty','MealHasProperty', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $ionicModal, $state, Meal, MealProperty, MealHasProperty ) => {
+  .controller( 'MealDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$ionicModal', '$state', 'Meal', 'MealProperty','MealHasProperty', '$mdToast', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $ionicModal, $state, Meal, MealProperty, MealHasProperty, $mdToast ) => {
       /* Init vars */
 
     const modalTemplateUrl = 'templates/modals/meals-delete.html';
@@ -91,10 +91,10 @@ angular.module( 'BookingSystem.meals',
       })
       .catch( () => {
 
-        $rootScope.FlashMessage = {
-          type: 'error',
-          message: 'Måltid kunde inte hämtas, var god försök igen.'
-        };
+        $mdToast.show( $mdToast.simple()
+          .content( 'Måltid kunde inte hämtas, var god försök igen.' )
+          .position( 'top right' )
+        );
       });
 
       $scope.meal = meal;
@@ -190,17 +190,17 @@ angular.module( 'BookingSystem.meals',
 
           .then( () => {
 
-            $rootScope.FlashMessage = {
-              type: 'success',
-              message: 'Måltiden "' + $scope.meal.Name + '" sparades med ett lyckat resultat'
-            };
+            $mdToast.show( $mdToast.simple()
+              .content( 'Måltiden "' + $scope.meal.Name + '" sparades med ett lyckat resultat' )
+              .position( 'top right' )
+            );
 
           }).catch( () => {
 
-            $rootScope.FlashMessage = {
-              type: 'error',
-              message: 'Uppgifter om måltiden sparades, men kostinformationen kunde inte sparas. Var god försök igen.'
-            };
+            $mdToast.show( $mdToast.simple()
+              .content( 'Uppgifter om måltiden sparades, men kostinformationen kunde inte sparas. Var god försök igen.' )
+              .position( 'top right' )
+            );
           });
 
           // Something went wrong
@@ -208,27 +208,27 @@ angular.module( 'BookingSystem.meals',
 
           // If there there was a foreign key reference
           if ( response.status === 409 ){
-            $rootScope.FlashMessage = {
-              type: 'error',
-              message: 'Det finns redan en måltid som heter "' + $scope.meal.Name +
-              '". Två måltider kan inte heta lika.'
-            };
+            $mdToast.show( $mdToast.simple()
+              .content( 'Det finns redan en måltid som heter "' + $scope.meal.Name +
+                '". Två måltider kan inte heta lika.' )
+              .position( 'top right' )
+            );
           }
 
           // If there was a problem with the in-data
           else if ( response.status === 400 || response.status === 500 ){
-            $rootScope.FlashMessage = {
-              type: 'error',
-              message: 'Ett oväntat fel uppstod när måltiden skulle sparas'
-            };
+            $mdToast.show( $mdToast.simple()
+              .content( 'Ett oväntat fel uppstod när måltiden skulle sparas' )
+              .position( 'top right' )
+            );
           }
 
           // If the entry was not found
           if ( response.status === 404 ) {
-            $rootScope.FlashMessage = {
-              type: 'error',
-              message: 'Måltiden "' + $scope.meal.Name + '" existerar inte längre. Hann kanske någon radera den?'
-            };
+            $mdToast.show( $mdToast.simple()
+              .content( 'Måltiden "' + $scope.meal.Name + '" existerar inte längre. Hann kanske någon radera den?' )
+              .position( 'top right' )
+            );
 
             history.back();
           }
@@ -247,10 +247,10 @@ angular.module( 'BookingSystem.meals',
         // If everything went ok
         .then( ( response ) => {
 
-          $rootScope.FlashMessage = {
-            type: 'success',
-            message: 'Måltiden "' + $scope.meal.Name + '" raderades med ett lyckat resultat'
-          };
+          $mdToast.show( $mdToast.simple()
+            .content( 'Måltiden "' + $scope.meal.Name + '" raderades med ett lyckat resultat' )
+            .position( 'top right' )
+          );
 
           history.back();
         })
@@ -263,27 +263,27 @@ angular.module( 'BookingSystem.meals',
             response.data.Message !== 'undefined' &&
             response.data.Message === 'Foreign key references exists'
           ){
-            $rootScope.FlashMessage = {
-              type: 'error',
-              message:    'Måltiden kan inte raderas eftersom det finns' +
-              ' en lokalbokning eller en lokalmåltid som refererar till måltiden'
-            };
+            $mdToast.show( $mdToast.simple()
+              .content( 'Måltiden kan inte raderas eftersom det finns' +
+                ' en lokalbokning eller en lokalmåltid som refererar till måltiden' )
+              .position( 'top right' )
+            );
           }
 
           // If there was a problem with the in-data
           else if ( response.status === 400 || response.status === 500 ){
-            $rootScope.FlashMessage = {
-              type: 'error',
-              message: 'Ett oväntat fel uppstod när måltiden skulle tas bort'
-            };
+            $mdToast.show( $mdToast.simple()
+              .content( 'Ett oväntat fel uppstod när måltiden skulle tas bort' )
+              .position( 'top right' )
+            );
           }
 
           // If the entry was not found
           if ( response.status === 404 ) {
-            $rootScope.FlashMessage = {
-              type: 'error',
-              message: 'Måltiden "' + $scope.meal.Name + '" existerar inte längre. Hann kanske någon radera den?'
-            };
+            $mdToast.show( $mdToast.simple()
+              .content( 'Måltiden "' + $scope.meal.Name + '" existerar inte längre. Hann kanske någon radera den?' )
+              .position( 'top right' )
+            );
           }
 
           history.back();
@@ -303,7 +303,7 @@ angular.module( 'BookingSystem.meals',
   )
 
   //Create controller
-  .controller( 'MealCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'Meal', ( $rootScope, $stateParams, $scope, $state, Meal ) => {
+  .controller( 'MealCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'Meal', '$mdToast', ( $rootScope, $stateParams, $scope, $state, Meal, $mdToast ) => {
 
     /* Init vars */
     $scope.meal = {};
@@ -329,10 +329,10 @@ angular.module( 'BookingSystem.meals',
         // If everything went ok
         .then( ( response ) => {
 
-          $rootScope.FlashMessage = {
-            type: 'success',
-            message: 'Måltiden "' + $scope.meal.Name + '" skapades med ett lyckat resultat'
-          };
+          $mdToast.show( $mdToast.simple()
+            .content( 'Måltiden "' + $scope.meal.Name + '" skapades med ett lyckat resultat' )
+            .position( 'top right' )
+          );
 
           history.back();
 
@@ -341,19 +341,19 @@ angular.module( 'BookingSystem.meals',
 
           // If there there was a foreign key reference
           if ( response.status === 409 ){
-            $rootScope.FlashMessage = {
-              type: 'error',
-              message: 'Det finns redan en måltid som heter "' + $scope.meal.Name +
-              '". Två måltider kan inte heta lika.'
-            };
+            $mdToast.show( $mdToast.simple()
+              .content( 'Det finns redan en måltid som heter "' + $scope.meal.Name +
+                '". Två måltider kan inte heta lika.' )
+              .position( 'top right' )
+            );
           }
 
           // If there was a problem with the in-data
           else {
-            $rootScope.FlashMessage = {
-              type: 'error',
-              message: 'Ett oväntat fel uppstod när måltiden skulle sparas'
-            };
+            $mdToast.show( $mdToast.simple()
+              .content( 'Ett oväntat fel uppstod när måltiden skulle sparas' )
+              .position( 'top right' )
+            );
           }
         });
     };

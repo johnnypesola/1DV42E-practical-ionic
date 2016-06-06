@@ -31,10 +31,10 @@
                     </md-input-container>
                 </div>
                 <div layout-gt-xs="row">
-                  <md-input-container class="md-block" flex-gt-xs>
-                    <label>Marginal före bokning</label>
-                    <input ng-model="resource.MinutesMarginBeforeBooking">
-                  </md-input-container>
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Marginal före bokning</label>
+                        <input ng-model="resource.MinutesMarginBeforeBooking" ng-disabled="!isEditMode">
+                    </md-input-container>
                 </div>
                 <div layout-gt-xs="row">
                     <md-input-container class="md-block" flex-gt-xs>
