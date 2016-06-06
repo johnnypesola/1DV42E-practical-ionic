@@ -30,7 +30,7 @@ x      "Notes": "",
 x      "CalculatedBookingPrice": 9.83,
       "StartTime": "2016-06-04T01:00:00",
       "EndTime": "2016-06-04T01:59:00",
-      "LocationBookings": [
+x      "LocationBookings": [
         {
           "LocationBookingId": 38,
           "BookingId": 86,
@@ -56,87 +56,58 @@ x      "CalculatedBookingPrice": 9.83,
 
         -->
 
-        <h2>{{booking.Name || "(Namnlös)" }}</h2>
-
         <div class="row padding">
 
             <form name="bookingForm" class="col">
-                <div layout-gt-xs="row">
-                    <md-input-container class="md-block" flex-gt-xs>
-                        <label>Namn på bokningstillfälle</label>
-                        <input ng-model="booking.Name" type="text" ng-disabled="!isEditMode">
-                    </md-input-container>
-                </div>
 
-                <div layout-gt-xs="row">
-                    <md-input-container class="md-block" flex-gt-xs>
-                        <label>Totalt antal personer</label>
-                        <input ng-model="booking.NumberOfPeople" type="number" ng-disabled="!isEditMode">
-                    </md-input-container>
-                </div>
+                <div class="pos-relative list card rel-t-20">
 
-                <div>
-                    <md-input-container class="md-block">
-                        <label>Anteckningar</label>
+                    <div class="validation-messages" ng-messages="bookingForm.CustomerId.$error">
+                        <div ng-message="required">Var god ange kund</div>
+                    </div>
+
+                    <div class="item item-avatar">
+
+                        <img class="top-35" src="{{ customerImageSrc }}">
+
+                        <md-input-container class="md-block">
+
+                            <label>Kund</label>
+                            <md-select
+                                name="CustomerId"
+                                ng-model="booking.CustomerId"
+                                ng-required="true"
+                                ng-disabled="!isEditMode"
+                                ng-change="updateCustomerImageSrc()"
+                            >
+                                <md-option ng-repeat="customer in customers" value="{{customer.CustomerId}}">
+                                    {{customer.Name}}
+                                </md-option>
+                            </md-select>
+
+                        </md-input-container>
+
+                        <md-input-container class="md-block">
+                            <label>Totalt antal personer</label>
+                            <input ng-model="booking.NumberOfPeople" type="number" ng-disabled="!isEditMode">
+                        </md-input-container>
+
+
+                        <md-input-container class="md-block">
+                            <label>Rabatt (procent)</label>
+                            <input ng-model="booking.Discount" type="number" ng-disabled="!isEditMode">
+                        </md-input-container>
+
+                        <md-input-container class="md-block">
+                            <label>Anteckningar</label>
                         <textarea
-                            ng-model="booking.Notes"
-                            md-maxlength="200"
-                            rows="5"
-                            md-select-on-focus
-                            ng-disabled="!isEditMode"
-                        ></textarea>
-                    </md-input-container>
-                </div>
-
-                <div class="list card">
-                    <div class="item item-divider">
-                        Lokalbokningar <span class="faded">{{ booking.LocationBookings.length | count }}</span>
-                    </div>
-
-                    <a class="item item-avatar" href="#" ng-repeat="locationBooking in booking.LocationBookings">
-                        <img ng-src="{{ API_IMG_PATH_URL + locationBooking.LocationImageSrc }}" ng-if="locationBooking.LocationImageSrc">
-                        <img src="img/photo_missing.svg" ng-if="!locationBooking.LocationImageSrc">
-                        <h2>{{ locationBooking.LocationName }}</h2>
-                        <p>
-                            Börjar: <strong>{{ locationBooking.StartTime | date:'yyyy-MM-dd \k\l\. HH:mm'}}</strong><br>
-                            Slutar: <strong>{{ locationBooking.EndTime | date:'yyyy-MM-dd \k\l\. HH:mm'}}</strong>
-                        </p>
-
-                    </a>
-
-                    <a class="item button icon-left ion-plus-circled button-clear button-positive">Ny lokalbokning</a>
-                </div>
-
-                <div class="list card">
-                    <div class="item item-divider">
-                        Resursbokningar <span class="faded">{{ booking.ResourceBookings.length | count }}</span>
-                    </div>
-
-                    <div
-                        class="item"
-                        ng-repeat="resourceBooking in booking.ResourceBookings"
-                    >
-                        {{ resourceBooking.ResourceName }}
-                    </div>
-                    <a class="item button icon-left ion-plus-circled button-clear button-positive">Ny resursbokning</a>
-                </div>
-
-                <div class="list card">
-                    <div class="item item-divider">
-                        Måltidsbokningar  <span class="faded">{{ booking.MealBookings.length | count }}</span>
-                    </div>
-                    <div
-                        class="item"
-                        ng-repeat="mealBooking in booking.MealBookings"
-                    >
-                        {{ mealBooking.MealName }}
-                    </div>
-                    <a class="item button icon-left ion-plus-circled button-clear button-positive">Ny måltidsbokning</a>
-                </div>
-
-                <div class="list card">
-                    <div class="item item-divider">
-                        Summering
+                                ng-model="booking.Notes"
+                                md-maxlength="200"
+                                rows="5"
+                                md-select-on-focus
+                                ng-disabled="!isEditMode"
+                                ></textarea>
+                        </md-input-container>
                     </div>
                     <div class="item item-icon-left">
                         <i class="icon ion-ios-time-outline"></i>
@@ -158,6 +129,62 @@ x      "CalculatedBookingPrice": 9.83,
                         <span>Bokningspris:</span>
                         <strong>{{ booking.CalculatedBookingPrice | kr }}</strong>
                     </div>
+
+                </div>
+
+                <div class="list card">
+                    <div class="item item-divider">
+                        Lokalbokningar <span class="faded">{{ booking.LocationBookings.length | count }}</span>
+                    </div>
+
+                    <a class="item item-avatar" href="#" ng-repeat="locationBooking in booking.LocationBookings">
+                        <img ng-src="{{ API_IMG_PATH_URL + locationBooking.LocationImageSrc }}" ng-if="locationBooking.LocationImageSrc">
+                        <img src="img/photo_missing.svg" ng-if="!locationBooking.LocationImageSrc">
+                        <h2>{{ locationBooking.LocationName }} <span class="faded">{{ locationBooking.NumberOfPeople }} personer</span></h2>
+                        <p>
+                            Börjar: <strong>{{ locationBooking.StartTime | date:'yyyy-MM-dd \k\l\. HH:mm'}}</strong><br>
+                            Slutar: <strong>{{ locationBooking.EndTime | date:'yyyy-MM-dd \k\l\. HH:mm'}}</strong>
+                        </p>
+                    </a>
+
+                    <a class="item button icon-left ion-plus-circled button-clear button-positive rel-r-20">Ny lokalbokning</a>
+                </div>
+
+                <div class="list card">
+                    <div class="item item-divider">
+                        Resursbokningar <span class="faded">{{ booking.ResourceBookings.length | count }}</span>
+                    </div>
+
+                    <a class="item item-avatar" href="#" ng-repeat="resourceBooking in booking.ResourceBookings">
+                        <img ng-src="{{ API_IMG_PATH_URL + resourceBooking.ResourceImageSrc }}" ng-if="resourceBooking.ResourceImageSrc">
+                        <img src="img/photo_missing.svg" ng-if="!resourceBooking.ResourceImageSrc">
+                        <h2>{{ resourceBooking.ResourceName }} <span class="faded">{{ resourceBooking.ResourceCount | count }}</span></h2>
+                        <p>
+                            Börjar: <strong>{{ resourceBooking.StartTime | date:'yyyy-MM-dd \k\l\. HH:mm'}}</strong><br>
+                            Slutar: <strong>{{ resourceBooking.EndTime | date:'yyyy-MM-dd \k\l\. HH:mm'}}</strong>
+                        </p>
+                    </a>
+
+                    <a class="item button icon-left ion-plus-circled button-clear button-positive rel-r-20">Ny resursbokning</a>
+                </div>
+
+                <div class="list card">
+                    <div class="item item-divider">
+                        Måltidsbokningar  <span class="faded">{{ booking.MealBookings.length | count }}</span>
+                    </div>
+
+                    <a class="item item-avatar" href="#" ng-repeat="mealBooking in booking.MealBookings">
+                        <img ng-src="{{ API_IMG_PATH_URL + mealBooking.MealImageSrc }}" ng-if="mealBooking.MealImageSrc">
+                        <img src="img/photo_missing.svg" ng-if="!mealBooking.MealImageSrc">
+                        <h2>{{ mealBooking.MealName }} <span class="faded">{{ mealBooking.MealCount | count }}</span></h2>
+                        <p>
+                            Börjar: <strong>{{ mealBooking.StartTime | date:'yyyy-MM-dd \k\l\. HH:mm'}}</strong><br>
+                            Slutar: <strong>{{ mealBooking.EndTime | date:'yyyy-MM-dd \k\l\. HH:mm'}}</strong>
+                        </p>
+                    </a>
+
+                    <a class="item button icon-left ion-plus-circled button-clear button-positive rel-r-20">Ny måltidsbokning</a>
+
                 </div>
 
             </form>
@@ -174,7 +201,7 @@ x      "CalculatedBookingPrice": 9.83,
         <md-button
                 ng-show="isEditMode"
                 class="md-raised md-primary"
-                ng-click="saveFurnituring()"
+                ng-click="saveBooking()"
         >
             Spara
         </md-button>
@@ -187,15 +214,15 @@ x      "CalculatedBookingPrice": 9.83,
             <span class="icon ion-trash-a md-medium-icon"></span>
         </md-button>
 
-        <md-button
-                class="md-fab md-warn md-lower-right-button"
-                aria-label="Redigera"
-                ng-click="startEditMode()"
-                ng-show="!isEditMode"
-        >
-            <span class="icon ion-edit md-big-icon"></span>
-        </md-button>
-
     </ion-content>
+
+    <md-button
+            class="md-fab md-warn md-lower-right-button"
+            aria-label="Redigera"
+            ng-click="startEditMode()"
+            ng-show="!isEditMode"
+            >
+        <span class="icon ion-edit md-big-icon"></span>
+    </md-button>
 
 </ion-view>

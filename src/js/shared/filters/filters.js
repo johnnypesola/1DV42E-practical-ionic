@@ -38,4 +38,11 @@ angular.module( 'BookingSystem.filters',
     return function( text ) {
       return text + ' st';
     };
-  });
+  })
+
+  .filter( 'percentage', ['$filter', ( $filter ) => {
+    return function ( input ) {
+      return $filter( 'number' )( input * 100, 0 ) + '%';
+    };
+  }]
+  );

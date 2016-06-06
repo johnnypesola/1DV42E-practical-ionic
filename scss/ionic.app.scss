@@ -6,8 +6,8 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 @import "www/lib/ionic/scss/ionic";
 
 // Make disabled input colors black instead of grey
-.md-input[disabled] {
-  color: #000 !important;
+.md-input[disabled], md-select.md-default-theme[disabled] .md-select-value, md-select[disabled] .md-select-value {
+  color: #777 !important;
 }
 
 // Usage of Roboto font
@@ -315,6 +315,21 @@ md-datepicker {
 .rel-l-20 {
   position: relative;
   left: -20px;
+}
+
+.rel-r-20 {
+  position: relative;
+  right: -20px;
+}
+
+.rel-t-20 {
+  position: relative;
+  top: -20px;
+}
+
+.top-35 {
+  position: absolute;
+  top: 35px !important;
 }
 
 // Custom relative position classes END
