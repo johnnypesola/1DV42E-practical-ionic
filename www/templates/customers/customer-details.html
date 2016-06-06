@@ -3,10 +3,6 @@
 
         <h1>{{customer.Name}}</h1>
 
-        <pre>
-            {{ customer.ImageSrc | json }}
-        </pre>
-
         <div class="row padding">
 
             <form name="customerForm">
@@ -20,12 +16,18 @@
                 <div layout-gt-xs="row" class="pos-relative">
 
                     <div class="validation-messages" ng-messages="customerForm.Name.$error">
-                      <div ng-message="required">Var god ange kund</div>
+                      <div ng-message="required">Var god ange namn</div>
                     </div>
 
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Namn</label>
-                        <input ng-model="customer.Name" ng-disabled="!isEditMode">
+                        <input
+                          name="Name"
+                          type="text"
+                          ng-model="customer.Name"
+                          ng-required="true"
+                          ng-disabled="!isEditMode"
+                        >
                     </md-input-container>
                 </div>
                 <div layout-gt-xs="row">
@@ -34,40 +36,88 @@
                         <input ng-model="customer.CustomerId" disabled>
                     </md-input-container>
                 </div>
-                <div layout-gt-xs="row">
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="customerForm.Address.$error">
+                      <div ng-message="required">Var god ange adress</div>
+                    </div>
+
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Adress</label>
-                        <input ng-model="customer.Address" ng-disabled="!isEditMode">
+                        <input
+                          name="Address"
+                          type="text"
+                          ng-model="customer.Address"
+                          ng-required="true"
+                          ng-disabled="!isEditMode"
+                        >
                     </md-input-container>
                 </div>
-                <div layout-gt-xs="row">
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="customerForm.PostNumber.$error">
+                      <div ng-message="required">Var god ange postnummer i följande format: 123 45</div>
+                    </div>
+
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Postnummer</label>
-                        <input ng-model="customer.PostNumber" ng-disabled="!isEditMode">
+                        <input
+                          name="PostNumber"
+                          type="text"
+                          ng-model="customer.PostNumber"
+                          ng-required="true"
+                          ng-disabled="!isEditMode"
+                        >
                     </md-input-container>
                 </div>
-                <div layout-gt-xs="row">
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="customerForm.City.$error">
+                      <div ng-message="required">Var god ange stad</div>
+                    </div>
+
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Stad</label>
-                        <input ng-model="customer.City" ng-disabled="!isEditMode">
+                        <input
+                          name="City"
+                          type="text"
+                          ng-model="customer.City"
+                          ng-required="true"
+                          ng-disabled="!isEditMode"
+                        >
                     </md-input-container>
                 </div>
                 <div layout-gt-xs="row">
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>E-postadress</label>
-                        <input ng-model="customer.EmailAddress" ng-disabled="!isEditMode">
+                        <input
+                          name="EmailAddress"
+                          type="email"
+                          ng-model="customer.EmailAddress"
+                          ng-disabled="!isEditMode"
+                        >
                     </md-input-container>
                 </div>
                 <div layout-gt-xs="row">
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Telefonnummer</label>
-                        <input ng-model="customer.PhoneNumber" ng-disabled="!isEditMode">
+                        <input
+                          name="PhoneNumber"
+                          type="text"
+                          ng-model="customer.PhoneNumber"
+                          ng-disabled="!isEditMode"
+                        >
                     </md-input-container>
                 </div>
                 <div layout-gt-xs="row">
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Mobilnummer</label>
-                        <input ng-model="customer.CellPhoneNumber" ng-disabled="!isEditMode">
+                        <input
+                          name="CellPhoneNumber"
+                          type="text"
+                          ng-model="customer.CellPhoneNumber"
+                          ng-disabled="!isEditMode"
+                        >
                     </md-input-container>
                 </div>
                 <div layout-gt-xs="row">
@@ -79,7 +129,12 @@
                 <div layout-gt-xs="row">
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Anteckningar</label>
-                        <input ng-model="customer.Notes" ng-disabled="!isEditMode">
+                        <input
+                          name="Notes"
+                          type="text"
+                          ng-model="customer.Notes"
+                          ng-disabled="!isEditMode"
+                        >
                     </md-input-container>
                 </div>
             </form>
