@@ -123,7 +123,7 @@ angular.module( 'BookingSystem.resourceBooking',
 
   /* Initialization START */
 
-  $scope.$on( '$ionicView.enter', ( event, data ) => {
+  $scope.$on( '$ionicView.beforeEnter', ( event, data ) => {
 
     setupWeekStartAndEndDates();
     getResourceBookings();
@@ -467,13 +467,15 @@ angular.module( 'BookingSystem.resourceBooking',
 }]
 )
 
-.controller( 'ResourceBookingCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'ResourceBooking', 'Resource', 'BookingHelper', 'Customer', '$q', '$mdToast', '$ionicHistory', ( $rootScope, $stateParams, $scope, $state, ResourceBooking, Resource, BookingHelper, Customer, $q, $mdToast, $ionicHistory ) => {
+.controller( 'ResourceBookingCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'ResourceBooking', 'Resource', 'BookingHelper', 'Customer', '$q', '$mdToast', '$ionicHistory', 'API_IMG_PATH_URL', 'PHOTO_MISSING_SRC', ( $rootScope, $stateParams, $scope, $state, ResourceBooking, Resource, BookingHelper, Customer, $q, $mdToast, $ionicHistory, API_IMG_PATH_URL, PHOTO_MISSING_SRC ) => {
 
   /* Init vars */
   $scope.resourceBooking = {
     Provisional: true,
     BookingTypeId: 1
   };
+  $scope.API_IMG_PATH_URL = API_IMG_PATH_URL;
+  $scope.customerImageSrc = PHOTO_MISSING_SRC;
 
   /* Private methods START */
 
@@ -569,6 +571,35 @@ angular.module( 'BookingSystem.resourceBooking',
     $scope.customers = customers;
   };
 
+  const updateCustomerImageSrc = function() {
+
+    $scope.customerImageSrc = (
+      $scope.customer.ImageSrc !== null && $scope.customer.ImageSrc.length > 1 ? API_IMG_PATH_URL + $scope.customer.ImageSrc : PHOTO_MISSING_SRC
+    );
+  };
+
+  const getCustomer = function(){
+
+    const customer = Customer.get(
+      {
+        customerId: $state.params.customerId
+      }
+    );
+
+    customer.$promise.catch( () => {
+
+      $mdToast.show( $mdToast.simple()
+        .content( 'Kund kunde inte hämtas, var god försök igen.' )
+        .position( 'top right' )
+      );
+    })
+    .then( () => {
+      updateCustomerImageSrc();
+    });
+
+    $scope.customer = customer;
+  };
+
   const addTimeToDate = function( dateObj, hour, minute ) {
 
     return moment( dateObj )
@@ -576,32 +607,43 @@ angular.module( 'BookingSystem.resourceBooking',
       .minute( minute );
   };
 
-  const createBookingContainer = function () {
+  const createBookingContainerIfNeeded = function () {
 
     // Create promise
     const deferred = $q.defer();
 
-    BookingHelper.createBookingContainer( $scope.resourceBooking )
+    // If there is already a booking container which is passed as state param.
+    if ( $state.params.bookingId !== null ) {
 
-      // If everything went ok
-      .then( ( createdBooking ) => {
+      $scope.resourceBooking.BookingId = $state.params.bookingId;
 
-        // Make created booking accessible from other metods
-        $scope.resourceBooking.BookingId = createdBooking.BookingId;
+      deferred.resolve();
 
-        // Resolve promise
-        deferred.resolve();
+      // There is no booking container, create one
+    } else {
 
-        // Something went wrong
-      }).catch( ( response ) => {
+      BookingHelper.createBookingContainer( $scope.resourceBooking )
 
-        $mdToast.show( $mdToast.simple()
-          .content( 'Ett oväntat fel uppstod när bokningstillfället skulle sparas' )
-          .position( 'top right' )
-        );
+        // If everything went ok
+        .then( ( createdBooking ) => {
 
-        deferred.reject();
-      });
+          // Make created booking accessible from other metods
+          $scope.resourceBooking.BookingId = createdBooking.BookingId;
+
+          // Resolve promise
+          deferred.resolve();
+
+          // Something went wrong
+        }).catch( ( response ) => {
+
+          $mdToast.show( $mdToast.simple()
+            .content( 'Ett oväntat fel uppstod när bokningstillfället skulle sparas' )
+            .position( 'top right' )
+          );
+
+          deferred.reject();
+        });
+    }
 
     // Return promise
     return deferred.promise;
@@ -640,7 +682,7 @@ angular.module( 'BookingSystem.resourceBooking',
     const deferred = $q.defer();
     const promise = deferred.promise;
 
-    createBookingContainer()
+    createBookingContainerIfNeeded()
       .then( () => {
 
         // Save resourceBooking
@@ -699,7 +741,13 @@ angular.module( 'BookingSystem.resourceBooking',
 
   initDate();
   getResources();
-  getCustomers();
+
+  if ( $state.params.customerId ){
+    getCustomer();
+  } else {
+    getCustomers();
+  }
+
   initTimeSelectData();
 
   /* Initialization END */

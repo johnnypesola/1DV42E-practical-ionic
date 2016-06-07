@@ -168,7 +168,8 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', '$mdDateLocalePro
       url: '/meal-booking-create',
       params: {
         date: null,
-        locationId: null
+        bookingId: null,
+        customerId: null
       },
       views: {
         'menuContent': {
@@ -207,7 +208,8 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', '$mdDateLocalePro
       url: '/resource-booking-create',
       params: {
         date: null,
-        locationId: null
+        bookingId: null,
+        customerId: null
       },
       views: {
         'menuContent': {
@@ -246,7 +248,8 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', '$mdDateLocalePro
       url: '/location-booking-create',
       params: {
         date: null,
-        bookingId: null
+        bookingId: null,
+        customerId: null
       },
       views: {
         'menuContent': {

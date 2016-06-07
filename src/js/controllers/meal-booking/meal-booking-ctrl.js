@@ -123,7 +123,7 @@ angular.module( 'BookingSystem.mealBooking',
 
     /* Initialization START */
 
-    $scope.$on( '$ionicView.enter', ( event, data ) => {
+    $scope.$on( '$ionicView.beforeEnter', ( event, data ) => {
 
       setupWeekStartAndEndDates();
       getMealBookings();
@@ -469,13 +469,15 @@ angular.module( 'BookingSystem.mealBooking',
   }]
   )
 
-  .controller( 'MealBookingCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'MealBooking', 'Meal', 'BookingHelper', 'Customer', '$q', '$mdToast', '$ionicHistory', 'Location', ( $rootScope, $stateParams, $scope, $state, MealBooking, Meal, BookingHelper, Customer, $q, $mdToast, $ionicHistory, Location ) => {
+  .controller( 'MealBookingCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'MealBooking', 'Meal', 'BookingHelper', 'Customer', '$q', '$mdToast', '$ionicHistory', 'Location', 'API_IMG_PATH_URL', 'PHOTO_MISSING_SRC', ( $rootScope, $stateParams, $scope, $state, MealBooking, Meal, BookingHelper, Customer, $q, $mdToast, $ionicHistory, Location, API_IMG_PATH_URL, PHOTO_MISSING_SRC ) => {
 
     /* Init vars */
     $scope.mealBooking = {
       Provisional: true,
       BookingTypeId: 1
     };
+    $scope.API_IMG_PATH_URL = API_IMG_PATH_URL;
+    $scope.customerImageSrc = PHOTO_MISSING_SRC;
 
     /* Private methods START */
 
@@ -589,6 +591,37 @@ angular.module( 'BookingSystem.mealBooking',
       return customers.$promise;
     };
 
+    const updateCustomerImageSrc = function() {
+
+      $scope.customerImageSrc = (
+        $scope.customer.ImageSrc !== null && $scope.customer.ImageSrc.length > 1 ? API_IMG_PATH_URL + $scope.customer.ImageSrc : PHOTO_MISSING_SRC
+      );
+    };
+
+    const getCustomer = function(){
+
+      const customer = Customer.get(
+        {
+          customerId: $state.params.customerId
+        }
+      );
+
+      customer.$promise.catch( () => {
+
+        $mdToast.show( $mdToast.simple()
+          .content( 'Kund kunde inte hämtas, var god försök igen.' )
+          .position( 'top right' )
+        );
+      })
+      .then( () => {
+        updateCustomerImageSrc();
+      });
+
+      $scope.customer = customer;
+
+      return customer.$promise;
+    };
+
     const addTimeToDate = function( dateObj, hour, minute ) {
 
       return moment( dateObj )
@@ -596,32 +629,43 @@ angular.module( 'BookingSystem.mealBooking',
         .minute( minute );
     };
 
-    const createBookingContainer = function () {
+    const createBookingContainerIfNeeded = function () {
 
       // Create promise
       const deferred = $q.defer();
 
-      BookingHelper.createBookingContainer( $scope.mealBooking )
+      // If there is already a booking container which is passed as state param.
+      if ( $state.params.bookingId !== null ) {
 
-      // If everything went ok
-      .then( ( createdBooking ) => {
+        $scope.mealBooking.BookingId = $state.params.bookingId;
 
-        // Make created booking accessible from other metods
-        $scope.mealBooking.BookingId = createdBooking.BookingId;
-
-        // Resolve promise
         deferred.resolve();
 
-        // Something went wrong
-      }).catch( ( response ) => {
+        // There is no booking container, create one
+      } else {
 
-        $mdToast.show( $mdToast.simple()
-          .content( 'Ett oväntat fel uppstod när bokningstillfället skulle sparas' )
-          .position( 'top right' )
-        );
+        BookingHelper.createBookingContainer( $scope.mealBooking )
 
-        deferred.reject();
-      });
+          // If everything went ok
+          .then( ( createdBooking ) => {
+
+            // Make created booking accessible from other metods
+            $scope.mealBooking.BookingId = createdBooking.BookingId;
+
+            // Resolve promise
+            deferred.resolve();
+
+            // Something went wrong
+          }).catch( ( response ) => {
+
+            $mdToast.show( $mdToast.simple()
+              .content( 'Ett oväntat fel uppstod när bokningstillfället skulle sparas' )
+              .position( 'top right' )
+            );
+
+            deferred.reject();
+          });
+      }
 
       // Return promise
       return deferred.promise;
@@ -660,7 +704,7 @@ angular.module( 'BookingSystem.mealBooking',
       const deferred = $q.defer();
       const promise = deferred.promise;
 
-      createBookingContainer()
+      createBookingContainerIfNeeded()
         .then( () => {
 
           // Save mealBooking
@@ -712,7 +756,8 @@ angular.module( 'BookingSystem.mealBooking',
     initDate();
     getMeals()
       .then( () => {
-        return getCustomers();
+
+        return ( $state.params.customerId ? getCustomer() : getCustomers() );
       })
       .then( () => {
         getLocations();
