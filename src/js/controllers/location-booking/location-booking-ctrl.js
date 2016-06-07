@@ -592,32 +592,43 @@ angular.module( 'BookingSystem.locationBooking',
         .minute( minute );
     };
 
-    const createBookingContainer = function () {
+    const createBookingContainerIfNeeded = function () {
 
       // Create promise
       const deferred = $q.defer();
 
-      BookingHelper.createBookingContainer( $scope.locationBooking )
+      // If there is already a booking container which is passed as state param.
+      if ( $state.params.bookingId !== null ) {
 
-      // If everything went ok
-      .then( ( createdBooking ) => {
+        $scope.locationBooking.BookingId = $state.params.bookingId;
 
-        // Make created booking accessible from other metods
-        $scope.locationBooking.BookingId = createdBooking.BookingId;
-
-        // Resolve promise
         deferred.resolve();
 
-        // Something went wrong
-      }).catch( ( response ) => {
+      // There is no booking container, create one
+      } else {
 
-        $mdToast.show( $mdToast.simple()
-          .content( 'Ett oväntat fel uppstod när bokningstillfället skulle sparas' )
-          .position( 'top right' )
-        );
+        BookingHelper.createBookingContainer( $scope.locationBooking )
 
-        deferred.reject();
-      });
+          // If everything went ok
+          .then( ( createdBooking ) => {
+
+            // Make created booking accessible from other metods
+            $scope.locationBooking.BookingId = createdBooking.BookingId;
+
+            // Resolve promise
+            deferred.resolve();
+
+            // Something went wrong
+          }).catch( ( response ) => {
+
+            $mdToast.show( $mdToast.simple()
+                .content( 'Ett oväntat fel uppstod när bokningstillfället skulle skapas' )
+                .position( 'top right' )
+            );
+
+            deferred.reject();
+          });
+      }
 
       // Return promise
       return deferred.promise;
@@ -680,7 +691,7 @@ angular.module( 'BookingSystem.locationBooking',
       const deferred = $q.defer();
       const promise = deferred.promise;
 
-      createBookingContainer()
+      createBookingContainerIfNeeded()
         .then( () => {
 
           // Set a furnituring if if there is a furnituring at all.
