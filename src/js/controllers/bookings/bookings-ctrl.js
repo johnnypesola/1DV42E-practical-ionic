@@ -45,7 +45,7 @@ angular.module( 'BookingSystem.bookings',
   }]
   )
 
-  .controller( 'BookingDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', 'Booking', 'API_IMG_PATH_URL', '$mdToast', 'Customer', 'PHOTO_MISSING_SRC', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, Booking, API_IMG_PATH_URL, $mdToast, Customer, PHOTO_MISSING_SRC ) => {
+  .controller( 'BookingDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', 'Booking', 'API_IMG_PATH_URL', '$mdToast', 'Customer', 'PHOTO_MISSING_SRC', '$ionicHistory', 'BOOKING_TYPES', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, Booking, API_IMG_PATH_URL, $mdToast, Customer, PHOTO_MISSING_SRC, $ionicHistory, BOOKING_TYPES ) => {
 
     /* Init vars */
     const modalTemplateUrl = 'templates/modals/booking-delete.html';
@@ -53,6 +53,7 @@ angular.module( 'BookingSystem.bookings',
     $scope.bookingBackup = {};
     $scope.API_IMG_PATH_URL = API_IMG_PATH_URL;
     $scope.customerImageSrc = PHOTO_MISSING_SRC;
+    $scope.bookingTypes = BOOKING_TYPES;
 
     /* Private methods START */
     const setupModal = function(){
@@ -175,6 +176,8 @@ angular.module( 'BookingSystem.bookings',
             .position( 'top right' )
           );
 
+          $ionicHistory.goBack();
+
           // Something went wrong
         }).catch( ( response ) => {
 
@@ -193,7 +196,7 @@ angular.module( 'BookingSystem.bookings',
               .position( 'top right' )
             );
 
-            history.back();
+            $ionicHistory.goBack();
           }
         });
     };
@@ -203,7 +206,7 @@ angular.module( 'BookingSystem.bookings',
       // Delete booking
       Booking.delete(
         {
-          bookingId: $stateParams.bookingId
+          bookingId: $stateParams.id
         }
       ).$promise
 
@@ -211,11 +214,11 @@ angular.module( 'BookingSystem.bookings',
         .then( ( response ) => {
 
           $mdToast.show( $mdToast.simple()
-            .content( 'Bokningstillfället "' + $scope.booking.Name + '" raderades med ett lyckat resultat' )
+            .content( 'Bokningstillfället raderades med ett lyckat resultat' )
             .position( 'top right' )
           );
 
-          history.back();
+          $ionicHistory.goBack();
         })
         // Something went wrong
         .catch( ( response ) => {
@@ -249,8 +252,16 @@ angular.module( 'BookingSystem.bookings',
             );
           }
 
-          history.back();
+          $ionicHistory.goBack();
         });
+    };
+
+    $scope.createBookingOfType = function( bookingTypeStr ) {
+
+      // Redirect to create view
+      $state.go( 'app.' + bookingTypeStr + '-create', {
+        bookingId: $stateParams.id
+      });
     };
 
     /* Public Methods END */

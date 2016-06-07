@@ -7,22 +7,35 @@ angular.module( 'BookingSystem.start',
   )
 
   // Controller
-  .controller( 'StartViewCtrl', [ '$rootScope', '$scope', '$state', 'Booking', 'LocationBooking', 'ResourceBooking', 'MealBooking', '$interval', 'DATA_SYNC_INTERVAL_TIME', '$ionicGesture', '$mdToast', 'DEFAULT_CALENDAR_ZOOM', '$stateParams', '$ionicHistory', ( $rootScope, $scope, $state, Booking, LocationBooking, ResourceBooking, MealBooking, $interval, DATA_SYNC_INTERVAL_TIME, $ionicGesture, $mdToast, DEFAULT_CALENDAR_ZOOM, $stateParams, $ionicHistory ) => {
+  .controller( 'StartViewCtrl', [ '$rootScope', '$scope', '$state', 'Booking', 'LocationBooking', 'ResourceBooking', 'MealBooking', '$interval', 'DATA_SYNC_INTERVAL_TIME', '$ionicGesture', '$mdToast', 'DEFAULT_CALENDAR_ZOOM', '$stateParams', '$ionicHistory', '$ionicModal', 'MODAL_ANIMATION', 'BOOKING_TYPES', ( $rootScope, $scope, $state, Booking, LocationBooking, ResourceBooking, MealBooking, $interval, DATA_SYNC_INTERVAL_TIME, $ionicGesture, $mdToast, DEFAULT_CALENDAR_ZOOM, $stateParams, $ionicHistory, $ionicModal, MODAL_ANIMATION, BOOKING_TYPES ) => {
 
     /* Init vars */
+    const modalTemplateUrl = 'templates/modals/booking-create-choose-type.html';
     const updateIntervalTime = DATA_SYNC_INTERVAL_TIME;
     let updateInterval = null, weekStartDate = null, weekEndDate = null;
     $scope.zoom = DEFAULT_CALENDAR_ZOOM;
     $scope.weekDate = moment();
-    $scope.bookingsType = $stateParams.bookingType;
-    $scope.bookingTypes = {
-      booking : 'booking',
-      location : 'location-booking',
-      resource : 'resource-booking',
-      meal : 'meal-booking'
-    };
+    $scope.bookingTypes = BOOKING_TYPES;
+    $scope.bookingsType = $scope.bookingTypes.booking; // $stateParams.bookingType;
 
     /* Private methods START */
+
+    const setupModal = function(){
+
+      $ionicModal.fromTemplateUrl( modalTemplateUrl, {
+        scope: $scope,
+        animation: MODAL_ANIMATION
+      })
+        .then( ( response ) => {
+
+          $scope.modal = response;
+        });
+
+      // Cleanup the modal when we're done with it!
+      $scope.$on( '$destroy', () => {
+        $scope.modal.remove();
+      });
+    };
 
     const setupWeekStartAndEndDates = function ( offset = 0 ) {
 
@@ -185,21 +198,28 @@ angular.module( 'BookingSystem.start',
 
     $scope.changeBookingTypeTo = function( bookingTypeStr ) {
 
-      $ionicHistory.nextViewOptions({
-        disableAnimate: true,
-        disableBack: true
-      });
+      // We are actually in parent scope at the moment. Therefore we need to broadcast.
+      $scope.$broadcast( 'changed-booking-type', { bookingType: bookingTypeStr });
 
-      $state.go( 'app.start', {
-        bookingType: bookingTypeStr
-      });
+    };
 
-//      $scope.bookingsType = bookingTypeStr;
+    $scope.createBookingOfType = function( bookingTypeStr ) {
+
+      // Redirect to edit view
+      $state.go( 'app.' + bookingTypeStr + '-create' );
+
+      $scope.modal.hide();
     };
 
     /* Public Methods END */
 
     /* Initialization START */
+
+    $scope.$on( 'changed-booking-type', ( event, args ) => {
+
+      $scope.bookingsType = args.bookingType;
+      getBookings();
+    });
 
     $scope.$on( '$ionicView.enter', ( event, data ) => {
 
@@ -207,6 +227,7 @@ angular.module( 'BookingSystem.start',
       getBookings();
       startUpdateInterval();
       setCalendarTitle();
+      setupModal();
     });
 
     $scope.$on( '$ionicView.loaded', ( event, data ) => {
