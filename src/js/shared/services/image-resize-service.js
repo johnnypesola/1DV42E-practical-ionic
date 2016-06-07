@@ -70,9 +70,22 @@ angular.module( 'BookingSystem.imageResizeServices',
       }
     };
 
+    const getScale = ( canvas ) => {
+
+      let scaleToReturn;
+
+      if ( canvas.width > canvas.height ) {
+        scaleToReturn = UPLOAD_IMG_MAX_WIDTH / canvas.width;
+      } else {
+        scaleToReturn = UPLOAD_IMG_MAX_HEIGHT / canvas.height;
+      }
+
+      return scaleToReturn;
+    };
+
     const scaleCanvasWithAlgorithm = ( canvas ) => {
       const scaledCanvas = document.createElement( 'canvas' );
-      const scale = UPLOAD_IMG_MAX_WIDTH / canvas.width;
+      const scale = getScale( canvas );
 
       scaledCanvas.width = canvas.width * scale;
       scaledCanvas.height = canvas.height * scale;
@@ -111,7 +124,7 @@ angular.module( 'BookingSystem.imageResizeServices',
             canvas = getHalfScaleCanvas( canvas );
           }
 
-          if ( canvas.width > UPLOAD_IMG_MAX_WIDTH ) {
+          if ( canvas.width > UPLOAD_IMG_MAX_WIDTH || canvas.height > UPLOAD_IMG_MAX_HEIGHT ) {
             canvas = scaleCanvasWithAlgorithm( canvas );
           }
 
