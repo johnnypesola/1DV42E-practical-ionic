@@ -141,7 +141,9 @@ x      "LocationBookings": [
                         </p>
                     </a>
 
-                    <a class="item button icon-left ion-plus-circled button-clear button-positive rel-r-20">Ny lokalbokning</a>
+                    <a class="item button icon-left ion-plus-circled button-clear button-positive rel-r-20"
+                       ng-click="createBookingOfType( bookingTypes.location )"
+                    >Ny lokalbokning</a>
                 </div>
 
                 <div class="list card">
@@ -160,7 +162,9 @@ x      "LocationBookings": [
                         </p>
                     </a>
 
-                    <a class="item button icon-left ion-plus-circled button-clear button-positive rel-r-20">Ny resursbokning</a>
+                    <a class="item button icon-left ion-plus-circled button-clear button-positive rel-r-20"
+                       ng-click="createBookingOfType( bookingTypes.resource )"
+                    >Ny resursbokning</a>
                 </div>
 
                 <div class="list card">
@@ -179,7 +183,9 @@ x      "LocationBookings": [
                         </p>
                     </a>
 
-                    <a class="item button icon-left ion-plus-circled button-clear button-positive rel-r-20">Ny måltidsbokning</a>
+                    <a class="item button icon-left ion-plus-circled button-clear button-positive rel-r-20"
+                       ng-click="createBookingOfType( bookingTypes.meal )"
+                    >Ny måltidsbokning</a>
 
                 </div>
 
