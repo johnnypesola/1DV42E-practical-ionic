@@ -11,51 +11,6 @@
 
     <ion-content padding="true">
 
-        <!--
-
-                    {
-      "BookingId": 86,
-x      "Name": "",
-      "BookingTypeId": 1,
-      "CustomerId": 100001,
-      "Provisional": true,
-x      "NumberOfPeople": 24,
-      "Discount": 0,
-x      "Notes": "",
-      "CreatedByUserId": null,
-      "ModifiedByUserId": null,
-      "ResponsibleUserId": null,
-      "CustomerName": "Blepp AB",
-      "BookingTypeName": "Ospecifierat",
-x      "CalculatedBookingPrice": 9.83,
-      "StartTime": "2016-06-04T01:00:00",
-      "EndTime": "2016-06-04T01:59:00",
-x      "LocationBookings": [
-        {
-          "LocationBookingId": 38,
-          "BookingId": 86,
-          "NumberOfPeople": 24,
-          "StartTime": "2016-06-04T01:00:00",
-          "EndTime": "2016-06-04T01:59:00",
-          "BookingName": null,
-          "Provisional": false,
-          "LocationId": 1,
-          "LocationName": "Nice place",
-          "LocationImageSrc": null,
-          "FurnituringId": 0,
-          "FurnituringName": "",
-          "MaxPeople": 5,
-          "MinutesMarginBeforeBooking": 0,
-          "MinutesMarginAfterBooking": 0,
-          "CalculatedBookingPrice": 9.83,
-          "CustomerId": 100001
-        }
-      ]
-    }
-
-
-        -->
-
         <div class="row padding">
 
             <form name="bookingForm" class="col">
@@ -87,16 +42,53 @@ x      "LocationBookings": [
 
                         </md-input-container>
 
-                        <md-input-container class="md-block">
-                            <label>Totalt antal personer</label>
-                            <input ng-model="booking.NumberOfPeople" type="number" ng-disabled="!isEditMode">
-                        </md-input-container>
+                        <div layout-gt-xs="row" class="pos-relative">
 
+                            <div class="validation-messages" ng-messages="bookingForm.NumberOfPeople.$error">
+                                <div ng-message="required">Var god ange antal personer</div>
+                                <div ng-message="pattern">Endast nummer tillåtna</div>
+                                <div ng-message="min">Måste vara minst 0</div>
+                            </div>
 
-                        <md-input-container class="md-block">
-                            <label>Rabatt (procent)</label>
-                            <input ng-model="booking.Discount" type="number" ng-disabled="!isEditMode">
-                        </md-input-container>
+                            <md-input-container class="md-block">
+                                <label>Totalt antal personer</label>
+                                <input
+                                        ng-model="booking.NumberOfPeople"
+                                        name="NumberOfPeople"
+                                        type="number"
+                                        ng-disabled="!isEditMode"
+                                        ng-required="true"
+                                        ng-pattern="/^[0-9]*$/"
+                                        min="0"
+                                >
+                            </md-input-container>
+
+                        </div>
+
+                        <div layout-gt-xs="row" class="pos-relative">
+
+                            <div class="validation-messages" ng-messages="bookingForm.Discount.$error">
+                                <div ng-message="required">Var god ange rabatt</div>
+                                <div ng-message="pattern">Endast nummer tillåtna</div>
+                                <div ng-message="min">Måste vara minst 0</div>
+                                <div ng-message="max">Får vara max 100</div>
+                            </div>
+
+                            <md-input-container class="md-block">
+                                <label>Rabatt (procent)</label>
+                                <input
+                                        ng-model="booking.Discount"
+                                        name="Discount"
+                                        type="number"
+                                        ng-required="true"
+                                        ng-pattern="/^[0-9]*$/"
+                                        ng-disabled="!isEditMode"
+                                        min="0"
+                                        max="100"
+                                        >
+                            </md-input-container>
+
+                        </div>
 
                         <md-input-container class="md-block">
                             <label>Anteckningar</label>
@@ -130,7 +122,10 @@ x      "LocationBookings": [
                         Lokalbokningar <span class="faded">{{ booking.LocationBookings.length | count }}</span>
                     </div>
 
-                    <a class="item item-avatar" href="#" ng-repeat="locationBooking in booking.LocationBookings">
+                    <a class="item item-avatar"
+                       ng-repeat="locationBooking in booking.LocationBookings"
+                       ng-click="showBooking( locationBooking.LocationBookingId, bookingTypes.location )"
+                    >
                         <img ng-src="{{ API_IMG_PATH_URL + locationBooking.LocationImageSrc }}" ng-if="locationBooking.LocationImageSrc">
                         <img src="img/photo_missing.svg" ng-if="!locationBooking.LocationImageSrc">
                         <h2>{{ locationBooking.LocationName }}</h2>
@@ -151,7 +146,10 @@ x      "LocationBookings": [
                         Resursbokningar <span class="faded">{{ booking.ResourceBookings.length | count }}</span>
                     </div>
 
-                    <a class="item item-avatar" href="#" ng-repeat="resourceBooking in booking.ResourceBookings">
+                    <a class="item item-avatar"
+                       ng-repeat="resourceBooking in booking.ResourceBookings"
+                       ng-click="showBooking( resourceBooking.ResourceBookingId, bookingTypes.resource )"
+                    >
                         <img ng-src="{{ API_IMG_PATH_URL + resourceBooking.ResourceImageSrc }}" ng-if="resourceBooking.ResourceImageSrc">
                         <img src="img/photo_missing.svg" ng-if="!resourceBooking.ResourceImageSrc">
                         <h2>{{ resourceBooking.ResourceName }}</h2>
@@ -172,7 +170,10 @@ x      "LocationBookings": [
                        Måltidsbokningar  <span class="faded">{{ booking.MealBookings.length | count }}</span>
                     </div>
 
-                    <a class="item item-avatar" href="#" ng-repeat="mealBooking in booking.MealBookings">
+                    <a class="item item-avatar"
+                       ng-repeat="mealBooking in booking.MealBookings"
+                       ng-click="showBooking( mealBooking.MealBookingId, bookingTypes.meal )"
+                    >
                         <img ng-src="{{ API_IMG_PATH_URL + mealBooking.MealImageSrc }}" ng-if="mealBooking.MealImageSrc">
                         <img src="img/photo_missing.svg" ng-if="!mealBooking.MealImageSrc">
                         <h2>{{ mealBooking.MealName }}</h2>
@@ -214,6 +215,7 @@ x      "LocationBookings": [
                 ng-show="isEditMode"
                 class="md-raised md-primary"
                 ng-click="saveBooking()"
+                ng-disabled="bookingForm.$invalid"
         >
             Spara
         </md-button>

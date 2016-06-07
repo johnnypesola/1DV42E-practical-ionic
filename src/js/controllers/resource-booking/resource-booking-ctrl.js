@@ -152,13 +152,14 @@ angular.module( 'BookingSystem.resourceBooking',
 }]
 )
 
-.controller( 'ResourceBookingDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', 'ResourceBooking', '$mdToast', 'Resource', 'Customer', 'BookingHelper', '$q', '$ionicHistory', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, ResourceBooking, $mdToast, Resource, Customer, BookingHelper, $q, $ionicHistory ) => {
+.controller( 'ResourceBookingDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', 'ResourceBooking', '$mdToast', 'Resource', 'Customer', 'BookingHelper', '$q', '$ionicHistory', 'API_IMG_PATH_URL', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, ResourceBooking, $mdToast, Resource, Customer, BookingHelper, $q, $ionicHistory, API_IMG_PATH_URL ) => {
 
   /* Init vars */
 
   const modalTemplateUrl = 'templates/modals/resource-booking-delete.html';
   $scope.editMode = false;
   $scope.resourceBookingBackup = {};
+  $scope.API_IMG_PATH_URL = API_IMG_PATH_URL;
 
   /* Private methods START */
   const setupModal = function(){
@@ -269,19 +270,23 @@ angular.module( 'BookingSystem.resourceBooking',
     }
   };
 
-  const getCustomers = function(){
+  const getCustomer = function(){
 
-    const customers = Customer.query();
+    const customer = Customer.get(
+      {
+        customerId: $scope.resourceBooking.CustomerId
+      }
+    );
 
-    customers.$promise.catch( () => {
+    customer.$promise.catch( () => {
 
       $mdToast.show( $mdToast.simple()
-        .content( 'Kunder kunde inte hämtas, var god försök igen.' )
-        .position( 'top right' )
+          .content( 'Kund kunde inte hämtas, var god försök igen.' )
+          .position( 'top right' )
       );
     });
 
-    $scope.customers = customers;
+    $scope.customer = customer;
   };
 
   const addTimeToDate = function( dateObj, hour, minute ) {
@@ -454,8 +459,7 @@ angular.module( 'BookingSystem.resourceBooking',
   /* Initialization START */
 
   setupModal();
-  getResourceBooking().then( () => { initDate(); getResources(); });
-  getCustomers();
+  getResourceBooking().then( () => { initDate(); getCustomer(); getResources(); });
   initTimeSelectData();
 
   /* Initialization END */

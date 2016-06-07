@@ -16,7 +16,7 @@ angular.module( 'BookingSystem.bookings',
     $scope.zoom = DEFAULT_CALENDAR_ZOOM;
     $scope.weekDate = moment();
     $scope.bookingTypes = BOOKING_TYPES;
-    $scope.bookingsType = $scope.bookingTypes.booking; // $stateParams.bookingType;
+    $scope.bookingsType = $scope.bookingTypes.booking;
 
     /* Private methods START */
 
@@ -313,7 +313,12 @@ angular.module( 'BookingSystem.bookings',
       })
 
         .then( () => {
+
+          // Setup discount value
           $scope.booking.Discount *= 100;
+
+          // Setup correct customer image to be displayed
+          $scope.updateCustomerImageSrc();
         });
 
       $scope.booking = booking;
@@ -468,6 +473,14 @@ angular.module( 'BookingSystem.bookings',
       // Redirect to create view
       $state.go( 'app.' + bookingTypeStr + '-create', {
         bookingId: $stateParams.id
+      });
+    };
+
+    $scope.showBooking = function( id, bookingTypeStr ) {
+
+      // Redirect to edit view
+      $state.go( 'app.' + bookingTypeStr + '-details', {
+        id: id
       });
     };
 

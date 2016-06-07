@@ -152,13 +152,14 @@ angular.module( 'BookingSystem.mealBooking',
   }]
 )
 
-  .controller( 'MealBookingDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', 'MealBooking', '$mdToast', 'Meal', 'Customer', 'BookingHelper', '$q', '$ionicHistory', 'Location', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, MealBooking, $mdToast, Meal, Customer, BookingHelper, $q, $ionicHistory, Location ) => {
+  .controller( 'MealBookingDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', 'MealBooking', '$mdToast', 'Meal', 'Customer', 'BookingHelper', '$q', '$ionicHistory', 'Location', 'API_IMG_PATH_URL', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, MealBooking, $mdToast, Meal, Customer, BookingHelper, $q, $ionicHistory, Location, API_IMG_PATH_URL ) => {
 
     /* Init vars */
 
     const modalTemplateUrl = 'templates/modals/meal-booking-delete.html';
     $scope.editMode = false;
     $scope.mealBookingBackup = {};
+    $scope.API_IMG_PATH_URL = API_IMG_PATH_URL;
 
     /* Private methods START */
     const setupModal = function(){
@@ -277,21 +278,23 @@ angular.module( 'BookingSystem.mealBooking',
       return Meal.query().$promise;
     };
 
-    const getCustomers = function(){
+    const getCustomer = function(){
 
-      const customers = Customer.query();
+      const customer = Customer.get(
+        {
+          customerId: $scope.mealBooking.CustomerId
+        }
+      );
 
-      customers.$promise.catch( () => {
+      customer.$promise.catch( () => {
 
         $mdToast.show( $mdToast.simple()
-            .content( 'Kunder kunde inte hämtas, var god försök igen.' )
+            .content( 'Kund kunde inte hämtas, var god försök igen.' )
             .position( 'top right' )
         );
       });
 
-      $scope.customers = customers;
-
-      return customers.$promise;
+      $scope.customer = customer;
     };
 
     const addTimeToDate = function( dateObj, hour, minute ) {
@@ -454,7 +457,7 @@ angular.module( 'BookingSystem.mealBooking',
         return getMeals();
       })
       .then( () => {
-        return getCustomers();
+        return getCustomer();
       })
       .then( () => {
         getLocations();
