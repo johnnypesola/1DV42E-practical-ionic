@@ -123,7 +123,7 @@ angular.module( 'BookingSystem.locationBooking',
 
     /* Initialization START */
 
-    $scope.$on( '$ionicView.enter', ( event, data ) => {
+    $scope.$on( '$ionicView.beforeEnter', ( event, data ) => {
 
       setupWeekStartAndEndDates();
       getLocationBookings();
@@ -483,7 +483,7 @@ angular.module( 'BookingSystem.locationBooking',
   }]
   )
 
-  .controller( 'LocationBookingCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'LocationBooking', 'Location', 'BookingHelper', 'LocationFurnituring', 'Customer', '$q', '$mdToast', '$ionicHistory', ( $rootScope, $stateParams, $scope, $state, LocationBooking, Location, BookingHelper, LocationFurnituring, Customer, $q, $mdToast, $ionicHistory ) => {
+  .controller( 'LocationBookingCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'LocationBooking', 'Location', 'BookingHelper', 'LocationFurnituring', 'Customer', '$q', '$mdToast', '$ionicHistory', 'API_IMG_PATH_URL', 'PHOTO_MISSING_SRC', ( $rootScope, $stateParams, $scope, $state, LocationBooking, Location, BookingHelper, LocationFurnituring, Customer, $q, $mdToast, $ionicHistory, API_IMG_PATH_URL, PHOTO_MISSING_SRC ) => {
 
     /* Init vars */
     $scope.locationBooking = {
@@ -491,6 +491,8 @@ angular.module( 'BookingSystem.locationBooking',
       BookingTypeId: 1
     };
     $scope.furnituring = [];
+    $scope.API_IMG_PATH_URL = API_IMG_PATH_URL;
+    $scope.customerImageSrc = PHOTO_MISSING_SRC;
 
     /* Private methods START */
 
@@ -584,6 +586,35 @@ angular.module( 'BookingSystem.locationBooking',
       });
 
       $scope.customers = customers;
+    };
+
+    const updateCustomerImageSrc = function() {
+
+      $scope.customerImageSrc = (
+        $scope.customer.ImageSrc !== null && $scope.customer.ImageSrc.length > 1 ? API_IMG_PATH_URL + $scope.customer.ImageSrc : PHOTO_MISSING_SRC
+      );
+    };
+
+    const getCustomer = function(){
+
+      const customer = Customer.get(
+        {
+          customerId: $state.params.customerId
+        }
+      );
+
+      customer.$promise.catch( () => {
+
+        $mdToast.show( $mdToast.simple()
+          .content( 'Kund kunde inte hämtas, var god försök igen.' )
+          .position( 'top right' )
+        );
+      })
+        .then( () => {
+          updateCustomerImageSrc();
+        });
+
+      $scope.customer = customer;
     };
 
     const addTimeToDate = function( dateObj, hour, minute ) {
@@ -755,8 +786,13 @@ angular.module( 'BookingSystem.locationBooking',
 
     initDate();
     getLocations();
-    getCustomers();
     initTimeSelectData();
+
+    if ( $state.params.customerId ){
+      getCustomer();
+    } else {
+      getCustomers();
+    }
 
     /* Initialization END */
 
