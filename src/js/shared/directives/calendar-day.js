@@ -35,8 +35,6 @@
 
       const setupModalIfNeeded = function(){
 
-        console.log( $scope.bookingsType === 'booking' );
-
         if ( $scope.bookingsType === 'booking' ) {
 
           $ionicModal.fromTemplateUrl( modalTemplateUrl, {
