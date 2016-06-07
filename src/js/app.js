@@ -78,6 +78,12 @@ BookingSystem.constant( 'DEFAULT_LONGITUDE', 15.2361 );
 BookingSystem.constant( 'MODAL_ANIMATION', 'slide-in-up' );
 BookingSystem.constant( 'DATA_SYNC_INTERVAL_TIME', 60000 * 5 ); // Every 5 minutes
 BookingSystem.constant( 'DEFAULT_CALENDAR_ZOOM', 2 );
+BookingSystem.constant( 'BOOKING_TYPES', {
+  booking : 'booking',
+  location : 'location-booking',
+  resource : 'resource-booking',
+  meal : 'meal-booking'
+});
 
 // Routes
 BookingSystem.config( ['$stateProvider', '$urlRouterProvider', '$mdDateLocaleProvider', ( $stateProvider, $urlRouterProvider, $mdDateLocaleProvider ) => {
@@ -99,8 +105,8 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', '$mdDateLocalePro
     },
     views: {
       'menuContent': {
-        templateUrl: 'templates/start/start.html',
-        controller: 'StartViewCtrl'
+        templateUrl: 'templates/booking/booking-view.html',
+        controller: 'BookingViewCtrl'
       }
     }
   })
@@ -116,6 +122,19 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', '$mdDateLocalePro
       'menuContent': {
         templateUrl: 'templates/booking/booking-details.html',
         controller: 'BookingDetailsCtrl'
+      }
+    }
+  })
+
+  .state( 'app.booking-view', {
+    url: '/start',
+    params: {
+      bookingType: 'booking'
+    },
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/booking/booking-view.html',
+        controller: 'BookingViewCtrl'
       }
     }
   })
@@ -227,7 +246,7 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', '$mdDateLocalePro
       url: '/location-booking-create',
       params: {
         date: null,
-        locationId: null
+        bookingId: null
       },
       views: {
         'menuContent': {

@@ -9,35 +9,21 @@
 
         </button>
     </ion-nav-buttons>
-    <ion-content padding="true">
+    <ion-content padding="false">
 
-        <div class="row">
+        <div class="list">
+
+            <div class="item item-avatar">
+                <img src="{{ API_IMG_PATH_URL + customer.ImageSrc }}">
+                <span class="label rel-t-5">Kund</span>
+                <h2 class="rel-t-5">{{customer.Name}}</h2>
+            </div>
+
+        </div>
+
+        <div class="row padding">
 
             <form name="locationBookingForm" class="col">
-
-                <div layout-gt-xs="row" class="pos-relative">
-
-                    <div class="validation-messages" ng-messages="locationBookingForm.CustomerId.$error">
-                        <div ng-message="required">Var god ange kund</div>
-                    </div>
-
-                    <md-input-container class="md-block" flex-gt-sm>
-
-                        <label>Kund</label>
-                        <md-select
-                                name="CustomerId"
-                                ng-model="locationBooking.CustomerId"
-                                ng-required="true"
-                                ng-disabled="!isEditMode"
-                        >
-                            <md-option ng-repeat="customer in customers" value="{{customer.CustomerId}}">
-                                {{customer.Name}}
-                            </md-option>
-                        </md-select>
-
-                    </md-input-container>
-
-                </div>
 
                 Starttidpunkt
 

@@ -327,6 +327,16 @@ md-datepicker {
   top: -20px;
 }
 
+.rel-t-10 {
+  position: relative;
+  top: -10px;
+}
+
+.rel-t-5 {
+  position: relative;
+  top: -5px;
+}
+
 .top-35 {
   position: absolute;
   top: 35px !important;
@@ -352,6 +362,13 @@ md-datepicker {
 
 span.faded {
   color: #aaa;
+  font-size: 12px;
+}
+
+span.label {
+  color: rgba(0, 0, 0, 0.541176);
+  line-height: 20px;
+  margin: 0;
   font-size: 12px;
 }
 

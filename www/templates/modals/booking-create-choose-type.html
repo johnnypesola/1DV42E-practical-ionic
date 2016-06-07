@@ -1,0 +1,51 @@
+<ion-modal-view view-title="Skapa bokning">
+    <ion-header-bar class="bar-energized">
+        <h1 class="title">Skapa bokning</h1>
+    </ion-header-bar>
+    <ion-content padding="true">
+
+        <div class="row padding" layout-align="center">
+            <h4>
+                Vilken typ av bokning vill du skapa?
+            </h4>
+        </div>
+        <div class="padding" layout-align="center">
+
+            <div class="row" layout-align="center">
+                <md-button
+                        class="md-raised md-primary"
+                        ng-click="createBookingOfType( bookingTypes.location )"
+                        >
+                    Lokalbokning
+                </md-button>
+            </div>
+            <div class="row" layout-align="center">
+                <md-button
+                        class="md-raised md-primary"
+                        ng-click="createBookingOfType( bookingTypes.resource )"
+                        >
+                    Resursbokning
+                </md-button>
+            </div>
+            <div class="row" layout-align="center">
+                <md-button
+                        class="md-raised md-primary"
+                        ng-click="createBookingOfType( bookingTypes.meal )"
+                        >
+                    Måltidsbokning
+                </md-button>
+            </div>
+
+            <div class="row" layout-align="center">
+                <md-button
+                        class="md-warn"
+                        ng-click="modal.hide()"
+                        >
+                    Avbryt
+                </md-button>
+            </div>
+
+        </div>
+
+    </ion-content>
+</ion-modal-view>
