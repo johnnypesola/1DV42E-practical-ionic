@@ -227,7 +227,7 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', '$mdDateLocalePro
       url: '/location-booking-create',
       params: {
         date: null,
-        locationId: null
+        bookingId: null
       },
       views: {
         'menuContent': {
