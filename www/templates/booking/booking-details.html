@@ -42,16 +42,53 @@
 
                         </md-input-container>
 
-                        <md-input-container class="md-block">
-                            <label>Totalt antal personer</label>
-                            <input ng-model="booking.NumberOfPeople" type="number" ng-disabled="!isEditMode">
-                        </md-input-container>
+                        <div layout-gt-xs="row" class="pos-relative">
 
+                            <div class="validation-messages" ng-messages="bookingForm.NumberOfPeople.$error">
+                                <div ng-message="required">Var god ange antal personer</div>
+                                <div ng-message="pattern">Endast nummer tillåtna</div>
+                                <div ng-message="min">Måste vara minst 0</div>
+                            </div>
 
-                        <md-input-container class="md-block">
-                            <label>Rabatt (procent)</label>
-                            <input ng-model="booking.Discount" type="number" ng-disabled="!isEditMode">
-                        </md-input-container>
+                            <md-input-container class="md-block">
+                                <label>Totalt antal personer</label>
+                                <input
+                                        ng-model="booking.NumberOfPeople"
+                                        name="NumberOfPeople"
+                                        type="number"
+                                        ng-disabled="!isEditMode"
+                                        ng-required="true"
+                                        ng-pattern="/^[0-9]*$/"
+                                        min="0"
+                                >
+                            </md-input-container>
+
+                        </div>
+
+                        <div layout-gt-xs="row" class="pos-relative">
+
+                            <div class="validation-messages" ng-messages="bookingForm.Discount.$error">
+                                <div ng-message="required">Var god ange rabatt</div>
+                                <div ng-message="pattern">Endast nummer tillåtna</div>
+                                <div ng-message="min">Måste vara minst 0</div>
+                                <div ng-message="max">Får vara max 100</div>
+                            </div>
+
+                            <md-input-container class="md-block">
+                                <label>Rabatt (procent)</label>
+                                <input
+                                        ng-model="booking.Discount"
+                                        name="Discount"
+                                        type="number"
+                                        ng-required="true"
+                                        ng-pattern="/^[0-9]*$/"
+                                        ng-disabled="!isEditMode"
+                                        min="0"
+                                        max="100"
+                                        >
+                            </md-input-container>
+
+                        </div>
 
                         <md-input-container class="md-block">
                             <label>Anteckningar</label>
@@ -178,6 +215,7 @@
                 ng-show="isEditMode"
                 class="md-raised md-primary"
                 ng-click="saveBooking()"
+                ng-disabled="bookingForm.$invalid"
         >
             Spara
         </md-button>
