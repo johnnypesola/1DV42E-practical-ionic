@@ -14,13 +14,13 @@ angular.module( 'BookingSystem.start',
     let updateInterval = null, weekStartDate = null, weekEndDate = null;
     $scope.zoom = DEFAULT_CALENDAR_ZOOM;
     $scope.weekDate = moment();
-    $scope.bookingsType = $stateParams.bookingType;
     $scope.bookingTypes = {
       booking : 'booking',
       location : 'location-booking',
       resource : 'resource-booking',
       meal : 'meal-booking'
     };
+    $scope.bookingsType = $scope.bookingTypes.booking; // $stateParams.bookingType;
 
     /* Private methods START */
 
@@ -185,21 +185,20 @@ angular.module( 'BookingSystem.start',
 
     $scope.changeBookingTypeTo = function( bookingTypeStr ) {
 
-      $ionicHistory.nextViewOptions({
-        disableAnimate: true,
-        disableBack: true
-      });
+      // We are actually in parent scope at the moment. Therefore we need to broadcast.
+      $scope.$broadcast( 'changed-booking-type', { bookingType: bookingTypeStr });
 
-      $state.go( 'app.start', {
-        bookingType: bookingTypeStr
-      });
-
-//      $scope.bookingsType = bookingTypeStr;
     };
 
     /* Public Methods END */
 
     /* Initialization START */
+
+    $scope.$on( 'changed-booking-type', ( event, args ) => {
+
+      $scope.bookingsType = args.bookingType;
+      getBookings();
+    });
 
     $scope.$on( '$ionicView.enter', ( event, data ) => {
 

@@ -109,6 +109,8 @@ x      "LocationBookings": [
                                 ></textarea>
                         </md-input-container>
                     </div>
+
+                    <!--
                     <div class="item item-icon-left">
                         <i class="icon ion-ios-time-outline"></i>
                         <span>Börjar:</span>
@@ -119,16 +121,7 @@ x      "LocationBookings": [
                         <span>Slutar:</span>
                         <strong>{{ booking.EndTime | date:'yyyy-MM-dd \k\l\. HH:mm'}}</strong>
                     </div>
-                    <div class="item item-icon-left">
-                        <i class="icon ion-stats-bars"></i>
-                        <span>Antal bokningar:</span>
-                        <strong>{{ booking.LocationBookings.length + booking.ResourceBookings.length + booking.MealBookings.length | count }}</strong>
-                    </div>
-                    <div class="item item-icon-left">
-                        <i class="icon ion-ios-cart-outline"></i>
-                        <span>Bokningspris:</span>
-                        <strong>{{ booking.CalculatedBookingPrice | kr }}</strong>
-                    </div>
+                    -->
 
                 </div>
 
@@ -140,8 +133,9 @@ x      "LocationBookings": [
                     <a class="item item-avatar" href="#" ng-repeat="locationBooking in booking.LocationBookings">
                         <img ng-src="{{ API_IMG_PATH_URL + locationBooking.LocationImageSrc }}" ng-if="locationBooking.LocationImageSrc">
                         <img src="img/photo_missing.svg" ng-if="!locationBooking.LocationImageSrc">
-                        <h2>{{ locationBooking.LocationName }} <span class="faded">{{ locationBooking.NumberOfPeople }} personer</span></h2>
+                        <h2>{{ locationBooking.LocationName }}</h2>
                         <p>
+                            Antal personer: <strong>{{ locationBooking.NumberOfPeople | count }}</strong><br>
                             Börjar: <strong>{{ locationBooking.StartTime | date:'yyyy-MM-dd \k\l\. HH:mm'}}</strong><br>
                             Slutar: <strong>{{ locationBooking.EndTime | date:'yyyy-MM-dd \k\l\. HH:mm'}}</strong>
                         </p>
@@ -158,8 +152,9 @@ x      "LocationBookings": [
                     <a class="item item-avatar" href="#" ng-repeat="resourceBooking in booking.ResourceBookings">
                         <img ng-src="{{ API_IMG_PATH_URL + resourceBooking.ResourceImageSrc }}" ng-if="resourceBooking.ResourceImageSrc">
                         <img src="img/photo_missing.svg" ng-if="!resourceBooking.ResourceImageSrc">
-                        <h2>{{ resourceBooking.ResourceName }} <span class="faded">{{ resourceBooking.ResourceCount | count }}</span></h2>
+                        <h2>{{ resourceBooking.ResourceName }}</h2>
                         <p>
+                            Antal: <strong>{{ resourceBooking.ResourceCount | count }}</strong><br>
                             Börjar: <strong>{{ resourceBooking.StartTime | date:'yyyy-MM-dd \k\l\. HH:mm'}}</strong><br>
                             Slutar: <strong>{{ resourceBooking.EndTime | date:'yyyy-MM-dd \k\l\. HH:mm'}}</strong>
                         </p>
@@ -170,14 +165,15 @@ x      "LocationBookings": [
 
                 <div class="list card">
                     <div class="item item-divider">
-                        Måltidsbokningar  <span class="faded">{{ booking.MealBookings.length | count }}</span>
+                       Måltidsbokningar  <span class="faded">{{ booking.MealBookings.length | count }}</span>
                     </div>
 
                     <a class="item item-avatar" href="#" ng-repeat="mealBooking in booking.MealBookings">
                         <img ng-src="{{ API_IMG_PATH_URL + mealBooking.MealImageSrc }}" ng-if="mealBooking.MealImageSrc">
                         <img src="img/photo_missing.svg" ng-if="!mealBooking.MealImageSrc">
-                        <h2>{{ mealBooking.MealName }} <span class="faded">{{ mealBooking.MealCount | count }}</span></h2>
+                        <h2>{{ mealBooking.MealName }}</h2>
                         <p>
+                            Antal: <strong>{{ mealBooking.MealCount | count }}</strong><br>
                             Börjar: <strong>{{ mealBooking.StartTime | date:'yyyy-MM-dd \k\l\. HH:mm'}}</strong><br>
                             Slutar: <strong>{{ mealBooking.EndTime | date:'yyyy-MM-dd \k\l\. HH:mm'}}</strong>
                         </p>
@@ -185,6 +181,16 @@ x      "LocationBookings": [
 
                     <a class="item button icon-left ion-plus-circled button-clear button-positive rel-r-20">Ny måltidsbokning</a>
 
+                </div>
+
+
+                <div class="row">
+                    <div class="col">
+
+                        <span>Bokningspris:</span>
+                        <strong>{{ booking.CalculatedBookingPrice | kr }}</strong>
+
+                    </div>
                 </div>
 
             </form>

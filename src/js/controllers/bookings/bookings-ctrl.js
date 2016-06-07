@@ -45,7 +45,7 @@ angular.module( 'BookingSystem.bookings',
   }]
   )
 
-  .controller( 'BookingDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', 'Booking', 'API_IMG_PATH_URL', '$mdToast', 'Customer', 'PHOTO_MISSING_SRC', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, Booking, API_IMG_PATH_URL, $mdToast, Customer, PHOTO_MISSING_SRC ) => {
+  .controller( 'BookingDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', 'Booking', 'API_IMG_PATH_URL', '$mdToast', 'Customer', 'PHOTO_MISSING_SRC', '$ionicHistory', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, Booking, API_IMG_PATH_URL, $mdToast, Customer, PHOTO_MISSING_SRC, $ionicHistory ) => {
 
     /* Init vars */
     const modalTemplateUrl = 'templates/modals/booking-delete.html';
@@ -175,6 +175,8 @@ angular.module( 'BookingSystem.bookings',
             .position( 'top right' )
           );
 
+          $ionicHistory.goBack();
+
           // Something went wrong
         }).catch( ( response ) => {
 
@@ -193,7 +195,7 @@ angular.module( 'BookingSystem.bookings',
               .position( 'top right' )
             );
 
-            history.back();
+            $ionicHistory.goBack();
           }
         });
     };
