@@ -488,9 +488,12 @@ angular.module( 'BookingSystem.bookings',
 
     /* Initialization START */
 
-    setupModal();
-    getBooking();
-    getCustomers();
+    $scope.$on( '$ionicView.enter', ( event, data ) => {
+
+      setupModal();
+      getBooking();
+      getCustomers();
+    });
 
     /* Initialization END */
 
