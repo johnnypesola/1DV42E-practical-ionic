@@ -6,15 +6,20 @@
 
         <div class="row padding" layout-align="center">
             <h4>
-                Vill du verkligen ta bort lokalen/platsen {{location.Name}}?
+                Vill du verkligen ta bort bokningstillfället?
             </h4>
+        </div>
+        <div class="row padding" layout-align="center">
+            <p>
+                Alla underliggande bokningar kommer att tas bort.
+            </p>
         </div>
 
         <div class="row padding" layout-align="center">
 
             <md-button
                     class="md-raised md-primary"
-                    ng-click="deleteLocation()"
+                    ng-click="deleteBooking()"
             >
                 Ja
             </md-button>

@@ -205,7 +205,7 @@ angular.module( 'BookingSystem.bookings',
       // Delete booking
       Booking.delete(
         {
-          bookingId: $stateParams.bookingId
+          bookingId: $stateParams.id
         }
       ).$promise
 
@@ -213,11 +213,11 @@ angular.module( 'BookingSystem.bookings',
         .then( ( response ) => {
 
           $mdToast.show( $mdToast.simple()
-            .content( 'Bokningstillfället "' + $scope.booking.Name + '" raderades med ett lyckat resultat' )
+            .content( 'Bokningstillfället raderades med ett lyckat resultat' )
             .position( 'top right' )
           );
 
-          history.back();
+          $ionicHistory.goBack();
         })
         // Something went wrong
         .catch( ( response ) => {
@@ -251,7 +251,7 @@ angular.module( 'BookingSystem.bookings',
             );
           }
 
-          history.back();
+          $ionicHistory.goBack();
         });
     };
 
