@@ -476,6 +476,14 @@ angular.module( 'BookingSystem.bookings',
       });
     };
 
+    $scope.showBooking = function( id, bookingTypeStr ) {
+
+      // Redirect to edit view
+      $state.go( 'app.' + bookingTypeStr + '-details', {
+        id: id
+      });
+    };
+
     /* Public Methods END */
 
     /* Initialization START */

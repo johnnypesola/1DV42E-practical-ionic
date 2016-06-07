@@ -85,7 +85,10 @@
                         Lokalbokningar <span class="faded">{{ booking.LocationBookings.length | count }}</span>
                     </div>
 
-                    <a class="item item-avatar" href="#" ng-repeat="locationBooking in booking.LocationBookings">
+                    <a class="item item-avatar"
+                       ng-repeat="locationBooking in booking.LocationBookings"
+                       ng-click="showBooking( locationBooking.LocationBookingId, bookingTypes.location )"
+                    >
                         <img ng-src="{{ API_IMG_PATH_URL + locationBooking.LocationImageSrc }}" ng-if="locationBooking.LocationImageSrc">
                         <img src="img/photo_missing.svg" ng-if="!locationBooking.LocationImageSrc">
                         <h2>{{ locationBooking.LocationName }}</h2>
@@ -106,7 +109,10 @@
                         Resursbokningar <span class="faded">{{ booking.ResourceBookings.length | count }}</span>
                     </div>
 
-                    <a class="item item-avatar" href="#" ng-repeat="resourceBooking in booking.ResourceBookings">
+                    <a class="item item-avatar"
+                       ng-repeat="resourceBooking in booking.ResourceBookings"
+                       ng-click="showBooking( resourceBooking.ResourceBookingId, bookingTypes.resource )"
+                    >
                         <img ng-src="{{ API_IMG_PATH_URL + resourceBooking.ResourceImageSrc }}" ng-if="resourceBooking.ResourceImageSrc">
                         <img src="img/photo_missing.svg" ng-if="!resourceBooking.ResourceImageSrc">
                         <h2>{{ resourceBooking.ResourceName }}</h2>
@@ -127,7 +133,10 @@
                        Måltidsbokningar  <span class="faded">{{ booking.MealBookings.length | count }}</span>
                     </div>
 
-                    <a class="item item-avatar" href="#" ng-repeat="mealBooking in booking.MealBookings">
+                    <a class="item item-avatar"
+                       ng-repeat="mealBooking in booking.MealBookings"
+                       ng-click="showBooking( mealBooking.MealBookingId, bookingTypes.meal )"
+                    >
                         <img ng-src="{{ API_IMG_PATH_URL + mealBooking.MealImageSrc }}" ng-if="mealBooking.MealImageSrc">
                         <img src="img/photo_missing.svg" ng-if="!mealBooking.MealImageSrc">
                         <h2>{{ mealBooking.MealName }}</h2>

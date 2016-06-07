@@ -152,13 +152,14 @@ angular.module( 'BookingSystem.locationBooking',
   }]
 )
 
-  .controller( 'LocationBookingDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', 'LocationBooking', '$mdToast', 'Location', 'Customer', 'BookingHelper', '$q', '$ionicHistory', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, LocationBooking, $mdToast, Location, Customer, BookingHelper, $q, $ionicHistory ) => {
+  .controller( 'LocationBookingDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', 'LocationBooking', '$mdToast', 'Location', 'Customer', 'BookingHelper', '$q', '$ionicHistory', 'API_IMG_PATH_URL', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, LocationBooking, $mdToast, Location, Customer, BookingHelper, $q, $ionicHistory, API_IMG_PATH_URL ) => {
 
     /* Init vars */
 
     const modalTemplateUrl = 'templates/modals/location-booking-delete.html';
     $scope.editMode = false;
     $scope.locationBookingBackup = {};
+    $scope.API_IMG_PATH_URL = API_IMG_PATH_URL;
 
     /* Private methods START */
     const setupModal = function(){
@@ -265,19 +266,23 @@ angular.module( 'BookingSystem.locationBooking',
       }
     };
 
-    const getCustomers = function(){
+    const getCustomer = function(){
 
-      const customers = Customer.query();
+      const customer = Customer.get(
+        {
+          customerId: $scope.locationBooking.CustomerId
+        }
+      );
 
-      customers.$promise.catch( () => {
+      customer.$promise.catch( () => {
 
         $mdToast.show( $mdToast.simple()
-            .content( 'Kunder kunde inte hämtas, var god försök igen.' )
+            .content( 'Kund kunde inte hämtas, var god försök igen.' )
             .position( 'top right' )
         );
       });
 
-      $scope.customers = customers;
+      $scope.customer = customer;
     };
 
     const addTimeToDate = function( dateObj, hour, minute ) {
@@ -356,8 +361,6 @@ angular.module( 'BookingSystem.locationBooking',
           history.back();
         });
     };
-
-    //
 
     $scope.updateFurniturings = function() {
 
@@ -472,13 +475,11 @@ angular.module( 'BookingSystem.locationBooking',
     /* Initialization START */
 
     setupModal();
-    getLocationBooking().then( () => { initDate(); });
+    getLocationBooking().then( () => { initDate(); getCustomer(); });
     getLocations();
-    getCustomers();
     initTimeSelectData();
 
     /* Initialization END */
-
   }]
   )
 
