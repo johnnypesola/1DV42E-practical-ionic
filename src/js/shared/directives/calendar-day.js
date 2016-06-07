@@ -11,9 +11,10 @@
   )
 
     // Directive specific controllers START
-    .controller( 'CalendarDayCtrl', ['$scope', '$element', '$attrs', '$rootScope', '$location', '$q', '$state', 'BookingHelper', '$interval', 'DEFAULT_CALENDAR_ZOOM', '$ionicScrollDelegate', '$window', '$document', function( $scope, $element, $attrs, $rootScope, $location, $q, $state, BookingHelper, $interval, DEFAULT_CALENDAR_ZOOM, $ionicScrollDelegate, $window, $document ) {
+    .controller( 'CalendarDayCtrl', ['$scope', '$element', '$attrs', '$rootScope', '$location', '$q', '$state', 'BookingHelper', '$interval', 'DEFAULT_CALENDAR_ZOOM', '$ionicScrollDelegate', '$window', '$document', '$ionicModal', 'MODAL_ANIMATION', 'BOOKING_TYPES', function( $scope, $element, $attrs, $rootScope, $location, $q, $state, BookingHelper, $interval, DEFAULT_CALENDAR_ZOOM, $ionicScrollDelegate, $window, $document, $ionicModal, MODAL_ANIMATION, BOOKING_TYPES ) {
 
       /* Declare variables START */
+      const modalTemplateUrl = 'templates/modals/booking-create-choose-type.html';
       const calendarDayMomentDate = moment( $scope.date );
       const updateIntervalTime = 60000; // Every 60 seconds
       const maxColumnHeight = 200;
@@ -24,12 +25,35 @@
       $scope.dayName = calendarDayMomentDate.format( 'ddd' );
       $scope.visibleAddButtonHour = null;
       $scope.columnHeight = minColumnHeight * $scope.zoom;
+      $scope.bookingTypes = BOOKING_TYPES;
 
       // TODO: Store number of concurrent events in calendar event. Then let the other concurrent events calculate their width from this previous events value.
 
       /* Declare variables END */
 
       /* Private methods START */
+
+      const setupModalIfNeeded = function(){
+
+        console.log( $scope.bookingsType === 'booking' );
+
+        if ( $scope.bookingsType === 'booking' ) {
+
+          $ionicModal.fromTemplateUrl( modalTemplateUrl, {
+            scope: $scope,
+            animation: MODAL_ANIMATION
+          })
+            .then( ( response ) => {
+
+              $scope.modal = response;
+            });
+
+          // Cleanup the modal when we're done with it!
+          $scope.$on( '$destroy', () => {
+            $scope.modal.remove();
+          });
+        }
+      };
 
       const setupHours = function(){
 
@@ -159,19 +183,38 @@
         $scope.visibleAddButtonHour = null;
       };
 
-      $scope.createEventForHour = function( hour ) {
+      $scope.createEventForHour = function( hour, bookingTypeStr ) {
+
+        const bookingType = bookingTypeStr || $scope.bookingsType;
 
         calendarDayMomentDate.set({
           'hour': hour
         });
 
-        // Redirect to create view
-        $state.go( 'app.' + $scope.bookingsType + '-create', {
-          date: calendarDayMomentDate,
-          id: null
-        });
+        // If booking type is not set. Display a modal where the user can make a choice.
+        if ( bookingType === 'booking' ) {
 
-        $scope.hideAddButton();
+          $scope.modal.show();
+
+        // Booking type is set, redirect
+        } else {
+
+          // Redirect to create view
+          $state.go( 'app.' + bookingType + '-create', {
+            date: calendarDayMomentDate,
+            id: null
+          });
+
+          $scope.hideAddButton();
+        }
+      };
+
+      $scope.createBookingOfType = function( bookingTypeStr ) {
+
+        // Redirect to edit view
+        $scope.createEventForHour( calendarDayMomentDate.hour(), bookingTypeStr );
+
+        $scope.modal.hide();
       };
 
       $scope.showEvent = function( id ) {
@@ -190,6 +233,7 @@
       setIsCurrentDayVariables();
       startUpdateInterval();
       scrollToTimeLineIfNeeded();
+      setupModalIfNeeded();
 
       // Listen to when AddButton should hide
       $scope.$on( 'hideAllAddButtons', ( event, msg ) => {
