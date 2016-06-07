@@ -105,8 +105,8 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', '$mdDateLocalePro
     },
     views: {
       'menuContent': {
-        templateUrl: 'templates/start/start.html',
-        controller: 'StartViewCtrl'
+        templateUrl: 'templates/booking/booking-view.html',
+        controller: 'BookingViewCtrl'
       }
     }
   })
@@ -122,6 +122,19 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', '$mdDateLocalePro
       'menuContent': {
         templateUrl: 'templates/booking/booking-details.html',
         controller: 'BookingDetailsCtrl'
+      }
+    }
+  })
+
+  .state( 'app.booking-view', {
+    url: '/start',
+    params: {
+      bookingType: 'booking'
+    },
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/booking/booking-view.html',
+        controller: 'BookingViewCtrl'
       }
     }
   })
