@@ -26,7 +26,7 @@
                 width: {{95 / booking.ConcurrentBookings }}%;
                 left: {{(100 / booking.ConcurrentBookings) * booking.ConcurrentBookingIndex}}%;
                 z-index: 10;
-                opacity: {{ booking.Provisional === 'true' ? 0.3 : 0.8 }};
+                opacity: {{ booking.Provisional ? 0.4 : 0.8 }};
         ">
             {{ booking.Name }}
         </div>

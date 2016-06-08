@@ -23,7 +23,7 @@
 
                     <div class="item item-avatar">
 
-                        <img class="top-35" src="{{ customerImageSrc }}">
+                        <img class="top-35" ng-src="{{ customerImageSrc }}">
 
                         <md-input-container class="md-block">
 
@@ -156,7 +156,8 @@
                         <p>
                             Antal: <strong>{{ resourceBooking.ResourceCount | count }}</strong><br>
                             Börjar: <strong>{{ resourceBooking.StartTime | date:'yyyy-MM-dd \k\l\. HH:mm'}}</strong><br>
-                            Slutar: <strong>{{ resourceBooking.EndTime | date:'yyyy-MM-dd \k\l\. HH:mm'}}</strong>
+                            Slutar: <strong>{{ resourceBooking.EndTime | date:'yyyy-MM-dd \k\l\. HH:mm'}}</strong><br>
+                            <span class="custom-chip custom-small-chip" ng-if="resourceBooking.Provisional">Preliminär</span>
                         </p>
                     </a>
 
