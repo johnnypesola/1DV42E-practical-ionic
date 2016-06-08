@@ -280,7 +280,7 @@ namespace BookingSystem.Models
                                 MealName = reader.GetSafeString(reader.GetOrdinal("MealName")),
                                 MealImageSrc = reader.GetSafeString(reader.GetOrdinal("MealImageSrc")),
                                 MealCount = reader.GetSafeInt16(reader.GetOrdinal("MealCount")),
-                                LocationId = reader.GetSafeInt32(reader.GetOrdinal("LocationId")),
+                                LocationId = reader.GetSafeNullableInt32(reader.GetOrdinal("LocationId")),
                                 LocationName = reader.GetSafeString(reader.GetOrdinal("LocationName")),
                                 StartTime = reader.GetSafeDateTime(reader.GetOrdinal("StartTime")),
                                 EndTime = reader.GetSafeDateTime(reader.GetOrdinal("EndTime")),

@@ -19,6 +19,18 @@ namespace BookingSystem
             return (!reader.IsDBNull(columnIndex) ? reader.GetInt32(columnIndex) : 0);
         }
 
+        public static int? GetSafeNullableInt32(this SqlDataReader reader, int columnIndex)
+        {
+            if (!reader.IsDBNull(columnIndex))
+            {
+                return reader.GetInt32(columnIndex);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         public static int GetSafeInt16(this SqlDataReader reader, int columnIndex)
         {
             return (!reader.IsDBNull(columnIndex) ? reader.GetInt16(columnIndex) : 0);
@@ -54,6 +66,18 @@ namespace BookingSystem
         public static bool GetSafeBoolean(this SqlDataReader reader, int columnIndex)
         {
             return (!reader.IsDBNull(columnIndex) ? reader.GetBoolean(columnIndex) : false);
+        }
+
+        public static bool? GetSafeNullableBoolean(this SqlDataReader reader, int columnIndex)
+        {
+            if (!reader.IsDBNull(columnIndex))
+            {
+                return reader.GetBoolean(columnIndex);
+            }
+            else
+            {
+                return null;
+            }
         }
 
     }
