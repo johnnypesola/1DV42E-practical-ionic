@@ -27,8 +27,6 @@ namespace BookingSystem.Models
         public DateTime EndTime { get; set; }
 
         // Extra datafields retrieved from database/stored procedure
-        public string BookingName { get; set; }
-
         public bool Provisional { get; set; }
 
         [Range(0, int.MaxValue, ErrorMessage = "LocationId is out of range.")]

@@ -22,5 +22,7 @@ namespace BookingSystem.Models
         public int Id { get; set; }
 
         public String Name { get; set; }
+
+        public Boolean Provisional { get; set; }
     }
 }

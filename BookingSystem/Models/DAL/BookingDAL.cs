@@ -65,7 +65,6 @@ namespace BookingSystem.Models
                                 BookingId = reader.GetSafeInt32(reader.GetOrdinal("BookingId")),
                                 BookingTypeId = reader.GetSafeInt16(reader.GetOrdinal("BookingTypeId")),
                                 CustomerId = reader.GetSafeInt32(reader.GetOrdinal("CustomerId")),
-                                Provisional = reader.GetBoolean(reader.GetOrdinal("Provisional")),
                                 NumberOfPeople = reader.GetSafeInt16(reader.GetOrdinal("NumberOfPeople")),
                                 Discount = reader.GetSafeDecimal(reader.GetOrdinal("Discount")),
                                 Notes = reader.GetSafeString(reader.GetOrdinal("Notes")),
@@ -112,9 +111,6 @@ namespace BookingSystem.Models
                     // Add variable for stored procedure
                     switch(searchContainer.ColumnName)
                     {
-                        case "Name":
-                            cmd.Parameters.Add("@Name", SqlDbType.VarChar, 50).Value = searchContainer.SearchValue;
-                            break;
                         case "NumberOfPeople":
                             cmd.Parameters.Add("@NumberOfPeople", SqlDbType.SmallInt).Value = Int16.Parse(searchContainer.SearchValue);
                             break;
@@ -138,7 +134,6 @@ namespace BookingSystem.Models
                                 BookingId = reader.GetSafeInt32(reader.GetOrdinal("BookingId")),
                                 CustomerId = reader.GetSafeInt32(reader.GetOrdinal("CustomerId")),
                                 CustomerName = reader.GetSafeString(reader.GetOrdinal("CustomerName")),
-                                Provisional = reader.GetBoolean(reader.GetOrdinal("Provisional")),
                                 NumberOfPeople = reader.GetSafeInt16(reader.GetOrdinal("NumberOfPeople")),
                                 Discount = reader.GetSafeDecimal(reader.GetOrdinal("Discount")),
                                 CalculatedBookingPrice = reader.GetSafeDecimal(reader.GetOrdinal("CalculatedBookingPrice")),
@@ -193,7 +188,6 @@ namespace BookingSystem.Models
                                 BookingId = reader.GetSafeInt32(reader.GetOrdinal("BookingId")),
                                 CustomerId = reader.GetSafeInt32(reader.GetOrdinal("CustomerId")),
                                 CustomerName = reader.GetSafeString(reader.GetOrdinal("CustomerName")),
-                                Provisional = reader.GetBoolean(reader.GetOrdinal("Provisional")),
                                 NumberOfPeople = reader.GetSafeInt16(reader.GetOrdinal("NumberOfPeople")),
                                 Discount = reader.GetSafeDecimal(reader.GetOrdinal("Discount")),
                                 CalculatedBookingPrice = reader.GetSafeDecimal(reader.GetOrdinal("CalculatedBookingPrice")),
@@ -248,7 +242,6 @@ namespace BookingSystem.Models
                                 BookingId = reader.GetSafeInt32(reader.GetOrdinal("BookingId")),
                                 CustomerId = reader.GetSafeInt32(reader.GetOrdinal("CustomerId")),
                                 CustomerName = reader.GetSafeString(reader.GetOrdinal("CustomerName")),
-                                Provisional = reader.GetBoolean(reader.GetOrdinal("Provisional")),
                                 NumberOfPeople = reader.GetSafeInt16(reader.GetOrdinal("NumberOfPeople")),
                                 Discount = reader.GetSafeDecimal(reader.GetOrdinal("Discount")),
                                 CalculatedBookingPrice = reader.GetSafeDecimal(reader.GetOrdinal("CalculatedBookingPrice")),
@@ -361,7 +354,6 @@ namespace BookingSystem.Models
                                 BookingId = reader.GetSafeInt32(reader.GetOrdinal("BookingId")),
                                 CustomerId = reader.GetSafeInt32(reader.GetOrdinal("CustomerId")),
                                 CustomerName = reader.GetSafeString(reader.GetOrdinal("CustomerName")),
-                                Provisional = reader.GetBoolean(reader.GetOrdinal("Provisional")),
                                 NumberOfPeople = reader.GetSafeInt16(reader.GetOrdinal("NumberOfPeople")),
                                 Discount = reader.GetSafeDecimal(reader.GetOrdinal("Discount")),
                                 CalculatedBookingPrice = reader.GetSafeDecimal(reader.GetOrdinal("CalculatedBookingPrice")),
@@ -424,7 +416,6 @@ namespace BookingSystem.Models
                                 BookingId = reader.GetSafeInt32(reader.GetOrdinal("BookingId")),
                                 BookingTypeId = reader.GetSafeInt16(reader.GetOrdinal("BookingTypeId")),
                                 CustomerId = reader.GetSafeInt32(reader.GetOrdinal("CustomerId")),
-                                Provisional = reader.GetBoolean(reader.GetOrdinal("Provisional")),
                                 NumberOfPeople = reader.GetSafeInt16(reader.GetOrdinal("NumberOfPeople")),
                                 Discount = reader.GetSafeDecimal(reader.GetOrdinal("Discount")),
                                 Notes = reader.GetSafeString(reader.GetOrdinal("Notes")),
@@ -469,7 +460,6 @@ namespace BookingSystem.Models
                     // Add in parameters for Stored procedure
                     cmd.Parameters.Add("@BookingTypeId", SqlDbType.SmallInt).Value = booking.BookingTypeId;
                     cmd.Parameters.Add("@CustomerId", SqlDbType.Int).Value = booking.CustomerId;
-                    cmd.Parameters.Add("@Provisional", SqlDbType.Bit).Value = booking.Provisional;
                     cmd.Parameters.Add("@NumberOfPeople", SqlDbType.SmallInt).Value = booking.NumberOfPeople;
                     cmd.Parameters.Add("@Discount", SqlDbType.Decimal).Value = booking.Discount;
                     cmd.Parameters.Add("@Notes", SqlDbType.VarChar, 200).Value = booking.Notes;
@@ -512,7 +502,6 @@ namespace BookingSystem.Models
                     cmd.Parameters.Add("@BookingId", SqlDbType.Int).Value = booking.BookingId;
                     cmd.Parameters.Add("@BookingTypeId", SqlDbType.SmallInt).Value = booking.BookingTypeId;
                     cmd.Parameters.Add("@CustomerId", SqlDbType.Int).Value = booking.CustomerId;
-                    cmd.Parameters.Add("@Provisional", SqlDbType.Bit).Value = booking.Provisional;
                     cmd.Parameters.Add("@NumberOfPeople", SqlDbType.SmallInt).Value = booking.NumberOfPeople;
                     cmd.Parameters.Add("@Discount", SqlDbType.Decimal).Value = booking.Discount;
                     cmd.Parameters.Add("@Notes", SqlDbType.VarChar, 200).Value = booking.Notes;

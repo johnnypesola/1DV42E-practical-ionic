@@ -69,7 +69,6 @@ namespace BookingSystem.Models
                             {
                                 MealBookingId = reader.GetSafeInt32(reader.GetOrdinal("MealBookingId")),
                                 BookingId = reader.GetSafeInt32(reader.GetOrdinal("BookingId")),
-                                BookingName = reader.GetSafeString(reader.GetOrdinal("BookingName")),
                                 Provisional = reader.GetSafeBoolean(reader.GetOrdinal("Provisional")),
                                 MealId = reader.GetSafeInt16(reader.GetOrdinal("MealId")),
                                 MealName = reader.GetSafeString(reader.GetOrdinal("MealName")),

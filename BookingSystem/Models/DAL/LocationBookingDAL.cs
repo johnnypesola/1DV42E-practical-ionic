@@ -116,7 +116,6 @@ namespace BookingSystem.Models
                             {
                                 LocationBookingId = reader.GetSafeInt32(reader.GetOrdinal("LocationBookingId")),
                                 BookingId = reader.GetSafeInt32(reader.GetOrdinal("BookingId")),
-                                BookingName = reader.GetSafeString(reader.GetOrdinal("BookingName")),
                                 Provisional = reader.GetBoolean(reader.GetOrdinal("Provisional")),
                                 LocationName = reader.GetSafeString(reader.GetOrdinal("LocationName")),
                                 LocationId = reader.GetSafeInt32(reader.GetOrdinal("LocationId")),
@@ -162,6 +161,7 @@ namespace BookingSystem.Models
                     // Add in parameters for Stored procedure
                     cmd.Parameters.Add("@BookingId", SqlDbType.Int).Value = locationBooking.BookingId;
                     cmd.Parameters.Add("@LocationId", SqlDbType.Int).Value = locationBooking.LocationId;
+                    cmd.Parameters.Add("@Provisional", SqlDbType.Bit).Value = locationBooking.Provisional;
                     cmd.Parameters.Add("@FurnituringId", SqlDbType.Int).Value = locationBooking.FurnituringId;
                     cmd.Parameters.Add("@StartTime", SqlDbType.SmallDateTime).Value = locationBooking.StartTime;
                     cmd.Parameters.Add("@EndTime", SqlDbType.SmallDateTime).Value = locationBooking.EndTime;
@@ -206,6 +206,7 @@ namespace BookingSystem.Models
                     // Add in parameters for Stored procedure
                     cmd.Parameters.Add("@LocationBookingId", SqlDbType.Int).Value = locationBooking.LocationBookingId;
                     cmd.Parameters.Add("@BookingId", SqlDbType.Int).Value = locationBooking.BookingId;
+                    cmd.Parameters.Add("@Provisional", SqlDbType.Bit).Value = locationBooking.Provisional;
                     cmd.Parameters.Add("@LocationId", SqlDbType.Int).Value = locationBooking.LocationId;
                     cmd.Parameters.Add("@FurnituringId", SqlDbType.Int).Value = locationBooking.FurnituringId;
                     cmd.Parameters.Add("@StartTime", SqlDbType.SmallDateTime).Value = locationBooking.StartTime;
@@ -265,6 +266,7 @@ namespace BookingSystem.Models
                             {
                                 LocationBookingId = reader.GetSafeInt32(reader.GetOrdinal("LocationBookingId")),
                                 BookingId = reader.GetSafeInt32(reader.GetOrdinal("BookingId")),
+                                Provisional = reader.GetSafeBoolean(reader.GetOrdinal("Provisional")),
                                 LocationId = reader.GetSafeInt32(reader.GetOrdinal("LocationId")),
                                 LocationImageSrc = reader.GetSafeString(reader.GetOrdinal("LocationImageSrc")),
                                 FurnituringId = reader.GetSafeInt16(reader.GetOrdinal("FurnituringId")),
@@ -323,6 +325,7 @@ namespace BookingSystem.Models
                             {
                                 LocationBookingId = reader.GetSafeInt32(reader.GetOrdinal("LocationBookingId")),
                                 BookingId = reader.GetSafeInt32(reader.GetOrdinal("BookingId")),
+                                Provisional = reader.GetSafeBoolean(reader.GetOrdinal("Provisional")),
                                 LocationId = reader.GetSafeInt32(reader.GetOrdinal("LocationId")),
                                 LocationImageSrc = reader.GetSafeString(reader.GetOrdinal("LocationImageSrc")),
                                 FurnituringId = reader.GetSafeInt16(reader.GetOrdinal("FurnituringId")),

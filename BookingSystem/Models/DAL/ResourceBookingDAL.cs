@@ -114,7 +114,6 @@ namespace BookingSystem.Models
                             {
                                 ResourceBookingId = reader.GetSafeInt32(reader.GetOrdinal("ResourceBookingId")),
                                 BookingId = reader.GetSafeInt32(reader.GetOrdinal("BookingId")),
-                                BookingName = reader.GetSafeString(reader.GetOrdinal("BookingName")),
                                 Provisional = reader.GetBoolean(reader.GetOrdinal("Provisional")),
                                 ResourceId = reader.GetSafeInt32(reader.GetOrdinal("ResourceId")),
                                 ResourceName = reader.GetSafeString(reader.GetOrdinal("ResourceName")),
@@ -160,6 +159,7 @@ namespace BookingSystem.Models
                     // Add in parameters for Stored procedure
                     cmd.Parameters.Add("@BookingId", SqlDbType.Int).Value = resourceBooking.BookingId;
                     cmd.Parameters.Add("@ResourceId", SqlDbType.Int).Value = resourceBooking.ResourceId;
+                    cmd.Parameters.Add("@Provisional", SqlDbType.Bit).Value = resourceBooking.Provisional;
                     cmd.Parameters.Add("@ResourceCount", SqlDbType.Int).Value = resourceBooking.ResourceCount;
                     cmd.Parameters.Add("@StartTime", SqlDbType.SmallDateTime).Value = resourceBooking.StartTime;
                     cmd.Parameters.Add("@EndTime", SqlDbType.SmallDateTime).Value = resourceBooking.EndTime;
@@ -204,6 +204,7 @@ namespace BookingSystem.Models
                     cmd.Parameters.Add("@ResourceBookingId", SqlDbType.Int).Value = resourceBooking.ResourceBookingId;
                     cmd.Parameters.Add("@BookingId", SqlDbType.Int).Value = resourceBooking.BookingId;
                     cmd.Parameters.Add("@ResourceId", SqlDbType.Int).Value = resourceBooking.ResourceId;
+                    cmd.Parameters.Add("@Provisional", SqlDbType.Bit).Value = resourceBooking.Provisional;
                     cmd.Parameters.Add("@ResourceCount", SqlDbType.Int).Value = resourceBooking.ResourceCount;
                     cmd.Parameters.Add("@StartTime", SqlDbType.SmallDateTime).Value = resourceBooking.StartTime;
                     cmd.Parameters.Add("@EndTime", SqlDbType.SmallDateTime).Value = resourceBooking.EndTime;
@@ -262,6 +263,7 @@ namespace BookingSystem.Models
                                 ResourceBookingId = reader.GetSafeInt32(reader.GetOrdinal("ResourceBookingId")),
                                 BookingId = reader.GetSafeInt32(reader.GetOrdinal("BookingId")),
                                 ResourceId = reader.GetSafeInt32(reader.GetOrdinal("ResourceId")),
+                                Provisional = reader.GetSafeBoolean(reader.GetOrdinal("Provisional")),
                                 ResourceName = reader.GetSafeString(reader.GetOrdinal("ResourceName")),
                                 ResourceImageSrc = reader.GetSafeString(reader.GetOrdinal("ResourceImageSrc")),
                                 ResourceCount = reader.GetSafeInt16(reader.GetOrdinal("ResourceCount")),
@@ -316,6 +318,7 @@ namespace BookingSystem.Models
                                 ResourceBookingId = reader.GetSafeInt32(reader.GetOrdinal("ResourceBookingId")),
                                 BookingId = reader.GetSafeInt32(reader.GetOrdinal("BookingId")),
                                 ResourceId = reader.GetSafeInt32(reader.GetOrdinal("ResourceId")),
+                                Provisional = reader.GetSafeBoolean(reader.GetOrdinal("Provisional")),
                                 ResourceName = reader.GetSafeString(reader.GetOrdinal("ResourceName")),
                                 ResourceImageSrc = reader.GetSafeString(reader.GetOrdinal("ResourceImageSrc")),
                                 ResourceCount = reader.GetSafeInt16(reader.GetOrdinal("ResourceCount")),

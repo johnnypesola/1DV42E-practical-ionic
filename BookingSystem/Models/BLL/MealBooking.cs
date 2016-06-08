@@ -45,8 +45,6 @@ namespace BookingSystem.Models
         public string Notes { get; set; }
 
         // Extra datafields retrieved from database/stored procedure
-        public string BookingName { get; set; }
-
         public string LocationName { get; set; }
 
         public string MealName { get; set; }
