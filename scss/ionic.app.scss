@@ -88,6 +88,13 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   cursor: pointer;
 }
 
+.custom-small-chip {
+  height: 20px;
+  border-radius: 10px;
+  line-height: 21px;
+  font-size: 11px;
+}
+
 .custom-chip-active {
   background-color: rgb(16,108,200) !important;
   color: #fff !important;
