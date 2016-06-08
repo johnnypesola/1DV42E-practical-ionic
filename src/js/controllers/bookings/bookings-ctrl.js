@@ -293,6 +293,8 @@ angular.module( 'BookingSystem.bookings',
       });
 
       $scope.customers = customers;
+
+      return customers.$promise;
     };
 
     const getBooking = function () {
@@ -322,6 +324,8 @@ angular.module( 'BookingSystem.bookings',
         });
 
       $scope.booking = booking;
+
+      return booking.$promise;
     };
 
     /* Private Methods END */
@@ -472,7 +476,8 @@ angular.module( 'BookingSystem.bookings',
 
       // Redirect to create view
       $state.go( 'app.' + bookingTypeStr + '-create', {
-        bookingId: $stateParams.id
+        bookingId: $stateParams.id,
+        customerId: $scope.booking.CustomerId
       });
     };
 
@@ -488,9 +493,13 @@ angular.module( 'BookingSystem.bookings',
 
     /* Initialization START */
 
-    setupModal();
-    getBooking();
-    getCustomers();
+    $scope.$on( '$ionicView.beforeEnter', ( event, data ) => {
+
+      setupModal();
+      getCustomers().then( () => {
+        getBooking();
+      });
+    });
 
     /* Initialization END */
 
