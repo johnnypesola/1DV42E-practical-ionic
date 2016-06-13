@@ -2,9 +2,24 @@
     <ion-content padding="true">
 
         <h1>{{meal.Name}}</h1>
+
         <div class="row padding">
 
             <form name="userForm">
+
+                <div layout-gt-xs="row">
+                    <img class="show-image" ng-src="{{API_IMG_PATH_URL + meal.ImageSrc}}" ng-show="meal.ImageSrc" ng-hide="isEditMode">
+
+                    <div ng-if="isEditMode">
+                        <div layout-gt-xs="row">
+                            <label>Bild</label>
+                        </div>
+                        <div layout-gt-xs="row">
+                            <image-uploader type="Meal" id="{{meal.MealId}}" image-src="meal.ImageSrc" base64-encoded-image="meal.ImageForUpload"></image-uploader>
+                        </div>
+                    </div>
+                </div>
+
                 <div layout-gt-xs="row">
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Namn</label>

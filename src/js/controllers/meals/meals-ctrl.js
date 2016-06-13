@@ -47,12 +47,13 @@ angular.module( 'BookingSystem.meals',
   )
 
   //Edit controller
-  .controller( 'MealDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$ionicModal', '$state', 'Meal', 'MealProperty','MealHasProperty', '$mdToast', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $ionicModal, $state, Meal, MealProperty, MealHasProperty, $mdToast ) => {
+  .controller( 'MealDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$ionicModal', '$state', 'Meal', 'MealProperty','MealHasProperty', '$mdToast', 'API_IMG_PATH_URL', 'MealImage', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $ionicModal, $state, Meal, MealProperty, MealHasProperty, $mdToast, API_IMG_PATH_URL, MealImage ) => {
       /* Init vars */
 
     const modalTemplateUrl = 'templates/modals/meals-delete.html';
     $scope.isEditMode = false;
     $scope.mealBackup = {};
+    $scope.API_IMG_PATH_URL = API_IMG_PATH_URL;
 
     /* Private methods START */
 
@@ -71,6 +72,23 @@ angular.module( 'BookingSystem.meals',
       $scope.$on( '$destroy', () => {
         $scope.modal.remove();
       });
+    };
+
+    const uploadImage = function( MealId ){
+
+      return MealImage.upload( $scope.meal.ImageForUpload, MealId );
+
+    };
+
+    const saveSuccess = function() {
+      // Display success message
+      $mdToast.show( $mdToast.simple()
+          .content( 'Måltiden "' + $scope.meal.Name + '" sparades med ett lyckat resultat' )
+          .position( 'top right' )
+      );
+
+      // Redirect
+      history.back();
     };
 
     const getMeal = function () {
@@ -104,9 +122,9 @@ angular.module( 'BookingSystem.meals',
     const getAllMealProperties = function() {
       $scope.mealProperties = MealProperty.query();
     };
-
-    /*
+/*
     const saveMealProperties = function(){
+
       let mealPropertiesToSave;
       const postDataArray = [];
 
@@ -178,7 +196,8 @@ angular.module( 'BookingSystem.meals',
       Meal.save(
         {
           MealId: $stateParams.mealId,
-          Name: $scope.meal.Name
+          Name: $scope.meal.Name,
+          ImageSrc: $scope.meal.ImageSrc
         }
       ).$promise
 
@@ -186,15 +205,38 @@ angular.module( 'BookingSystem.meals',
         .then( ( response ) => {
 
           $scope.endEditMode();
-          saveMealProperties( response.MealId )
 
-          .then( () => {
+          if ( typeof $scope.meal.ImageForUpload !== 'undefined' ) {
 
-            $mdToast.show( $mdToast.simple()
-              .content( 'Måltiden "' + $scope.meal.Name + '" sparades med ett lyckat resultat' )
-              .position( 'top right' )
-            );
+            // Upload image
+            uploadImage( response.MealId )
 
+              // Image upload successful
+              .success( ( data ) => {
+
+                saveSuccess();
+              })
+              // Image upload failed
+              .error( () => {
+
+                $mdToast.show( $mdToast.simple()
+                    .content( 'Måltiden "' + $scope.meal.Name + '" sparades, men det gick inte att ladda upp och spara den önskade bilden.' )
+                    .position( 'top right' )
+                );
+
+                // Redirect
+                history.back();
+              });
+
+          } else {
+            saveSuccess();
+          }
+
+          //saveMealProperties( response.MealId )
+
+          //.then( () => {
+
+          /*
           }).catch( () => {
 
             $mdToast.show( $mdToast.simple()
@@ -202,6 +244,7 @@ angular.module( 'BookingSystem.meals',
               .position( 'top right' )
             );
           });
+          */
 
           // Something went wrong
         }).catch( ( response ) => {
@@ -303,12 +346,32 @@ angular.module( 'BookingSystem.meals',
   )
 
   //Create controller
-  .controller( 'MealCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'Meal', '$mdToast', ( $rootScope, $stateParams, $scope, $state, Meal, $mdToast ) => {
+  .controller( 'MealCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'Meal', '$mdToast', 'MealImage', ( $rootScope, $stateParams, $scope, $state, Meal, $mdToast, MealImage ) => {
 
     /* Init vars */
     $scope.meal = {};
 
     /* Private methods START */
+
+    // Upload image
+    const uploadImage = ( MealId ) => {
+
+      return MealImage.upload( $scope.meal.ImageForUpload, MealId );
+
+    };
+
+    // Display success message
+    const saveSuccess = () => {
+
+      // Display success message
+      $mdToast.show( $mdToast.simple()
+          .content( 'Måltiden "' + $scope.meal.Name + '" sparades med ett lyckat resultat' )
+          .position( 'top right' )
+      );
+
+      // Redirect
+      history.back();
+    };
 
     /* Private Methods END */
 
@@ -329,12 +392,31 @@ angular.module( 'BookingSystem.meals',
         // If everything went ok
         .then( ( response ) => {
 
-          $mdToast.show( $mdToast.simple()
-            .content( 'Måltiden "' + $scope.meal.Name + '" skapades med ett lyckat resultat' )
-            .position( 'top right' )
-          );
+          if ( typeof $scope.meal.ImageForUpload !== 'undefined' ) {
 
-          history.back();
+            // Upload image
+            uploadImage( response.MealId )
+
+              // Image upload successful
+              .success( ( data ) => {
+
+                saveSuccess();
+              })
+              // Image upload failed
+              .error( () => {
+
+                $mdToast.show( $mdToast.simple()
+                    .content( 'Måltiden "' + $scope.meal.Name + '" skapades, men det gick inte att ladda upp och spara den önskade bilden.' )
+                    .position( 'top right' )
+                );
+
+                // Redirect
+                history.back();
+              });
+
+          } else {
+            saveSuccess();
+          }
 
           // Something went wrong
         }).catch( ( response ) => {
