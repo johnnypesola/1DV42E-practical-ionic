@@ -219,6 +219,7 @@ angular.module( 'BookingSystem.bookings',
 
       $scope.bookingsType = args.bookingType;
       getBookings();
+      setCalendarTitle();
     });
 
     $scope.$on( '$ionicView.enter', ( event, data ) => {
