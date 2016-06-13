@@ -67,7 +67,8 @@ namespace BookingSystem.Models
                             return new Meal
                             {
                                 MealId = reader.GetSafeInt16(reader.GetOrdinal("MealId")),
-                                Name = reader.GetSafeString(reader.GetOrdinal("Name"))
+                                Name = reader.GetSafeString(reader.GetOrdinal("Name")),
+                                ImageSrc = reader.GetSafeString(reader.GetOrdinal("ImageSrc"))
                             };
                         }
                     }
@@ -108,7 +109,8 @@ namespace BookingSystem.Models
                             MealsReturnList.Add(new Meal
                             {
                                 MealId = reader.GetSafeInt16(reader.GetOrdinal("MealId")),
-                                Name = reader.GetSafeString(reader.GetOrdinal("Name"))
+                                Name = reader.GetSafeString(reader.GetOrdinal("Name")),
+                                ImageSrc = reader.GetSafeString(reader.GetOrdinal("ImageSrc"))
                             });
                         }
                     }
@@ -180,6 +182,7 @@ namespace BookingSystem.Models
                     // Add in parameters for Stored procedure
                     cmd.Parameters.Add("@MealId", SqlDbType.SmallInt).Value = Meal.MealId;
                     cmd.Parameters.Add("@Name", SqlDbType.VarChar, 50).Value = Meal.Name;
+                    cmd.Parameters.Add("@ImageSrc", SqlDbType.VarChar, 50).Value = Meal.ImageSrc;
 
                     // Open DB connection
                     connection.Open();

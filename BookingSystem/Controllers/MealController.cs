@@ -7,12 +7,16 @@ using System.Web.Http;
 using BookingSystem.Models;
 using System.Web.Http.Cors;
 using System.Data;
+using Newtonsoft.Json.Linq;
 
 namespace BookingSystem.Controllers
 {
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class MealController : ApiController
     {
+        // Shared variables
+        const string IMAGE_PATH = "Content/upload/img/meal";
+
         // Set up Service.
         MealService mealService = new MealService();
 
@@ -123,6 +127,50 @@ namespace BookingSystem.Controllers
             }
 
             return Ok();
+        }
+
+        // POST a picture for a meal
+        [Route("api/Meal/image/{MealId:int}")]
+        [AcceptVerbs("POST")]
+        [HttpPost]
+        public IHttpActionResult Post(int MealId)
+        {
+            string base64string;
+            JObject returnData;
+            ImageService imageService = new ImageService();
+            string UploadImagePath;
+
+            try
+            {
+                // Check that location with specific Id exists
+                Meal meal = mealService.GetMeal(MealId);
+                if (meal == null)
+                {
+                    return NotFound();
+                }
+
+                // Process image data
+                base64string = Request.Content.ReadAsStringAsync().Result;
+
+                // Save image
+                UploadImagePath = imageService.SaveImage(IMAGE_PATH, base64string, MealId);
+
+                // Attach path to object
+                meal.ImageSrc = UploadImagePath;
+
+                // Save location
+                mealService.SaveMeal(meal);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
+            // Build return JSON object
+            returnData = JObject.Parse(String.Format("{{ 'imgpath' : '{0}/{1}.jpg'}}", IMAGE_PATH, MealId));
+
+            // Return path to uploaded image
+            return Ok(returnData);
         }
     }
 }

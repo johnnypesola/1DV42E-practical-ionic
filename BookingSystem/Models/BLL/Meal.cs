@@ -12,6 +12,10 @@ namespace BookingSystem.Models
         [Range(0, Int16.MaxValue, ErrorMessage = "MealId is out of range.")]
         public int MealId { get; set; }
 
+        [StringLength(50, ErrorMessage = "ImageSrc must not exceed 50 chars.")]
+        [RegularExpression(ValidationExtensions.IMG_PATH_REGEXP, ErrorMessage = "ImageSrc is invalid")]
+        public string ImageSrc { get; set; }
+
         [Required(ErrorMessage = "Name is required.")]
         [StringLength(50, ErrorMessage = "Name must not exceed 50 chars.")]
         [RegularExpression(ValidationExtensions.TEXT_FIELD_REGEXP, ErrorMessage = "Name must be alphanumeric and may also contain the following chars: &_-.,@")]
