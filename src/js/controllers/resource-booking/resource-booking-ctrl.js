@@ -428,7 +428,7 @@ angular.module( 'BookingSystem.resourceBooking',
         if ( response.status === 409 ){
 
           $mdToast.show( $mdToast.simple()
-            .content( 'Resursen är tyvärr redan bokad under vald tidsram.' )
+            .content( 'Alla resurser av denna typ är tyvärr redan bokade under vald tidsram.' )
             .position( 'top right' )
           );
         }
@@ -693,7 +693,8 @@ angular.module( 'BookingSystem.resourceBooking',
             ResourceId: $scope.resourceBooking.Resource.ResourceId,
             ResourceCount: $scope.resourceBooking.ResourceCount,
             StartTime: addTimeToDate( $scope.bookingStartDate, $scope.bookingStartHour, $scope.bookingStartMinute ).format(),
-            EndTime: addTimeToDate( $scope.bookingEndDate, $scope.bookingEndHour, $scope.bookingEndMinute ).format()
+            EndTime: addTimeToDate( $scope.bookingEndDate, $scope.bookingEndHour, $scope.bookingEndMinute ).format(),
+            Provisional: $scope.resourceBooking.Provisional
           }
         ).$promise
 
