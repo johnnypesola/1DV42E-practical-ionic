@@ -157,3 +157,8 @@ $RECYCLE.BIN/
 
 # JetBrains IDE:s
 .idea
+
+# Web.config
+BookingSystem/Web.config
+BookingSystem/Web.Debug.config
+BookingSystem/Web.Release.config

@@ -161,23 +161,21 @@ namespace BookingSystem.Controllers
         [AcceptVerbs("DELETE")]
         public IHttpActionResult Delete(int LocationId)
         {
-            string UploadImagePath, imageLocation;
+            string imageFile;
+            Location deletedLocation;
 
             try
             {
                 // Delete info from database
-                locationService.LocationDelete(LocationId);
-                
-                // Get uploadpath
-                UploadImagePath = HttpContext.Current.Server.MapPath(String.Format(@"~/{0}", IMAGE_PATH));
+                deletedLocation = locationService.LocationDelete(LocationId);
 
-                // Build full image path
-                imageLocation = String.Format("{0}/{1}.jpg", UploadImagePath, LocationId);
+                // Get image path
+                imageFile = HttpContext.Current.Server.MapPath(String.Format(@"~/{0}", deletedLocation.ImageSrc));
 
                 // Remove uploaded file if it exists
-                if(File.Exists(@imageLocation))
+                if(File.Exists(@imageFile))
                 {
-                    File.Delete(@imageLocation);
+                    File.Delete(@imageFile);
                 }
             }
             catch (FormatException)
@@ -231,17 +229,17 @@ namespace BookingSystem.Controllers
 
                 // Save location
                 locationService.SaveLocation(location);
+
+                // Build return JSON object
+                returnData = JObject.Parse(String.Format("{{ 'imgpath' : '{0}'}}", UploadImagePath));
+
+                // Return path to uploaded image
+                return Ok(returnData);
             }
             catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
-
-            // Build return JSON object
-            returnData = JObject.Parse(String.Format("{{ 'imgpath' : '{0}/{1}.jpg'}}", IMAGE_PATH, LocationId));
-
-            // Return path to uploaded image
-            return Ok(returnData);
         }
     }
 }

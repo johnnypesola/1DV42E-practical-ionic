@@ -21,12 +21,12 @@ namespace BookingSystem.Models
         }
 
         // Methods
-        public void LocationDelete(Location Location)
+        public Location LocationDelete(Location Location)
         {
-            LocationDelete(Location.LocationId);
+            return LocationDelete(Location.LocationId);
         }
 
-        public void LocationDelete(int LocationId)
+        public Location LocationDelete(int LocationId)
         {
             if (LocationId < 0)
             {
@@ -34,16 +34,18 @@ namespace BookingSystem.Models
             }
 
             // Check that the Location exists before deletion
-            Location Location = LocationDAL.GetLocationById(LocationId);
+            Location location = LocationDAL.GetLocationById(LocationId);
 
             // If there is no Location
-            if (Location == null)
+            if (location == null)
             {
                 throw new DataBaseEntryNotFoundException("Location does not exist");
             }
 
             // Delete Location
             LocationDAL.DeleteLocation(LocationId);
+
+            return location;
         }
 
         public Location GetLocation(int LocationId)

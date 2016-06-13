@@ -133,19 +133,17 @@ namespace BookingSystem.Controllers
         [AcceptVerbs("DELETE")]
         public IHttpActionResult Delete(int ResourceId)
         {
-            string UploadImagePath, imageResource;
+            string imageResource;
+            Resource deletedResource;
 
             try
             {
                 // Delete info from database
-                resourceService.ResourceDelete(ResourceId);
+                deletedResource = resourceService.ResourceDelete(ResourceId);
 
-                // Get uploadpath
-                UploadImagePath = HttpContext.Current.Server.MapPath(String.Format(@"~/{0}", IMAGE_PATH));
-
-                // Build full image path
-                imageResource = String.Format("{0}/{1}.jpg", UploadImagePath, ResourceId);
-
+                // Get image path
+                imageResource = HttpContext.Current.Server.MapPath(String.Format(@"~/{0}", deletedResource.ImageSrc));
+                
                 // Remove uploaded file if it exists
                 if (File.Exists(@imageResource))
                 {
@@ -203,17 +201,17 @@ namespace BookingSystem.Controllers
 
                 // Save location
                 resourceService.SaveResource(resource);
+
+                // Build return JSON object
+                returnData = JObject.Parse(String.Format("{{ 'imgpath' : '{0}'}}", UploadImagePath));
+
+                // Return path to uploaded image
+                return Ok(returnData);
             }
             catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
-
-            // Build return JSON object
-            returnData = JObject.Parse(String.Format("{{ 'imgpath' : '{0}/{1}.jpg'}}", IMAGE_PATH, ResourceId));
-
-            // Return path to uploaded image
-            return Ok(returnData);
         }
     }
 }

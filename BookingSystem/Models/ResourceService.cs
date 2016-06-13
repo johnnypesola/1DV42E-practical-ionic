@@ -21,12 +21,12 @@ namespace BookingSystem.Models
         }
 
         // Methods
-        public void ResourceDelete(Resource Resource)
+        public Resource ResourceDelete(Resource Resource)
         {
-            ResourceDelete(Resource.ResourceId);
+            return ResourceDelete(Resource.ResourceId);
         }
 
-        public void ResourceDelete(int ResourceId)
+        public Resource ResourceDelete(int ResourceId)
         {
             if (ResourceId < 0)
             {
@@ -45,6 +45,7 @@ namespace BookingSystem.Models
             // Delete Resource
             ResourceDAL.DeleteResource(ResourceId);
 
+            return Resource;
         }
 
         public Resource GetResource(int ResourceId)

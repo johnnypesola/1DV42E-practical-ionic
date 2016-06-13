@@ -14,13 +14,14 @@ namespace BookingSystem.Models
         byte[] bytes;
         Image image;
         string UploadImagePath;
+        string dateNowStr;
 
         const int MAX_IMAGE_HEIGHT = 400;
         const int MAX_IMAGE_WIDTH = 400;
         const int MIN_IMAGE_HEIGHT = 10;
         const int MIN_IMAGE_WIDTH = 10;
 
-        public string SaveImage(string IMAGE_PATH, string base64string, int locationId)
+        public string SaveImage(string IMAGE_PATH, string base64string, int objectId)
         {
             bytes = Convert.FromBase64String(base64string);
 
@@ -42,11 +43,14 @@ namespace BookingSystem.Models
                 // Build uploadpath
                 UploadImagePath = HttpContext.Current.Server.MapPath(String.Format(@"~/{0}", IMAGE_PATH));
 
+                // Build date string
+                dateNowStr = DateTime.Now.ToString("yyyyMMddHHmmss");
+
                 // Save image
-                image.Save(String.Format("{0}/{1}.jpg", UploadImagePath, locationId), System.Drawing.Imaging.ImageFormat.Jpeg);
+                image.Save(String.Format("{0}/{1}-{2}.jpg", UploadImagePath, objectId, dateNowStr), System.Drawing.Imaging.ImageFormat.Jpeg);
 
                 // Return relative path to image
-                return String.Format("{0}/{1}.jpg", IMAGE_PATH, locationId);
+                return String.Format("{0}/{1}-{2}.jpg", IMAGE_PATH, objectId, dateNowStr);
             }
         }
     }

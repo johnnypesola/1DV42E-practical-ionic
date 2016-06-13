@@ -21,12 +21,12 @@ namespace BookingSystem.Models
         }
 
         // Methods
-        public void MealDelete(Meal Meal)
+        public Meal MealDelete(Meal Meal)
         {
-            MealDelete(Meal.MealId);
+            return MealDelete(Meal.MealId);
         }
 
-        public void MealDelete(int MealId)
+        public Meal MealDelete(int MealId)
         {
             if (MealId < 0)
             {
@@ -45,6 +45,7 @@ namespace BookingSystem.Models
             // Delete Meal
             MealDAL.DeleteMeal(MealId);
 
+            return Meal;
         }
 
         public Meal GetMeal(int MealId)

@@ -19,12 +19,12 @@ namespace BookingSystem.Models
         }
 
     // Methods
-        public void DeleteCustomer(Customer customer)
+        public Customer DeleteCustomer(Customer customer)
         {
-            DeleteCustomer(customer.CustomerId);
+            return DeleteCustomer(customer.CustomerId);
         }
 
-        public void DeleteCustomer(int customerId)
+        public Customer DeleteCustomer(int customerId)
         {
             if(customerId < 0)
             {
@@ -48,6 +48,7 @@ namespace BookingSystem.Models
             // Delete customer
             CustomerDAL.DeleteCustomer(customerId);
 
+            return customer;
         }
 
         public Customer GetCustomer(int customerId)

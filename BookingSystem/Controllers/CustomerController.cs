@@ -8,6 +8,8 @@ using BookingSystem.Models;
 using System.Web.Http.Cors;
 using System.Data;
 using Newtonsoft.Json.Linq;
+using System.Web;
+using System.IO;
 
 namespace BookingSystem.Controllers
 {
@@ -132,9 +134,23 @@ namespace BookingSystem.Controllers
         [AcceptVerbs("DELETE")]
         public IHttpActionResult Delete(int CustomerId)
         {
+            string imageFile;
+            Customer deletedCustomer;
+
             try
             {
-                customerService.DeleteCustomer(CustomerId);
+                // Delete info from database
+                deletedCustomer = customerService.DeleteCustomer(CustomerId);
+
+                // Get image path
+                imageFile = HttpContext.Current.Server.MapPath(String.Format(@"~/{0}", deletedCustomer.ImageSrc));
+
+                // Remove uploaded file if it exists
+                if (File.Exists(imageFile))
+                {
+                    File.Delete(imageFile);
+                }
+
             }
             catch (FormatException)
             {
@@ -188,17 +204,17 @@ namespace BookingSystem.Controllers
 
                 // Save location
                 customerService.SaveCustomer(customer);
+
+                // Build return JSON object
+                returnData = JObject.Parse(String.Format("{{ 'imgpath' : '{0}'}}", UploadImagePath));
+
+                // Return path to uploaded image
+                return Ok(returnData);
             }
             catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
-
-            // Build return JSON object
-            returnData = JObject.Parse(String.Format("{{ 'imgpath' : '{0}/{1}.jpg'}}", IMAGE_PATH, CustomerId));
-
-            // Return path to uploaded image
-            return Ok(returnData);
         }
     }
 }
