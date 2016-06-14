@@ -7,12 +7,17 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 
 // Make disabled input colors black instead of grey
 .md-input[disabled], md-select.md-default-theme[disabled] .md-select-value, md-select[disabled] .md-select-value {
-  color: #777 !important;
+  color: #666 !important;
 }
 
 // Remove lines in lists
 .item {
   border-width: 0 !important;
+}
+
+// Make headers normal, not bold
+h1, .h1 {
+  font-weight: normal !important;
 }
 
 // Usage of Roboto font
@@ -407,6 +412,10 @@ span.label {
 
 .upper-case {
   text-transform: uppercase !important;
+}
+
+.pointer {
+  cursor: pointer !important;
 }
 
 // Text transform specific END
