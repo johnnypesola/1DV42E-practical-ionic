@@ -41,7 +41,7 @@ angular.module( 'BookingSystem.resources',
 
     /* Initialization START */
 
-    $scope.$on( '$ionicView.enter', ( event, data ) => {
+    $scope.$on( '$ionicView.beforeEnter', ( event, data ) => {
       getResources();
     });
 

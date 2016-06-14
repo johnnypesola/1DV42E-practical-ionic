@@ -15,18 +15,20 @@
                 </div>
                 <div layout-gt-xs="row" class="pos-relative">
 
-                    <div class="validation-messages" ng-messages="customerForm.Name.$error">
-                      <div ng-message="required">Var god ange namn</div>
+                    <div class="validation-messages" ng-messages="customerForm.name.$error">
+                        <div ng-message="required">Var god ange namn</div>
+                        <div ng-message="pattern">Får endast innehålla specialtecknen: &_-.,~^@()%!</div>
                     </div>
 
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Namn</label>
                         <input
-                          name="Name"
+                          name="name"
                           type="text"
                           ng-model="customer.Name"
                           ng-required="true"
                           ng-disabled="!isEditMode"
+                          ng-pattern="TEXT_FIELD_REGEXP"
                         >
                     </md-input-container>
                 </div>
@@ -38,102 +40,144 @@
                 </div>
                 <div layout-gt-xs="row" class="pos-relative">
 
-                    <div class="validation-messages" ng-messages="customerForm.Address.$error">
-                      <div ng-message="required">Var god ange adress</div>
+                    <div class="validation-messages" ng-messages="customerForm.address.$error">
+                        <div ng-message="pattern">Får endast innehålla specialtecknen: &_-.,~^@()%!</div>
                     </div>
 
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Adress</label>
                         <input
-                          name="Address"
+                          name="address"
                           type="text"
                           ng-model="customer.Address"
-                          ng-required="true"
                           ng-disabled="!isEditMode"
+                          ng-pattern="TEXT_FIELD_REGEXP"
                         >
                     </md-input-container>
                 </div>
                 <div layout-gt-xs="row" class="pos-relative">
 
-                    <div class="validation-messages" ng-messages="customerForm.PostNumber.$error">
-                      <div ng-message="required">Var god ange postnummer i följande format: 123 45</div>
+                    <div class="validation-messages" ng-messages="customerForm.postNumber.$error">
+                        <div ng-message="pattern">Var god ange i formatet: 123 45</div>
                     </div>
 
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Postnummer</label>
                         <input
-                          name="PostNumber"
+                          name="postNumber"
                           type="text"
                           ng-model="customer.PostNumber"
-                          ng-required="true"
+                          ng-change="fixPostFormat()"
                           ng-disabled="!isEditMode"
+                          ng-pattern="/^[0-9\s]*$/"
                         >
                     </md-input-container>
                 </div>
                 <div layout-gt-xs="row" class="pos-relative">
 
-                    <div class="validation-messages" ng-messages="customerForm.City.$error">
-                      <div ng-message="required">Var god ange stad</div>
+                    <div class="validation-messages" ng-messages="customerForm.city.$error">
+                        <div ng-message="pattern">Får endast innehålla specialtecknen: &_-.,~^@()%!</div>
                     </div>
 
                     <md-input-container class="md-block" flex-gt-xs>
-                        <label>Stad</label>
+                        <label>Ort</label>
                         <input
-                          name="City"
-                          type="text"
-                          ng-model="customer.City"
-                          ng-required="true"
-                          ng-disabled="!isEditMode"
+                            class="upper-case"
+                            name="city"
+                            type="text"
+                            ng-model="customer.City"
+                            ng-disabled="!isEditMode"
+                            ng-pattern="TEXT_FIELD_REGEXP"
                         >
                     </md-input-container>
                 </div>
-                <div layout-gt-xs="row">
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="customerForm.email.$error">
+                        <div ng-message="email">Ange en giltig e-postadress</div>
+                    </div>
+
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>E-postadress</label>
                         <input
-                          name="EmailAddress"
+                          name="email"
                           type="email"
                           ng-model="customer.EmailAddress"
                           ng-disabled="!isEditMode"
                         >
                     </md-input-container>
                 </div>
-                <div layout-gt-xs="row">
+
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="customerForm.phoneNumber.$error">
+                        <div ng-message="pattern">Får endast innehålla nummer</div>
+                    </div>
+
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Telefonnummer</label>
                         <input
-                          name="PhoneNumber"
+                          name="phoneNumber"
                           type="text"
                           ng-model="customer.PhoneNumber"
                           ng-disabled="!isEditMode"
+                          ng-pattern="NUMERIC_SPACE_REGEXP"
                         >
                     </md-input-container>
                 </div>
-                <div layout-gt-xs="row">
+
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="customerForm.cellPhoneNumber.$error">
+                        <div ng-message="pattern">Får endast innehålla nummer</div>
+                    </div>
+
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Mobilnummer</label>
                         <input
-                          name="CellPhoneNumber"
+                          name="cellPhoneNumber"
                           type="text"
                           ng-model="customer.CellPhoneNumber"
                           ng-disabled="!isEditMode"
+                          ng-pattern="NUMERIC_SPACE_REGEXP"
                         >
                     </md-input-container>
                 </div>
-                <div layout-gt-xs="row">
+
+                <div layout-gt-xs="row" class="pos-relative">
                     <md-input-container class="md-block" flex-gt-xs>
+
                         <label>Tillhör kund</label>
-                        <input ng-model="customer.ParentCustomerId" ng-disabled="!isEditMode">
+
+                        <md-select
+                                name="parentCustomer"
+                                ng-model="customer.ParentCustomerId"
+                                ng-disabled="!customers.length || !isEditMode"
+                                >
+                            <md-option value="" selected="selected"><span class="faded">(Ingen)</span></md-option>
+                            <md-option ng-repeat="customer in customers" ng-value="customer.CustomerId">
+                                {{customer.Name}}
+                            </md-option>
+                        </md-select>
+
+
                     </md-input-container>
                 </div>
-                <div layout-gt-xs="row">
+
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="customerForm.notes.$error">
+                        <div ng-message="pattern">Får endast innehålla specialtecknen: &_-.,~^@()%!</div>
+                    </div>
+
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Anteckningar</label>
                         <input
-                          name="Notes"
+                          name="notes"
                           type="text"
                           ng-model="customer.Notes"
                           ng-disabled="!isEditMode"
+                          ng-pattern="TEXT_FIELD_REGEXP"
                         >
                     </md-input-container>
                 </div>
@@ -152,6 +196,7 @@
                 ng-show="isEditMode"
                 class="md-raised md-primary"
                 ng-click="saveCustomer()"
+                ng-disabled="customerForm.$invalid"
         >
             Spara
         </md-button>

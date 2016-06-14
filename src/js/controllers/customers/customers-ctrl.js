@@ -39,7 +39,7 @@ angular.module( 'BookingSystem.customers',
 
     /* Initialization START */
 
-    $scope.$on( '$ionicView.enter', ( event, data ) => {
+    $scope.$on( '$ionicView.beforeEnter', ( event, data ) => {
       getCustomers();
     });
 
@@ -112,6 +112,22 @@ angular.module( 'BookingSystem.customers',
 
       $scope.customer = customer;
 
+      return customer.$promise;
+    };
+
+    const getCustomers = function(){
+
+      const customers = Customer.query();
+
+      customers.$promise.catch( () => {
+
+        $mdToast.show( $mdToast.simple()
+            .content( 'Kunder kunde inte hämtas, var god försök igen.' )
+            .position( 'top right' )
+        );
+      });
+
+      $scope.customers = customers;
     };
 
     /* Private Methods END */
@@ -144,6 +160,8 @@ angular.module( 'BookingSystem.customers',
 
       const $scope = this;
 
+      const emailAddress = $scope.customer.EmailAddress.length > 1 ? $scope.customer.EmailAddress : null;
+
       // Save customer
       Customer.save(
         {
@@ -152,7 +170,7 @@ angular.module( 'BookingSystem.customers',
           Address: $scope.customer.Address,
           PostNumber: $scope.customer.PostNumber,
           City: $scope.customer.City,
-          EmailAddress: $scope.customer.EmailAddress,
+          EmailAddress: emailAddress,
           PhoneNumber: $scope.customer.PhoneNumber,
           CellPhoneNumber: $scope.customer.CellPhoneNumber,
           ParentCustomerId: $scope.customer.ParentCustomerId,
@@ -280,12 +298,29 @@ angular.module( 'BookingSystem.customers',
         });
     };
 
+    $scope.fixPostFormat = function() {
+
+      if ( !$scope.customer.PostNumber ) {
+        return;
+      }
+
+      // Add space if needed
+      if ( $scope.customer.PostNumber.length >= 5 && $scope.customer.PostNumber[3] !== ' ' ) {
+        $scope.customer.PostNumber = $scope.customer.PostNumber.substring( 0, 3 ) + ' ' + $scope.customer.PostNumber.substring( 3 );
+      }
+
+      // Limit length
+      if ( $scope.customer.PostNumber.length > 6 ) {
+        $scope.customer.PostNumber = $scope.customer.PostNumber.substring( 0, 6 );
+      }
+    };
+
     /* Public Methods END */
 
     /* Initialization START */
 
     setupModal();
-    getCustomer();
+    getCustomer().then( () => getCustomers() );
 
     /* Initialization END */
   }]
@@ -317,6 +352,21 @@ angular.module( 'BookingSystem.customers',
 
       // Redirect
       history.back();
+    };
+
+    const getCustomers = function(){
+
+      const customers = Customer.query();
+
+      customers.$promise.catch( () => {
+
+        $mdToast.show( $mdToast.simple()
+            .content( 'Kunder kunde inte hämtas, var god försök igen.' )
+            .position( 'top right' )
+        );
+      });
+
+      $scope.customers = customers;
     };
 
     /* Private Methods END */
@@ -395,9 +445,28 @@ angular.module( 'BookingSystem.customers',
         });
     };
 
+    $scope.fixPostFormat = function() {
+
+      if ( !$scope.customer.PostNumber ) {
+        return;
+      }
+
+      // Add space if needed
+      if ( $scope.customer.PostNumber.length >= 5 && $scope.customer.PostNumber[3] !== ' ' ) {
+        $scope.customer.PostNumber = $scope.customer.PostNumber.substring( 0, 3 ) + ' ' + $scope.customer.PostNumber.substring( 3 );
+      }
+
+      // Limit length
+      if ( $scope.customer.PostNumber.length > 6 ) {
+        $scope.customer.PostNumber = $scope.customer.PostNumber.substring( 0, 6 );
+      }
+    };
+
     /* Public Methods END */
 
     /* Initialization START */
+
+    getCustomers();
 
     /* Initialization END */
 

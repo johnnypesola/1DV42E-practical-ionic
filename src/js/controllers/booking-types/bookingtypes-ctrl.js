@@ -40,7 +40,7 @@ angular.module( 'BookingSystem.bookingTypes',
 
     /* Initialization START */
 
-    $scope.$on( '$ionicView.enter', ( event, data ) => {
+    $scope.$on( '$ionicView.beforeEnter', ( event, data ) => {
       getBookingTypes();
     });
 
