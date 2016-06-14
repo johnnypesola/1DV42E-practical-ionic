@@ -80,13 +80,14 @@
                     </div>
 
                     <md-input-container class="md-block" flex-gt-xs>
-                        <label>Stad</label>
+                        <label>Ort</label>
                         <input
-                          name="city"
-                          type="text"
-                          ng-model="customer.City"
-                          ng-disabled="!isEditMode"
-                          ng-pattern="TEXT_FIELD_REGEXP"
+                            class="upper-case"
+                            name="city"
+                            type="text"
+                            ng-model="customer.City"
+                            ng-disabled="!isEditMode"
+                            ng-pattern="TEXT_FIELD_REGEXP"
                         >
                     </md-input-container>
                 </div>
