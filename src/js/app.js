@@ -65,7 +65,7 @@ BookingSystem.run( ['$ionicPlatform', '$rootScope', ( $ionicPlatform, $rootScope
   moment.locale( 'sv' );
 
   // Global REGEXP
-  $rootScope.TEXT_FIELD_REGEXP = /^[a-zA-ZåäöÅÄÖé\-_&\.,~\^@()/%\s\!]*$/;
+  $rootScope.TEXT_FIELD_REGEXP = /^[0-9a-zA-ZåäöÅÄÖé\-_&\.,~\^@()/%\s\!]*$/;
   $rootScope.NUMERIC_SPACE_REGEXP = /^[0-9\s\+]*$/;
 
 }] );
