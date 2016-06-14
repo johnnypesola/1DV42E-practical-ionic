@@ -45,7 +45,7 @@ const BookingSystem = angular
     'ngMessages'
   ] );
 
-BookingSystem.run( ['$ionicPlatform', ( $ionicPlatform ) => {
+BookingSystem.run( ['$ionicPlatform', '$rootScope', ( $ionicPlatform, $rootScope ) => {
   $ionicPlatform.ready( () => {
 
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -63,6 +63,11 @@ BookingSystem.run( ['$ionicPlatform', ( $ionicPlatform ) => {
 
   // Moment.js locale settngs
   moment.locale( 'sv' );
+
+  // Global REGEXP
+  $rootScope.TEXT_FIELD_REGEXP = /^[0-9a-zA-ZåäöÅÄÖé\-_&\.,~\^@()/%\s\!]*$/;
+  $rootScope.NUMERIC_SPACE_REGEXP = /^[0-9\s\+\-]*$/;
+
 }] );
 
 // Constants

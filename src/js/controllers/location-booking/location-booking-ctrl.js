@@ -738,7 +738,8 @@ angular.module( 'BookingSystem.locationBooking',
               FurnituringId: furnituringId,
               StartTime: addTimeToDate( $scope.bookingStartDate, $scope.bookingStartHour, $scope.bookingStartMinute ).format(),
               EndTime: addTimeToDate( $scope.bookingEndDate, $scope.bookingEndHour, $scope.bookingEndMinute ).format(),
-              NumberOfPeople: $scope.locationBooking.NumberOfPeople
+              NumberOfPeople: $scope.locationBooking.NumberOfPeople,
+              Provisional: $scope.locationBooking.Provisional
             }
             ).$promise
 

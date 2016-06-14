@@ -19,6 +19,24 @@ angular.module( 'BookingSystem.mealsServices',
   }]
   )
 
+  .factory( 'MealImage', ['$http', 'API_URL', ( $http, API_URL ) => {
+
+    return {
+      upload : function( imageData, customerId ) {
+
+        return $http(
+          {
+            method: 'POST',
+            url: API_URL + 'Meal/image/' + customerId,
+            data: imageData,
+            headers: {'Content-Type': undefined}
+          }
+        );
+      }
+    };
+  }]
+  )
+
   .factory( 'MealHasPropertyHelper', ['MealHasProperty', 'MealProperty', ( MealHasProperty, MealProperty ) => {
     return {
 

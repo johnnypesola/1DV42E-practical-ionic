@@ -437,7 +437,7 @@ angular.module( 'BookingSystem.mealBooking',
         }).catch( ( response ) => {
 
           $mdToast.show( $mdToast.simple()
-              .content( 'Ett oväntat fel uppstod när lokal/plats-bokningen skulle sparas' )
+              .content( 'Ett oväntat fel uppstod när måltidsbokningen skulle sparas' )
               .position( 'top right' )
           );
         });

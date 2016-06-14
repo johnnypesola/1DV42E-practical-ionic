@@ -14,7 +14,7 @@
         <div class="row padding">
             <form name="locationForm">
                 <div layout-gt-xs="row">
-                    <img class="show-image" ng-src="{{API_IMG_PATH_URL + location.ImageSrc}}" ng-show="location.ImageSrc" ng-disabled="isEditMode">
+                    <img class="show-image" ng-src="{{API_IMG_PATH_URL + location.ImageSrc}}" ng-show="location.ImageSrc" ng-hide="isEditMode || !location.ImageSrc">
                     <div ng-if="isEditMode">
                         <image-uploader type="Location" id="{{location.LocationId}}" image-src="location.ImageSrc" base64-encoded-image="location.ImageForUpload"></image-uploader>
                     </div>
