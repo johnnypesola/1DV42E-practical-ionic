@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 15.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!-- Generator: Adobe Illustrator 13.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 14948)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="400px" height="400px" viewBox="0 0 400 400" enable-background="new 0 0 400 400" xml:space="preserve">
-<rect x="0.234" y="0.77" fill="#F1F0EE" width="399.766" height="398.71"/>
+<svg version="1.1" id="Lager_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="300px" height="300px" viewBox="0 0 300 300" enable-background="new 0 0 300 300" xml:space="preserve">
+<rect x="0.117" y="0.625" fill="#F1F0EE" width="300" height="300"/>
 <g>
-	<circle fill="#D5D5D5" cx="202.152" cy="200.589" r="25.395"/>
-	<path fill="#D5D5D5" d="M239.781,160.625l-7.256-19h-58.693l-7.719,19h-10.996v-9.5h-16v13.489l-11,3.511v74.5h144v-82H239.781z
-		 M202.152,237.625c-20.454,0-37.035-16.582-37.035-37.036s16.581-37.035,37.035-37.035c20.455,0,37.036,16.581,37.036,37.035
-		S222.607,237.625,202.152,237.625z"/>
+	<ellipse fill="#D5D5D5" cx="151.644" cy="150.974" rx="19.058" ry="19.108"/>
+	<path fill="#D5D5D5" d="M179.882,120.904l-5.445-14.296h-44.045l-5.793,14.296h-8.251v-7.148H104.34v10.149l-8.255,2.642v56.056
+		h108.063v-61.699H179.882z M151.644,178.841c-15.35,0-27.792-12.477-27.792-27.866c0-15.391,12.442-27.866,27.792-27.866
+		c15.351,0,27.793,12.476,27.793,27.866C179.437,166.364,166.994,178.841,151.644,178.841z"/>
 </g>
-<polygon fill="#D5D5D5" points="3.559,2.885 2.877,2.885 2.877,3.617 128.261,129 129.675,129 "/>
-<polygon fill="#D5D5D5" points="397.357,3.592 397.357,2.885 396.65,2.885 270.535,129 271.949,129 "/>
-<polygon fill="#D5D5D5" points="396.676,397.365 397.357,397.365 397.357,396.633 271.974,271.25 270.56,271.25 "/>
-<polygon fill="#D5D5D5" points="2.877,396.658 2.877,397.365 3.584,397.365 129.699,271.25 128.285,271.25 "/>
-<rect x="208.788" y="182.984" transform="matrix(0.9232 0.3844 -0.3844 0.9232 87.7182 -68.5938)" fill="#D5D5D5" width="13.333" height="4.313"/>
-<rect x="182.039" y="182.984" transform="matrix(-0.9232 0.3844 -0.3844 -0.9232 434.0778 283.5207)" fill="#D5D5D5" width="13.333" height="4.313"/>
+<polygon fill="#D5D5D5" points="2.612,2.216 2.101,2.216 2.101,2.768 96.193,97.109 97.254,97.109 "/>
+<polygon fill="#D5D5D5" points="298.133,2.749 298.133,2.216 297.603,2.216 202.961,97.109 204.022,97.109 "/>
+<polygon fill="#D5D5D5" points="297.622,299.033 298.133,299.033 298.133,298.482 204.041,204.142 202.979,204.142 "/>
+<polygon fill="#D5D5D5" points="2.101,298.502 2.101,299.033 2.631,299.033 97.273,204.142 96.211,204.142 "/>
+<polygon fill="#D5D5D5" points="157.633,135.93 166.87,139.787 165.626,142.783 156.388,138.926 "/>
+<polygon fill="#D5D5D5" points="146.787,138.917 137.55,142.774 136.306,139.778 145.543,135.922 "/>
 </svg>
