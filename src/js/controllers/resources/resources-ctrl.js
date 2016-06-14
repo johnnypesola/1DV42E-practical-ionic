@@ -10,7 +10,7 @@ angular.module( 'BookingSystem.resources',
   )
 
   //List controller
-  .controller( 'ResourcesListCtrl', [ '$rootScope', '$scope', '$state', '$mdToast', 'Resource', ($rootScope, $scope, $state, $mdToast, Resource) => {
+  .controller( 'ResourcesListCtrl', [ '$rootScope', '$scope', '$state', '$mdToast', 'Resource', ( $rootScope, $scope, $state, $mdToast, Resource ) => {
 
     /* Init vars */
 
@@ -50,27 +50,26 @@ angular.module( 'BookingSystem.resources',
   )
 
   //Edit controller
-  .controller( 'ResourceDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$ionicModal', '$state', 'Resource', 'ResourceImage', 'API_IMG_PATH_URL', '$mdToast', ($rootScope, $scope, $stateParams, MODAL_ANIMATION, $ionicModal, $state, Resource, ResourceImage, API_IMG_PATH_URL, $mdToast ) => {
+  .controller( 'ResourceDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$ionicModal', '$state', 'Resource', 'ResourceImage', 'API_IMG_PATH_URL', '$mdToast', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $ionicModal, $state, Resource, ResourceImage, API_IMG_PATH_URL, $mdToast ) => {
     /* Init vars */
 
     const modalTemplateUrl = 'templates/modals/resources-delete.html';
     $scope.isEditMode = false;
     $scope.resourceBackup = {};
     $scope.API_IMG_PATH_URL = API_IMG_PATH_URL;
-    $scope.imgTime = Date.now();
 
     /* Private methods START */
 
     const setupModal = function(){
 
       $ionicModal.fromTemplateUrl( modalTemplateUrl, {
-          scope: $scope,
-          animation: MODAL_ANIMATION
-        })
-        .then( ( response ) => {
+        scope: $scope,
+        animation: MODAL_ANIMATION
+      })
+      .then( ( response ) => {
 
-          $scope.modal = response;
-        });
+        $scope.modal = response;
+      });
 
       // Cleanup the modal when we're done with it!
       $scope.$on( '$destroy', () => {
@@ -191,33 +190,33 @@ angular.module( 'BookingSystem.resources',
           // Something went wrong
         }).catch( ( response ) => {
 
-        // If there there was a foreign key reference
-        if ( response.status === 409 ){
-          $mdToast.show( $mdToast.simple()
-            .content( 'Det finns redan en resurs som heter "' + $scope.resource.Name +
-              '". Två resurser kan inte heta lika.' )
-            .position( 'top right' )
-          );
-        }
+          // If there there was a foreign key reference
+          if ( response.status === 409 ){
+            $mdToast.show( $mdToast.simple()
+              .content( 'Det finns redan en resurs som heter "' + $scope.resource.Name +
+                '". Två resurser kan inte heta lika.' )
+              .position( 'top right' )
+            );
+          }
 
-        // If there was a problem with the in-data
-        else if ( response.status === 400 || response.status === 500 ){
-          $mdToast.show( $mdToast.simple()
-            .content( 'Ett oväntat fel uppstod när resursen skulle sparas' )
-            .position( 'top right' )
-          );
-        }
+          // If there was a problem with the in-data
+          else if ( response.status === 400 || response.status === 500 ){
+            $mdToast.show( $mdToast.simple()
+              .content( 'Ett oväntat fel uppstod när resursen skulle sparas' )
+              .position( 'top right' )
+            );
+          }
 
-        // If the entry was not found
-        if ( response.status === 404 ) {
-          $mdToast.show( $mdToast.simple()
-            .content( 'Resursen "' + $scope.resource.Name + '" existerar inte längre. Hann kanske någon radera den?' )
-            .position( 'top right' )
-          );
+          // If the entry was not found
+          if ( response.status === 404 ) {
+            $mdToast.show( $mdToast.simple()
+              .content( 'Resursen "' + $scope.resource.Name + '" existerar inte längre. Hann kanske någon radera den?' )
+              .position( 'top right' )
+            );
 
-          history.back();
-        }
-      });
+            history.back();
+          }
+        });
     };
 
     $scope.deleteResource = function() {
@@ -287,12 +286,31 @@ angular.module( 'BookingSystem.resources',
   )
 
   //Create controller
-  .controller( 'ResourceCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'Resource', '$mdToast', ( $rootScope, $stateParams, $scope, $state, Resource, $mdToast ) => {
+  .controller( 'ResourceCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'Resource', '$mdToast', 'ResourceImage', ( $rootScope, $stateParams, $scope, $state, Resource, $mdToast, ResourceImage ) => {
 
     /* Init vars */
     $scope.resource = {};
 
     /* Private methods START */
+
+    const uploadImage = ( ResourceId ) => {
+
+      return ResourceImage.upload( $scope.resource.ImageForUpload, ResourceId );
+
+    };
+
+    // Display success message
+    const saveSuccess = () => {
+
+      // Display success message
+      $mdToast.show( $mdToast.simple()
+          .content( 'Resursen "' + $scope.resource.Name + '" sparades med ett lyckat resultat' )
+          .position( 'top right' )
+      );
+
+      // Redirect
+      history.back();
+    };
 
     /* Private Methods END */
 
@@ -318,33 +336,52 @@ angular.module( 'BookingSystem.resources',
         // If everything went ok
         .then( ( response ) => {
 
-          $mdToast.show( $mdToast.simple()
-            .content( 'Resursen "' + $scope.resource.Name + '" skapades med ett lyckat resultat' )
-            .position( 'top right' )
-          );
+          if ( typeof $scope.resource.ImageForUpload !== 'undefined' ) {
 
-          history.back();
+            // Upload image
+            uploadImage( response.ResourceId )
+
+              // Image upload successful
+              .success( ( data ) => {
+
+                saveSuccess();
+              })
+              // Image upload failed
+              .error( () => {
+
+                $mdToast.show( $mdToast.simple()
+                    .content( 'Resursen "' + $scope.meal.Name + '" skapades, men det gick inte att ladda upp och spara den önskade bilden.' )
+                    .position( 'top right' )
+                );
+
+                // Redirect
+                history.back();
+              });
+
+          } else {
+            saveSuccess();
+          }
 
           // Something went wrong
         }).catch( ( response ) => {
 
-        // If there there was a foreign key reference
-        if ( response.status === 409 ){
-          $mdToast.show( $mdToast.simple()
-            .content( 'Det finns redan en resurs som heter "' + $scope.resource.Name +
-              '". Två resurser kan inte heta lika.' )
-            .position( 'top right' )
-          );
-        }
+          // If there there was a foreign key reference
+          if ( response.status === 409 ){
+            $mdToast.show( $mdToast.simple()
+              .content( 'Det finns redan en resurs som heter "' + $scope.resource.Name +
+                '". Två resurser kan inte heta lika.' )
+              .position( 'top right' )
+            );
+          }
 
-        // If there was a problem with the in-data
-        else {
-          $mdToast.show( $mdToast.simple()
-            .content( 'Ett oväntat fel uppstod när resursen skulle sparas' )
-            .position( 'top right' )
-          );
-        }
-      });
+          // If there was a problem with the in-data
+          else {
+            $mdToast.show( $mdToast.simple()
+              .content( 'Ett oväntat fel uppstod när resursen skulle sparas' )
+              .position( 'top right' )
+            );
+          }
+        });
     };
 
     /* Public Methods END */
