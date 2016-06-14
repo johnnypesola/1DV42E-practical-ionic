@@ -395,6 +395,23 @@ angular.module( 'BookingSystem.customers',
         });
     };
 
+    $scope.fixPostFormat = function() {
+
+      if ( !$scope.customer.PostNumber ) {
+        return;
+      }
+
+      // Add space if needed
+      if ( $scope.customer.PostNumber.length >= 5 && $scope.customer.PostNumber[3] !== ' ' ) {
+        $scope.customer.PostNumber = $scope.customer.PostNumber.substring( 0, 3 ) + ' ' + $scope.customer.PostNumber.substring( 3 );
+      }
+
+      // Limit length
+      if ( $scope.customer.PostNumber.length > 6 ) {
+        $scope.customer.PostNumber = $scope.customer.PostNumber.substring( 0, 6 );
+      }
+    };
+
     /* Public Methods END */
 
     /* Initialization START */

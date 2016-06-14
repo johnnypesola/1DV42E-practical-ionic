@@ -3,59 +3,105 @@
 
         <div class="row padding">
 
-            <form name="userForm">
+            <form name="customerForm">
                 <div layout-gt-xs="row">
                     <image-uploader type="Customer" id="{{customer.CustomerId}}" image-src="customer.ImageSrc" base64-encoded-image="customer.ImageForUpload"></image-uploader>
                 </div>
-                <div layout-gt-xs="row">
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="customerForm.name.$error">
+                        <div ng-message="required">Var god ange namn</div>
+                        <div ng-message="pattern">Får endast innehålla specialtecknen: &_-.,~^@()%!</div>
+                    </div>
+
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Namn</label>
-                        <input ng-model="customer.Name">
+                        <input
+                            ng-model="customer.Name"
+                            name="name"
+                            ng-required="true"
+                            ng-pattern="/^[a-zA-ZåäöÅÄÖé\-_&\.,~\^@()/%\s\!]*$/"
+                        >
                     </md-input-container>
                 </div>
-                <div layout-gt-xs="row">
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="customerForm.address.$error">
+                        <div ng-message="required">Var god ange adress</div>
+                        <div ng-message="pattern">Får endast innehålla specialtecknen: &_-.,~^@()%!</div>
+                    </div>
+
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Adress</label>
-                        <input ng-model="customer.Address">
+                        <input
+                            ng-model="customer.Address"
+                            name="address"
+                            ng-required="true"
+                            ng-pattern="/^[a-zA-ZåäöÅÄÖé\-_&\.,~\^@()/%\s\!]*$/"
+                        >
                     </md-input-container>
                 </div>
-                <div layout-gt-xs="row">
+
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="customerForm.postNumber.$error">
+                        <div ng-message="required">Var god ange postnummer</div>
+                        <div ng-message="pattern">Var god ange i formatet: 737 22</div>
+                    </div>
+
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Postnummer</label>
-                        <input ng-model="customer.PostNumber">
+                        <input
+                            ng-model="customer.PostNumber"
+                            name="postNumber"
+                            ng-required="true"
+                            ng-pattern="/^[0-9\s]*$/"
+                            ng-change="fixPostFormat()"
+                        >
                     </md-input-container>
                 </div>
-                <div layout-gt-xs="row">
+
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="customerForm.city.$error">
+                        <div ng-message="required">Var god ange stad</div>
+                        <div ng-message="pattern">Får endast innehålla specialtecknen: &_-.,~^@()%!</div>
+                    </div>
+
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Stad</label>
                         <input ng-model="customer.City">
                     </md-input-container>
                 </div>
-                <div layout-gt-xs="row">
+
+                <div layout-gt-xs="row" class="pos-relative">
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>E-postadress</label>
                         <input ng-model="customer.EmailAddress">
                     </md-input-container>
                 </div>
-                <div layout-gt-xs="row">
+
+                <div layout-gt-xs="row" class="pos-relative">
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Telefonnummer</label>
                         <input ng-model="customer.PhoneNumber">
                     </md-input-container>
                 </div>
-                <div layout-gt-xs="row">
+
+                <div layout-gt-xs="row" class="pos-relative">
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Mobilnummer</label>
                         <input ng-model="customer.CellPhoneNumber">
                     </md-input-container>
                 </div>
-                <div layout-gt-xs="row">
+
+                <div layout-gt-xs="row" class="pos-relative">
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Tillhör kund</label>
                         <input ng-model="customer.ParentCustomerId">
                     </md-input-container>
                 </div>
-                <div layout-gt-xs="row">
+                <div layout-gt-xs="row" class="pos-relative">
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Anteckningar</label>
                         <input ng-model="customer.Notes">
