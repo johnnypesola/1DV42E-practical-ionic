@@ -133,7 +133,7 @@
                                 ng-disabled="!customers.length"
                         >
                             <md-option value="" selected="selected"><span class="faded">(Ingen)</span></md-option>
-                            <md-option ng-repeat="customer in customers" ng-value="customer">
+                            <md-option ng-repeat="customer in customers" ng-value="customer.CustomerId">
                                 {{customer.Name}}
                             </md-option>
                         </md-select>

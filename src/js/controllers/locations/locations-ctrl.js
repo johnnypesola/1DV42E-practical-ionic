@@ -55,7 +55,7 @@ angular.module( 'BookingSystem.locations',
     /* Public Methods END */
 
     /* Initialization START */
-    $scope.$on( '$ionicView.enter', ( event, data ) => {
+    $scope.$on( '$ionicView.beforeEnter', ( event, data ) => {
       getLocations();
     });
 

@@ -39,7 +39,7 @@ angular.module( 'BookingSystem.customers',
 
     /* Initialization START */
 
-    $scope.$on( '$ionicView.enter', ( event, data ) => {
+    $scope.$on( '$ionicView.beforeEnter', ( event, data ) => {
       getCustomers();
     });
 

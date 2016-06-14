@@ -10,6 +10,11 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   color: #777 !important;
 }
 
+// Remove lines in lists
+.item {
+  border-width: 0 !important;
+}
+
 // Usage of Roboto font
 @font-face {
   font-family: "Roboto";
@@ -398,10 +403,10 @@ span.label {
 
 // Image uploader specific END
 
-// Text transform specfict START
+// Text transform specific START
 
 .upper-case {
   text-transform: uppercase !important;
 }
 
-// Text transform specfict ENd
+// Text transform specific END

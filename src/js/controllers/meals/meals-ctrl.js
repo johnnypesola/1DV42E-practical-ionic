@@ -37,7 +37,7 @@ angular.module( 'BookingSystem.meals',
 
     /* Initialization START */
 
-    $scope.$on( '$ionicView.enter', ( event, data ) => {
+    $scope.$on( '$ionicView.beforeEnter', ( event, data ) => {
       getMeals();
     });
 
