@@ -44,7 +44,7 @@ namespace BookingSystem.Models
                 UploadImagePath = HttpContext.Current.Server.MapPath(String.Format(@"~/{0}", IMAGE_PATH));
 
                 // Build date string
-                dateNowStr = DateTime.Now.ToString("yyyyMMddHHmmss");
+                dateNowStr = DateTime.Now.ToString("MMddHHmmss");
 
                 // Save image
                 image.Save(String.Format("{0}/{1}-{2}.jpg", UploadImagePath, objectId, dateNowStr), System.Drawing.Imaging.ImageFormat.Jpeg);
