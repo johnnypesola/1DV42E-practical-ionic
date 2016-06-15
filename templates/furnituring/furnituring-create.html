@@ -12,11 +12,23 @@
 
         <div class="row padding">
 
-            <form name="userForm">
-                <div layout-gt-xs="row">
+            <form name="furnituringForm">
+
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="furnituringForm.name.$error">
+                        <div ng-message="required">Var god ange namn</div>
+                        <div ng-message="pattern">Får endast innehålla specialtecknen: &_-.,~^@()%!</div>
+                    </div>
+
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Namn</label>
-                        <input ng-model="furnituring.Name">
+                        <input
+                            ng-model="furnituring.Name"
+                            name="name"
+                            ng-required="true"
+                            ng-pattern="TEXT_FIELD_REGEXP"
+                        >
                     </md-input-container>
                 </div>
             </form>
@@ -25,6 +37,7 @@
         <md-button
             class="md-raised md-primary"
             ng-click="saveFurnituring()"
+            ng-disabled="furnituringForm.$invalid"
         >
             Spara
         </md-button>
