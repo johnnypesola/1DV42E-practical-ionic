@@ -19,6 +19,17 @@
                         <image-uploader type="Location" id="{{location.LocationId}}" image-src="location.ImageSrc" base64-encoded-image="location.ImageForUpload"></image-uploader>
                     </div>
                 </div>
+
+                <div layout-gt-xs="row">
+                    <div class="col">
+                        <md-button
+                            md-no-ink
+                            class="md-primary"
+                            ng-click="mapsModal.show()"
+                        >Visa Position</md-button>
+                    </div>
+                </div>
+
                 <div layout-gt-xs="row">
 
                     <div class="validation-messages" ng-messages="locationForm.Name.$error">
@@ -36,6 +47,7 @@
                         >
                     </md-input-container>
                 </div>
+
                 <div layout-gt-xs="row">
 
                     <div class="validation-messages" ng-messages="locationForm.MaxPeople.$error">
@@ -57,6 +69,7 @@
                         >
                     </md-input-container>
                 </div>
+
                 <div layout-gt-xs="row">
 
                     <div class="validation-messages" ng-messages="locationForm.BookingPricePerHour.$error">
@@ -117,17 +130,6 @@
                     </md-input-container>
                 </div>
 
-
-                <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" options="map.options" bounds="map.bounds" events="map.events">
-                    <ui-gmap-markers
-                            models="markers"
-                            coords="'coords'"
-                            options="options"
-                            events="events"
-                    >
-                    </ui-gmap-markers>
-                </ui-gmap-google-map>
-
             </form>
 
         </div>
@@ -151,7 +153,7 @@
         <md-button
                 ng-show="isEditMode"
                 class="md-fab md-mini md-warn"
-                ng-click="modal.show()"
+                ng-click="deleteModal.show()"
         >
             <span class="icon ion-trash-a md-medium-icon"></span>
         </md-button>

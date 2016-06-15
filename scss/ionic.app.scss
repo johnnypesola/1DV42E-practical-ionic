@@ -5,6 +5,12 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
 
+// Custom colors
+.orangitive {
+  color: #ef7c2b;
+}
+
+
 // Make disabled input colors black instead of grey
 .md-input[disabled], md-select.md-default-theme[disabled] .md-select-value, md-select[disabled] .md-select-value {
   color: #222 !important;
@@ -404,9 +410,25 @@ span.label {
 
 // Angular google maps specific START
 
+.angular-google-map {
+  display: -webkit-flex;
+  display: flex;
+  flex:1;
+}
+
 .angular-google-map-container {
-  width: 800px !important;
-  height: 600px !important;
+  /*width: 100% !important;
+  height: 400px !important;*/
+  flex:1;
+}
+
+.flex-parent {
+  display: -webkit-flex;
+  display: flex;
+}
+
+.flex-child {
+  flex:1;
 }
 
 // Angular google maps specific END

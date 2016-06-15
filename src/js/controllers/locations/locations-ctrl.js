@@ -70,13 +70,13 @@ angular.module( 'BookingSystem.locations',
     /* Init vars */
 
     const modalTemplateUrl = 'templates/modals/location-delete.html';
-    $scope.editMode = false;
+    const googleMapsTemplateUrl = 'templates/modals/google-maps.html';
     $scope.locationBackup = {};
     $scope.API_IMG_PATH_URL = API_IMG_PATH_URL;
     $scope.markers = [];
 
     /* Private methods START */
-    const setupModal = function(){
+    const setupDeleteModal = function(){
 
       $ionicModal.fromTemplateUrl( modalTemplateUrl, {
         scope: $scope,
@@ -84,12 +84,29 @@ angular.module( 'BookingSystem.locations',
       })
       .then( ( response ) => {
 
-        $scope.modal = response;
+        $scope.deleteModal = response;
       });
 
       // Cleanup the modal when we're done with it!
       $scope.$on( '$destroy', () => {
-        $scope.modal.remove();
+        $scope.deleteModal.remove();
+      });
+    };
+
+    const setupGoogleMapsModal = function(){
+
+      $ionicModal.fromTemplateUrl( googleMapsTemplateUrl, {
+        scope: $scope,
+        animation: MODAL_ANIMATION
+      })
+        .then( ( response ) => {
+
+          $scope.mapsModal = response;
+        });
+
+      // Cleanup the modal when we're done with it!
+      $scope.$on( '$destroy', () => {
+        $scope.mapsModal.remove();
       });
     };
 
@@ -109,6 +126,25 @@ angular.module( 'BookingSystem.locations',
       // Redirect
       history.back();
     };
+
+    const moveMarkerOnClick = function( map, eventName, args ) {
+
+      if ( $scope.isEditMode ) {
+
+        // Refresh location variables
+        $scope.location.GPSLatitude = args[0].latLng.lat();
+        $scope.location.GPSLongitude = args[0].latLng.lng();
+
+        // Refresh map marker variables
+        $scope.markers[0].coords = {
+          latitude : args[0].latLng.lat(),
+          longitude : args[0].latLng.lng()
+        };
+
+        $scope.$apply();
+      }
+    };
+
     const initMapVariables = function() {
 
       $scope.map = {
@@ -118,7 +154,14 @@ angular.module( 'BookingSystem.locations',
         },
         zoom: DEFAULT_MAP_ZOOM,
         bounds: {},
-        options: { mapTypeId: google.maps.MapTypeId.SATELLITE } // Make satellite view default
+        // options: { mapTypeId: google.maps.MapTypeId.SATELLITE }, // Make satellite view default
+        events: {
+          click: function ( map, eventName, args ) {
+
+            // Only do stuff if we are in edit mode
+            moveMarkerOnClick( map, eventName, args );
+          }
+        }
       };
     };
 
@@ -134,12 +177,18 @@ angular.module( 'BookingSystem.locations',
         }
       };
 
-      $scope.map.center = {
-        latitude: $scope.location.GPSLatitude,
-        longitude: $scope.location.GPSLongitude
-      };
-
-      $scope.map.zoom = 18;
+      // Make sure that there is valid GPS values, then we apply specific marker settings
+      if (
+        $scope.location.GPSLatitude !== 0 &&
+        $scope.location.GPSLongitude !== 0
+      )
+      {
+        $scope.map.center = {
+          latitude: $scope.location.GPSLatitude + 0.0015,
+          longitude: $scope.location.GPSLongitude - 0.0022
+        };
+        $scope.map.zoom = 17;
+      }
     };
 
     const getLocation = function () {
@@ -166,7 +215,6 @@ angular.module( 'BookingSystem.locations',
     /* Public Methods START */
 
     $scope.startEditMode = function () {
-      const $scope = this;
 
       $scope.isEditMode = true;
 
@@ -175,16 +223,16 @@ angular.module( 'BookingSystem.locations',
     };
 
     $scope.endEditMode = function () {
-      const $scope = this;
 
       $scope.isEditMode = false;
     };
 
     $scope.abortEditMode = function() {
-      const $scope = this;
 
       $scope.isEditMode = false;
       $scope.location = $scope.locationBackup;
+
+      $scope.$apply();
     };
 
     $scope.saveLocation = function() {
@@ -198,6 +246,8 @@ angular.module( 'BookingSystem.locations',
           Name: $scope.location.Name,
           MaxPeople: $scope.location.MaxPeople,
           ImageSrc: $scope.location.ImageSrc,
+          GPSLatitude: $scope.location.GPSLatitude,
+          GPSLongitude: $scope.location.GPSLongitude,
           BookingPricePerHour: $scope.location.BookingPricePerHour,
           MinutesMarginBeforeBooking: $scope.location.MinutesMarginBeforeBooking,
           MinutesMarginAfterBooking: $scope.location.MinutesMarginAfterBooking
@@ -323,9 +373,11 @@ angular.module( 'BookingSystem.locations',
 
     /* Initialization START */
 
-    setupModal();
+    setupDeleteModal();
+    setupGoogleMapsModal();
     getLocation();
     initMapVariables();
+
     // Add watch on $scope.map.bounds to check (every time it changes) if return boundary data is received from google maps
     $scope.$watch(
 
