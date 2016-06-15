@@ -93,7 +93,7 @@ BookingSystem.constant( 'BOOKING_TYPES', {
 });
 
 // Routes
-BookingSystem.config( ['$stateProvider', '$urlRouterProvider', '$mdDateLocaleProvider', ( $stateProvider, $urlRouterProvider, $mdDateLocaleProvider ) => {
+BookingSystem.config( ['$stateProvider', '$urlRouterProvider', '$ionicConfigProvider', ( $stateProvider, $urlRouterProvider, $ionicConfigProvider ) => {
   $stateProvider
 
   .state( 'app', {
@@ -459,6 +459,9 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', '$mdDateLocalePro
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise( '/app/start' );
+
+  // Disable animation between views
+  $ionicConfigProvider.views.transition( 'none' );
 }]
 );
 
