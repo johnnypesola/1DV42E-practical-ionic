@@ -1,0 +1,25 @@
+<ion-modal-view view-title="Plats">
+    <ion-header-bar class="bar-energized">
+
+        <div class="buttons">
+            <button class="button" ng-click="mapsModal.hide()">
+                <i class="icon ion-ios-arrow-back"></i> Tillbaka</button>
+        </div>
+
+        <h1 class="title">Position</h1>
+
+    </ion-header-bar>
+    <ion-content padding="false" scroll="false" class="flex-parent">
+
+        <ui-gmap-google-map center="map.center" zoom="map.zoom" draggable="true" options="map.options" bounds="map.bounds" events="map.events" refresh="mapsWillRefresh">
+            <ui-gmap-markers
+                    models="markers"
+                    coords="'coords'"
+                    options="options"
+                    events="events"
+            >
+            </ui-gmap-markers>
+        </ui-gmap-google-map>
+
+    </ion-content>
+</ion-modal-view>

@@ -5,49 +5,137 @@
 
         <div class="row padding">
 
-            <form name="userForm">
+            <form name="resourceForm">
+
               <div layout-gt-xs="row">
                 <img class="show-image" ng-src="{{API_IMG_PATH_URL + resource.ImageSrc}}" ng-show="resource.ImageSrc" ng-hide="isEditMode || !resource.ImageSrc">
                 <div ng-if="isEditMode">
                   <image-uploader type="Resource" id="{{resource.ResourceId}}" image-src="resource.ImageSrc" base64-encoded-image="resource.ImageForUpload"></image-uploader>
                 </div>
               </div>
-                <div layout-gt-xs="row">
+
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="resourceForm.name.$error">
+                        <div ng-message="required">Var god ange namn</div>
+                        <div ng-message="pattern">Får endast innehålla specialtecknen: &_-.,~^@()%!</div>
+                    </div>
+
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Namn</label>
-                        <input ng-model="resource.Name" ng-disabled="!isEditMode">
+                        <input
+                            ng-model="resource.Name"
+                            ng-disabled="!isEditMode"
+                            name="name"
+                            ng-required="true"
+                            ng-pattern="TEXT_FIELD_REGEXP"
+                            >
                     </md-input-container>
                 </div>
-                <div layout-gt-xs="row">
+
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="resourceForm.count.$error">
+                        <div ng-message="required">Var god ange antal</div>
+                        <div ng-message="pattern">Endast nummer tillåtna</div>
+                        <div ng-message="min">Måste vara minst 0</div>
+                    </div>
+
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Antal</label>
-                        <input ng-model="resource.Count" ng-disabled="!isEditMode">
+                        <input
+                            ng-disabled="!isEditMode"
+                            type="number"
+                            name="count"
+                            ng-required="true"
+                            ng-model="resource.Count"
+                            ng-pattern="NUMERIC_STRICT_REGEXP"
+                            min="0"
+                        >
                     </md-input-container>
                 </div>
-                <div layout-gt-xs="row">
+
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="resourceForm.price.$error">
+                        <div ng-message="pattern">Endast nummer och en punkt tillåtet</div>
+                    </div>
+
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Pris per timme</label>
-                        <input ng-model="resource.BookingPricePerHour" ng-disabled="!isEditMode">
+                        <input
+                            ng-model="resource.BookingPricePerHour"
+                            name="price"
+                            ng-pattern="NUMERIC_DOT_REGEXP"
+                            ng-disabled="!isEditMode"
+                        >
                     </md-input-container>
                 </div>
-                <div layout-gt-xs="row">
+
+                <!-- NOT IMPLEMENTED
+
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="resourceForm.minutesMarginBeforeBooking.$error">
+                        <div ng-message="pattern">Endast nummer tillåtna</div>
+                        <div ng-message="min">Måste vara minst 0</div>
+                    </div>
+
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Marginal före bokning</label>
-                        <input ng-model="resource.MinutesMarginBeforeBooking" ng-disabled="!isEditMode">
+                        <input
+                            ng-model="resource.MinutesMarginBeforeBooking"
+                            ng-disabled="!isEditMode"
+                            type="number"
+                            name="minutesMarginBeforeBooking"
+                            ng-pattern="NUMERIC_STRICT_REGEXP"
+                            min="0"
+                        >
                     </md-input-container>
                 </div>
-                <div layout-gt-xs="row">
+
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="resourceForm.minutesMarginAfterBooking.$error">
+                        <div ng-message="pattern">Endast nummer tillåtna</div>
+                        <div ng-message="min">Måste vara minst 0</div>
+                    </div>
+
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Marginal efter bokning</label>
-                        <input ng-model="resource.MinutesMarginAfterBooking" ng-disabled="!isEditMode">
+                        <input
+                            ng-model="resource.MinutesMarginAfterBooking"
+                            ng-disabled="!isEditMode"
+                            type="number"
+                            name="minutesMarginAfterBooking"
+                            ng-pattern="NUMERIC_STRICT_REGEXP"
+                            min="0"
+                        >
                     </md-input-container>
                 </div>
-                <div layout-gt-xs="row">
+
+
+
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="resourceForm.weekEndCount.$error">
+                        <div ng-message="pattern">Endast nummer tillåtna</div>
+                        <div ng-message="min">Måste vara minst 0</div>
+                    </div>
+
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Helgantal</label>
-                        <input ng-model="resource.WeekEndCount" ng-disabled="!isEditMode">
+                        <input
+                            ng-model="resource.WeekEndCount"
+                            ng-disabled="!isEditMode"
+                            type="number"
+                            name="weekEndCount"
+                            ng-pattern="NUMERIC_STRICT_REGEXP"
+                            min="0"
+                        >
                     </md-input-container>
                 </div>
+                -->
             </form>
         </div>
 
@@ -63,6 +151,7 @@
                 ng-show="isEditMode"
                 class="md-raised md-primary"
                 ng-click="saveResource()"
+                ng-disabled="resourceForm.$invalid"
         >
             Spara
         </md-button>

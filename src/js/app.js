@@ -67,6 +67,8 @@ BookingSystem.run( ['$ionicPlatform', '$rootScope', ( $ionicPlatform, $rootScope
   // Global REGEXP
   $rootScope.TEXT_FIELD_REGEXP = /^[0-9a-zA-ZåäöÅÄÖé\-_&\.,~\^@()/%\s\!]*$/;
   $rootScope.NUMERIC_SPACE_REGEXP = /^[0-9\s\+\-]*$/;
+  $rootScope.NUMERIC_STRICT_REGEXP = /^[0-9]*$/;
+  $rootScope.NUMERIC_DOT_REGEXP = /^[0-9]*[\.]?[0-9]*?$/;
 
 }] );
 
@@ -78,8 +80,8 @@ BookingSystem.constant( 'UPLOAD_IMG_MAX_WIDTH', '300' );
 BookingSystem.constant( 'UPLOAD_IMG_MAX_HEIGHT', '300' );
 BookingSystem.constant( 'PHOTO_MISSING_SRC', 'img/photo_missing.svg' );
 BookingSystem.constant( 'DEFAULT_MAP_ZOOM', 5 );
-BookingSystem.constant( 'DEFAULT_LATITUDE', 59.2792 );
-BookingSystem.constant( 'DEFAULT_LONGITUDE', 15.2361 );
+BookingSystem.constant( 'DEFAULT_LATITUDE', 67.2792 );
+BookingSystem.constant( 'DEFAULT_LONGITUDE', 4.2361 );
 BookingSystem.constant( 'MODAL_ANIMATION', 'slide-in-up' );
 BookingSystem.constant( 'DATA_SYNC_INTERVAL_TIME', 60000 * 5 ); // Every 5 minutes
 BookingSystem.constant( 'DEFAULT_CALENDAR_ZOOM', 2 );

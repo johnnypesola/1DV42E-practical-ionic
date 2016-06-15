@@ -3,52 +3,135 @@
 
         <div class="row padding">
 
-            <form name="userForm">
+            <form name="resourceForm">
                 <div layout-gt-xs="row">
                     <image-uploader type="Meal" id="{{resource.ResourceId}}" image-src="resource.ImageSrc" base64-encoded-image="resource.ImageForUpload"></image-uploader>
                 </div>
-                <div layout-gt-xs="row">
+
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="resourceForm.name.$error">
+                        <div ng-message="required">Var god ange namn</div>
+                        <div ng-message="pattern">Får endast innehålla specialtecknen: &_-.,~^@()%!</div>
+                    </div>
+
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Namn</label>
-                        <input ng-model="resource.Name">
+                        <input
+                            ng-model="resource.Name"
+                            name="name"
+                            ng-required="true"
+                            ng-pattern="TEXT_FIELD_REGEXP"
+                        >
                     </md-input-container>
                 </div>
-                <div layout-gt-xs="row">
+
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="resourceForm.count.$error">
+                        <div ng-message="required">Var god ange antal</div>
+                        <div ng-message="pattern">Endast nummer tillåtna</div>
+                        <div ng-message="min">Måste vara minst 0</div>
+                    </div>
+
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Antal</label>
-                        <input ng-model="resource.Count">
+                        <input
+                            type="number"
+                            name="count"
+                            ng-required="true"
+                            ng-model="resource.Count"
+                            ng-pattern="NUMERIC_STRICT_REGEXP"
+                            min="0"
+                        >
                     </md-input-container>
                 </div>
-                <div layout-gt-xs="row">
+
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="resourceForm.price.$error">
+                        <div ng-message="pattern">Endast nummer och en punkt tillåtet</div>
+                    </div>
+                    
                     <md-input-container class="md-block" flex-gt-xs>
-                        <label>Pris per timme</label>
-                        <input ng-model="resource.BookingPricePerHour">
+                        <label>Pris per timme (kr)</label>
+                        <input
+                            ng-model="resource.BookingPricePerHour"
+                            name="price"
+                            ng-pattern="NUMERIC_DOT_REGEXP"
+                        >
                     </md-input-container>
                 </div>
-                <div layout-gt-xs="row">
+
+                <!-- NOT IMPLEMENTED
+
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="resourceForm.minutesMarginBeforeBooking.$error">
+                        <div ng-message="pattern">Endast nummer tillåtna</div>
+                        <div ng-message="min">Måste vara minst 0</div>
+                    </div>
+
                     <md-input-container class="md-block" flex-gt-xs>
-                        <label>Marginal före bokning</label>
-                        <input ng-model="resource.MinutesMarginBeforeBooking">
+                        <label>Marginal före bokning (minuter)</label>
+                        <input
+                            type="number"
+                            ng-model="resource.MinutesMarginBeforeBooking"
+                            name="minutesMarginBeforeBooking"
+                            ng-pattern="NUMERIC_STRICT_REGEXP"
+                            min="0"
+                        >
                       </md-input-container>
                 </div>
-                <div layout-gt-xs="row">
+
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="resourceForm.minutesMarginAfterBooking.$error">
+                        <div ng-message="pattern">Endast nummer tillåtna</div>
+                        <div ng-message="min">Måste vara minst 0</div>
+                    </div>
+
                     <md-input-container class="md-block" flex-gt-xs>
-                        <label>Marginal efter bokning</label>
-                        <input ng-model="resource.MinutesMarginAfterBooking">
+                        <label>Marginal efter bokning (minuter)</label>
+                        <input
+                            type="number"
+                            ng-model="resource.MinutesMarginAfterBooking"
+                            name="minutesMarginAfterBooking"
+                            ng-pattern="NUMERIC_STRICT_REGEXP"
+                            min="0"
+                        >
                     </md-input-container>
                 </div>
-                <div layout-gt-xs="row">
+
+
+
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="resourceForm.weekEndCount.$error">
+                        <div ng-message="pattern">Endast nummer tillåtna</div>
+                        <div ng-message="min">Måste vara minst 0</div>
+                    </div>
+
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Helgantal</label>
-                        <input ng-model="resource.WeekEndCount">
+                        <input
+                            type="number"
+                            ng-model="resource.WeekEndCount"
+                            name="weekEndCount"
+                            ng-pattern="NUMERIC_STRICT_REGEXP"
+                            min="0"
+                        >
                     </md-input-container>
                 </div>
+
+                -->
             </form>
         </div>
 
         <md-button
-                class="md-raised md-primary"
-                ng-click="saveResource()"
+            class="md-raised md-primary"
+            ng-click="saveResource()"
+            ng-disabled="resourceForm.$invalid"
         >
             Spara
         </md-button>
