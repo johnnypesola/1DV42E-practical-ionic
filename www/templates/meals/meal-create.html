@@ -12,15 +12,28 @@
 
         <div class="row padding">
 
-            <form name="userForm">
+            <form name="mealForm">
                 <div layout-gt-xs="row">
                     <image-uploader type="Meal" id="{{meal.MealId}}" image-src="meal.ImageSrc" base64-encoded-image="meal.ImageForUpload"></image-uploader>
                 </div>
-                <div layout-gt-xs="row">
+
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="mealForm.name.$error">
+                        <div ng-message="required">Var god ange namn</div>
+                        <div ng-message="pattern">Får endast innehålla specialtecknen: &_-.,~^@()%!</div>
+                    </div>
+
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Namn</label>
-                        <input ng-model="meal.Name">
+                        <input
+                            ng-model="meal.Name"
+                            name="name"
+                            ng-required="true"
+                            ng-pattern="TEXT_FIELD_REGEXP"
+                        >
                     </md-input-container>
+
                 </div>
             </form>
         </div>
@@ -28,6 +41,7 @@
         <md-button
                 class="md-raised md-primary"
                 ng-click="saveMeal()"
+                ng-disabled="customerForm.$invalid"
         >
             Spara
         </md-button>
