@@ -178,7 +178,7 @@
                                 name="ResourceCount"
                                 ng-model="resourceBooking.ResourceCount"
                                 ng-required="true"
-                                ng-pattern="/^[0-9]*$/"
+                                ng-pattern="NUMERIC_STRICT_REGEXP"
                                 ng-max="resourceBooking.Resource.Count"
                                 min="1"
                         >

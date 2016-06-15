@@ -7,7 +7,18 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 
 // Make disabled input colors black instead of grey
 .md-input[disabled], md-select.md-default-theme[disabled] .md-select-value, md-select[disabled] .md-select-value {
-  color: #666 !important;
+  color: #222 !important;
+  margin-bottom: 0px !important;
+  background: none !important;
+}
+
+md-select[disabled] .md-select-value .md-select-icon {
+  display: none !important;
+}
+
+// Modify disabled inputs
+input[disabled], input[readonly]:not(.cloned-text-input), select[disabled], select[readonly], textarea[disabled], textarea[readonly]:not(.cloned-text-input) {
+  background: none !important;
 }
 
 // Remove lines in lists
