@@ -17,6 +17,17 @@
                     <image-uploader type="Location" id="{{location.LocationId}}" image-src="location.ImageSrc" base64-encoded-image="location.ImageForUpload"></image-uploader>
                 </div>
 
+                <div layout-gt-xs="row">
+                    <div class="col">
+                        <md-button
+                                md-no-ink
+                                class="md-primary"
+                                ng-click="mapsModal.show()"
+                                >
+                            <i class="icon ion-ios-navigate"></i> Ange Position</md-button>
+                    </div>
+                </div>
+
                 <div layout-gt-xs="row" class="pos-relative">
 
                     <div class="validation-messages" ng-messages="locationForm.Name.$error">
