@@ -5,14 +5,36 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
 
+// Custom colors
+.orangitive {
+  color: #ef7c2b;
+}
+
+
 // Make disabled input colors black instead of grey
 .md-input[disabled], md-select.md-default-theme[disabled] .md-select-value, md-select[disabled] .md-select-value {
-  color: #777 !important;
+  color: #222 !important;
+  margin-bottom: 0px !important;
+  background: none !important;
+}
+
+md-select[disabled] .md-select-value .md-select-icon {
+  display: none !important;
+}
+
+// Modify disabled inputs
+input[disabled], input[readonly]:not(.cloned-text-input), select[disabled], select[readonly], textarea[disabled], textarea[readonly]:not(.cloned-text-input) {
+  background: none !important;
 }
 
 // Remove lines in lists
 .item {
   border-width: 0 !important;
+}
+
+// Make headers normal, not bold
+h1, .h1 {
+  font-weight: normal !important;
 }
 
 // Usage of Roboto font
@@ -388,9 +410,23 @@ span.label {
 
 // Angular google maps specific START
 
+.angular-google-map {
+  display: -webkit-flex;
+  display: flex;
+  flex:1;
+}
+
 .angular-google-map-container {
-  width: 800px !important;
-  height: 600px !important;
+  flex:1;
+}
+
+.flex-parent {
+  display: -webkit-flex;
+  display: flex;
+}
+
+.flex-child {
+  flex:1;
 }
 
 // Angular google maps specific END
@@ -407,6 +443,10 @@ span.label {
 
 .upper-case {
   text-transform: uppercase !important;
+}
+
+.pointer {
+  cursor: pointer !important;
 }
 
 // Text transform specific END
