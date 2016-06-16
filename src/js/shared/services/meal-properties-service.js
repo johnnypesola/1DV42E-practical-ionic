@@ -47,13 +47,13 @@ angular.module( 'BookingSystem.mealPropertiesServices',
           }
         },
 
-        queryForMealProperty: {
-          url: API_URL + 'MealHasProperty/:mealPropertyId',
+        queryForMeal: {
+          url: API_URL + 'MealHasProperty/meal/:mealId',
           id: '@id',
           method: 'GET',
           isArray: true,
           params: {
-            mealPropertyId: '@mealPropertyId'
+            mealPropertyId: '@mealId'
           }
         },
 

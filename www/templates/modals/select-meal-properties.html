@@ -1,0 +1,28 @@
+<ion-modal-view view-title="Välj måltidsegenskaper">
+    <ion-header-bar class="bar-positive">
+
+        <div class="buttons">
+            <button class="button" ng-click="selectModal.hide()">
+                <i class="icon ion-ios-arrow-back"></i> Tillbaka</button>
+        </div>
+
+        <h1 class="title">Välj måltidsegenskaper</h1>
+    </ion-header-bar>
+    <ion-content padding="true">
+
+        <ion-list>
+            <ion-item ng-repeat="mealProperty in mealProperties">
+                <md-checkbox
+                    ng-model="mealProperty.isSelected"
+                    aria-label="Selected"
+                    class="no-margin-bottom"
+                    ng-disabled="!isEditMode"
+                    ng-click="toggleMealPropertyToMeal( mealProperty )"
+                >
+                    {{mealProperty.Name}}
+                </md-checkbox>
+            </ion-item>
+        </ion-list>
+
+    </ion-content>
+</ion-modal-view>

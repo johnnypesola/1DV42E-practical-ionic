@@ -47,26 +47,45 @@ angular.module( 'BookingSystem.meals',
   )
 
   //Edit controller
-  .controller( 'MealDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$ionicModal', '$state', 'Meal', 'MealProperty','MealHasProperty', '$mdToast', 'API_IMG_PATH_URL', 'MealImage', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $ionicModal, $state, Meal, MealProperty, MealHasProperty, $mdToast, API_IMG_PATH_URL, MealImage ) => {
-      /* Init vars */
 
-    const modalTemplateUrl = 'templates/modals/meals-delete.html';
+  .controller( 'MealDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$ionicModal', '$state', 'Meal', 'MealProperty','MealHasProperty', '$mdToast', 'API_IMG_PATH_URL', 'MealImage', '$q',( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $ionicModal, $state, Meal, MealProperty, MealHasProperty, $mdToast, API_IMG_PATH_URL, MealImage, $q ) => {
+    /* Init vars */
+
+    const selectMealPropertiesModalTemplateUrl = 'templates/modals/select-meal-properties.html';
+    const deleteModalTemplateUrl = 'templates/modals/meals-delete.html';
     $scope.isEditMode = false;
     $scope.mealBackup = {};
     $scope.API_IMG_PATH_URL = API_IMG_PATH_URL;
 
     /* Private methods START */
 
-    const setupModal = function(){
+    const setupDeleteModal = function(){
 
-      $ionicModal.fromTemplateUrl( modalTemplateUrl, {
+      $ionicModal.fromTemplateUrl( deleteModalTemplateUrl, {
         scope: $scope,
         animation: MODAL_ANIMATION
       })
-      .then( ( response ) => {
+        .then( ( response ) => {
 
-        $scope.modal = response;
+          $scope.deleteModal = response;
+        });
+
+      // Cleanup the modal when we're done with it!
+      $scope.$on( '$destroy', () => {
+        $scope.modal.remove();
       });
+    };
+
+    const setupSelectMealPropertyModal = function(){
+
+      $ionicModal.fromTemplateUrl( selectMealPropertiesModalTemplateUrl, {
+        scope: $scope,
+        animation: MODAL_ANIMATION
+      })
+        .then( ( response ) => {
+
+          $scope.selectModal = response;
+        });
 
       // Cleanup the modal when we're done with it!
       $scope.$on( '$destroy', () => {
@@ -93,81 +112,109 @@ angular.module( 'BookingSystem.meals',
 
     const getMeal = function () {
 
+      const deferred = $q.defer();
+
       const meal = Meal.get(
         {
           mealId: $stateParams.mealId
         }
       );
 
-      // In case meal cannot be fetched, display an error to user.
-      meal.$promise.then( () => {
-        meal.mealProperties = MealHasProperty.queryForMealProperty(
-          {
-            mealPropertyId: $stateParams.mealPropertyId
-          }
+      meal.$promise.catch( () => {
+        $mdToast.show( $mdToast.simple()
+            .content( 'Måltid kunde inte hämtas, var god försök igen.' )
+            .position( 'top right' )
         );
       })
-      .catch( () => {
 
-        $mdToast.show( $mdToast.simple()
-          .content( 'Måltid kunde inte hämtas, var god försök igen.' )
-          .position( 'top right' )
-        );
-      });
+        // In case meal cannot be fetched, display an error to user.
+        .then( () => {
+          meal.mealProperties = MealHasProperty.queryForMeal(
+            {
+              mealId: $stateParams.mealId
+            }
+          );
+
+          // Resolve promise
+          deferred.resolve();
+        })
+
+        .catch( () => {
+          $mdToast.show( $mdToast.simple()
+              .content( 'Måltidsegenskaper kunde inte hämtas, var god försök igen.' )
+              .position( 'top right' )
+          );
+        });
 
       $scope.meal = meal;
 
+      return deferred.promise;
     };
 
     const getAllMealProperties = function() {
       $scope.mealProperties = MealProperty.query();
+
+      return $scope.mealProperties.$promise;
     };
-/*
-    const saveMealProperties = function(){
 
-      let mealPropertiesToSave;
-      const postDataArray = [];
+    const processMealProperties = function() {
 
-      // Delete previous meal properties
-      const mealPropertyResource = MealHasProperty.removeForMealProperty(
-        {
-          mealId: $scope.meal.MealId
-        }
-      );
+      $scope.mealProperties.forEach( ( mealProperty ) => {
 
-      // After previous meal properties were deleted. Save new meal properties for meal
-      mealPropertyResource.$promise.finally( () => {
+        const match = $scope.meal.mealProperties.some( ( mealHasThisProperty ) => {
 
-        // Filter out meal properties to save
-        mealPropertiesToSave = $scope.mealProperties.filter( ( mealProperty ) => {
-          return mealProperty.Selected;
+          return mealProperty.Name === mealHasThisProperty.MealPropertyName;
         });
 
-        // Process each and every one of the meal properties
-        mealPropertiesToSave.forEach( ( mealProperty ) => {
-
-          postDataArray.push({
-            MealId: $stateParams.mealId,
-            MealPropertyId: mealProperty.MealPropertyId
-          });
-        });
-
-        // Save
-        MealHasProperty.saveForMealProperty( postDataArray );
+        mealProperty.isSelected = match;
       });
-
-      // Return promise
-      return mealPropertyResource.$promise;
-
     };
-    */
+
+    /*
+     const saveMealProperties = function(){
+
+     let mealPropertiesToSave;
+     const postDataArray = [];
+
+     // Delete previous meal properties
+     const mealPropertyResource = MealHasProperty.removeForMealProperty(
+     {
+     mealId: $scope.meal.MealId
+     }
+     );
+
+     // After previous meal properties were deleted. Save new meal properties for meal
+     mealPropertyResource.$promise.finally( () => {
+
+     // Filter out meal properties to save
+     mealPropertiesToSave = $scope.mealProperties.filter( ( mealProperty ) => {
+     return mealProperty.Selected;
+     });
+
+     // Process each and every one of the meal properties
+     mealPropertiesToSave.forEach( ( mealProperty ) => {
+
+     postDataArray.push({
+     MealId: $stateParams.mealId,
+     MealPropertyId: mealProperty.MealPropertyId
+     });
+     });
+
+     // Save
+     MealHasProperty.saveForMealProperty( postDataArray );
+     });
+
+     // Return promise
+     return mealPropertyResource.$promise;
+
+     };
+     */
 
     /* Private Methods END */
 
     /* Public Methods START */
 
     $scope.startEditMode = function () {
-      const $scope = this;
 
       $scope.isEditMode = true;
 
@@ -176,13 +223,11 @@ angular.module( 'BookingSystem.meals',
     };
 
     $scope.endEditMode = function () {
-      const $scope = this;
 
       $scope.isEditMode = false;
     };
 
     $scope.abortEditMode = function() {
-      const $scope = this;
 
       $scope.isEditMode = false;
       $scope.meal = $scope.mealBackup;
@@ -237,14 +282,14 @@ angular.module( 'BookingSystem.meals',
           //.then( () => {
 
           /*
-          }).catch( () => {
+           }).catch( () => {
 
-            $mdToast.show( $mdToast.simple()
-              .content( 'Uppgifter om måltiden sparades, men kostinformationen kunde inte sparas. Var god försök igen.' )
-              .position( 'top right' )
-            );
-          });
-          */
+           $mdToast.show( $mdToast.simple()
+           .content( 'Uppgifter om måltiden sparades, men kostinformationen kunde inte sparas. Var god försök igen.' )
+           .position( 'top right' )
+           );
+           });
+           */
 
           // Something went wrong
         }).catch( ( response ) => {
@@ -252,25 +297,25 @@ angular.module( 'BookingSystem.meals',
           // If there there was a foreign key reference
           if ( response.status === 409 ){
             $mdToast.show( $mdToast.simple()
-              .content( 'Det finns redan en måltid som heter "' + $scope.meal.Name +
+                .content( 'Det finns redan en måltid som heter "' + $scope.meal.Name +
                 '". Två måltider kan inte heta lika.' )
-              .position( 'top right' )
+                .position( 'top right' )
             );
           }
 
           // If there was a problem with the in-data
           else if ( response.status === 400 || response.status === 500 ){
             $mdToast.show( $mdToast.simple()
-              .content( 'Ett oväntat fel uppstod när måltiden skulle sparas' )
-              .position( 'top right' )
+                .content( 'Ett oväntat fel uppstod när måltiden skulle sparas' )
+                .position( 'top right' )
             );
           }
 
           // If the entry was not found
           if ( response.status === 404 ) {
             $mdToast.show( $mdToast.simple()
-              .content( 'Måltiden "' + $scope.meal.Name + '" existerar inte längre. Hann kanske någon radera den?' )
-              .position( 'top right' )
+                .content( 'Måltiden "' + $scope.meal.Name + '" existerar inte längre. Hann kanske någon radera den?' )
+                .position( 'top right' )
             );
 
             history.back();
@@ -291,8 +336,8 @@ angular.module( 'BookingSystem.meals',
         .then( ( response ) => {
 
           $mdToast.show( $mdToast.simple()
-            .content( 'Måltiden "' + $scope.meal.Name + '" raderades med ett lyckat resultat' )
-            .position( 'top right' )
+              .content( 'Måltiden "' + $scope.meal.Name + '" raderades med ett lyckat resultat' )
+              .position( 'top right' )
           );
 
           history.back();
@@ -307,25 +352,25 @@ angular.module( 'BookingSystem.meals',
             response.data.Message === 'Foreign key references exists'
           ){
             $mdToast.show( $mdToast.simple()
-              .content( 'Måltiden kan inte raderas eftersom det finns' +
+                .content( 'Måltiden kan inte raderas eftersom det finns' +
                 ' en lokalbokning eller en lokalmåltid som refererar till måltiden' )
-              .position( 'top right' )
+                .position( 'top right' )
             );
           }
 
           // If there was a problem with the in-data
           else if ( response.status === 400 || response.status === 500 ){
             $mdToast.show( $mdToast.simple()
-              .content( 'Ett oväntat fel uppstod när måltiden skulle tas bort' )
-              .position( 'top right' )
+                .content( 'Ett oväntat fel uppstod när måltiden skulle tas bort' )
+                .position( 'top right' )
             );
           }
 
           // If the entry was not found
           if ( response.status === 404 ) {
             $mdToast.show( $mdToast.simple()
-              .content( 'Måltiden "' + $scope.meal.Name + '" existerar inte längre. Hann kanske någon radera den?' )
-              .position( 'top right' )
+                .content( 'Måltiden "' + $scope.meal.Name + '" existerar inte längre. Hann kanske någon radera den?' )
+                .position( 'top right' )
             );
           }
 
@@ -333,18 +378,50 @@ angular.module( 'BookingSystem.meals',
         });
     };
 
+    $scope.toggleMealPropertyToMeal = function( mealProperty ) {
+
+      const newMealPropertyList = [];
+      let match = false;
+
+      $scope.meal.mealProperties.forEach( ( mealPropertyInMeal ) => {
+
+        if ( mealPropertyInMeal.MealPropertyId === mealProperty.MealPropertyId ) {
+
+          match = true;
+        } else {
+
+          newMealPropertyList.push( mealPropertyInMeal );
+        }
+      });
+
+      if ( !match ) {
+        newMealPropertyList.push({
+          MealPropertyId: mealProperty.MealPropertyId,
+          MealPropertyName: mealProperty.Name
+        });
+      }
+
+      $scope.meal.mealProperties = newMealPropertyList;
+    };
+
     /* Public Methods END */
 
     /* Initialization START */
 
-    setupModal();
-    getMeal();
-    getAllMealProperties();
+    setupDeleteModal();
+    setupSelectMealPropertyModal();
+
+    getMeal()
+      .then( () => {
+        return getAllMealProperties();
+      })
+      .then( () => {
+        processMealProperties();
+      });
 
     /* Initialization END */
   }]
   )
-
   //Create controller
   .controller( 'MealCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'Meal', '$mdToast', 'MealImage', ( $rootScope, $stateParams, $scope, $state, Meal, $mdToast, MealImage ) => {
 
