@@ -72,7 +72,7 @@ angular.module( 'BookingSystem.meals',
 
       // Cleanup the modal when we're done with it!
       $scope.$on( '$destroy', () => {
-        $scope.modal.remove();
+        $scope.deleteModal.remove();
       });
     };
 
@@ -89,7 +89,7 @@ angular.module( 'BookingSystem.meals',
 
       // Cleanup the modal when we're done with it!
       $scope.$on( '$destroy', () => {
-        $scope.modal.remove();
+        $scope.selectModal.remove();
       });
     };
 
