@@ -1,0 +1,67 @@
+<ion-view view-title="Måltid">
+    <ion-content padding="true">
+
+        <h1>{{mealProperty.Name}}</h1>
+
+        <div class="row padding">
+
+            <form name="mealPropertyForm">
+
+                <div layout-gt-xs="col" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="mealPropertyForm.name.$error">
+                        <div ng-message="required">Var god ange namn</div>
+                        <div ng-message="pattern">Tillåtna tecken: &_-.,~^@()%!</div>
+                    </div>
+
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Namn</label>
+                        <input
+                            ng-model="mealProperty.Name"
+                            ng-disabled="!isEditMode"
+                            name="name"
+                            ng-required="true"
+                            ng-pattern="TEXT_FIELD_REGEXP"
+                        >
+                    </md-input-container>
+                </div>
+            </form>
+        </div>
+
+        <md-button
+                ng-show="isEditMode"
+                ng-click="abortEditMode()"
+                class="md-raised"
+        >
+            Avbryt
+        </md-button>
+
+        <md-button
+                ng-show="isEditMode"
+                class="md-raised md-primary"
+                ng-click="saveMealProperty()"
+                ng-disabled="mealPropertyForm.$invalid"
+        >
+            Spara
+        </md-button>
+
+        <md-button
+                ng-show="isEditMode"
+                class="md-fab md-mini md-warn"
+                ng-click="modal.show()"
+        >
+            <span class="icon ion-trash-a md-medium-icon"></span>
+        </md-button>
+
+        <md-button
+                class="md-fab md-warn md-lower-right-button"
+                aria-label="Redigera"
+                ng-click="startEditMode()"
+                ng-show="!isEditMode"
+        >
+            <span class="icon ion-edit md-big-icon"></span>
+        </md-button>
+
+    </ion-content>
+
+</ion-view>

@@ -10,7 +10,6 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   color: #ef7c2b;
 }
 
-
 // Make disabled input colors black instead of grey
 .md-input[disabled], md-select.md-default-theme[disabled] .md-select-value, md-select[disabled] .md-select-value {
   color: #222 !important;
@@ -258,6 +257,10 @@ h1, .h1 {
       line-height: 12px;
       overflow: hidden;
       cursor: pointer;
+    }
+
+    .activated {
+      color: #000;
     }
 
     .time {
