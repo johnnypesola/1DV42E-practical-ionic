@@ -3,10 +3,6 @@
 
         <h1>{{meal.Name}}</h1>
 
-        <pre>
-            {{ meal | json }}
-        </pre>
-
         <div class="row padding">
 
             <form name="mealForm">
@@ -42,6 +38,9 @@
             </form>
         </div>
 
+        <div layout-gt-xs="row">
+            <span class="faded">Måltidsegenskaper</span>
+        </div>
         <div layout-gt-xs="row">
             <div
                     class="custom-chip"

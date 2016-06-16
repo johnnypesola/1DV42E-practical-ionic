@@ -170,45 +170,43 @@ angular.module( 'BookingSystem.meals',
       });
     };
 
-    /*
-     const saveMealProperties = function(){
+    const saveMealProperties = function(){
 
-     let mealPropertiesToSave;
-     const postDataArray = [];
+      const deferred = $q.defer();
+      const postDataArray = [];
 
-     // Delete previous meal properties
-     const mealPropertyResource = MealHasProperty.removeForMealProperty(
-     {
-     mealId: $scope.meal.MealId
-     }
-     );
+      // Delete previous meal properties
 
-     // After previous meal properties were deleted. Save new meal properties for meal
-     mealPropertyResource.$promise.finally( () => {
+      const mealPropertyResource = MealHasProperty.removeForMeal(
+        {
+          mealId: $scope.meal.MealId
+        }
+      );
 
-     // Filter out meal properties to save
-     mealPropertiesToSave = $scope.mealProperties.filter( ( mealProperty ) => {
-     return mealProperty.Selected;
-     });
+      // After previous meal properties were deleted. Save new meal properties for meal
+      mealPropertyResource.$promise.finally( () => {
 
-     // Process each and every one of the meal properties
-     mealPropertiesToSave.forEach( ( mealProperty ) => {
+        // Process each and every one of the meal properties
+        $scope.meal.mealProperties.forEach( ( mealProperty ) => {
 
-     postDataArray.push({
-     MealId: $stateParams.mealId,
-     MealPropertyId: mealProperty.MealPropertyId
-     });
-     });
+          postDataArray.push({
+            MealId: $stateParams.mealId,
+            MealPropertyId: mealProperty.MealPropertyId
+          });
+        });
 
-     // Save
-     MealHasProperty.saveForMealProperty( postDataArray );
-     });
+        // Save
+        MealHasProperty.saveForMeal( postDataArray )
+          .then( () => {
 
-     // Return promise
-     return mealPropertyResource.$promise;
+            // Resolve promise
+            deferred.resolve();
+          });
+      });
 
-     };
-     */
+      // Return promise
+      return deferred.promise;
+    };
 
     /* Private Methods END */
 
@@ -277,19 +275,20 @@ angular.module( 'BookingSystem.meals',
             saveSuccess();
           }
 
-          //saveMealProperties( response.MealId )
+          saveMealProperties( response.MealId )
 
-          //.then( () => {
+          .then( () => {
 
-          /*
-           }).catch( () => {
+            // Redirect
+            history.back();
 
-           $mdToast.show( $mdToast.simple()
-           .content( 'Uppgifter om måltiden sparades, men kostinformationen kunde inte sparas. Var god försök igen.' )
-           .position( 'top right' )
-           );
-           });
-           */
+          }).catch( () => {
+
+            $mdToast.show( $mdToast.simple()
+               .content( 'Uppgifter om måltiden sparades, men måltidsegenskaper kunde inte sparas. Var god försök igen.' )
+               .position( 'top right' )
+            );
+          });
 
           // Something went wrong
         }).catch( ( response ) => {

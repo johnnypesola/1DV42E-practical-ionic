@@ -37,13 +37,13 @@ angular.module( 'BookingSystem.mealPropertiesServices',
           }
         },
 
-        removeForMealProperty: {
-          url: API_URL + 'MealHasProperty/:mealPropertyId',
+        removeForMeal: {
+          url: API_URL + 'MealHasProperty/:mealId',
           id: '@id',
           method: 'DELETE',
           isArray: false,
           params: {
-            mealPropertyId: '@mealPropertyId'
+            mealId: '@mealId'
           }
         },
 
@@ -57,8 +57,8 @@ angular.module( 'BookingSystem.mealPropertiesServices',
           }
         },
 
-        saveForMealProperty: {
-          url: API_URL + 'MealHasProperty',
+        saveForMeal: {
+          url: API_URL + 'MealHasProperty/meal',
           id: '@id',
           method: 'POST',
           isArray: true
