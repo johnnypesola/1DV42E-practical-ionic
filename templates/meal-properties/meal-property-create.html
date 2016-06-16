@@ -1,0 +1,47 @@
+<ion-view view-title="Skapa Måltidsegenskap">
+    <ion-nav-buttons side="secondary">
+        <button
+                class="button"
+                ng-click="abortEditMode()"
+                ng-show="true"
+        >
+            editMode: {{isEditMode}}
+        </button>
+    </ion-nav-buttons>
+    <ion-content padding="true">
+
+        <div class="row padding">
+
+            <form name="mealPropertyForm">
+
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="mealPropertyForm.name.$error">
+                        <div ng-message="required">Var god ange namn</div>
+                        <div ng-message="pattern">Tillåtna specialtecken: &_-.,~^@()%!</div>
+                    </div>
+
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Namn</label>
+                        <input
+                            ng-model="mealProperty.Name"
+                            name="name"
+                            ng-required="true"
+                            ng-pattern="TEXT_FIELD_REGEXP"
+                        >
+                    </md-input-container>
+
+                </div>
+            </form>
+        </div>
+
+        <md-button
+            class="md-raised md-primary"
+            ng-click="saveMealProperty()"
+            ng-disabled="mealPropertyForm.$invalid"
+        >
+            Spara
+        </md-button>
+
+    </ion-content>
+</ion-view>
