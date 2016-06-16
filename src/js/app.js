@@ -39,6 +39,7 @@ const BookingSystem = angular
     'BookingSystem.start',
     'BookingSystem.mealBookingServices',
     'BookingSystem.mealBooking',
+    'BookingSystem.mealProperties',
     'BookingSystem.bookings',
     'ngMaterial',
     'ngResource',
@@ -74,7 +75,7 @@ BookingSystem.run( ['$ionicPlatform', '$rootScope', ( $ionicPlatform, $rootScope
 
 // Constants
 BookingSystem.constant( 'API_URL', 'http://bokning.vvfors.se/api/' );
-// BookingSystem.constant( 'API_URL', 'http://localhost:6796/api/' );
+// BookingSystem.constant( 'API_URL', 'http://localhost:8706/api/' );
 BookingSystem.constant( 'API_IMG_PATH_URL', 'http://bokning.vvfors.se/' );
 BookingSystem.constant( 'UPLOAD_IMG_MAX_WIDTH', '300' );
 BookingSystem.constant( 'UPLOAD_IMG_MAX_HEIGHT', '300' );
@@ -294,6 +295,38 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', '$ionicConfigProv
       'menuContent': {
         templateUrl: 'templates/furnituring/furnituring-create.html',
         controller: 'FurnituringCreateCtrl'
+      }
+    }
+  })
+
+  // MealProperties
+
+  .state( 'app.meal-properties-list', {
+    url: '/meal-properties-list',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/meal-properties/meal-properties-list.html',
+        controller: 'MealPropertyListCtrl'
+      }
+    }
+  })
+
+  .state( 'app.meal-property-details', {
+    url: '/meal-property-details/:mealPropertyId',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/meal-properties/meal-property-details.html',
+        controller: 'MealPropertyDetailsCtrl'
+      }
+    }
+  })
+
+  .state( 'app.meal-property-create', {
+    url: '/meal-property-create',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/meal-properties/meal-property-create.html',
+        controller: 'MealPropertyCreateCtrl'
       }
     }
   })
