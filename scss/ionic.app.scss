@@ -10,13 +10,6 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   color: #ef7c2b;
 }
 
-.bar.bar-churchitive {
-  border-color: #cd0014;
-  background-color: #cd0014;
-  background-image: linear-gradient(0deg,#cd0014,#cd0014 50%,transparent 50%);
-  color: #fff;
-}
-
 // Make disabled input colors black instead of grey
 .md-input[disabled], md-select.md-default-theme[disabled] .md-select-value, md-select[disabled] .md-select-value {
   color: #222 !important;
