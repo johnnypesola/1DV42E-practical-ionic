@@ -74,8 +74,8 @@ BookingSystem.run( ['$ionicPlatform', '$rootScope', ( $ionicPlatform, $rootScope
 }] );
 
 // Constants
-// BookingSystem.constant( 'API_URL', 'http://bokning.vvfors.se/api/' );
-BookingSystem.constant( 'API_URL', 'http://localhost:8706/api/' );
+BookingSystem.constant( 'API_URL', 'http://bokning.vvfors.se/api/' );
+// BookingSystem.constant( 'API_URL', 'http://localhost:8706/api/' );
 BookingSystem.constant( 'API_IMG_PATH_URL', 'http://bokning.vvfors.se/' );
 BookingSystem.constant( 'UPLOAD_IMG_MAX_WIDTH', '300' );
 BookingSystem.constant( 'UPLOAD_IMG_MAX_HEIGHT', '300' );
