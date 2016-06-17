@@ -196,7 +196,8 @@ angular.module( 'BookingSystem.meals',
         });
 
         // Save
-        MealHasProperty.saveForMeal( postDataArray )
+        MealHasProperty.saveForMeal( postDataArray ).$promise
+
           .then( () => {
 
             // Resolve promise
@@ -254,11 +255,6 @@ angular.module( 'BookingSystem.meals',
             // Upload image
             uploadImage( response.MealId )
 
-              // Image upload successful
-              .success( ( data ) => {
-
-                saveSuccess();
-              })
               // Image upload failed
               .error( () => {
 
@@ -271,16 +267,13 @@ angular.module( 'BookingSystem.meals',
                 history.back();
               });
 
-          } else {
-            saveSuccess();
           }
 
           saveMealProperties( response.MealId )
 
           .then( () => {
 
-            // Redirect
-            history.back();
+            saveSuccess();
 
           }).catch( () => {
 
@@ -422,12 +415,33 @@ angular.module( 'BookingSystem.meals',
   }]
   )
   //Create controller
-  .controller( 'MealCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'Meal', '$mdToast', 'MealImage', ( $rootScope, $stateParams, $scope, $state, Meal, $mdToast, MealImage ) => {
+  .controller( 'MealCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'Meal', '$mdToast', 'MealImage', 'MODAL_ANIMATION', '$ionicModal', 'MealProperty', 'MealHasProperty', '$q', ( $rootScope, $stateParams, $scope, $state, Meal, $mdToast, MealImage, MODAL_ANIMATION, $ionicModal, MealProperty, MealHasProperty, $q ) => {
 
     /* Init vars */
-    $scope.meal = {};
+    const selectMealPropertiesModalTemplateUrl = 'templates/modals/select-meal-properties.html';
+    $scope.meal = {
+      mealProperties: []
+    };
+    $scope.isEditMode = true;
 
     /* Private methods START */
+
+    const setupSelectMealPropertyModal = function(){
+
+      $ionicModal.fromTemplateUrl( selectMealPropertiesModalTemplateUrl, {
+        scope: $scope,
+        animation: MODAL_ANIMATION
+      })
+        .then( ( response ) => {
+
+          $scope.selectModal = response;
+        });
+
+      // Cleanup the modal when we're done with it!
+      $scope.$on( '$destroy', () => {
+        $scope.selectModal.remove();
+      });
+    };
 
     // Upload image
     const uploadImage = ( MealId ) => {
@@ -436,7 +450,12 @@ angular.module( 'BookingSystem.meals',
 
     };
 
-    // Display success message
+    const getAllMealProperties = function() {
+      $scope.mealProperties = MealProperty.query();
+
+      return $scope.mealProperties.$promise;
+    };
+
     const saveSuccess = () => {
 
       // Display success message
@@ -447,6 +466,32 @@ angular.module( 'BookingSystem.meals',
 
       // Redirect
       history.back();
+    };
+
+    const saveMealProperties = function( mealId ){
+
+      const deferred = $q.defer();
+      const postDataArray = [];
+
+      // Process each and every one of the meal properties
+      $scope.meal.mealProperties.forEach( ( mealProperty ) => {
+
+        postDataArray.push({
+          MealId: mealId,
+          MealPropertyId: mealProperty.MealPropertyId
+        });
+      });
+
+      // Save
+      MealHasProperty.saveForMeal( postDataArray ).$promise
+        .then( () => {
+
+          // Resolve promise
+          deferred.resolve();
+        });
+
+      // Return promise
+      return deferred.promise;
     };
 
     /* Private Methods END */
@@ -473,11 +518,6 @@ angular.module( 'BookingSystem.meals',
             // Upload image
             uploadImage( response.MealId )
 
-              // Image upload successful
-              .success( ( data ) => {
-
-                saveSuccess();
-              })
               // Image upload failed
               .error( () => {
 
@@ -489,10 +529,21 @@ angular.module( 'BookingSystem.meals',
                 // Redirect
                 history.back();
               });
-
-          } else {
-            saveSuccess();
           }
+
+          saveMealProperties( response.MealId )
+
+            .then( () => {
+
+              saveSuccess();
+
+            }).catch( () => {
+
+              $mdToast.show( $mdToast.simple()
+                  .content( 'Uppgifter om måltiden sparades, men måltidsegenskaper kunde inte sparas. Var god försök igen.' )
+                  .position( 'top right' )
+              );
+            });
 
           // Something went wrong
         }).catch( ( response ) => {
@@ -516,9 +567,38 @@ angular.module( 'BookingSystem.meals',
         });
     };
 
+    $scope.toggleMealPropertyToMeal = function( mealProperty ) {
+
+      const newMealPropertyList = [];
+      let match = false;
+
+      $scope.meal.mealProperties.forEach( ( mealPropertyInMeal ) => {
+
+        if ( mealPropertyInMeal.MealPropertyId === mealProperty.MealPropertyId ) {
+
+          match = true;
+        } else {
+
+          newMealPropertyList.push( mealPropertyInMeal );
+        }
+      });
+
+      if ( !match ) {
+        newMealPropertyList.push({
+          MealPropertyId: mealProperty.MealPropertyId,
+          MealPropertyName: mealProperty.Name
+        });
+      }
+
+      $scope.meal.mealProperties = newMealPropertyList;
+    };
+
     /* Public Methods END */
 
     /* Initialization START */
+
+    setupSelectMealPropertyModal();
+    getAllMealProperties();
 
     /* Initialization END */
 
