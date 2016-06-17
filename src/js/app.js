@@ -108,13 +108,10 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', '$ionicConfigProv
 
   .state( 'app.start', {
     url: '/start',
-    params: {
-      bookingType: 'booking'
-    },
     views: {
       'menuContent': {
-        templateUrl: 'templates/booking/booking-view.html',
-        controller: 'BookingViewCtrl'
+        templateUrl: 'templates/start/start.html',
+        controller: 'StartViewCtrl'
       }
     }
   })
@@ -135,7 +132,7 @@ BookingSystem.config( ['$stateProvider', '$urlRouterProvider', '$ionicConfigProv
   })
 
   .state( 'app.booking-view', {
-    url: '/start',
+    url: '/booking-view',
     params: {
       bookingType: 'booking'
     },

@@ -38,6 +38,30 @@
             </form>
         </div>
 
+        <div layout-gt-xs="row" ng-show="meal.mealProperties.length">
+            <span class="faded">Måltidsegenskaper</span>
+        </div>
+        <div layout-gt-xs="row">
+            <div
+                    class="custom-chip"
+                    ng-repeat="mealProperty in meal.mealProperties"
+                    >
+                {{mealProperty.MealPropertyName}}
+            </div>
+        </div>
+
+        <div layout-gt-xs="row">
+            <div class="col">
+                <md-button
+                        md-no-ink
+                        class="md-primary"
+                        ng-click="selectModal.show()"
+                >
+                <i class="icon ion-ios-nutrition"></i> Välj Måltidsegenskaper</md-button>
+            </div>
+        </div>
+
+
         <md-button
             class="md-raised md-primary"
             ng-click="saveMeal()"
