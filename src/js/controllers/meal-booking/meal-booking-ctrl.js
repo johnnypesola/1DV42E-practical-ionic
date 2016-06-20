@@ -257,7 +257,7 @@ angular.module( 'BookingSystem.mealBooking',
 
       $scope.meals = Meal.query();
 
-      Meal.query().$promise
+      $scope.meals.$promise
 
         // Success
         .then( ( response ) => {
@@ -275,7 +275,7 @@ angular.module( 'BookingSystem.mealBooking',
           );
         });
 
-      return Meal.query().$promise;
+      return $scope.meals.$promise;
     };
 
     const getCustomer = function(){

@@ -25,6 +25,10 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   background: none !important;
 }
 
+.md-select[disabled] .md-select-value span {
+  color: #222 !important;
+}
+
 md-select[disabled] .md-select-value .md-select-icon {
   display: none !important;
 }
