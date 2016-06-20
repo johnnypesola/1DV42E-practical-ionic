@@ -135,7 +135,6 @@ angular.module( 'BookingSystem.customers',
     /* Public Methods START */
 
     $scope.startEditMode = function () {
-      const $scope = this;
 
       $scope.isEditMode = true;
 
@@ -144,13 +143,11 @@ angular.module( 'BookingSystem.customers',
     };
 
     $scope.endEditMode = function () {
-      const $scope = this;
 
       $scope.isEditMode = false;
     };
 
     $scope.abortEditMode = function() {
-      const $scope = this;
 
       $scope.isEditMode = false;
       $scope.customer = $scope.customerBackup;
