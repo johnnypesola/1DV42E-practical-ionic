@@ -184,11 +184,15 @@
             </form>
         </div>
 
+    </ion-content>
+
+    <div class="edit-buttons-container">
+
         <md-button
                 ng-show="isEditMode"
                 ng-click="abortEditMode()"
                 class="md-raised"
-        >
+                >
             Avbryt
         </md-button>
 
@@ -197,7 +201,7 @@
                 class="md-raised md-primary"
                 ng-click="saveCustomer()"
                 ng-disabled="customerForm.$invalid"
-        >
+                >
             Spara
         </md-button>
 
@@ -205,19 +209,20 @@
                 ng-show="isEditMode"
                 class="md-fab md-mini md-warn"
                 ng-click="modal.show()"
-        >
+                >
             <span class="icon ion-trash-a md-medium-icon"></span>
         </md-button>
 
-        <md-button
-                class="md-fab md-warn md-lower-right-button"
-                aria-label="Redigera"
-                ng-click="startEditMode()"
-                ng-show="!isEditMode"
-        >
-            <span class="icon ion-edit md-big-icon"></span>
-        </md-button>
 
-    </ion-content>
+    </div>
+
+    <md-button
+            class="md-fab md-warn md-lower-right-button"
+            aria-label="Redigera"
+            ng-click="startEditMode()"
+            ng-show="!isEditMode"
+            >
+        <span class="icon ion-edit md-big-icon"></span>
+    </md-button>
 
 </ion-view>

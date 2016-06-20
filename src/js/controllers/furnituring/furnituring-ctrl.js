@@ -150,6 +150,8 @@ angular.module( 'BookingSystem.furnituring',
               .position( 'top right' )
             );
 
+            history.back();
+
             // Something went wrong
           }).catch( ( response ) => {
 
