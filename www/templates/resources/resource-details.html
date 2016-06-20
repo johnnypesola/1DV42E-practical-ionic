@@ -29,6 +29,7 @@
                             name="name"
                             ng-required="true"
                             ng-pattern="TEXT_FIELD_REGEXP"
+                            maxlength="50"
                             >
                     </md-input-container>
                 </div>
@@ -139,11 +140,15 @@
             </form>
         </div>
 
+    </ion-content>
+
+    <div class="edit-buttons-container">
+
         <md-button
                 ng-show="isEditMode"
                 ng-click="abortEditMode()"
                 class="md-raised"
-        >
+                >
             Avbryt
         </md-button>
 
@@ -152,7 +157,7 @@
                 class="md-raised md-primary"
                 ng-click="saveResource()"
                 ng-disabled="resourceForm.$invalid"
-        >
+                >
             Spara
         </md-button>
 
@@ -160,19 +165,19 @@
                 ng-show="isEditMode"
                 class="md-fab md-mini md-warn"
                 ng-click="modal.show()"
-        >
+                >
             <span class="icon ion-trash-a md-medium-icon"></span>
         </md-button>
 
-        <md-button
-                class="md-fab md-warn md-lower-right-button"
-                aria-label="Redigera"
-                ng-click="startEditMode()"
-                ng-show="!isEditMode"
-        >
-            <span class="icon ion-edit md-big-icon"></span>
-        </md-button>
+    </div>
 
-    </ion-content>
+    <md-button
+            class="md-fab md-warn md-lower-right-button"
+            aria-label="Redigera"
+            ng-click="startEditMode()"
+            ng-show="!isEditMode"
+            >
+        <span class="icon ion-edit md-big-icon"></span>
+    </md-button>
 
 </ion-view>

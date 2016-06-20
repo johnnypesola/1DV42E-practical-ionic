@@ -219,8 +219,6 @@ angular.module( 'BookingSystem.locations',
 
       $scope.isEditMode = false;
       $scope.location = $scope.locationBackup;
-
-      $scope.$apply();
     };
 
     $scope.saveLocation = function() {

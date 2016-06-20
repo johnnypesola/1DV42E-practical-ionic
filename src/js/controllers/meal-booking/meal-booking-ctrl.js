@@ -152,7 +152,7 @@ angular.module( 'BookingSystem.mealBooking',
   }]
 )
 
-  .controller( 'MealBookingDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', 'MealBooking', '$mdToast', 'Meal', 'Customer', 'BookingHelper', '$q', '$ionicHistory', 'Location', 'API_IMG_PATH_URL', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, MealBooking, $mdToast, Meal, Customer, BookingHelper, $q, $ionicHistory, Location, API_IMG_PATH_URL ) => {
+  .controller( 'MealBookingDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', 'MealBooking', '$mdToast', 'Meal', 'Customer', 'BookingHelper', '$q', '$ionicHistory', 'Location', 'API_IMG_PATH_URL', 'MealHasProperty', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, MealBooking, $mdToast, Meal, Customer, BookingHelper, $q, $ionicHistory, Location, API_IMG_PATH_URL, MealHasProperty ) => {
 
     /* Init vars */
 
@@ -187,14 +187,19 @@ angular.module( 'BookingSystem.mealBooking',
         }
       );
 
-      // In case mealBooking cannot be fetched, display an error to user.
-      mealBooking.$promise.catch( () => {
+      mealBooking.$promise.then( ( response ) => {
 
-        $mdToast.show( $mdToast.simple()
-            .content( 'Måltidsbokning kunde inte hämtas, var god försök igen.' )
-            .position( 'top right' )
-        );
-      });
+        $scope.mealProperties = response.MealHasProperties;
+      })
+
+        // In case mealBooking cannot be fetched, display an error to user.
+        .catch( () => {
+
+          $mdToast.show( $mdToast.simple()
+              .content( 'Måltidsbokning kunde inte hämtas, var god försök igen.' )
+              .position( 'top right' )
+          );
+        });
 
       $scope.mealBooking = mealBooking;
 
@@ -257,7 +262,7 @@ angular.module( 'BookingSystem.mealBooking',
 
       $scope.meals = Meal.query();
 
-      Meal.query().$promise
+      $scope.meals.$promise
 
         // Success
         .then( ( response ) => {
@@ -275,7 +280,7 @@ angular.module( 'BookingSystem.mealBooking',
           );
         });
 
-      return Meal.query().$promise;
+      return $scope.meals.$promise;
     };
 
     const getCustomer = function(){
@@ -445,6 +450,30 @@ angular.module( 'BookingSystem.mealBooking',
       return promise;
     };
 
+    $scope.updateMealProperties = function() {
+
+      // Get all available furniturings for selected location
+      if ( $scope.mealBooking.MealId ){
+        $scope.mealProperties = MealHasProperty.queryForMeal(
+          {
+            mealId: $scope.mealBooking.MealId
+          }
+        );
+
+        // If mealProperties could not be fetched
+        $scope.mealProperties.$promise.catch( () => {
+
+          $mdToast.show( $mdToast.simple()
+              .content( 'Måltidsegenskaper för vald måltid kunde inte hämtas.' )
+              .position( 'top right' )
+          );
+        });
+      }
+      else {
+        $scope.mealProperties = [];
+      }
+    };
+
     /* Public Methods END */
 
     /* Initialization START */
@@ -469,7 +498,7 @@ angular.module( 'BookingSystem.mealBooking',
   }]
   )
 
-  .controller( 'MealBookingCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'MealBooking', 'Meal', 'BookingHelper', 'Customer', '$q', '$mdToast', '$ionicHistory', 'Location', 'API_IMG_PATH_URL', 'PHOTO_MISSING_SRC', ( $rootScope, $stateParams, $scope, $state, MealBooking, Meal, BookingHelper, Customer, $q, $mdToast, $ionicHistory, Location, API_IMG_PATH_URL, PHOTO_MISSING_SRC ) => {
+  .controller( 'MealBookingCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'MealBooking', 'Meal', 'BookingHelper', 'Customer', '$q', '$mdToast', '$ionicHistory', 'Location', 'API_IMG_PATH_URL', 'PHOTO_MISSING_SRC', 'MealHasProperty', ( $rootScope, $stateParams, $scope, $state, MealBooking, Meal, BookingHelper, Customer, $q, $mdToast, $ionicHistory, Location, API_IMG_PATH_URL, PHOTO_MISSING_SRC, MealHasProperty ) => {
 
     /* Init vars */
     $scope.mealBooking = {
@@ -747,6 +776,30 @@ angular.module( 'BookingSystem.mealBooking',
         });
 
       return promise;
+    };
+
+    $scope.updateMealProperties = function() {
+
+      // Get all available furniturings for selected location
+      if ( $scope.mealBooking.MealId ){
+        $scope.mealProperties = MealHasProperty.queryForMeal(
+          {
+            mealId: $scope.mealBooking.MealId
+          }
+        );
+
+        // If mealProperties could not be fetched
+        $scope.mealProperties.$promise.catch( () => {
+
+          $mdToast.show( $mdToast.simple()
+              .content( 'Måltidsegenskaper för vald måltid kunde inte hämtas.' )
+              .position( 'top right' )
+          );
+        });
+      }
+      else {
+        $scope.mealProperties = [];
+      }
     };
 
     /* Public Methods END */
