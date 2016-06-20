@@ -53,13 +53,13 @@
                             <md-input-container class="md-block">
                                 <label>Totalt antal personer</label>
                                 <input
-                                        ng-model="booking.NumberOfPeople"
-                                        name="NumberOfPeople"
-                                        type="number"
-                                        ng-disabled="!isEditMode"
-                                        ng-required="true"
-                                        ng-pattern="/^[0-9]*$/"
-                                        min="0"
+                                    ng-model="booking.NumberOfPeople"
+                                    name="NumberOfPeople"
+                                    type="number"
+                                    ng-disabled="!isEditMode"
+                                    ng-required="true"
+                                    ng-pattern="/^[0-9]*$/"
+                                    min="0"
                                 >
                             </md-input-container>
 
@@ -98,6 +98,7 @@
                                 rows="5"
                                 md-select-on-focus
                                 ng-disabled="!isEditMode"
+                                maxlength="200"
                                 ></textarea>
                         </md-input-container>
                     </div>
