@@ -11,6 +11,7 @@ namespace BookingSystem.Models
         // Fields
         private MealBookingDAL _mealBookingDAL;
         private SharedDAL _sharedDAL;
+        private MealHasPropertyDAL _mealHasPropertyDAL;
 
         // Properties
         private MealBookingDAL MealBookingDAL
@@ -18,6 +19,13 @@ namespace BookingSystem.Models
             get
             {
                 return _mealBookingDAL ?? (_mealBookingDAL = new MealBookingDAL());
+            }
+        }
+        private MealHasPropertyDAL MealHasPropertyDAL
+        {
+            get
+            {
+                return _mealHasPropertyDAL ?? (_mealHasPropertyDAL = new MealHasPropertyDAL());
             }
         }
         private SharedDAL SharedDAL
@@ -79,12 +87,20 @@ namespace BookingSystem.Models
 
         public MealBooking GetMealBooking(int MealBookingId)
         {
+            MealBooking mealBooking;
+
             if (MealBookingId < 0)
             {
                 throw new ApplicationException("Invalid MealBookingId");
             }
 
-            return MealBookingDAL.GetMealBookingById(MealBookingId);
+            // Get MealBooking
+            mealBooking = MealBookingDAL.GetMealBookingById(MealBookingId);
+
+            // Get MealHas Properties
+            mealBooking.MealHasProperties = MealHasPropertyDAL.GetMealHasPropertys(mealBooking.MealId);
+
+            return mealBooking;
         }
 
         public IEnumerable<MealBooking> GetMealBookings(int? BookingId = null)

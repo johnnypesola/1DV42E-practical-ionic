@@ -8,8 +8,8 @@ namespace BookingSystem.Models
 {
     public class MealProperty
     {
-        [Required(ErrorMessage = "MealId is required.")]
-        [Range(0, Int16.MaxValue, ErrorMessage = "MealId is out of range.")]
+        [Required(ErrorMessage = "MealPropertyId is required.")]
+        [Range(0, Int16.MaxValue, ErrorMessage = "MealPropertyId is out of range.")]
         public int MealPropertyId { get; set; }
 
         [Required(ErrorMessage = "Name is required.")]

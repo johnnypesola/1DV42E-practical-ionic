@@ -53,6 +53,8 @@ namespace BookingSystem.Models
 
         [Range(0, int.MaxValue, ErrorMessage = "CustomerId is out of range.")]
         public int CustomerId { get; set; }
-        
+
+        public IEnumerable<MealHasProperty> MealHasProperties { get; set; }
+
     }
 }

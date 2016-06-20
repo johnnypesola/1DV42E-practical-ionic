@@ -68,9 +68,9 @@ namespace BookingSystem.Models
             return LocationDAL.SearchFor(searchContainer);
         }
 
-        public IEnumerable<Location> GetLocationsFreeForPeriod(DateTime startTime, DateTime endTime)
+        public IEnumerable<Location> GetLocationsFreeForPeriod(DateTime startTime, DateTime endTime, int locationBookingExceptionId)
         {
-            return LocationDAL.GetLocationsFreeForPeriod(startTime, endTime);
+            return LocationDAL.GetLocationsFreeForPeriod(startTime, endTime, locationBookingExceptionId);
         }
 
         public IEnumerable<Location> GetPageWise(string sortColumn, int pageSize, int pageIndex, out int totalRowCount)

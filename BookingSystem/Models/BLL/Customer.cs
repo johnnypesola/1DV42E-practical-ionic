@@ -18,17 +18,14 @@ namespace BookingSystem.Models
         public string Name { get; set; }
 
 
-        [Required(ErrorMessage = "Address is required.")]
         [RegularExpression(ValidationExtensions.TEXT_FIELD_REGEXP, ErrorMessage = "Address string can only contain letters and spaces and the following characters: &_-")]
         [StringLength(40, ErrorMessage = " Address string length surpassed the limit of 40.")]
         public string Address { get; set; }
 
-        [Required(ErrorMessage = "PostNumber is required.")]
         [StringLength(6, ErrorMessage = "PostNumber string length surpassed the limit of 6.")]
         [RegularExpression(ValidationExtensions.POST_NUMBER_REGEXP, ErrorMessage = "PostNumber must be in the following format: '123 41'")]
         public string PostNumber { get; set; }
 
-        [Required(ErrorMessage = "City is required.")]
         [RegularExpression(ValidationExtensions.TEXT_FIELD_REGEXP, ErrorMessage = "City string can only contain letters and spaces and the following characters: &_-")]
         [StringLength(30, ErrorMessage = "City string length surpassed the limit of  30.")]
         public string City { get; set; }

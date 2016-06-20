@@ -155,7 +155,7 @@ namespace BookingSystem.Models
                 }
                 catch (Exception exception)
                 {
-                    if (exception.Message == "There is already a meal with the given name.")
+                    if (exception.Message == "There is already a meal property with the given name.")
                     {
                         throw new DuplicateNameException(exception.Message);
                     }

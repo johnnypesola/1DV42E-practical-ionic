@@ -193,7 +193,7 @@ namespace BookingSystem.Controllers
         }
 
         // GET: all meal properties for specific meal
-        [Route("api/MealHasProperty/mealproperty/{MealId:int}")]
+        [Route("api/MealHasProperty/meal/{MealId:int}")]
         [AcceptVerbs("GET")]
         public IHttpActionResult GetForMeal(int MealId)
         {

@@ -208,7 +208,7 @@ namespace BookingSystem.Models
             }
         }
 
-        public IEnumerable<Location> GetLocationsFreeForPeriod(DateTime startTime, DateTime endTime)
+        public IEnumerable<Location> GetLocationsFreeForPeriod(DateTime startTime, DateTime endTime, int locationBookingExceptionId)
         {
             // Create connection object
             using (this.CreateConnection())
@@ -227,6 +227,7 @@ namespace BookingSystem.Models
                     // Add parameter for Stored procedure
                     cmd.Parameters.Add("@StartTime", SqlDbType.SmallDateTime).Value = startTime;
                     cmd.Parameters.Add("@EndTime", SqlDbType.SmallDateTime).Value = endTime;
+                    cmd.Parameters.Add("@ExceptionId", SqlDbType.Int).Value = locationBookingExceptionId;
 
                     // Get all data from stored procedure
                     using (SqlDataReader reader = cmd.ExecuteReader())

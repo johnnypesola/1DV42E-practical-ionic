@@ -67,9 +67,9 @@ namespace BookingSystem.Controllers
 
         // GET: api/Location/free/2015-01-01/2015-01-02
         // GET: api/Location/free/2015-01-01/2015-01-02?fromTime=10.00&toTime=10.00
-        [Route("api/Location/free/{fromDate:datetime}/{toDate:datetime}")]
+        [Route("api/Location/free/{fromDate:datetime}/{toDate:datetime}/{locationBookingExceptionId:int?}")]
         [AcceptVerbs("GET")]
-        public IHttpActionResult Get(string fromDate, string toDate, string fromTime = "00:00:00", string toTime = "23:59:59")
+        public IHttpActionResult Get(string fromDate, string toDate, string fromTime = "00:00:00", string toTime = "23:59:59", int locationBookingExceptionId = 0)
         {
             DateTime startTime, endTime;
 
@@ -78,7 +78,7 @@ namespace BookingSystem.Controllers
                 startTime = Convert.ToDateTime(String.Format("{0} {1}", fromDate, fromTime));
                 endTime = Convert.ToDateTime(String.Format("{0} {1}", toDate, toTime));
 
-                IEnumerable<Location> locations = locationService.GetLocationsFreeForPeriod(startTime, endTime);
+                IEnumerable<Location> locations = locationService.GetLocationsFreeForPeriod(startTime, endTime, locationBookingExceptionId);
                 if (locations == null)
                 {
                     return NotFound();

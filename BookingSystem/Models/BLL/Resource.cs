@@ -25,7 +25,6 @@ namespace BookingSystem.Models
         [RegularExpression(ValidationExtensions.IMG_PATH_REGEXP, ErrorMessage = "ImageSrc is invalid")]
         public string ImageSrc { get; set; }
 
-        [Required(ErrorMessage = "BookingPricePerHour is required.")]
         [Range(0.00, int.MaxValue, ErrorMessage = "BookingPricePerHour is out of range.")]
         public decimal BookingPricePerHour { get; set; }
 
@@ -35,7 +34,6 @@ namespace BookingSystem.Models
         [Range(0, Int16.MaxValue, ErrorMessage = "MinutesMarginAfterBooking is out of range.")]
         public int MinutesMarginAfterBooking { get; set; }
 
-        [Required(ErrorMessage = "WeekEndCount is required.")]
         [Range(0, Int16.MaxValue, ErrorMessage = "WeekEndCount is out of range.")]
         public int WeekEndCount { get; set; }
 
