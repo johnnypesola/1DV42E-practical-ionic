@@ -120,11 +120,12 @@
 
                     <md-input-container class="md-block col" flex-gt-sm>
 
-                        <label>Välj måltid</label>
+                        <label>Måltid</label>
                         <md-select
                                 name="MealId"
                                 ng-model="mealBooking.MealId"
                                 ng-required="true"
+                                ng-change="updateMealProperties()"
                                 ng-disabled="!isEditMode"
                         >
                             <md-option ng-repeat="meal in meals" value="{{meal.MealId}}">
@@ -135,6 +136,19 @@
                     </md-input-container>
 
                 </div>
+
+                <div layout-gt-xs="row" ng-show="mealProperties.length" class="pos-relative">
+                    <span class="faded">Måltiden har egenskaperna</span>
+                </div>
+                <div layout-gt-xs="row" class="pos-relative">
+                    <div
+                            class="custom-chip"
+                            ng-repeat="mealProperty in mealProperties"
+                            >
+                        {{mealProperty.MealPropertyName}}
+                    </div>
+                </div>
+
                 <div layout-gt-xs="row" class="pos-relative">
 
                     <div class="validation-messages" ng-messages="mealBookingForm.MealCount.$error">
