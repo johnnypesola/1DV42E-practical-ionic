@@ -217,6 +217,7 @@ angular.module( 'BookingSystem.locationBooking',
     };
 
     const areDateVariablesDefined = function() {
+
       return (
         typeof $scope.bookingStartDate !== 'undefined' &&
         typeof $scope.bookingStartHour !== 'undefined' &&
@@ -241,6 +242,7 @@ angular.module( 'BookingSystem.locationBooking',
 
         Location.queryFreeForPeriod(
           {
+            locationBookingId: $scope.locationBooking.LocationBookingId,
             fromDate: startMomentDate.format( 'YYYY-MM-DD' ),
             fromTime: startMomentDate.format( 'HH:mm' ),
             toDate: endMomentDate.format( 'YYYY-MM-DD' ),
@@ -475,8 +477,7 @@ angular.module( 'BookingSystem.locationBooking',
     /* Initialization START */
 
     setupModal();
-    getLocationBooking().then( () => { initDate(); getCustomer(); });
-    getLocations();
+    getLocationBooking().then( () => { initDate(); getCustomer(); getLocations(); });
     initTimeSelectData();
 
     /* Initialization END */
@@ -524,6 +525,7 @@ angular.module( 'BookingSystem.locationBooking',
     };
 
     const areDateVariablesDefined = function() {
+
       return (
         typeof $scope.bookingStartDate !== 'undefined' &&
         typeof $scope.bookingStartHour !== 'undefined' &&

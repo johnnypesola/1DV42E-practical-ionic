@@ -16,11 +16,12 @@ angular.module( 'BookingSystem.locationsServices',
       {locationId: '@locationId'},
       {
         queryFreeForPeriod: {
-          url: API_URL + 'Location/free/:fromDate/:toDate',
+          url: API_URL + 'Location/free/:fromDate/:toDate/:locationBookingId',
           id: '@id',
           method: 'GET',
           isArray: true,
           params: {
+            locationBookingId: '@locationBookingId',
             fromDate: '@fromDate',
             toDate: '@toDate'
           }
