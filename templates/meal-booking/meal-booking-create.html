@@ -1,13 +1,4 @@
 <ion-view view-title="Skapa måltidsbokning">
-    <ion-nav-buttons side="secondary">
-        <button
-                class="button"
-                ng-click="abortEditMode()"
-                ng-show="true"
-        >
-            editMode: {{isEditMode}}
-        </button>
-    </ion-nav-buttons>
     <ion-content padding="false">
 
         <div class="list" ng-if="customer">
@@ -151,6 +142,7 @@
                                 name="MealId"
                                 ng-model="mealBooking.MealId"
                                 ng-required="true"
+                                ng-change="updateMealProperties()"
                         >
                             <md-option ng-repeat="meal in meals" value="{{meal.MealId}}">
                                 {{meal.Name}}
@@ -160,6 +152,19 @@
                     </md-input-container>
 
                 </div>
+
+                <div layout-gt-xs="row" ng-show="mealProperties.length" class="pos-relative">
+                    <span class="faded">Måltiden har egenskaperna</span>
+                </div>
+                <div layout-gt-xs="row" class="pos-relative">
+                    <div
+                            class="custom-chip"
+                            ng-repeat="mealProperty in mealProperties"
+                            >
+                        {{mealProperty.MealPropertyName}}
+                    </div>
+                </div>
+
                 <div layout-gt-xs="row" class="pos-relative">
 
                     <div class="validation-messages" ng-messages="mealBookingForm.MealCount.$error">

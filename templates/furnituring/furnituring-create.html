@@ -1,13 +1,4 @@
 <ion-view view-title="Skapa Möblering">
-    <ion-nav-buttons side="secondary">
-        <button
-            class="button"
-            ng-click="abortEditMode()"
-            ng-show="true"
-        >
-            editMode: {{isEditMode}}
-        </button>
-    </ion-nav-buttons>
     <ion-content padding="true">
 
         <div class="row padding">
@@ -28,6 +19,7 @@
                             name="name"
                             ng-required="true"
                             ng-pattern="TEXT_FIELD_REGEXP"
+                            maxlength="50"
                         >
                     </md-input-container>
                 </div>
