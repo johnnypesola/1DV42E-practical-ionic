@@ -1,14 +1,4 @@
 <ion-view view-title="Lokal/Platsbokning">
-    <ion-nav-buttons side="secondary">
-        <button
-                class="button"
-                ng-click="abortEditMode()"
-                ng-show="true"
-                >
-            editMode: {{isEditMode}}
-
-        </button>
-    </ion-nav-buttons>
     <ion-content padding="false">
 
         <div class="list">
@@ -205,6 +195,10 @@
 
         </div>
 
+    </ion-content>
+
+    <div class="edit-buttons-container">
+
         <md-button
                 ng-show="isEditMode"
                 ng-click="abortEditMode()"
@@ -230,15 +224,15 @@
             <span class="icon ion-trash-a md-medium-icon"></span>
         </md-button>
 
-        <md-button
-                class="md-fab md-warn md-lower-right-button"
-                aria-label="Redigera"
-                ng-click="startEditMode()"
-                ng-show="!isEditMode"
-                >
-            <span class="icon ion-edit md-big-icon"></span>
-        </md-button>
+    </div>
 
-    </ion-content>
+    <md-button
+            class="md-fab md-warn md-lower-right-button"
+            aria-label="Redigera"
+            ng-click="startEditMode()"
+            ng-show="!isEditMode"
+            >
+        <span class="icon ion-edit md-big-icon"></span>
+    </md-button>
 
 </ion-view>
