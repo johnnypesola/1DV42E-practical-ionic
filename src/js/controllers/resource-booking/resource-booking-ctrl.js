@@ -245,7 +245,7 @@ angular.module( 'BookingSystem.resourceBooking',
           fromTime: startMomentDate.format( 'HH:mm' ),
           toDate: endMomentDate.format( 'YYYY-MM-DD' ),
           toTime: endMomentDate.format( 'HH:mm' ),
-          resourceBookingExceptionId: $scope.resourceBooking.ResourceBookingId
+          resourceBookingId: $scope.resourceBooking.ResourceBookingId
         }
       ).$promise
 

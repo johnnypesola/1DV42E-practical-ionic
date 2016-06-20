@@ -17,11 +17,12 @@ angular.module( 'BookingSystem.resourcesServices',
       {resourceId: '@resourceId'},
       {
         queryFreeForPeriod: {
-          url: API_URL + 'Resource/free/:fromDate/:toDate',
+          url: API_URL + 'Resource/free/:fromDate/:toDate/:resourceBookingId',
           id: '@id',
           method: 'GET',
           isArray: true,
           params: {
+            resourceBookingId: '@resourceBookingId',
             fromDate: '@fromDate',
             toDate: '@toDate'
           }
