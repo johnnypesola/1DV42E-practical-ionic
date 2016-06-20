@@ -169,7 +169,7 @@
                                 ng-model="mealBooking.LocationId"
                                 ng-disabled="!isEditMode"
                         >
-                            <md-option value="" selected="selected"><span class="faded">(Ingen)</span></md-option>
+                            <md-option selected="selected" value="null"><span class="faded">(Ingen)</span></md-option>
                             <md-option ng-repeat="location in locations" value="{{location.LocationId}}">
                                 {{location.Name}}
                             </md-option>
