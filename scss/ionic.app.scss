@@ -61,10 +61,14 @@ h1, .h1 {
 }
 
 // Background image on menu
-.menu-background {
+.menu-top {
   background: url("../img/menu-card.png") top left no-repeat;
   background-size: 100%;
   height: 110px;
+
+  h2 {
+    color: #fff;
+  }
 }
 
 // Navigation list in menu
