@@ -6,8 +6,19 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 @import "www/lib/ionic/scss/ionic";
 
 // Custom colors
-.orangitive {
-  color: #ef7c2b;
+.bar.bar-logo-color {
+  border-color: #6F7EA5;
+  background-color: #6F7EA5;
+  background-image: linear-gradient(0deg, #6F7EA5, #6F7EA5 50%, transparent 50%);
+  color: #fff !important;
+
+  h1, h2, h3, h4, h5, h6, button {
+    color: #fff;
+  }
+}
+
+.logo-color {
+  color: #7D88bc;
 }
 
 .menu-icon-color {
@@ -36,6 +47,10 @@ md-select[disabled] .md-select-value .md-select-icon {
 // Modify disabled inputs
 input[disabled], input[readonly]:not(.cloned-text-input), select[disabled], select[readonly], textarea[disabled], textarea[readonly]:not(.cloned-text-input) {
   background: none !important;
+}
+
+md-input-container textarea[disabled] + div.md-errors-spacer {
+  visibility: hidden;
 }
 
 // Remove lines in lists
