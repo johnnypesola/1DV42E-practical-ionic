@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BookingSystem.Models
 {
-    public class UserStore : IUserStore<IdentityUser, int> , IUserRoleStore<IdentityUser, int>
+    public class UserStore : IUserStore<IdentityUser, int> , IUserRoleStore<IdentityUser, int>//, IUserPasswordStore<IdentityUser, int>
     {
         // Properties
         public UserDAL UserDAL { get; private set; }
