@@ -7,20 +7,22 @@ using System.Threading.Tasks;
 
 namespace BookingSystem.Models
 {
-    public class UserStore : IUserStore<IdentityUser, int> //, IUserRoleStore<IdentityUser, int>
+    public class UserStore : IUserStore<IdentityUser, int> , IUserRoleStore<IdentityUser, int>
     {
         // Properties
         public UserDAL UserDAL { get; private set; }
+        public UserRoleDAL UserRoleDAL { get; private set; }
 
         // Constructors
         public UserStore()
         {
-            new UserStore(new UserDAL());
+            new UserStore(new UserDAL(), new UserRoleDAL());
         }
 
-        public UserStore(UserDAL userDAL)
+        public UserStore(UserDAL userDAL, UserRoleDAL userRoleDAL)
         {
             UserDAL = userDAL;
+            UserRoleDAL = userRoleDAL;
         }
 
         // Methods
@@ -91,6 +93,59 @@ namespace BookingSystem.Models
             return Task.FromResult<object>(null);
         }
 
+        public Task AddToRoleAsync(IdentityUser user, string roleName)
+        {
+            UserRoleDAL.InsertUserRole(user.Id, roleName);
+
+            return Task.FromResult<object>(null);
+        }
+
+        public Task RemoveFromRoleAsync(IdentityUser user, string roleName)
+        {
+            if (user != null)
+            {
+                UserRoleDAL.DeleteUserRole(user.Id, roleName);
+            }
+
+            return Task.FromResult<object>(null);
+        }
+
+        public Task<IList<string>> GetRolesAsync(IdentityUser user)
+        {
+            List<string> rolesList;
+
+            if (user != null)
+            {
+                rolesList = UserRoleDAL.GetUserRoles(user.Id).ToList();
+
+                return Task.FromResult<IList<string>>(rolesList);
+            }
+
+            return Task.FromResult<IList<string>>(null);
+        }
+
+        public Task<bool> IsInRoleAsync(IdentityUser user, string roleName)
+        {
+            List<string> rolesList;
+            bool hasRole = false;
+
+            if (user != null)
+            {
+                rolesList = UserRoleDAL.GetUserRoles(user.Id).ToList();
+
+                foreach (string role in rolesList)
+                {
+                    if (role == roleName)
+                    {
+                        hasRole = true;
+                        break;
+                    }
+                }
+            }
+
+            return Task.FromResult<bool>(hasRole);
+        }
+
         public void Dispose() {
 
             if (UserDAL != null)
@@ -98,8 +153,6 @@ namespace BookingSystem.Models
                 UserDAL.Dispose();
                 UserDAL = null;
             }
-
         }
-        
     }
 }
