@@ -4,7 +4,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
@@ -13,6 +12,7 @@ using BookingSystemAuth.Models;
 
 namespace BookingSystemAuth.Providers
 {
+    /*
     public class ApplicationOAuthProvider : OAuthAuthorizationServerProvider
     {
         private readonly string _publicClientId;
@@ -31,7 +31,7 @@ namespace BookingSystemAuth.Providers
         {
             var userManager = context.OwinContext.GetUserManager<ApplicationUserManager>();
 
-            ApplicationUser user = await userManager.FindAsync(context.UserName, context.Password);
+            IdentityUser user = await userManager.FindAsync(context.UserName, context.Password);
 
             if (user == null)
             {
@@ -95,4 +95,5 @@ namespace BookingSystemAuth.Providers
             return new AuthenticationProperties(data);
         }
     }
+    */
 }

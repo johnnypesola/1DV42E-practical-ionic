@@ -11,18 +11,16 @@ namespace BookingSystemAuth.Models
     {
         // Properties
         public UserDAL UserDAL { get; private set; }
-        public UserRoleDAL UserRoleDAL { get; private set; }
 
         // Constructors
         public UserStore()
         {
-            new UserStore(new UserDAL(), new UserRoleDAL());
+            new UserStore(new UserDAL());
         }
 
-        public UserStore(UserDAL userDAL, UserRoleDAL userRoleDAL)
+        public UserStore(UserDAL userDAL)
         {
             UserDAL = userDAL;
-            UserRoleDAL = userRoleDAL;
         }
 
         // Methods
@@ -95,7 +93,7 @@ namespace BookingSystemAuth.Models
 
         public Task AddToRoleAsync(IdentityUser user, string roleName)
         {
-            UserRoleDAL.InsertUserRole(user.Id, roleName);
+            UserDAL.InsertUserRole(user.Id, roleName);
 
             return Task.FromResult<object>(null);
         }
@@ -104,7 +102,7 @@ namespace BookingSystemAuth.Models
         {
             if (user != null)
             {
-                UserRoleDAL.DeleteUserRole(user.Id, roleName);
+                UserDAL.DeleteUserRole(user.Id, roleName);
             }
 
             return Task.FromResult<object>(null);
@@ -116,7 +114,7 @@ namespace BookingSystemAuth.Models
 
             if (user != null)
             {
-                rolesList = UserRoleDAL.GetUserRoles(user.Id).ToList();
+                rolesList = UserDAL.GetUserRoles(user.Id).ToList();
 
                 return Task.FromResult<IList<string>>(rolesList);
             }
@@ -131,7 +129,7 @@ namespace BookingSystemAuth.Models
 
             if (user != null)
             {
-                rolesList = UserRoleDAL.GetUserRoles(user.Id).ToList();
+                rolesList = UserDAL.GetUserRoles(user.Id).ToList();
 
                 foreach (string role in rolesList)
                 {

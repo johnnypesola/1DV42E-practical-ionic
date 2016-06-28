@@ -6,7 +6,7 @@ using System.Web;
 
 namespace BookingSystemAuth.Models
 {
-    public class BookingService : IBookingService
+    public class BookingService
     {
 
         // Fields

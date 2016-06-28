@@ -8,7 +8,6 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Http.ModelBinding;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
@@ -19,8 +18,10 @@ using BookingSystemAuth.Results;
 
 namespace BookingSystemAuth.Controllers
 {
+    /*
     [Authorize]
     [RoutePrefix("api/Account")]
+    
     public class AccountController : ApiController
     {
         private const string LocalLoginProvider = "Local";
@@ -78,7 +79,11 @@ namespace BookingSystemAuth.Controllers
         [Route("ManageInfo")]
         public async Task<ManageInfoViewModel> GetManageInfo(string returnUrl, bool generateState = false)
         {
-            IdentityUser user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            int userId;
+
+            Int32.TryParse(User.Identity.GetUserId(), out userId);
+
+            IdentityUser user = await UserManager.FindByIdAsync(userId);
 
             if (user == null)
             {
@@ -491,4 +496,6 @@ namespace BookingSystemAuth.Controllers
 
         #endregion
     }
+
+    */
 }
