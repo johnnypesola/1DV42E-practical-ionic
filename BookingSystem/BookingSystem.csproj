@@ -75,6 +75,10 @@
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -155,6 +159,8 @@
     <Compile Include="Models\BLL\Booking.cs" />
     <Compile Include="Models\BLL\BookingType.cs" />
     <Compile Include="Models\BLL\BookingTypeHasLocation.cs" />
+    <Compile Include="Models\BLL\IdentityRole.cs" />
+    <Compile Include="Models\BLL\IdentityUser.cs" />
     <Compile Include="Models\BLL\MealHasProperty.cs" />
     <Compile Include="Models\BLL\BookingTypeHasResource.cs" />
     <Compile Include="Models\BLL\CalendarBookingDay.cs" />
@@ -175,6 +181,9 @@
     <Compile Include="Models\BookingTypeHasResourceService.cs" />
     <Compile Include="Models\DAL\BookingTypeHasLocationDAL.cs" />
     <Compile Include="Models\DAL\BookingTypeHasResourceDAL.cs" />
+    <Compile Include="Models\DAL\RoleDAL.cs" />
+    <Compile Include="Models\DAL\UserDAL.cs" />
+    <Compile Include="Models\DAL\UserRoleDAL.cs" />
     <Compile Include="Models\MealHasPropertyService.cs" />
     <Compile Include="Models\BookingTypeService.cs" />
     <Compile Include="Models\CustomerService.cs" />
@@ -205,6 +214,8 @@
     <Compile Include="Models\MealPropertyService.cs" />
     <Compile Include="Models\MealService.cs" />
     <Compile Include="Models\ResourceService.cs" />
+    <Compile Include="Models\Stores\RoleStore.cs" />
+    <Compile Include="Models\Stores\UserStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

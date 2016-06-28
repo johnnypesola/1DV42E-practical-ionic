@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNet.Identity;
 
-namespace BookingSystem.Models.Stores
+namespace BookingSystem.Models
 {
     public class RoleStore : IRoleStore<IdentityRole, int>
     {

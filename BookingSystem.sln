@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingSystem", "BookingSystem\BookingSystem.csproj", "{39708B4B-F657-4D6A-96E5-CE8B7000088A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingSystem.Tests", "BookingSystem.Tests\BookingSystem.Tests.csproj", "{E38DDC19-F205-4A13-A406-152EFC3D5420}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingSystemAuth", "BookingSystemAuth\BookingSystemAuth.csproj", "{BA5723E9-1FE3-4AE6-96F3-B2C6578855C1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{E38DDC19-F205-4A13-A406-152EFC3D5420}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E38DDC19-F205-4A13-A406-152EFC3D5420}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E38DDC19-F205-4A13-A406-152EFC3D5420}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA5723E9-1FE3-4AE6-96F3-B2C6578855C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA5723E9-1FE3-4AE6-96F3-B2C6578855C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA5723E9-1FE3-4AE6-96F3-B2C6578855C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA5723E9-1FE3-4AE6-96F3-B2C6578855C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

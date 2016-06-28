@@ -7,9 +7,11 @@ using System.Web.Http;
 using BookingSystem.Models;
 using System.Web.Http.Cors;
 using System.Data;
+using Microsoft.AspNet.Identity;
 
 namespace BookingSystem.Controllers
 {
+    // [IdentityBasicAuthentication] // Enable authentication via an ASP.NET Identity user name and password
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class MealPropertyController : ApiController
     {

@@ -217,7 +217,7 @@ namespace BookingSystem.Models
                     cmd.Parameters.Add("@IsLockedOut", SqlDbType.Bit).Value = User.IsLockedOut;
                     
                     // Add out parameter for Stored procedure
-                    cmd.Parameters.Add("@InsertId", SqlDbType.SmallInt).Direction = ParameterDirection.Output;
+                    cmd.Parameters.Add("@InsertId", SqlDbType.Int).Direction = ParameterDirection.Output;
 
                     // Open DB connection
                     connection.Open();
