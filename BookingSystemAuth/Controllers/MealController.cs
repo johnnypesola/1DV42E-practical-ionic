@@ -23,6 +23,7 @@ namespace BookingSystemAuth.Controllers
         MealService mealService = new MealService();
 
         // GET: api/Meal
+        [Authorize]
         [Route("api/Meal")]
         [AcceptVerbs("GET")]
         public IHttpActionResult Get()

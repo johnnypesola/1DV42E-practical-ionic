@@ -162,3 +162,6 @@ $RECYCLE.BIN/
 BookingSystem/Web.config
 BookingSystem/Web.Debug.config
 BookingSystem/Web.Release.config
+BookingSystemAuth/Web.config
+BookingSystemAuth/Web.Debug.config
+BookingSystemAuth/Web.Release.config

@@ -15,7 +15,8 @@ namespace BookingSystemAuth.Models
         // Constructors
         public UserStore()
         {
-            new UserStore(new UserDAL());
+            UserDAL userDAL = new UserDAL();
+            new UserStore(userDAL);
         }
 
         public UserStore(UserDAL userDAL)

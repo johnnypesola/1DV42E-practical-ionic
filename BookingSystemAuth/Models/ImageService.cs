@@ -10,7 +10,6 @@ namespace BookingSystemAuth.Models
     public class ImageService
     {
         MemoryStream ms;
-        // string base64string;
         byte[] bytes;
         Image image;
         string UploadImagePath;
