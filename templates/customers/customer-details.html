@@ -7,7 +7,7 @@
 
             <form name="customerForm">
                 <div layout-gt-xs="row">
-                    <img class="show-image" ng-src="{{API_IMG_PATH_URL + customer.ImageSrc}}" ng-show="customer.ImageSrc" ng-hide="isEditMode || !customer.ImageSrc">
+                    <img class="show-image" ng-src="{{API_IMG_PATH_URL + customer.ImageSrc}}" ng-show="isImgVisible" ng-hide="isEditMode || !customer.ImageSrc" show-on-load>
 
                     <div ng-if="isEditMode">
                         <image-uploader type="Customer" id="{{customer.CustomerId}}" image-src="customer.ImageSrc" base64-encoded-image="customer.ImageForUpload"></image-uploader>
@@ -161,7 +161,7 @@
                                 ng-model="customer.ParentCustomerId"
                                 ng-disabled="!customers.length || !isEditMode"
                                 >
-                            <md-option value="" selected="selected"><span class="faded">(Ingen)</span></md-option>
+                            <md-option value="0" selected="selected"><span class="faded">(Ingen)</span></md-option>
                             <md-option ng-repeat="customer in customers" ng-value="customer.CustomerId">
                                 {{customer.Name}}
                             </md-option>
