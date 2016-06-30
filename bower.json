@@ -11,7 +11,8 @@
     "angular-messages": "^1.4.8",
     "moment": "^2.13.0",
     "angular-resource": "^1.5.5",
-    "angular-google-maps": "^2.3.3"
+    "angular-google-maps": "^2.3.3",
+    "angular-cookies": "^1.5.7"
   },
   "resolutions": {
     "angular": "1.4.3",
