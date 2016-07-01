@@ -6,7 +6,7 @@
 
       <div class="row">
 
-          <form ng-submit="doLogin()" name="loginForm" class="col">
+          <form name="loginForm" class="col">
 
               <p>
                   Var god ange dina inloggingsuppgifter för att komma åt bokningssystemet. Saknar du uppgifter så kontakta ansvarig.
@@ -26,7 +26,7 @@
                               ng-required="true"
                               ng-pattern="TEXT_FIELD_REGEXP"
                               maxlength="50"
-                              >
+                      >
                   </md-input-container>
 
               </div>
@@ -55,7 +55,8 @@
                   <md-button
                           ng-disabled="loginForm.$invalid"
                           class="md-raised md-primary" type="submit"
-                          >Logga in</md-button>
+                          ng-click="loginFromModal( loginData.username, loginData.password )"
+                  >Logga in</md-button>
               </md-input-container>
 
           </form>

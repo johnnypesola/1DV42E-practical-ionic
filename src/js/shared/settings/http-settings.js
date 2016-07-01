@@ -11,7 +11,7 @@ angular.module( 'BookingSystem.httpSettings',
 
     return {
 
-      // Only use API Key and Auth if we are connecting to the REST API.
+      // Only use Authentication header if we are connecting to the REST API.
       request: function ( config ) {
 
         $rootScope.isLoading = true;

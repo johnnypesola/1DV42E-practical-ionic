@@ -46,6 +46,7 @@ angular.module( 'BookingSystem.resourceBooking',
       $mdToast.show( $mdToast.simple()
         .content( 'Resursbokningar kunde inte hämtas, var god försök igen.' )
         .position( 'top right' )
+        .theme( 'error' )
       );
     })
 
@@ -193,6 +194,7 @@ angular.module( 'BookingSystem.resourceBooking',
       $mdToast.show( $mdToast.simple()
         .content( 'Resursbokning kunde inte hämtas, var god försök igen.' )
         .position( 'top right' )
+        .theme( 'error' )
       );
     });
 
@@ -265,6 +267,7 @@ angular.module( 'BookingSystem.resourceBooking',
           $mdToast.show( $mdToast.simple()
             .content( 'Ett oväntat fel uppstod när uppgifter om lediga resurser skulle hämtas' )
             .position( 'top right' )
+            .theme( 'error' )
           );
         });
     }
@@ -283,6 +286,7 @@ angular.module( 'BookingSystem.resourceBooking',
       $mdToast.show( $mdToast.simple()
           .content( 'Kund kunde inte hämtas, var god försök igen.' )
           .position( 'top right' )
+          .theme( 'error' )
       );
     });
 
@@ -337,6 +341,7 @@ angular.module( 'BookingSystem.resourceBooking',
         $mdToast.show( $mdToast.simple()
           .content( 'Resursbokningen raderades med ett lyckat resultat' )
           .position( 'top right' )
+          .theme( 'success' )
         );
 
         history.back();
@@ -350,6 +355,7 @@ angular.module( 'BookingSystem.resourceBooking',
           $mdToast.show( $mdToast.simple()
             .content( 'Ett oväntat fel uppstod när Resursbokningen skulle tas bort' )
             .position( 'top right' )
+            .theme( 'error' )
           );
         }
 
@@ -359,6 +365,7 @@ angular.module( 'BookingSystem.resourceBooking',
           $mdToast.show( $mdToast.simple()
             .content( 'Resursbokningen existerar inte längre. Hann kanske någon radera den?' )
             .position( 'top right' )
+            .theme( 'error' )
           );
         }
 
@@ -414,6 +421,7 @@ angular.module( 'BookingSystem.resourceBooking',
         $mdToast.show( $mdToast.simple()
           .content( 'Resursbokningen sparades med ett lyckat resultat' )
           .position( 'top right' )
+          .theme( 'success' )
         );
 
         // Resolve promise
@@ -430,6 +438,7 @@ angular.module( 'BookingSystem.resourceBooking',
           $mdToast.show( $mdToast.simple()
             .content( 'Alla resurser av denna typ är tyvärr redan bokade under vald tidsram.' )
             .position( 'top right' )
+            .theme( 'error' )
           );
         }
 
@@ -439,6 +448,7 @@ angular.module( 'BookingSystem.resourceBooking',
           $mdToast.show( $mdToast.simple()
             .content( 'Ett oväntat fel uppstod när resursbokningen skulle sparas' )
             .position( 'top right' )
+            .theme( 'error' )
           );
         }
       });
@@ -551,6 +561,7 @@ angular.module( 'BookingSystem.resourceBooking',
           $mdToast.show( $mdToast.simple()
             .content( 'Ett oväntat fel uppstod när uppgifter om lediga resurser skulle hämtas' )
             .position( 'top right' )
+            .theme( 'error' )
           );
         });
     }
@@ -565,6 +576,7 @@ angular.module( 'BookingSystem.resourceBooking',
       $mdToast.show( $mdToast.simple()
         .content( 'Kunder kunde inte hämtas, var god försök igen.' )
         .position( 'top right' )
+        .theme( 'error' )
       );
     });
 
@@ -591,6 +603,7 @@ angular.module( 'BookingSystem.resourceBooking',
       $mdToast.show( $mdToast.simple()
         .content( 'Kund kunde inte hämtas, var god försök igen.' )
         .position( 'top right' )
+        .theme( 'error' )
       );
     })
     .then( () => {
@@ -639,6 +652,7 @@ angular.module( 'BookingSystem.resourceBooking',
           $mdToast.show( $mdToast.simple()
             .content( 'Ett oväntat fel uppstod när bokningstillfället skulle sparas' )
             .position( 'top right' )
+            .theme( 'error' )
           );
 
           deferred.reject();
@@ -704,6 +718,7 @@ angular.module( 'BookingSystem.resourceBooking',
             $mdToast.show( $mdToast.simple()
               .content( ' Resursbokningen skapades med ett lyckat resultat' )
               .position( 'top right' )
+              .theme( 'success' )
             );
 
             // Resolve promise
@@ -720,6 +735,7 @@ angular.module( 'BookingSystem.resourceBooking',
               $mdToast.show( $mdToast.simple()
                 .content( 'Resursen är tyvärr redan bokad under vald tidsram.' )
                 .position( 'top right' )
+                .theme( 'error' )
               );
             }
 
@@ -728,6 +744,7 @@ angular.module( 'BookingSystem.resourceBooking',
               $mdToast.show( $mdToast.simple()
                 .content( 'Ett oväntat fel uppstod när resursbokningen skulle sparas' )
                 .position( 'top right' )
+                .theme( 'error' )
               );
             }
           });

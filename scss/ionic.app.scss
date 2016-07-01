@@ -500,3 +500,19 @@ span.label {
 }
 
 // Text transform specific END
+
+// Custom md-toast themes START
+
+md-toast.md-success-theme {
+  .md-toast-content {
+      background-color: green;
+    }
+}
+
+md-toast.md-error-theme {
+  .md-toast-content {
+      background-color: red;
+    }
+}
+
+// Custom md-toast themes END
