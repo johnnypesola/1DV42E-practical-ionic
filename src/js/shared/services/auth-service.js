@@ -1,16 +1,56 @@
-angular.module( 'BookingSystem.bookingHelperServices',
+angular.module( 'BookingSystem.authService',
 
   // Dependencies
   ['ngCookies']
 )
-  .factory( 'AuthService', [ '$q', '$cookies', '$timeout', '$rootScope', '$http', 'API_URL', ( $q, $cookies, $timeout, $rootScope, $http, API_URL ) => {
+  .service( 'AuthService', [ '$q', '$cookies', '$timeout', '$rootScope', 'API_URL', 'MODAL_ANIMATION', '$injector', function( $q, $cookies, $timeout, $rootScope, API_URL, MODAL_ANIMATION, $injector ) {
 
     // Init values
     const keyStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+    const CURRENT_USER_STR = 'currentUser';
+    const loginModalTemplateUrl = 'templates/modals/login.html';
 
-    // Private functions
+    this.showLoginModal = function(){
 
-    const base64Encode = function ( input ) {
+      console.log( ( $rootScope.authModal !== undefined ? $rootScope.authModal.isShown() : 'nope' ) );
+
+      if ( $rootScope.authModal === undefined || $rootScope.authModal === null || $rootScope.authModal !== undefined && !$rootScope.authModal.isShown() ) {
+
+        $rootScope.authModal = {};
+
+        // Inject ionic modal to avoid circular dependency.
+        const ionicModal = $injector.get( '$ionicModal' );
+
+        // Load modal template and set scope.
+        ionicModal.fromTemplateUrl( loginModalTemplateUrl, {
+          scope: $rootScope,
+          animation: MODAL_ANIMATION,
+          backdropClickToClose: false,
+          hardwareBackButtonClose: false
+        })
+          .then( ( response ) => {
+
+            // Store modal in root scope
+            $rootScope.authModal = response;
+
+            // Show the modal when loaded.
+            $rootScope.authModal.show();
+          });
+
+        // Cleanup the modal when we're done with it
+        $rootScope.$on( 'authModal.hidden', () => {
+          console.log( 'hidden' );
+          $rootScope.authModal.remove();
+        });
+
+        $rootScope.$on( 'authModal.removed', () => {
+          console.log( 'removed' );
+          $rootScope.authModal = null;
+        });
+      }
+    };
+
+    this.base64Encode = function ( input ) {
       let output = '';
       let chr1, chr2, chr3 = '';
       let enc1, enc2, enc3, enc4 = '';
@@ -92,7 +132,7 @@ angular.module( 'BookingSystem.bookingHelperServices',
     };
     */
 
-    const login = function ( username, password, callback ) {
+    this.login = function ( username, password, callback ) {
 
       /* Dummy authentication for testing, uses $timeout to simulate api call
        ----------------------------------------------*/
@@ -115,28 +155,64 @@ angular.module( 'BookingSystem.bookingHelperServices',
 
     };
 
-    const setCredentials = function ( username, password ) {
+    this.isLoggedInCheck = function() {
+
+      // Try to get cookie credentials. Determine if user is logged in.
+      const isLoggedIn = $cookies.get( CURRENT_USER_STR ) !== undefined;
+
+      // Update rootscope variable if needed
+      if ( $rootScope.isLoggedIn !== isLoggedIn ) {
+        $rootScope.isLoggedIn = isLoggedIn;
+      }
+
+      // If auth token is valid
+      return isLoggedIn;
+    };
+
+    this.setCredentials = function ( username, password ) {
 
       const authData = base64Encode( username + ':' + password );
 
-      $rootScope.globals = {
-        currentUser: {
-          username: username,
-          authData: authData
-        }
+      const currentUser = {
+        username: username,
+        authData: authData
       };
+      /*
+      $rootScope.globals = {
+        currentUser: currentUser
+      };
+      */
 
-      $http.defaults.headers.common.Authorization = 'Basic ' + authData;
-      $cookies.put( 'globals', $rootScope.globals );
+      // $http.defaults.headers.common.Authorization = 'Basic ' + authData;
+      $cookies.put( CURRENT_USER_STR, currentUser );
     };
 
-    const clearCredentials = function () {
-      $rootScope.globals = {};
-      $cookies.remove( 'globals' );
-      $http.defaults.headers.common.Authorization = 'Basic ';
+    this.getAuthHeader = function() {
+
+      let returnValue = false;
+
+      const currentUser = $cookies.get( CURRENT_USER_STR ) !== null;
+
+      if ( currentUser.authData ) {
+        returnValue = 'Basic ' + currentUser.authData;
+      }
+
+      return returnValue;
     };
 
-    const apiUrlEqualsUrl = function( configUrl ){
+    this.clearCredentials = function () {
+
+      // Clear credentials from rootScope.
+      // $rootScope.globals = {};
+
+      // Clear credentials from cookie
+      $cookies.remove( CURRENT_USER_STR );
+
+      // Clear credentials from http headers
+      // $http.defaults.headers.common.Authorization = 'Basic ';
+    };
+
+    this.apiUrlEqualsUrl = function( configUrl ){
 
       let apiUrlPartsArray, apiCompareUrl, currentCompareUrl;
 
@@ -156,15 +232,6 @@ angular.module( 'BookingSystem.bookingHelperServices',
       }
 
       return false;
-    };
-
-    // Public functions
-
-    return {
-      login: login,
-      setCredentials: setCredentials,
-      clearCredentials: clearCredentials,
-      apiUrlEqualsUrl: apiUrlEqualsUrl
     };
   }]
 );

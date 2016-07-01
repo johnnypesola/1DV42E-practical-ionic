@@ -3,11 +3,33 @@
 const BookingSystem = angular
   .module( 'BookingSystem', [
     'ionic',
+    'ngMaterial',
+    'ngResource',
+    'ngMessages',
+
+    // Settings
+    'BookingSystem.start',
     'BookingSystem.routes',
     'BookingSystem.constants',
-    'BookingSystem.httpSettings',
     'BookingSystem.ngMaterialSettings',
+    'BookingSystem.httpSettings',
 
+    // Controllers
+    'BookingSystem.login',
+    'BookingSystem.meals',
+    'BookingSystem.resources',
+    'BookingSystem.bookings',
+    'BookingSystem.locations',
+    'BookingSystem.furnituring',
+    'BookingSystem.customers',
+    'BookingSystem.mealProperties',
+    'BookingSystem.locationBooking',
+    'BookingSystem.resourceBooking',
+    'BookingSystem.mealBooking',
+    'BookingSystem.bookingTypes',
+
+    // Services
+    'BookingSystem.authService',
     'BookingSystem.furnituringServices',
     'BookingSystem.mealsServices',
     'BookingSystem.resourcesServices',
@@ -23,31 +45,15 @@ const BookingSystem = angular
     'BookingSystem.resourceBookingServices',
     'BookingSystem.mealBookingServices',
 
-    'BookingSystem.meals',
-    'BookingSystem.resources',
-    'BookingSystem.locationBooking',
-    'BookingSystem.locations',
-    'BookingSystem.furnituring',
-
-    'BookingSystem.customers',
-
-    'BookingSystem.bookingTypes',
-    'BookingSystem.filters',
-    'BookingSystem.resourceBooking',
+    // Directives
     'BookingSystem.calendarDaysHeaderDirective',
-    'BookingSystem.start',
-    'BookingSystem.mealBooking',
-    'BookingSystem.mealProperties',
-    'BookingSystem.bookings',
-
     'BookingSystem.calendarWeekDirective',
     'BookingSystem.imageUploaderDirective',
     'BookingSystem.ngMinMaxDirectives',
     'BookingSystem.calendarDayDirective',
 
-    'ngMaterial',
-    'ngResource',
-    'ngMessages'
+    // Filters
+    'BookingSystem.filters'
   ] );
 
 BookingSystem.run( ['$ionicPlatform', '$rootScope', ( $ionicPlatform, $rootScope ) => {
