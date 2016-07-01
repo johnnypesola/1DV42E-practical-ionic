@@ -192,16 +192,18 @@ angular.module( 'BookingSystem.authService',
       */
 
       // $http.defaults.headers.common.Authorization = 'Basic ' + authData;
-      $cookies.put( CURRENT_USER_STR, currentUser );
+      $cookies.putObject( CURRENT_USER_STR, currentUser );
     };
 
     this.getAuthHeader = function() {
 
       let returnValue = false;
 
-      const currentUser = $cookies.get( CURRENT_USER_STR ) !== null;
+      // Get current logged in user from cookie
+      const currentUser = $cookies.getObject( CURRENT_USER_STR );
 
-      if ( currentUser.authData ) {
+      // Check that current user has auth data
+      if ( currentUser.authData !== undefined ) {
         returnValue = 'Basic ' + currentUser.authData;
       }
 
