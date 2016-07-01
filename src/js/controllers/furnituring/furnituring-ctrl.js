@@ -23,6 +23,7 @@ angular.module( 'BookingSystem.furnituring',
           $mdToast.show( $mdToast.simple()
             .content( 'Möbleringar kunde inte hämtas, var god försök igen.' )
             .position( 'top right' )
+            .theme( 'error' )
           );
         });
 
@@ -96,6 +97,7 @@ angular.module( 'BookingSystem.furnituring',
           $mdToast.show( $mdToast.simple()
             .content( 'Möblering kunde inte hämtas, var god försök igen.' )
             .position( 'top right' )
+            .theme( 'error' )
           );
         });
 
@@ -148,6 +150,7 @@ angular.module( 'BookingSystem.furnituring',
             $mdToast.show( $mdToast.simple()
               .content( 'Möbleringen "' + $scope.furnituring.Name + '" sparades med ett lyckat resultat' )
               .position( 'top right' )
+              .theme( 'success' )
             );
 
             history.back();
@@ -161,6 +164,7 @@ angular.module( 'BookingSystem.furnituring',
                 .content( 'Det finns redan en möblering som heter "' + $scope.furnituring.Name +
                   '". Två möbleringar kan inte heta lika.' )
                 .position( 'top right' )
+                .theme( 'error' )
               );
             }
 
@@ -169,6 +173,7 @@ angular.module( 'BookingSystem.furnituring',
               $mdToast.show( $mdToast.simple()
                 .content( 'Ett oväntat fel uppstod när möbleringen skulle sparas' )
                 .position( 'top right' )
+                .theme( 'error' )
               );
             }
 
@@ -177,6 +182,7 @@ angular.module( 'BookingSystem.furnituring',
               $mdToast.show( $mdToast.simple()
                 .content( 'Möbleringen "' + $scope.furnituring.Name + '" existerar inte längre. Hann kanske någon radera den?' )
                 .position( 'top right' )
+                .theme( 'error' )
               );
 
               history.back();
@@ -199,6 +205,7 @@ angular.module( 'BookingSystem.furnituring',
             $mdToast.show( $mdToast.simple()
               .content( 'Möbleringen "' + $scope.furnituring.Name + '" raderades med ett lyckat resultat' )
               .position( 'top right' )
+              .theme( 'success' )
             );
 
             history.back();
@@ -216,6 +223,7 @@ angular.module( 'BookingSystem.furnituring',
                 .content( 'Möbleringen kan inte raderas eftersom det finns' +
                   ' en lokalbokning eller en lokalmöblering som refererar till möbleringen' )
                 .position( 'top right' )
+                .theme( 'error' )
               );
             }
 
@@ -224,6 +232,7 @@ angular.module( 'BookingSystem.furnituring',
               $mdToast.show( $mdToast.simple()
                 .content( 'Ett oväntat fel uppstod när möbleringen skulle tas bort' )
                 .position( 'top right' )
+                .theme( 'error' )
               );
             }
 
@@ -232,6 +241,7 @@ angular.module( 'BookingSystem.furnituring',
               $mdToast.show( $mdToast.simple()
                 .content( 'Möbleringen "' + $scope.furnituring.Name + '" existerar inte längre. Hann kanske någon radera den?' )
                 .position( 'top right' )
+                .theme( 'error' )
               );
             }
 
@@ -280,6 +290,7 @@ angular.module( 'BookingSystem.furnituring',
             $mdToast.show( $mdToast.simple()
               .content( 'Möbleringen "' + $scope.furnituring.Name + '" skapades med ett lyckat resultat' )
               .position( 'top right' )
+              .theme( 'success' )
             );
 
             history.back();
@@ -293,6 +304,7 @@ angular.module( 'BookingSystem.furnituring',
                 .content( 'Det finns redan en möblering som heter "' + $scope.furnituring.Name +
                   '". Två möbleringar kan inte heta lika.' )
                 .position( 'top right' )
+                .theme( 'error' )
               );
             }
 
@@ -301,6 +313,7 @@ angular.module( 'BookingSystem.furnituring',
               $mdToast.show( $mdToast.simple()
                 .content( 'Ett oväntat fel uppstod när möbleringen skulle sparas' )
                 .position( 'top right' )
+                .theme( 'error' )
               );
             }
           });

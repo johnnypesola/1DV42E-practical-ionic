@@ -1,16 +1,58 @@
-angular.module( 'BookingSystem.bookingHelperServices',
+angular.module( 'BookingSystem.authService',
 
   // Dependencies
   ['ngCookies']
 )
-  .factory( 'AuthService', [ '$q', '$cookies', '$timeout', '$rootScope', '$http', 'API_URL', ( $q, $cookies, $timeout, $rootScope, $http, API_URL ) => {
+  .service( 'AuthService', [ '$q', '$cookies', '$timeout', '$rootScope', 'API_URL', 'MODAL_ANIMATION', '$injector', function( $q, $cookies, $timeout, $rootScope, API_URL, MODAL_ANIMATION, $injector ) {
 
     // Init values
     const keyStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+    const CURRENT_USER_STR = 'currentUser';
+    const loginModalTemplateUrl = 'templates/modals/login.html';
+    const that = this;
 
-    // Private functions
+    this.showLoginModal = function(){
 
-    const base64Encode = function ( input ) {
+      // Only init modal if there is no modal.
+      if (
+          $rootScope.loginModal === undefined ||
+          $rootScope.loginModal === null ||
+          $rootScope.loginModal !== undefined && !$rootScope.loginModal.isShown()
+      ) {
+
+        $rootScope.loginModal = {};
+
+        // Inject ionic modal to avoid circular dependency.
+        const ionicModal = $injector.get( '$ionicModal' );
+
+        // Load modal template and set scope.
+        ionicModal.fromTemplateUrl( loginModalTemplateUrl, {
+          scope: $rootScope,
+          animation: MODAL_ANIMATION,
+          backdropClickToClose: false,
+          hardwareBackButtonClose: false
+        })
+          .then( ( response ) => {
+
+            // Store modal in root scope
+            $rootScope.loginModal = response;
+
+            // Show the modal when loaded.
+            $rootScope.loginModal.show();
+          });
+
+        // Cleanup the modal when we're done with it
+        $rootScope.$on( 'loginModal.hidden', () => {
+          $rootScope.loginModal.remove();
+        });
+
+        $rootScope.$on( 'loginModal.removed', () => {
+          $rootScope.loginModal = null;
+        });
+      }
+    };
+
+    this.base64Encode = function ( input ) {
       let output = '';
       let chr1, chr2, chr3 = '';
       let enc1, enc2, enc3, enc4 = '';
@@ -92,7 +134,9 @@ angular.module( 'BookingSystem.bookingHelperServices',
     };
     */
 
-    const login = function ( username, password, callback ) {
+    this.login = function ( username, password ) {
+
+      const deferred = $q.defer();
 
       /* Dummy authentication for testing, uses $timeout to simulate api call
        ----------------------------------------------*/
@@ -101,9 +145,11 @@ angular.module( 'BookingSystem.bookingHelperServices',
         const response = { success: username === 'test' && password === 'test' };
 
         if ( !response.success ) {
-          response.message = 'Username or password is incorrect';
+          deferred.reject();
+        } else {
+          deferred.resolve();
         }
-        callback( response );
+
       }, 1000 );
 
       /* Use this for real authentication
@@ -113,30 +159,70 @@ angular.module( 'BookingSystem.bookingHelperServices',
       //        callback(response);
       //    });
 
+      // Return promise
+      return deferred.promise;
     };
 
-    const setCredentials = function ( username, password ) {
+    this.isLoggedInCheck = function() {
 
-      const authData = base64Encode( username + ':' + password );
+      // Try to get cookie credentials. Determine if user is logged in.
+      const isLoggedIn = $cookies.get( CURRENT_USER_STR ) !== undefined;
 
-      $rootScope.globals = {
-        currentUser: {
-          username: username,
-          authData: authData
-        }
+      // Update rootscope variable if needed
+      if ( $rootScope.isLoggedIn !== isLoggedIn ) {
+        $rootScope.isLoggedIn = isLoggedIn;
+      }
+
+      // If auth token is valid
+      return isLoggedIn;
+    };
+
+    this.setCredentials = function ( username, password ) {
+
+      const authData = that.base64Encode( username + ':' + password );
+
+      const currentUser = {
+        username: username,
+        authData: authData
       };
+      /*
+      $rootScope.globals = {
+        currentUser: currentUser
+      };
+      */
 
-      $http.defaults.headers.common.Authorization = 'Basic ' + authData;
-      $cookies.put( 'globals', $rootScope.globals );
+      // $http.defaults.headers.common.Authorization = 'Basic ' + authData;
+      $cookies.putObject( CURRENT_USER_STR, currentUser );
     };
 
-    const clearCredentials = function () {
-      $rootScope.globals = {};
-      $cookies.remove( 'globals' );
-      $http.defaults.headers.common.Authorization = 'Basic ';
+    this.getAuthHeader = function() {
+
+      let returnValue = false;
+
+      // Get current logged in user from cookie
+      const currentUser = $cookies.getObject( CURRENT_USER_STR );
+
+      // Check that current user has auth data
+      if ( currentUser.authData !== undefined ) {
+        returnValue = 'Basic ' + currentUser.authData;
+      }
+
+      return returnValue;
     };
 
-    const apiUrlEqualsUrl = function( configUrl ){
+    this.clearCredentials = function () {
+
+      // Clear credentials from rootScope.
+      // $rootScope.globals = {};
+
+      // Clear credentials from cookie
+      $cookies.remove( CURRENT_USER_STR );
+
+      // Clear credentials from http headers
+      // $http.defaults.headers.common.Authorization = 'Basic ';
+    };
+
+    this.apiUrlEqualsUrl = function( configUrl ){
 
       let apiUrlPartsArray, apiCompareUrl, currentCompareUrl;
 
@@ -158,13 +244,50 @@ angular.module( 'BookingSystem.bookingHelperServices',
       return false;
     };
 
-    // Public functions
+    // Init rootScope auth functions
+    $rootScope.loginFromModal = function( username, password ){
 
-    return {
-      login: login,
-      setCredentials: setCredentials,
-      clearCredentials: clearCredentials,
-      apiUrlEqualsUrl: apiUrlEqualsUrl
+      // Inject ionic modal to avoid circular dependency.
+      const mdToast = $injector.get( '$mdToast' );
+
+      that.login( username, password )
+
+        // Login successful
+        .then( ( response ) => {
+
+          $rootScope.loginModal.hide();
+
+          // Display error message
+          mdToast.show( mdToast.simple()
+              .content( 'Du är nu inloggad' )
+              .position( 'top right' )
+          );
+
+          // Set http header credentials
+          that.setCredentials( username, password );
+
+          // Clear loginData
+          $rootScope.loginData = {};
+
+          window.location = '/';
+        })
+
+        .catch( ( response ) => {
+
+          // Display error message
+          mdToast.show( mdToast.simple()
+              .content( 'Felaktigt användarnamn eller lösenord' )
+              .position( 'top right' )
+              .theme( 'error' )
+          );
+        });
     };
+
+    $rootScope.logout = function() {
+      that.clearCredentials();
+
+      window.location = '/';
+    };
+
   }]
 );

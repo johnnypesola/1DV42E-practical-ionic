@@ -41,6 +41,7 @@ angular.module( 'BookingSystem.locations',
         $mdToast.show( $mdToast.simple()
           .content( 'Lokaler och platser kunde inte hämtas, var god försök igen.' )
           .position( 'top right' )
+          .theme( 'error' )
         );
       });
 
@@ -123,6 +124,7 @@ angular.module( 'BookingSystem.locations',
       $mdToast.show( $mdToast.simple()
         .content( 'Lokalen/Platsen "' + $scope.location.Name + '" sparades med ett lyckat resultat' )
         .position( 'top right' )
+        .theme( 'success' )
       );
 
       // Redirect
@@ -193,6 +195,7 @@ angular.module( 'BookingSystem.locations',
         $mdToast.show( $mdToast.simple()
           .content( 'Lokal/plats kunde inte hämtas, var god försök igen.' )
           .position( 'top right' )
+          .theme( 'error' )
         );
       });
       $scope.location = location;
@@ -260,6 +263,7 @@ angular.module( 'BookingSystem.locations',
                 $mdToast.show( $mdToast.simple()
                   .content( 'Lokalen/Platsen sparades, men det gick inte att ladda upp och spara den önskade bilden.' )
                   .position( 'top right' )
+                  .theme( 'error' )
                 );
               });
           }
@@ -277,6 +281,7 @@ angular.module( 'BookingSystem.locations',
               .content( 'Det finns redan en lokal/plats som heter "' + $scope.location.Name +
                 '". Två lokaler eller platser kan inte heta lika.' )
               .position( 'top right' )
+              .theme( 'error' )
             );
           }
 
@@ -285,6 +290,7 @@ angular.module( 'BookingSystem.locations',
             $mdToast.show( $mdToast.simple()
               .content( 'Ett oväntat fel uppstod när lokalen/platsen skulle sparas' )
               .position( 'top right' )
+              .theme( 'error' )
             );
           }
 
@@ -293,6 +299,7 @@ angular.module( 'BookingSystem.locations',
             $mdToast.show( $mdToast.simple()
               .content( 'Lokalen/platsen "' + $scope.location.Name + '" existerar inte längre. Hann kanske någon radera den?' )
               .position( 'top right' )
+              .theme( 'error' )
             );
 
             history.back();
@@ -332,6 +339,7 @@ angular.module( 'BookingSystem.locations',
           $mdToast.show( $mdToast.simple()
             .content( 'Lokalen/platsen "' + $scope.location.Name + '" raderades med ett lyckat resultat' )
             .position( 'top right' )
+            .theme( 'success' )
           );
 
           history.back();
@@ -349,6 +357,7 @@ angular.module( 'BookingSystem.locations',
               .content( 'Lokalen/platsen kan inte raderas eftersom det finns' +
                 ' en bokning eller en lokalmöblering som refererar till lokalen/platsen' )
               .position( 'top right' )
+              .theme( 'error' )
             );
           }
 
@@ -357,6 +366,7 @@ angular.module( 'BookingSystem.locations',
             $mdToast.show( $mdToast.simple()
               .content( 'Ett oväntat fel uppstod när lokalen/platsen skulle tas bort' )
               .position( 'top right' )
+              .theme( 'error' )
             );
           }
 
@@ -365,6 +375,7 @@ angular.module( 'BookingSystem.locations',
             $mdToast.show( $mdToast.simple()
               .content( 'Lokalen/platsen "' + $scope.location.Name + '" existerar inte längre. Hann kanske någon radera den?' )
               .position( 'top right' )
+              .theme( 'error' )
             );
           }
 
@@ -429,6 +440,7 @@ angular.module( 'BookingSystem.locations',
       $mdToast.show( $mdToast.simple()
         .content( 'Lokalen/Platsen "' + $scope.location.Name + '" sparades med ett lyckat resultat' )
         .position( 'top right' )
+        .theme( 'success' )
       );
 
       // Redirect
@@ -556,6 +568,7 @@ angular.module( 'BookingSystem.locations',
                 $mdToast.show( $mdToast.simple()
                   .content( 'Lokalen/Platsen sparades, men det gick inte att ladda upp och spara den önskade bilden.' )
                   .position( 'top right' )
+                  .theme( 'error' )
                 );
               });
           }
@@ -573,6 +586,7 @@ angular.module( 'BookingSystem.locations',
               .content( 'Det finns redan en lokal eller plats som heter "' + $scope.location.Name +
                 '". Två lokaler/platser kan inte heta lika.' )
               .position( 'top right' )
+              .theme( 'error' )
             );
           }
 
@@ -581,6 +595,7 @@ angular.module( 'BookingSystem.locations',
             $mdToast.show( $mdToast.simple()
               .content( 'Ett oväntat fel uppstod när lokalen/platsen skulle sparas' )
               .position( 'top right' )
+              .theme( 'error' )
             );
           }
         });

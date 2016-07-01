@@ -23,6 +23,7 @@ angular.module( 'BookingSystem.meals',
         $mdToast.show( $mdToast.simple()
           .content( 'Måltider kunde inte hämtas, var god försök igen.' )
           .position( 'top right' )
+          .theme( 'error' )
         );
       });
 
@@ -104,6 +105,7 @@ angular.module( 'BookingSystem.meals',
       $mdToast.show( $mdToast.simple()
           .content( 'Måltiden "' + $scope.meal.Name + '" sparades med ett lyckat resultat' )
           .position( 'top right' )
+          .theme( 'success' )
       );
 
       // Redirect
@@ -124,6 +126,7 @@ angular.module( 'BookingSystem.meals',
         $mdToast.show( $mdToast.simple()
             .content( 'Måltid kunde inte hämtas, var god försök igen.' )
             .position( 'top right' )
+            .theme( 'error' )
         );
       })
 
@@ -143,6 +146,7 @@ angular.module( 'BookingSystem.meals',
           $mdToast.show( $mdToast.simple()
               .content( 'Måltidsegenskaper kunde inte hämtas, var god försök igen.' )
               .position( 'top right' )
+              .theme( 'error' )
           );
         });
 
@@ -261,6 +265,7 @@ angular.module( 'BookingSystem.meals',
                 $mdToast.show( $mdToast.simple()
                     .content( 'Måltiden "' + $scope.meal.Name + '" sparades, men det gick inte att ladda upp och spara den önskade bilden.' )
                     .position( 'top right' )
+                    .theme( 'error' )
                 );
 
                 // Redirect
@@ -278,8 +283,9 @@ angular.module( 'BookingSystem.meals',
           }).catch( () => {
 
             $mdToast.show( $mdToast.simple()
-               .content( 'Uppgifter om måltiden sparades, men måltidsegenskaper kunde inte sparas. Var god försök igen.' )
-               .position( 'top right' )
+              .content( 'Uppgifter om måltiden sparades, men måltidsegenskaper kunde inte sparas. Var god försök igen.' )
+              .position( 'top right' )
+              .theme( 'error' )
             );
           });
 
@@ -292,6 +298,7 @@ angular.module( 'BookingSystem.meals',
                 .content( 'Det finns redan en måltid som heter "' + $scope.meal.Name +
                 '". Två måltider kan inte heta lika.' )
                 .position( 'top right' )
+                .theme( 'error' )
             );
           }
 
@@ -300,6 +307,7 @@ angular.module( 'BookingSystem.meals',
             $mdToast.show( $mdToast.simple()
                 .content( 'Ett oväntat fel uppstod när måltiden skulle sparas' )
                 .position( 'top right' )
+                .theme( 'error' )
             );
           }
 
@@ -308,6 +316,7 @@ angular.module( 'BookingSystem.meals',
             $mdToast.show( $mdToast.simple()
                 .content( 'Måltiden "' + $scope.meal.Name + '" existerar inte längre. Hann kanske någon radera den?' )
                 .position( 'top right' )
+                .theme( 'error' )
             );
 
             history.back();
@@ -330,6 +339,7 @@ angular.module( 'BookingSystem.meals',
           $mdToast.show( $mdToast.simple()
               .content( 'Måltiden "' + $scope.meal.Name + '" raderades med ett lyckat resultat' )
               .position( 'top right' )
+              .theme( 'success' )
           );
 
           history.back();
@@ -347,6 +357,7 @@ angular.module( 'BookingSystem.meals',
                 .content( 'Måltiden kan inte raderas eftersom det finns' +
                 ' en lokalbokning eller en lokalmåltid som refererar till måltiden' )
                 .position( 'top right' )
+                .theme( 'error' )
             );
           }
 
@@ -355,6 +366,7 @@ angular.module( 'BookingSystem.meals',
             $mdToast.show( $mdToast.simple()
                 .content( 'Ett oväntat fel uppstod när måltiden skulle tas bort' )
                 .position( 'top right' )
+                .theme( 'error' )
             );
           }
 
@@ -363,6 +375,7 @@ angular.module( 'BookingSystem.meals',
             $mdToast.show( $mdToast.simple()
                 .content( 'Måltiden "' + $scope.meal.Name + '" existerar inte längre. Hann kanske någon radera den?' )
                 .position( 'top right' )
+                .theme( 'error' )
             );
           }
 
@@ -462,6 +475,7 @@ angular.module( 'BookingSystem.meals',
       $mdToast.show( $mdToast.simple()
           .content( 'Måltiden "' + $scope.meal.Name + '" sparades med ett lyckat resultat' )
           .position( 'top right' )
+          .theme( 'success' )
       );
 
       // Redirect
@@ -524,6 +538,7 @@ angular.module( 'BookingSystem.meals',
                 $mdToast.show( $mdToast.simple()
                     .content( 'Måltiden "' + $scope.meal.Name + '" skapades, men det gick inte att ladda upp och spara den önskade bilden.' )
                     .position( 'top right' )
+                    .theme( 'error' )
                 );
 
                 // Redirect
@@ -542,6 +557,7 @@ angular.module( 'BookingSystem.meals',
               $mdToast.show( $mdToast.simple()
                   .content( 'Uppgifter om måltiden sparades, men måltidsegenskaper kunde inte sparas. Var god försök igen.' )
                   .position( 'top right' )
+                  .theme( 'error' )
               );
             });
 
@@ -554,6 +570,7 @@ angular.module( 'BookingSystem.meals',
               .content( 'Det finns redan en måltid som heter "' + $scope.meal.Name +
                 '". Två måltider kan inte heta lika.' )
               .position( 'top right' )
+              .theme( 'error' )
             );
           }
 
@@ -562,6 +579,7 @@ angular.module( 'BookingSystem.meals',
             $mdToast.show( $mdToast.simple()
               .content( 'Ett oväntat fel uppstod när måltiden skulle sparas' )
               .position( 'top right' )
+              .theme( 'error' )
             );
           }
         });
