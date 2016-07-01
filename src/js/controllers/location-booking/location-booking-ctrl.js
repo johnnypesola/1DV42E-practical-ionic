@@ -46,6 +46,7 @@ angular.module( 'BookingSystem.locationBooking',
         $mdToast.show( $mdToast.simple()
           .content( 'Lokalbokningar kunde inte hämtas, var god försök igen.' )
           .position( 'top right' )
+          .theme( 'error' )
         );
       })
 
@@ -193,6 +194,7 @@ angular.module( 'BookingSystem.locationBooking',
         $mdToast.show( $mdToast.simple()
             .content( 'Lokalbokning kunde inte hämtas, var god försök igen.' )
             .position( 'top right' )
+            .theme( 'error' )
         );
       });
 
@@ -263,6 +265,7 @@ angular.module( 'BookingSystem.locationBooking',
             $mdToast.show( $mdToast.simple()
               .content( 'Ett oväntat fel uppstod när uppgifter om lediga lokaler skulle hämtas' )
               .position( 'top right' )
+              .theme( 'error' )
             );
           });
       }
@@ -281,6 +284,7 @@ angular.module( 'BookingSystem.locationBooking',
         $mdToast.show( $mdToast.simple()
             .content( 'Kund kunde inte hämtas, var god försök igen.' )
             .position( 'top right' )
+            .theme( 'error' )
         );
       });
 
@@ -335,6 +339,7 @@ angular.module( 'BookingSystem.locationBooking',
           $mdToast.show( $mdToast.simple()
               .content( 'Lokalbokningen raderades med ett lyckat resultat' )
               .position( 'top right' )
+              .theme( 'success' )
           );
 
           history.back();
@@ -348,6 +353,7 @@ angular.module( 'BookingSystem.locationBooking',
             $mdToast.show( $mdToast.simple()
                 .content( 'Ett oväntat fel uppstod när Lokalbokningen skulle tas bort' )
                 .position( 'top right' )
+                .theme( 'error' )
             );
           }
 
@@ -357,6 +363,7 @@ angular.module( 'BookingSystem.locationBooking',
             $mdToast.show( $mdToast.simple()
                 .content( 'Lokalbokningen existerar inte längre. Hann kanske någon radera den?' )
                 .position( 'top right' )
+                .theme( 'error' )
             );
           }
 
@@ -380,6 +387,7 @@ angular.module( 'BookingSystem.locationBooking',
           $mdToast.show( $mdToast.simple()
               .content( 'Möbleringar för vald lokal kunde inte hämtas.' )
               .position( 'top right' )
+              .theme( 'error' )
           );
         });
       }
@@ -440,6 +448,7 @@ angular.module( 'BookingSystem.locationBooking',
           $mdToast.show( $mdToast.simple()
               .content( 'Lokal/plats-bokningen sparades med ett lyckat resultat' )
               .position( 'top right' )
+              .theme( 'success' )
           );
 
           // Resolve promise
@@ -456,6 +465,7 @@ angular.module( 'BookingSystem.locationBooking',
             $mdToast.show( $mdToast.simple()
                 .content( 'Lokalen är tyvärr redan bokad under vald tidsram.' )
                 .position( 'top right' )
+                .theme( 'error' )
             );
           }
 
@@ -465,6 +475,7 @@ angular.module( 'BookingSystem.locationBooking',
             $mdToast.show( $mdToast.simple()
                 .content( 'Ett oväntat fel uppstod när lokal/plats-bokningen skulle sparas' )
                 .position( 'top right' )
+                .theme( 'error' )
             );
           }
         });
@@ -570,6 +581,7 @@ angular.module( 'BookingSystem.locationBooking',
             $mdToast.show( $mdToast.simple()
               .content( 'Ett oväntat fel uppstod när uppgifter om lediga lokaler skulle hämtas' )
               .position( 'top right' )
+              .theme( 'error' )
             );
           });
       }
@@ -584,6 +596,7 @@ angular.module( 'BookingSystem.locationBooking',
         $mdToast.show( $mdToast.simple()
             .content( 'Kunder kunde inte hämtas, var god försök igen.' )
             .position( 'top right' )
+            .theme( 'error' )
         );
       });
 
@@ -610,6 +623,7 @@ angular.module( 'BookingSystem.locationBooking',
         $mdToast.show( $mdToast.simple()
           .content( 'Kund kunde inte hämtas, var god försök igen.' )
           .position( 'top right' )
+          .theme( 'error' )
         );
       })
         .then( () => {
@@ -658,6 +672,7 @@ angular.module( 'BookingSystem.locationBooking',
             $mdToast.show( $mdToast.simple()
                 .content( 'Ett oväntat fel uppstod när bokningstillfället skulle skapas' )
                 .position( 'top right' )
+                .theme( 'error' )
             );
 
             deferred.reject();
@@ -688,6 +703,7 @@ angular.module( 'BookingSystem.locationBooking',
           $mdToast.show( $mdToast.simple()
             .content( 'Möbleringar för vald lokal kunde inte hämtas.' )
             .position( 'top right' )
+            .theme( 'error' )
           );
         });
       }
@@ -751,6 +767,7 @@ angular.module( 'BookingSystem.locationBooking',
                 $mdToast.show( $mdToast.simple()
                   .content( 'Lokal/plats-bokningen skapades med ett lyckat resultat' )
                   .position( 'top right' )
+                  .theme( 'success' )
                 );
 
                 // Resolve promise
@@ -767,6 +784,7 @@ angular.module( 'BookingSystem.locationBooking',
                   $mdToast.show( $mdToast.simple()
                     .content( 'Lokalen är tyvärr redan bokad under vald tidsram.' )
                     .position( 'top right' )
+                    .theme( 'error' )
                   );
                 }
 
@@ -775,6 +793,7 @@ angular.module( 'BookingSystem.locationBooking',
                   $mdToast.show( $mdToast.simple()
                     .content( 'Ett oväntat fel uppstod när lokal/plats-bokningen skulle sparas' )
                     .position( 'top right' )
+                    .theme( 'error' )
                   );
                 }
               });

@@ -26,6 +26,7 @@ angular.module( 'BookingSystem.resources',
         $mdToast.show( $mdToast.simple()
           .content( 'Resurser kunde inte hämtas, var god försök igen.' )
           .position( 'top right' )
+          .theme( 'error' )
         );
       });
 
@@ -88,6 +89,7 @@ angular.module( 'BookingSystem.resources',
       $mdToast.show( $mdToast.simple()
         .content( 'Resursen "' + $scope.resource.Name + '" sparades med ett lyckat resultat' )
         .position( 'top right' )
+        .theme( 'success' )
       );
 
       // Redirect
@@ -108,6 +110,7 @@ angular.module( 'BookingSystem.resources',
         $mdToast.show( $mdToast.simple()
           .content( 'Resurs kunde inte hämtas, var god försök igen.' )
           .position( 'top right' )
+          .theme( 'error' )
         );
       });
 
@@ -179,6 +182,7 @@ angular.module( 'BookingSystem.resources',
                 $mdToast.show( $mdToast.simple()
                   .content( 'Resursen sparades, men det gick inte att ladda upp och spara den önskade bilden.' )
                   .position( 'top right' )
+                  .theme( 'error' )
                 );
               });
           }
@@ -196,6 +200,7 @@ angular.module( 'BookingSystem.resources',
               .content( 'Det finns redan en resurs som heter "' + $scope.resource.Name +
                 '". Två resurser kan inte heta lika.' )
               .position( 'top right' )
+              .theme( 'error' )
             );
           }
 
@@ -204,6 +209,7 @@ angular.module( 'BookingSystem.resources',
             $mdToast.show( $mdToast.simple()
               .content( 'Ett oväntat fel uppstod när resursen skulle sparas' )
               .position( 'top right' )
+              .theme( 'error' )
             );
           }
 
@@ -212,6 +218,7 @@ angular.module( 'BookingSystem.resources',
             $mdToast.show( $mdToast.simple()
               .content( 'Resursen "' + $scope.resource.Name + '" existerar inte längre. Hann kanske någon radera den?' )
               .position( 'top right' )
+              .theme( 'error' )
             );
 
             history.back();
@@ -234,6 +241,7 @@ angular.module( 'BookingSystem.resources',
           $mdToast.show( $mdToast.simple()
             .content( 'Resursen "' + $scope.resource.Name + '" raderades med ett lyckat resultat' )
             .position( 'top right' )
+            .theme( 'success' )
           );
 
           history.back();
@@ -251,6 +259,7 @@ angular.module( 'BookingSystem.resources',
               .content( 'Resursen kan inte raderas eftersom det finns' +
                 ' en lokalbokning eller en lokalresurs som refererar till resursen' )
               .position( 'top right' )
+              .theme( 'error' )
             );
           }
 
@@ -259,6 +268,7 @@ angular.module( 'BookingSystem.resources',
             $mdToast.show( $mdToast.simple()
               .content( 'Ett oväntat fel uppstod när resursen skulle tas bort' )
               .position( 'top right' )
+              .theme( 'error' )
             );
           }
 
@@ -267,6 +277,7 @@ angular.module( 'BookingSystem.resources',
             $mdToast.show( $mdToast.simple()
               .content( 'Resursen "' + $scope.resource.Name + '" existerar inte längre. Hann kanske någon radera den?' )
               .position( 'top right' )
+              .theme( 'error' )
             );
           }
 
@@ -306,6 +317,7 @@ angular.module( 'BookingSystem.resources',
       $mdToast.show( $mdToast.simple()
           .content( 'Resursen "' + $scope.resource.Name + '" sparades med ett lyckat resultat' )
           .position( 'top right' )
+          .theme( 'success' )
       );
 
       // Redirect
@@ -352,6 +364,7 @@ angular.module( 'BookingSystem.resources',
                 $mdToast.show( $mdToast.simple()
                     .content( 'Resursen "' + $scope.meal.Name + '" skapades, men det gick inte att ladda upp och spara den önskade bilden.' )
                     .position( 'top right' )
+                    .theme( 'error' )
                 );
 
                 // Redirect
@@ -371,6 +384,7 @@ angular.module( 'BookingSystem.resources',
               .content( 'Det finns redan en resurs som heter "' + $scope.resource.Name +
                 '". Två resurser kan inte heta lika.' )
               .position( 'top right' )
+              .theme( 'error' )
             );
           }
 
@@ -379,6 +393,7 @@ angular.module( 'BookingSystem.resources',
             $mdToast.show( $mdToast.simple()
               .content( 'Ett oväntat fel uppstod när resursen skulle sparas' )
               .position( 'top right' )
+              .theme( 'error' )
             );
           }
         });

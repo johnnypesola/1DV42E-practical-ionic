@@ -6,62 +6,74 @@ angular.module( 'BookingSystem.httpSettings',
 // Only send Basic Auth http headers to API_URL, not other URL:s.
 .config( ['$httpProvider', ( $httpProvider ) => {
 
-  /*
-   // Do stuff in every http request
-   $httpProvider.interceptors.push( ( $q, $rootScope, AppSettings, AUTH_TOKEN_STR ) => {
+  // Do stuff in every http request
+  $httpProvider.interceptors.push( [ '$q', '$rootScope', 'AuthService', '$injector', ( $q, $rootScope, AuthService, $injector ) => {
 
-   return {
-   // Only use API Key and Auth if we are connecting to the REST API.
-   request: function ( config ) {
+    return {
 
-   $rootScope.isLoading = true;
+      // Only use Authentication header if we are connecting to the REST API.
+      request: function ( config ) {
 
-   // If the base url of the request is the same as the API url
-   if ( AppSettings.apiUrlEqualsUrl( config.url ) ) {
+        $rootScope.isLoading = true;
 
-   // Use API key
-   config.url = config.url + AppSettings.getApiKeyUrl();
+        // If the base url of the request is the same as the API url
+        if ( AuthService.apiUrlEqualsUrl( config.url ) ) {
 
-   // Use Authentication headers
-   config.headers[AUTH_TOKEN_STR] = AppSettings.getToken();
-   }
+          // If user is not logged in, reject with 401 unauthorized
+          if ( !AuthService.isLoggedInCheck() ) {
 
-   return config;
-   },
+            return $q.reject({
+              config: config,
+              status: 401
+            });
+          }
 
-   requestError: function( response ) {
+          // User is logged in, set http Authentication header
+          config.headers.Authorization = AuthService.getAuthHeader();
+        }
 
-   $rootScope.isLoading = false;
+        return config;
+      },
 
-   return response;
-   },
+      requestError: function( response ) {
 
-   response: function( response ) {
+        $rootScope.isLoading = false;
 
-   $rootScope.isLoading = false;
+        return response;
+      },
 
-   return response;
-   },
+      response: function( response ) {
 
-   // Check if we have been logged out from REST API for some reason.
-   responseError: function( rejection ) {
+        $rootScope.isLoading = false;
 
-   $rootScope.isLoading = false;
+        return response;
+      },
 
-   if (
-   AppSettings.apiUrlEqualsUrl( rejection.config.url ) &&
-   rejection.status === 401
-   ) {
-   // Remove token from local storage
-   AppSettings.destroyToken();
+      // Check if we have been logged out from REST API for some reason.
+      responseError: function( rejection ) {
 
-   $rootScope.isLoggedIn = false;
-   }
+        $rootScope.isLoading = false;
 
-   return $q.reject( rejection );
-   }
-   };
-   });
-   */
+        if (
+          AuthService.apiUrlEqualsUrl( rejection.config.url ) &&
+          rejection.status === 401
+        ) {
+
+          // Remove credentials from local storage / cookies
+          AuthService.clearCredentials();
+
+          $rootScope.isLoggedIn = false;
+
+          // Redirect to login
+          // $injector.get( '$state' ).go( 'app.login' );
+
+          AuthService.showLoginModal();
+        }
+
+        return $q.reject( rejection );
+      }
+    };
+  }]
+  );
 }]
 );
