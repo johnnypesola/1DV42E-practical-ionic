@@ -18,7 +18,6 @@ using BookingSystemAuth.Results;
 
 namespace BookingSystemAuth.Controllers
 {
-    /*
     [Authorize]
     [RoutePrefix("api/Account")]
     
@@ -75,6 +74,7 @@ namespace BookingSystemAuth.Controllers
             return Ok();
         }
 
+        /*
         // GET api/Account/ManageInfo?returnUrl=%2F&generateState=true
         [Route("ManageInfo")]
         public async Task<ManageInfoViewModel> GetManageInfo(string returnUrl, bool generateState = false)
@@ -118,17 +118,22 @@ namespace BookingSystemAuth.Controllers
                 ExternalLoginProviders = GetExternalLogins(returnUrl, generateState)
             };
         }
+        */
 
         // POST api/Account/ChangePassword
         [Route("ChangePassword")]
         public async Task<IHttpActionResult> ChangePassword(ChangePasswordBindingModel model)
         {
+            int userId;
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
+            Int32.TryParse(User.Identity.GetUserId(), out userId);
+
+            IdentityResult result = await UserManager.ChangePasswordAsync(userId, model.OldPassword,
                 model.NewPassword);
             
             if (!result.Succeeded)
@@ -143,12 +148,16 @@ namespace BookingSystemAuth.Controllers
         [Route("SetPassword")]
         public async Task<IHttpActionResult> SetPassword(SetPasswordBindingModel model)
         {
+            int userId;
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            IdentityResult result = await UserManager.AddPasswordAsync(User.Identity.GetUserId(), model.NewPassword);
+            Int32.TryParse(User.Identity.GetUserId(), out userId);
+
+            IdentityResult result = await UserManager.AddPasswordAsync(userId, model.NewPassword);
 
             if (!result.Succeeded)
             {
@@ -158,6 +167,7 @@ namespace BookingSystemAuth.Controllers
             return Ok();
         }
 
+        /*
         // POST api/Account/AddExternalLogin
         [Route("AddExternalLogin")]
         public async Task<IHttpActionResult> AddExternalLogin(AddExternalLoginBindingModel model)
@@ -195,7 +205,9 @@ namespace BookingSystemAuth.Controllers
 
             return Ok();
         }
+        */
 
+        /*
         // POST api/Account/RemoveLogin
         [Route("RemoveLogin")]
         public async Task<IHttpActionResult> RemoveLogin(RemoveLoginBindingModel model)
@@ -224,7 +236,9 @@ namespace BookingSystemAuth.Controllers
 
             return Ok();
         }
+        */
 
+        /*
         // GET api/Account/ExternalLogin
         [OverrideAuthentication]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalCookie)]
@@ -281,7 +295,9 @@ namespace BookingSystemAuth.Controllers
 
             return Ok();
         }
+        */
 
+        /*
         // GET api/Account/ExternalLogins?returnUrl=%2F&generateState=true
         [AllowAnonymous]
         [Route("ExternalLogins")]
@@ -322,7 +338,9 @@ namespace BookingSystemAuth.Controllers
 
             return logins;
         }
+        */
 
+        
         // POST api/Account/Register
         [AllowAnonymous]
         [Route("Register")]
@@ -333,7 +351,7 @@ namespace BookingSystemAuth.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
+            var user = new IdentityUser() { UserName = model.Email, EmailAddress = model.Email };
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 
@@ -344,7 +362,9 @@ namespace BookingSystemAuth.Controllers
 
             return Ok();
         }
+        
 
+        /*
         // POST api/Account/RegisterExternal
         [OverrideAuthentication]
         [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
@@ -377,6 +397,7 @@ namespace BookingSystemAuth.Controllers
             }
             return Ok();
         }
+        */
 
         protected override void Dispose(bool disposing)
         {
@@ -496,6 +517,4 @@ namespace BookingSystemAuth.Controllers
 
         #endregion
     }
-
-    */
 }

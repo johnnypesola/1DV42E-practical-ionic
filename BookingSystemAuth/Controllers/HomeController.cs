@@ -2,17 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
+using System.Web.Http;
 
 namespace BookingSystemAuth.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : ApiController
     {
-        public ActionResult Index()
+        public IHttpActionResult Index()
         {
-            ViewBag.Title = "Home Page";
-
-            return View();
+            return Ok();
         }
     }
 }

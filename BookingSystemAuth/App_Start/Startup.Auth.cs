@@ -35,7 +35,7 @@ namespace BookingSystemAuth
             OAuthOptions = new OAuthAuthorizationServerOptions
             {
                 TokenEndpointPath = new PathString("/Token"),
-                //Provider = new ApplicationOAuthProvider(PublicClientId),
+                Provider = new ApplicationOAuthProvider(PublicClientId),
                 AuthorizeEndpointPath = new PathString("/api/Account/ExternalLogin"),
                 AccessTokenExpireTimeSpan = TimeSpan.FromDays(14),
                 // In production mode set AllowInsecureHttp = false

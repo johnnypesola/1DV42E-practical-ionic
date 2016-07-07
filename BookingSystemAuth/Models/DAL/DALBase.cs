@@ -64,7 +64,7 @@ namespace BookingSystemAuth.Models
         {
             if (!isDisposed)
             {
-                if (disposing)
+                if (disposing && connection != null)
                 {
                     connection.Dispose();
                 }

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using Microsoft.AspNet.Identity;
 using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
+using System.Security.Claims;
 
 namespace BookingSystemAuth.Models
 {
@@ -32,6 +34,8 @@ namespace BookingSystemAuth.Models
         [EmailAddress(ErrorMessage = "Could not validate EmailAddress.")]
         public string EmailAddress { get; set; }
 
+        public bool EmailAddressConfirmed { get; set; }
+
         [Required(ErrorMessage = "PasswordHash is required.")]
         [StringLength(256, ErrorMessage = "PasswordHash string length surpassed the limit of 256.")]
         public string PasswordHash { get; set; }
@@ -47,5 +51,14 @@ namespace BookingSystemAuth.Models
         public int AccessFailedCount { get; set; }
 
         public bool IsLockedOut { get; set; }
+
+        // Identity specific
+        public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<IdentityUser, int> manager, string authenticationType)
+        {
+            // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
+            var userIdentity = await manager.CreateIdentityAsync(this, authenticationType);
+            // Add custom user claims here
+            return userIdentity;
+        }
     }
 }

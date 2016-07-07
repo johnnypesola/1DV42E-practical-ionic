@@ -12,7 +12,7 @@ using BookingSystemAuth.Models;
 
 namespace BookingSystemAuth.Providers
 {
-    /*
+    
     public class ApplicationOAuthProvider : OAuthAuthorizationServerProvider
     {
         private readonly string _publicClientId;
@@ -95,5 +95,4 @@ namespace BookingSystemAuth.Providers
             return new AuthenticationProperties(data);
         }
     }
-    */
 }

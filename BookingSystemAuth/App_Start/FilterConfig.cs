@@ -7,6 +7,7 @@ namespace BookingSystemAuth
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
+            // Add user friendly error page on controller all controller action errors
             filters.Add(new HandleErrorAttribute());
         }
     }

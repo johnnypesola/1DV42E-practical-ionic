@@ -146,6 +146,57 @@ namespace BookingSystemAuth.Models
             } // Connection is closed here
         }
 
+        public IdentityUser GetUserByEmailAddress(string EmailAddress)
+        {
+            // Create connection object
+            using (this.CreateConnection())
+            {
+                try
+                {
+                    SqlCommand cmd;
+
+                    // Connect to database
+                    cmd = this.Setup("appSchema.usp_UserList", DALOptions.closedConnection);
+
+                    // Add parameter for Stored procedure
+                    cmd.Parameters.Add("@EmailAddress", SqlDbType.VarChar, 50).Value = EmailAddress;
+
+                    // Open connection to database
+                    connection.Open();
+
+                    // Try to read response from stored procedure
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        // Check if there is any return data to read
+                        if (reader.Read())
+                        {
+                            // Create new User object from database values and return a reference
+                            return new IdentityUser
+                            {
+                                Id = reader.GetSafeInt32(reader.GetOrdinal("UserId")),
+                                UserName = reader.GetSafeString(reader.GetOrdinal("UserName")),
+                                FirstName = reader.GetSafeString(reader.GetOrdinal("FirstName")),
+                                SurName = reader.GetSafeString(reader.GetOrdinal("SurName")),
+                                EmailAddress = reader.GetSafeString(reader.GetOrdinal("EmailAddress")),
+                                PasswordHash = reader.GetSafeString(reader.GetOrdinal("PasswordHash")),
+                                CellPhoneNumber = reader.GetSafeString(reader.GetOrdinal("CellPhoneNumber")),
+                                ImageSrc = reader.GetSafeString(reader.GetOrdinal("ImageSrc")),
+                                AccessFailedCount = reader.GetSafeInt32(reader.GetOrdinal("AccessFailedCount")),
+                                IsLockedOut = reader.GetBoolean(reader.GetOrdinal("IsLockedOut"))
+                            };
+                        }
+                    }
+
+                    return null;
+                }
+                catch
+                {
+                    // Throw exception
+                    throw new ApplicationException(DAL_ERROR_MSG);
+                }
+            } // Connection is closed here
+        }
+
         public IEnumerable<IdentityUser> GetUsers()
         {
             // Create connection object
@@ -231,7 +282,7 @@ namespace BookingSystemAuth.Models
                     cmd.ExecuteNonQuery();
 
                     // Place database insert id into User object.
-                    User.Id = (Int16)cmd.Parameters["@InsertId"].Value;
+                    User.Id = (Int32)cmd.Parameters["@InsertId"].Value;
                 }
                 catch (Exception exception)
                 {
