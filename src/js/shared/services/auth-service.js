@@ -3,7 +3,7 @@ angular.module( 'BookingSystem.authService',
   // Dependencies
   ['ngCookies']
 )
-  .service( 'AuthService', [ '$q', '$cookies', '$timeout', '$rootScope', 'API_URL', 'MODAL_ANIMATION', '$injector', function( $q, $cookies, $timeout, $rootScope, API_URL, MODAL_ANIMATION, $injector ) {
+  .service( 'AuthService', [ '$q', '$cookies', '$timeout', '$rootScope', 'API_URL', 'MODAL_ANIMATION', '$injector', 'API_LOGIN_URL', function( $q, $cookies, $timeout, $rootScope, API_URL, MODAL_ANIMATION, $injector, API_LOGIN_URL ) {
 
     // Init values
     const keyStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
@@ -138,8 +138,12 @@ angular.module( 'BookingSystem.authService',
 
       const deferred = $q.defer();
 
+      // Inject $http to avoid circular dependency.
+      const $http = $injector.get( '$http' );
+
       /* Dummy authentication for testing, uses $timeout to simulate api call
        ----------------------------------------------*/
+      /*
       $timeout( () => {
 
         const response = { success: username === 'test' && password === 'test' };
@@ -151,13 +155,28 @@ angular.module( 'BookingSystem.authService',
         }
 
       }, 1000 );
+      */
 
       /* Use this for real authentication
        ----------------------------------------------*/
-      //$http.post('/api/authenticate', { username: username, password: password })
-      //    .success(function (response) {
-      //        callback(response);
-      //    });
+
+      $http.post( API_LOGIN_URL,
+        {
+          UserName: username,
+          Password: password,
+          grant_type: 'password'
+        },
+        {
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        }
+      )
+        .then( () => {
+          deferred.resolve();
+        })
+
+        .catch( ( response ) => {
+          deferred.reject( response );
+        });
 
       // Return promise
       return deferred.promise;
@@ -177,21 +196,13 @@ angular.module( 'BookingSystem.authService',
       return isLoggedIn;
     };
 
-    this.setCredentials = function ( username, password ) {
-
-      const authData = that.base64Encode( username + ':' + password );
+    this.setCredentials = function ( token ) {
 
       const currentUser = {
         username: username,
-        authData: authData
+        token: token
       };
-      /*
-      $rootScope.globals = {
-        currentUser: currentUser
-      };
-      */
 
-      // $http.defaults.headers.common.Authorization = 'Basic ' + authData;
       $cookies.putObject( CURRENT_USER_STR, currentUser );
     };
 
@@ -202,9 +213,9 @@ angular.module( 'BookingSystem.authService',
       // Get current logged in user from cookie
       const currentUser = $cookies.getObject( CURRENT_USER_STR );
 
-      // Check that current user has auth data
-      if ( currentUser.authData !== undefined ) {
-        returnValue = 'Basic ' + currentUser.authData;
+      // Check that current user has token
+      if ( currentUser.token !== undefined ) {
+        returnValue = 'Bearer ' + currentUser.token;
       }
 
       return returnValue;
@@ -273,6 +284,8 @@ angular.module( 'BookingSystem.authService',
         })
 
         .catch( ( response ) => {
+
+          console.log( response );
 
           // Display error message
           mdToast.show( mdToast.simple()
