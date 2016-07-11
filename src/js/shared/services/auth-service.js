@@ -3,7 +3,7 @@ angular.module( 'BookingSystem.authService',
   // Dependencies
   ['ngCookies']
 )
-  .service( 'AuthService', [ '$q', '$cookies', '$timeout', '$rootScope', 'API_URL', 'MODAL_ANIMATION', '$injector', 'API_LOGIN_URL', function( $q, $cookies, $timeout, $rootScope, API_URL, MODAL_ANIMATION, $injector, API_LOGIN_URL ) {
+  .service( 'AuthService', [ '$q', '$cookies', '$timeout', '$rootScope', 'API_URL', 'MODAL_ANIMATION', '$injector', 'API_LOGIN_URL', '$http', function( $q, $cookies, $timeout, $rootScope, API_URL, MODAL_ANIMATION, $injector, API_LOGIN_URL, $http ) {
 
     // Init values
     const keyStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
@@ -139,7 +139,7 @@ angular.module( 'BookingSystem.authService',
       const deferred = $q.defer();
 
       // Inject $http to avoid circular dependency.
-      const $http = $injector.get( '$http' );
+      //const $http = $injector.get( '$http' );
 
       /* Dummy authentication for testing, uses $timeout to simulate api call
        ----------------------------------------------*/
@@ -159,6 +159,18 @@ angular.module( 'BookingSystem.authService',
 
       /* Use this for real authentication
        ----------------------------------------------*/
+      /*
+      $http({
+        method: 'POST',
+        url: API_LOGIN_URL,
+        data: {
+          UserName: username,
+          Password: password,
+          grant_type: 'password'
+        },
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+      })
+      */
 
       $http.post( API_LOGIN_URL,
         {
@@ -245,8 +257,8 @@ angular.module( 'BookingSystem.authService',
         apiUrlPartsArray = API_URL.split( '/' );
 
         // Build base urls to compare
-        currentCompareUrl = urlPartsArray[0] + urlPartsArray[2];
-        apiCompareUrl = apiUrlPartsArray[0] + apiUrlPartsArray[2];
+        currentCompareUrl = urlPartsArray[0] + urlPartsArray[2] + urlPartsArray[3];
+        apiCompareUrl = apiUrlPartsArray[0] + apiUrlPartsArray[2] + apiUrlPartsArray[3];
 
         // If the base url of the request is the same as the API url
         return currentCompareUrl === apiCompareUrl;

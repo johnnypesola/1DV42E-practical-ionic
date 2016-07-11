@@ -7,12 +7,15 @@ angular.module( 'BookingSystem.httpSettings',
 .config( ['$httpProvider', ( $httpProvider ) => {
 
   // Do stuff in every http request
-  $httpProvider.interceptors.push( [ '$q', '$rootScope', 'AuthService', '$injector', ( $q, $rootScope, AuthService, $injector ) => {
+  $httpProvider.interceptors.push( [ '$q', '$rootScope', '$injector', ( $q, $rootScope, $injector ) => {
 
     return {
 
       // Only use Authentication header if we are connecting to the REST API.
       request: function ( config ) {
+
+        // Inject service, avoid circular dependency
+        const AuthService = $injector.get( 'AuthService' );
 
         $rootScope.isLoading = true;
 
@@ -51,6 +54,9 @@ angular.module( 'BookingSystem.httpSettings',
 
       // Check if we have been logged out from REST API for some reason.
       responseError: function( rejection ) {
+
+        // Inject service, avoid circular dependency
+        const AuthService = $injector.get( 'AuthService' );
 
         $rootScope.isLoading = false;
 
