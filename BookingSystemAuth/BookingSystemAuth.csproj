@@ -218,7 +218,6 @@
     <Compile Include="Controllers\BookingTypeHasResourceController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\FurnituringController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LocationBookingController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\LocationFurnituringController.cs" />
@@ -228,7 +227,6 @@
     <Compile Include="Controllers\MealPropertyController.cs" />
     <Compile Include="Controllers\ResourceBookingController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -343,6 +341,7 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+    <None Include="Properties\PublishProfiles\bokning.vvfors.se.pubxml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

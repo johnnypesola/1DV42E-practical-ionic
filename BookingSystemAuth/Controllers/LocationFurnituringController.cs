@@ -10,7 +10,7 @@ using System.Data;
 
 namespace BookingSystemAuth.Controllers
 {
-    //[EnableCors(origins: "*", headers: "*", methods: "*")]
+    [Authorize]
     public class LocationFurnituringController : ApiController
     {
         // Set up Service.

@@ -11,7 +11,7 @@ using Newtonsoft.Json.Linq;
 
 namespace BookingSystemAuth.Controllers
 {
-    //[EnableCors(origins: "*", headers: "*", methods: "*")]
+    [Authorize]
     public class BookingController : ApiController
     {
         public BookingService bookingService;

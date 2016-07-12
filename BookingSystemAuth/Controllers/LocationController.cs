@@ -14,7 +14,7 @@ using Newtonsoft.Json.Linq;
 
 namespace BookingSystemAuth.Controllers
 {
-    //[EnableCors(origins: "*", headers: "*", methods: "*")]
+    [Authorize]
     public class LocationController : ApiController
     {
         // Shared variables

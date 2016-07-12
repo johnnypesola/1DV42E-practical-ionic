@@ -11,7 +11,7 @@ using System.Text.RegularExpressions;
 
 namespace BookingSystemAuth.Controllers
 {
-    //[EnableCors(origins: "*", headers: "*", methods: "*")]
+    [Authorize]
     public class LocationBookingBookingController : ApiController
     {
         
