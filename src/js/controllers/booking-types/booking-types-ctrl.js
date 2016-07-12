@@ -91,7 +91,7 @@ angular.module( 'BookingSystem.bookingTypes',
         $mdToast.show( $mdToast.simple()
           .content( 'Bokningstypen kunde inte hämtas, var god försök igen.' )
           .position( 'top right' )
-          .theme( 'error' )
+          .theme( 'warn' )
         );
       });
 
@@ -168,7 +168,7 @@ angular.module( 'BookingSystem.bookingTypes',
               .content( 'Det finns redan en bokningstyp som heter "' + $scope.bookingType.Name +
                 '". Två boknigstyper kan inte heta lika.' )
               .position( 'top right' )
-              .theme( 'error' )
+              .theme( 'warn' )
             );
           }
 
@@ -177,7 +177,7 @@ angular.module( 'BookingSystem.bookingTypes',
             $mdToast.show( $mdToast.simple()
               .content( 'Ett oväntat fel uppstod när bokningstypen skulle sparas' )
               .position( 'top right' )
-              .theme( 'error' )
+              .theme( 'warn' )
             );
           }
 
@@ -186,7 +186,7 @@ angular.module( 'BookingSystem.bookingTypes',
             $mdToast.show( $mdToast.simple()
               .content( 'Bokningstypen "' + $scope.bookingType.Name + '" existerar inte längre. Hann kanske någon radera den?' )
               .position( 'top right' )
-              .theme( 'error' )
+              .theme( 'warn' )
             );
 
             history.back();
@@ -227,7 +227,7 @@ angular.module( 'BookingSystem.bookingTypes',
               .content( 'Bokningstypen kan inte raderas eftersom det finns' +
                 ' en bokning som refererar till bokningstypen' )
               .position( 'top right' )
-              .theme( 'error' )
+              .theme( 'warn' )
             );
           }
 
@@ -236,7 +236,7 @@ angular.module( 'BookingSystem.bookingTypes',
             $mdToast.show( $mdToast.simple()
               .content( 'Ett oväntat fel uppstod när bokningstypen skulle tas bort' )
               .position( 'top right' )
-              .theme( 'error' )
+              .theme( 'warn' )
             );
           }
 
@@ -245,7 +245,7 @@ angular.module( 'BookingSystem.bookingTypes',
             $mdToast.show( $mdToast.simple()
               .content( 'Bokningstypen "' + $scope.bookingType.Name + '" existerar inte längre. Hann kanske någon radera den?' )
               .position( 'top right' )
-              .theme( 'error' )
+              .theme( 'warn' )
             );
           }
 
@@ -323,7 +323,7 @@ angular.module( 'BookingSystem.bookingTypes',
               .content( 'Det finns redan en bokningstyp som heter "' + $scope.bookingType.Name +
                 '". Två bokningstyper kan inte heta lika.' )
               .position( 'top right' )
-              .theme( 'error' )
+              .theme( 'warn' )
             );
           }
 
@@ -332,7 +332,7 @@ angular.module( 'BookingSystem.bookingTypes',
             $mdToast.show( $mdToast.simple()
               .content( 'Ett oväntat fel uppstod när bokningstypen skulle sparas' )
               .position( 'top right' )
-              .theme( 'error' )
+              .theme( 'warn' )
             );
           }
         });

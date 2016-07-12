@@ -46,7 +46,7 @@ angular.module( 'BookingSystem.mealBooking',
         $mdToast.show( $mdToast.simple()
           .content( 'Måltidsbokningar kunde inte hämtas, var god försök igen.' )
           .position( 'top right' )
-          .theme( 'error' )
+          .theme( 'warn' )
         );
       })
 
@@ -199,7 +199,7 @@ angular.module( 'BookingSystem.mealBooking',
           $mdToast.show( $mdToast.simple()
               .content( 'Måltidsbokning kunde inte hämtas, var god försök igen.' )
               .position( 'top right' )
-              .theme( 'error' )
+              .theme( 'warn' )
           );
         });
 
@@ -256,7 +256,7 @@ angular.module( 'BookingSystem.mealBooking',
           $mdToast.show( $mdToast.simple()
             .content( 'Ett oväntat fel uppstod när lokaler skulle hämtas' )
             .position( 'top right' )
-            .theme( 'error' )
+            .theme( 'warn' )
           );
         });
     };
@@ -280,7 +280,7 @@ angular.module( 'BookingSystem.mealBooking',
           $mdToast.show( $mdToast.simple()
             .content( 'Ett oväntat fel uppstod när uppgifter om måltider skulle hämtas' )
             .position( 'top right' )
-            .theme( 'error' )
+            .theme( 'warn' )
           );
         });
 
@@ -300,7 +300,7 @@ angular.module( 'BookingSystem.mealBooking',
         $mdToast.show( $mdToast.simple()
             .content( 'Kund kunde inte hämtas, var god försök igen.' )
             .position( 'top right' )
-            .theme( 'error' )
+            .theme( 'warn' )
         );
       });
 
@@ -369,7 +369,7 @@ angular.module( 'BookingSystem.mealBooking',
             $mdToast.show( $mdToast.simple()
                 .content( 'Ett oväntat fel uppstod när Måltidsbokningen skulle tas bort' )
                 .position( 'top right' )
-                .theme( 'error' )
+                .theme( 'warn' )
             );
           }
 
@@ -379,7 +379,7 @@ angular.module( 'BookingSystem.mealBooking',
             $mdToast.show( $mdToast.simple()
                 .content( 'Måltidsbokningen existerar inte längre. Hann kanske någon radera den?' )
                 .position( 'top right' )
-                .theme( 'error' )
+                .theme( 'warn' )
             );
           }
 
@@ -453,7 +453,7 @@ angular.module( 'BookingSystem.mealBooking',
           $mdToast.show( $mdToast.simple()
               .content( 'Ett oväntat fel uppstod när måltidsbokningen skulle sparas' )
               .position( 'top right' )
-              .theme( 'error' )
+              .theme( 'warn' )
           );
         });
 
@@ -476,7 +476,7 @@ angular.module( 'BookingSystem.mealBooking',
           $mdToast.show( $mdToast.simple()
               .content( 'Måltidsegenskaper för vald måltid kunde inte hämtas.' )
               .position( 'top right' )
-              .theme( 'error' )
+              .theme( 'warn' )
           );
         });
       }
@@ -583,7 +583,7 @@ angular.module( 'BookingSystem.mealBooking',
           $mdToast.show( $mdToast.simple()
             .content( 'Ett oväntat fel uppstod när lokaler skulle hämtas' )
             .position( 'top right' )
-            .theme( 'error' )
+            .theme( 'warn' )
           );
         });
 
@@ -609,7 +609,7 @@ angular.module( 'BookingSystem.mealBooking',
           $mdToast.show( $mdToast.simple()
             .content( 'Ett oväntat fel uppstod när uppgifter om måltider skulle hämtas' )
             .position( 'top right' )
-            .theme( 'error' )
+            .theme( 'warn' )
           );
         });
 
@@ -625,7 +625,7 @@ angular.module( 'BookingSystem.mealBooking',
         $mdToast.show( $mdToast.simple()
             .content( 'Kunder kunde inte hämtas, var god försök igen.' )
             .position( 'top right' )
-            .theme( 'error' )
+            .theme( 'warn' )
         );
       });
 
@@ -654,7 +654,7 @@ angular.module( 'BookingSystem.mealBooking',
         $mdToast.show( $mdToast.simple()
           .content( 'Kund kunde inte hämtas, var god försök igen.' )
           .position( 'top right' )
-          .theme( 'error' )
+          .theme( 'warn' )
         );
       })
       .then( () => {
@@ -705,7 +705,7 @@ angular.module( 'BookingSystem.mealBooking',
             $mdToast.show( $mdToast.simple()
               .content( 'Ett oväntat fel uppstod när bokningstillfället skulle sparas' )
               .position( 'top right' )
-              .theme( 'error' )
+              .theme( 'warn' )
             );
 
             deferred.reject();
@@ -788,7 +788,7 @@ angular.module( 'BookingSystem.mealBooking',
                 $mdToast.show( $mdToast.simple()
                   .content( 'Ett oväntat fel uppstod när måltidsbokningen skulle sparas' )
                   .position( 'top right' )
-                  .theme( 'error' )
+                  .theme( 'warn' )
                 );
               });
         });
@@ -812,7 +812,7 @@ angular.module( 'BookingSystem.mealBooking',
           $mdToast.show( $mdToast.simple()
               .content( 'Måltidsegenskaper för vald måltid kunde inte hämtas.' )
               .position( 'top right' )
-              .theme( 'error' )
+              .theme( 'warn' )
           );
         });
       }
