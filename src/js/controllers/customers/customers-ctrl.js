@@ -25,7 +25,7 @@ angular.module( 'BookingSystem.customers',
         $mdToast.show( $mdToast.simple()
           .content( 'Kunder kunde inte hämtas, var god försök igen.' )
           .position( 'top right' )
-          .theme( 'error' )
+          .theme( 'warn' )
         );
       });
 
@@ -109,7 +109,7 @@ angular.module( 'BookingSystem.customers',
         $mdToast.show( $mdToast.simple()
           .content( 'Kunden kunde inte hämtas, var god försök igen.' )
           .position( 'top right' )
-          .theme( 'error' )
+          .theme( 'warn' )
         );
       });
 
@@ -127,7 +127,7 @@ angular.module( 'BookingSystem.customers',
         $mdToast.show( $mdToast.simple()
             .content( 'Kunder kunde inte hämtas, var god försök igen.' )
             .position( 'top right' )
-            .theme( 'error' )
+            .theme( 'warn' )
         );
       });
 
@@ -200,7 +200,7 @@ angular.module( 'BookingSystem.customers',
                 $mdToast.show( $mdToast.simple()
                   .content( 'Kunden sparades, men det gick inte att ladda upp och spara den önskade bilden.' )
                   .position( 'top right' )
-                  .theme( 'error' )
+                  .theme( 'warn' )
                 );
               });
           }
@@ -218,7 +218,7 @@ angular.module( 'BookingSystem.customers',
               .content( 'Det finns redan en kund som heter "' + $scope.customer.Name +
                 '". Två kunder kan inte heta lika.' )
               .position( 'top right' )
-              .theme( 'error' )
+              .theme( 'warn' )
             );
           }
 
@@ -227,7 +227,7 @@ angular.module( 'BookingSystem.customers',
             $mdToast.show( $mdToast.simple()
               .content( 'Ett oväntat fel uppstod när kunden skulle sparas' )
               .position( 'top right' )
-              .theme( 'error' )
+              .theme( 'warn' )
             );
           }
 
@@ -236,7 +236,7 @@ angular.module( 'BookingSystem.customers',
             $mdToast.show( $mdToast.simple()
               .content( 'Kunden "' + $scope.customer.Name + '" existerar inte längre. Hann kanske någon radera den?' )
               .position( 'top right' )
-              .theme( 'error' )
+              .theme( 'warn' )
             );
 
             history.back();
@@ -277,7 +277,7 @@ angular.module( 'BookingSystem.customers',
               .content( 'Kunden kan inte raderas eftersom det finns' +
                 ' en bokning som refererar till kunden' )
               .position( 'top right' )
-              .theme( 'error' )
+              .theme( 'warn' )
             );
           }
 
@@ -286,7 +286,7 @@ angular.module( 'BookingSystem.customers',
             $mdToast.show( $mdToast.simple()
               .content( 'Ett oväntat fel uppstod när kunden skulle tas bort' )
               .position( 'top right' )
-              .theme( 'error' )
+              .theme( 'warn' )
             );
           }
 
@@ -295,7 +295,7 @@ angular.module( 'BookingSystem.customers',
             $mdToast.show( $mdToast.simple()
               .content( 'Kunden "' + $scope.customer.Name + '" existerar inte längre. Hann kanske någon radera den?' )
               .position( 'top right' )
-              .theme( 'error' )
+              .theme( 'warn' )
             );
             $rootScope.FlashMessage = {
               type: 'error',
@@ -373,7 +373,7 @@ angular.module( 'BookingSystem.customers',
         $mdToast.show( $mdToast.simple()
             .content( 'Kunder kunde inte hämtas, var god försök igen.' )
             .position( 'top right' )
-            .theme( 'error' )
+            .theme( 'warn' )
         );
       });
 
@@ -424,7 +424,7 @@ angular.module( 'BookingSystem.customers',
                 $mdToast.show( $mdToast.simple()
                   .content( 'Kunden "' + $scope.customer.Name + '" skapades, men det gick inte att ladda upp och spara den önskade bilden.' )
                   .position( 'top right' )
-                  .theme( 'error' )
+                  .theme( 'warn' )
                 );
 
                 // Redirect
@@ -453,7 +453,7 @@ angular.module( 'BookingSystem.customers',
             $mdToast.show( $mdToast.simple()
               .content( 'Ett oväntat fel uppstod när kunden skulle sparas' )
               .position( 'top right' )
-              .theme( 'error' )
+              .theme( 'warn' )
             );
           }
         });
