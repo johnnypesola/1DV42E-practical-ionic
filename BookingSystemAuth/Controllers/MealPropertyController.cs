@@ -12,7 +12,7 @@ using Microsoft.AspNet.Identity;
 namespace BookingSystemAuth.Controllers
 {
     // [IdentityBasicAuthentication] // Enable authentication via an ASP.NET Identity user name and password
-    [EnableCors(origins: "*", headers: "*", methods: "*")]
+    //[EnableCors(origins: "*", headers: "*", methods: "*")]
     public class MealPropertyController : ApiController
     {
         // Set up Service.

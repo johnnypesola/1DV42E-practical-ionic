@@ -44,7 +44,7 @@ namespace BookingSystemAuth.Providers
             ClaimsIdentity cookiesIdentity = await user.GenerateUserIdentityAsync(userManager,
                 CookieAuthenticationDefaults.AuthenticationType);
 
-            AuthenticationProperties properties = CreateProperties(user.UserName);
+            AuthenticationProperties properties = CreateProperties(user);
             AuthenticationTicket ticket = new AuthenticationTicket(oAuthIdentity, properties);
             context.Validated(ticket);
             context.Request.Context.Authentication.SignIn(cookiesIdentity);
@@ -86,11 +86,15 @@ namespace BookingSystemAuth.Providers
             return Task.FromResult<object>(null);
         }
 
-        public static AuthenticationProperties CreateProperties(string userName)
+        public static AuthenticationProperties CreateProperties(IdentityUser user)
         {
             IDictionary<string, string> data = new Dictionary<string, string>
             {
-                { "userName", userName }
+                { "UserName", user.UserName },
+                { "FirstName", user.FirstName },
+                { "SurName", user.SurName },
+                { "ImageSrc", user.ImageSrc },
+                { "EmailAddress", user.EmailAddress }
             };
             return new AuthenticationProperties(data);
         }

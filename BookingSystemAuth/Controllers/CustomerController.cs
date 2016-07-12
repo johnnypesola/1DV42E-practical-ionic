@@ -13,7 +13,7 @@ using System.IO;
 
 namespace BookingSystemAuth.Controllers
 {
-    [EnableCors(origins: "*", headers: "*", methods: "*")]
+    //[EnableCors(origins: "*", headers: "*", methods: "*")]
     public class CustomerController : ApiController
     {
         // Shared variables
