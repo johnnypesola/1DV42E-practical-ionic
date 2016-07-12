@@ -123,7 +123,7 @@ angular.module( 'BookingSystem.bookings',
         $mdToast.show( $mdToast.simple()
             .content( 'Bokningar kunde inte hämtas, var god försök igen.' )
             .position( 'top right' )
-            .theme( 'error' )
+            .theme( 'warn' )
         );
       })
 
@@ -291,7 +291,7 @@ angular.module( 'BookingSystem.bookings',
         $mdToast.show( $mdToast.simple()
             .content( 'Kunder kunde inte hämtas, var god försök igen.' )
             .position( 'top right' )
-            .theme( 'error' )
+            .theme( 'warn' )
         );
       });
 
@@ -314,7 +314,7 @@ angular.module( 'BookingSystem.bookings',
         $mdToast.show( $mdToast.simple()
           .content( 'Bokningstillfället kunde inte hämtas, var god försök igen.' )
           .position( 'top right' )
-          .theme( 'error' )
+          .theme( 'warn' )
         );
       })
 
@@ -407,7 +407,7 @@ angular.module( 'BookingSystem.bookings',
             $mdToast.show( $mdToast.simple()
               .content( 'Ett oväntat fel uppstod när bokningstillfället skulle sparas' )
               .position( 'top right' )
-              .theme( 'error' )
+              .theme( 'warn' )
             );
           }
 
@@ -416,7 +416,7 @@ angular.module( 'BookingSystem.bookings',
             $mdToast.show( $mdToast.simple()
               .content( 'Bokningstillfället existerar inte längre. Hann kanske någon radera den?' )
               .position( 'top right' )
-              .theme( 'error' )
+              .theme( 'warn' )
             );
 
             $ionicHistory.goBack();
@@ -457,7 +457,7 @@ angular.module( 'BookingSystem.bookings',
               .content( 'Bokningstillfället kan inte raderas eftersom det finns' +
                 ' en lokalbokning, resursbokning eller en måltidsbokning som refererar till bokningstillfället' )
               .position( 'top right' )
-              .theme( 'error' )
+              .theme( 'warn' )
             );
           }
 
@@ -466,7 +466,7 @@ angular.module( 'BookingSystem.bookings',
             $mdToast.show( $mdToast.simple()
               .content( 'Ett oväntat fel uppstod när bokningstillfället skulle tas bort' )
               .position( 'top right' )
-              .theme( 'error' )
+              .theme( 'warn' )
             );
           }
 
@@ -475,7 +475,7 @@ angular.module( 'BookingSystem.bookings',
             $mdToast.show( $mdToast.simple()
               .content( 'Bokningstillfället "' + $scope.booking.Name + '" existerar inte längre. Hann kanske någon radera den?' )
               .position( 'top right' )
-              .theme( 'error' )
+              .theme( 'warn' )
             );
           }
 
@@ -560,7 +560,7 @@ angular.module( 'BookingSystem.bookings',
               .content( 'Det finns redan ett bokningstillfälle som heter "' + $scope.booking.Name +
                 '". Två bokningstillfällen kan inte heta lika.' )
               .position( 'top right' )
-              .theme( 'error' )
+              .theme( 'warn' )
             );
           }
 
@@ -569,7 +569,7 @@ angular.module( 'BookingSystem.bookings',
             $mdToast.show( $mdToast.simple()
               .content( 'Ett oväntat fel uppstod när bokningstillfället skulle sparas' )
               .position( 'top right' )
-              .theme( 'error' )
+              .theme( 'warn' )
             );
           }
         });

@@ -23,7 +23,7 @@ angular.module( 'BookingSystem.mealProperties',
         $mdToast.show( $mdToast.simple()
             .content( 'Måltidsegenskaper kunde inte hämtas, var god försök igen.' )
             .position( 'top right' )
-            .theme( 'error' )
+            .theme( 'warn' )
         );
       });
 
@@ -154,7 +154,7 @@ angular.module( 'BookingSystem.mealProperties',
                 .content( 'Det finns redan en måltidsegenskap som heter "' + $scope.mealProperty.Name +
                 '". Två måltidsegenskaper kan inte heta lika.' )
                 .position( 'top right' )
-                .theme( 'error' )
+                .theme( 'warn' )
             );
           }
 
@@ -163,7 +163,7 @@ angular.module( 'BookingSystem.mealProperties',
             $mdToast.show( $mdToast.simple()
                 .content( 'Ett oväntat fel uppstod när måltidsegenskapen skulle sparas' )
                 .position( 'top right' )
-                .theme( 'error' )
+                .theme( 'warn' )
             );
           }
 
@@ -172,7 +172,7 @@ angular.module( 'BookingSystem.mealProperties',
             $mdToast.show( $mdToast.simple()
                 .content( 'Måltidsegenskapen "' + $scope.mealProperty.Name + '" existerar inte längre. Hann kanske någon radera den?' )
                 .position( 'top right' )
-                .theme( 'error' )
+                .theme( 'warn' )
             );
 
             history.back();
@@ -213,7 +213,7 @@ angular.module( 'BookingSystem.mealProperties',
                 .content( 'Måltidsegenskapen kan inte raderas eftersom det finns' +
                 ' en måltid som refererar till måltidsegenskapen' )
                 .position( 'top right' )
-                .theme( 'error' )
+                .theme( 'warn' )
             );
           }
 
@@ -222,7 +222,7 @@ angular.module( 'BookingSystem.mealProperties',
             $mdToast.show( $mdToast.simple()
                 .content( 'Ett oväntat fel uppstod när måltidsegenskapen skulle tas bort' )
                 .position( 'top right' )
-                .theme( 'error' )
+                .theme( 'warn' )
             );
           }
 
@@ -231,7 +231,7 @@ angular.module( 'BookingSystem.mealProperties',
             $mdToast.show( $mdToast.simple()
                 .content( 'Måltidsegenskapen "' + $scope.mealProperty.Name + '" existerar inte längre. Hann kanske någon radera den?' )
                 .position( 'top right' )
-                .theme( 'error' )
+                .theme( 'warn' )
             );
           }
 
@@ -302,7 +302,7 @@ angular.module( 'BookingSystem.mealProperties',
                 .content( 'Det finns redan en måltidsegenskap som heter "' + $scope.mealProperty.Name +
                 '". Två måltidsegenskaper kan inte heta lika.' )
                 .position( 'top right' )
-                .theme( 'error' )
+                .theme( 'warn' )
             );
           }
 
@@ -311,7 +311,7 @@ angular.module( 'BookingSystem.mealProperties',
             $mdToast.show( $mdToast.simple()
                 .content( 'Ett oväntat fel uppstod när måltidsegenskapen skulle sparas' )
                 .position( 'top right' )
-                .theme( 'error' )
+                .theme( 'warn' )
             );
           }
         });

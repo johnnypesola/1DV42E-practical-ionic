@@ -39,4 +39,11 @@ angular.module( 'BookingSystem.ngMaterialSettings',
 .config( ['$mdGestureProvider', ( $mdGestureProvider ) => {
   $mdGestureProvider.skipClickHijack();
 }]
+)
+
+// Custom mdToast themes
+.config( ['$mdThemingProvider', ( $mdThemingProvider ) => {
+  $mdThemingProvider.theme( 'warn' );
+}]
 );
+

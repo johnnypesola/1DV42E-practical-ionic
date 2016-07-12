@@ -70,9 +70,7 @@ angular.module( 'BookingSystem.httpSettings',
 
           $rootScope.isLoggedIn = false;
 
-          // Redirect to login
-          // $injector.get( '$state' ).go( 'app.login' );
-
+          // Show login modal
           AuthService.showLoginModal();
         }
 

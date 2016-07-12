@@ -3,13 +3,13 @@ angular.module( 'BookingSystem.authService',
   // Dependencies
   ['ngCookies']
 )
-  .service( 'AuthService', [ '$q', '$cookies', '$timeout', '$rootScope', 'API_URL', 'MODAL_ANIMATION', '$injector', 'API_LOGIN_URL', '$http', function( $q, $cookies, $timeout, $rootScope, API_URL, MODAL_ANIMATION, $injector, API_LOGIN_URL, $http ) {
+  .service( 'AuthService', [ '$q', '$cookies', '$timeout', '$rootScope', 'API_URL', 'MODAL_ANIMATION', '$injector', 'API_LOGIN_URL', '$http', '$httpParamSerializer', '$state', 'API_LOGOUT_URL', function( $q, $cookies, $timeout, $rootScope, API_URL, MODAL_ANIMATION, $injector, API_LOGIN_URL, $http, $httpParamSerializer, $state, API_LOGOUT_URL ) {
 
     // Init values
-    const keyStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
     const CURRENT_USER_STR = 'currentUser';
     const loginModalTemplateUrl = 'templates/modals/login.html';
     const that = this;
+    let credentials = null;
 
     this.showLoginModal = function(){
 
@@ -17,7 +17,7 @@ angular.module( 'BookingSystem.authService',
       if (
           $rootScope.loginModal === undefined ||
           $rootScope.loginModal === null ||
-          $rootScope.loginModal !== undefined && !$rootScope.loginModal.isShown()
+          $rootScope.loginModal !== undefined && $rootScope.loginModal.isShown !== undefined && !$rootScope.loginModal.isShown()
       ) {
 
         $rootScope.loginModal = {};
@@ -52,138 +52,22 @@ angular.module( 'BookingSystem.authService',
       }
     };
 
-    this.base64Encode = function ( input ) {
-      let output = '';
-      let chr1, chr2, chr3 = '';
-      let enc1, enc2, enc3, enc4 = '';
-      let i = 0;
-
-      do {
-        chr1 = input.charCodeAt( i++ );
-        chr2 = input.charCodeAt( i++ );
-        chr3 = input.charCodeAt( i++ );
-
-        enc1 = chr1 >> 2;
-        enc2 = ( ( chr1 & 3 ) << 4 ) | ( chr2 >> 4 );
-        enc3 = ( ( chr2 & 15 ) << 2 ) | ( chr3 >> 6 );
-        enc4 = chr3 & 63;
-
-        if ( isNaN( chr2 ) ) {
-          enc3 = enc4 = 64;
-        } else if ( isNaN( chr3 ) ) {
-          enc4 = 64;
-        }
-
-        output = output +
-          keyStr.charAt( enc1 ) +
-          keyStr.charAt( enc2 ) +
-          keyStr.charAt( enc3 ) +
-          keyStr.charAt( enc4 );
-        chr1 = chr2 = chr3 = '';
-        enc1 = enc2 = enc3 = enc4 = '';
-      } while ( i < input.length );
-
-      return output;
-    };
-
-    /* Not used at the moment
-
-    const base64Decode = function ( input ) {
-      let output = '';
-      let chr1, chr2, chr3 = '';
-      let enc1, enc2, enc3, enc4 = '';
-      let i = 0;
-
-      // remove all characters that are not A-Z, a-z, 0-9, +, /, or =
-      const base64test = /[^A-Za-z0-9\+\/\=]/g;
-
-      if ( base64test.exec( input ) ) {
-        console.log(
-          'There were invalid base64 characters in the input text.\n' +
-          'Valid base64 characters are A-Z, a-z, 0-9, \'+\', \'/\',and \'=\'\n' +
-          'Expect errors in decoding.'
-        );
-      }
-      input = input.replace( /[^A-Za-z0-9\+\/\=]/g, '' );
-
-      do {
-        enc1 = keyStr.indexOf( input.charAt( i++ ) );
-        enc2 = keyStr.indexOf( input.charAt( i++ ) );
-        enc3 = keyStr.indexOf( input.charAt( i++ ) );
-        enc4 = keyStr.indexOf( input.charAt( i++ ) );
-
-        chr1 = ( enc1 << 2 ) | ( enc2 >> 4 );
-        chr2 = ( ( enc2 & 15 ) << 4 ) | ( enc3 >> 2 );
-        chr3 = ( ( enc3 & 3 ) << 6 ) | enc4;
-
-        output = output + String.fromCharCode( chr1 );
-
-        if ( enc3 !== 64 ) {
-          output = output + String.fromCharCode( chr2 );
-        }
-        if ( enc4 !== 64 ) {
-          output = output + String.fromCharCode( chr3 );
-        }
-
-        chr1 = chr2 = chr3 = '';
-        enc1 = enc2 = enc3 = enc4 = '';
-
-      } while ( i < input.length );
-
-      return output;
-    };
-    */
-
     this.login = function ( username, password ) {
 
       const deferred = $q.defer();
 
-      // Inject $http to avoid circular dependency.
-      //const $http = $injector.get( '$http' );
-
-      /* Dummy authentication for testing, uses $timeout to simulate api call
-       ----------------------------------------------*/
-      /*
-      $timeout( () => {
-
-        const response = { success: username === 'test' && password === 'test' };
-
-        if ( !response.success ) {
-          deferred.reject();
-        } else {
-          deferred.resolve();
-        }
-
-      }, 1000 );
-      */
-
-      /* Use this for real authentication
-       ----------------------------------------------*/
-      /*
-      $http({
-        method: 'POST',
-        url: API_LOGIN_URL,
-        data: {
-          UserName: username,
-          Password: password,
-          grant_type: 'password'
-        },
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-      })
-      */
-
       $http.post( API_LOGIN_URL,
-        {
+        $httpParamSerializer({
+          grant_type: 'password',
           UserName: username,
-          Password: password,
-          grant_type: 'password'
-        },
+          Password: password
+        }),
         {
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
         }
       )
-        .then( () => {
-          deferred.resolve();
+        .then( ( response ) => {
+          deferred.resolve( response );
         })
 
         .catch( ( response ) => {
@@ -194,7 +78,18 @@ angular.module( 'BookingSystem.authService',
       return deferred.promise;
     };
 
-    this.isLoggedInCheck = function() {
+    this.logout = function () {
+
+      const promise = $http.post( API_LOGOUT_URL );
+
+      promise.then( () => {
+        that.clearCredentials();
+      });
+
+      return promise;
+    };
+
+    this.isLoggedInCheck = function () {
 
       // Try to get cookie credentials. Determine if user is logged in.
       const isLoggedIn = $cookies.get( CURRENT_USER_STR ) !== undefined;
@@ -208,26 +103,60 @@ angular.module( 'BookingSystem.authService',
       return isLoggedIn;
     };
 
-    this.setCredentials = function ( token ) {
+    this.setCredentials = function ( credentialsObj ) {
 
-      const currentUser = {
-        username: username,
-        token: token
+      credentials = credentialsObj;
+
+      that.setRootScopeUserInfo( credentials );
+
+      $cookies.putObject( CURRENT_USER_STR, credentialsObj );
+    };
+
+    this.getCredentials = function () {
+
+      if ( credentials === null ) {
+
+        credentials = $cookies.getObject( CURRENT_USER_STR );
+
+        if ( credentials ) {
+          that.setRootScopeUserInfo( credentials );
+        }
+      }
+
+      return credentials;
+    };
+
+    this.setRootScopeUserInfo = function( userObj ) {
+
+      // Store some not so sensitive values in rootScope
+      $rootScope.userInfo = {
+        userName: userObj.userName,
+        firstName: userObj.firstName,
+        surName: userObj.surName,
+        imageSrc: userObj.imageSrc,
+        emailAddress: userObj.emailAddress
       };
-
-      $cookies.putObject( CURRENT_USER_STR, currentUser );
     };
 
     this.getAuthHeader = function() {
 
       let returnValue = false;
+      const currentDateObj = new Date();
 
       // Get current logged in user from cookie
-      const currentUser = $cookies.getObject( CURRENT_USER_STR );
+      const currentUser = that.getCredentials();
+      const expiredDateObj = new Date( currentUser.expires );
 
-      // Check that current user has token
-      if ( currentUser.token !== undefined ) {
+      // Check that current user has token, and that it has not expired
+      if (
+        currentUser.token !== undefined &&
+        currentDateObj < expiredDateObj
+      ) {
         returnValue = 'Bearer ' + currentUser.token;
+      }
+      // Token has expired
+      else {
+        that.clearCredentials();
       }
 
       return returnValue;
@@ -235,14 +164,12 @@ angular.module( 'BookingSystem.authService',
 
     this.clearCredentials = function () {
 
-      // Clear credentials from rootScope.
-      // $rootScope.globals = {};
+      credentials = null;
+
+      $rootScope.userInfo = null;
 
       // Clear credentials from cookie
       $cookies.remove( CURRENT_USER_STR );
-
-      // Clear credentials from http headers
-      // $http.defaults.headers.common.Authorization = 'Basic ';
     };
 
     this.apiUrlEqualsUrl = function( configUrl ){
@@ -267,7 +194,7 @@ angular.module( 'BookingSystem.authService',
       return false;
     };
 
-    // Init rootScope auth functions
+    // Add rootScope auth functions
     $rootScope.loginFromModal = function( username, password ){
 
       // Inject ionic modal to avoid circular dependency.
@@ -286,33 +213,45 @@ angular.module( 'BookingSystem.authService',
               .position( 'top right' )
           );
 
-          // Set http header credentials
-          that.setCredentials( username, password );
+          // Save http header credentials
+          that.setCredentials(
+            {
+              userName: response.data.UserName,
+              firstName: response.data.FirstName,
+              surName: response.data.SurName,
+              imageSrc: response.data.ImageSrc,
+              emailAddress: response.data.EmailAddress,
+              token: response.data.access_token,
+              expires: response.data['.expires']
+            }
+          );
 
-          // Clear loginData
-          $rootScope.loginData = {};
-
-          window.location = '/';
+          // Redirect to start page
+          $state.go( 'app.start' );
         })
 
         .catch( ( response ) => {
-
-          console.log( response );
 
           // Display error message
           mdToast.show( mdToast.simple()
               .content( 'Felaktigt användarnamn eller lösenord' )
               .position( 'top right' )
-              .theme( 'error' )
+              .theme( 'warn' )
           );
         });
     };
 
     $rootScope.logout = function() {
-      that.clearCredentials();
 
-      window.location = '/';
+      that.logout().then( () => {
+
+        // Redirect to start page
+        $state.go( 'app.start' );
+      });
+
     };
 
+    // Init values
+    that.getCredentials();
   }]
 );
