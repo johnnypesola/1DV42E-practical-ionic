@@ -21,7 +21,7 @@ angular.module( 'BookingSystem.users',
       users.$promise.catch( () => {
 
         $mdToast.show( $mdToast.simple()
-          .content( 'Måltider kunde inte hämtas, var god försök igen.' )
+          .content( 'Användare kunde inte hämtas, var god försök igen.' )
           .position( 'top right' )
           .theme( 'warn' )
         );
@@ -52,7 +52,7 @@ angular.module( 'BookingSystem.users',
   .controller( 'UserDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$ionicModal', '$state', 'User', '$mdToast', 'API_IMG_PATH_URL', 'UserImage', '$q',( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $ionicModal, $state, User, $mdToast, API_IMG_PATH_URL, UserImage, $q ) => {
     /* Init vars */
 
-    const deleteModalTemplateUrl = 'templates/modals/users-delete.html';
+    const deleteModalTemplateUrl = 'templates/modals/user-delete.html';
     $scope.isEditMode = false;
     $scope.userBackup = {};
     $scope.API_IMG_PATH_URL = API_IMG_PATH_URL;
@@ -85,7 +85,7 @@ angular.module( 'BookingSystem.users',
     const saveSuccess = function() {
       // Display success message
       $mdToast.show( $mdToast.simple()
-          .content( 'Måltiden "' + $scope.user.Name + '" sparades med ett lyckat resultat' )
+          .content( 'Användaren "' + $scope.user.Name + '" sparades med ett lyckat resultat' )
           .position( 'top right' )
           .theme( 'success' )
       );
@@ -98,6 +98,8 @@ angular.module( 'BookingSystem.users',
 
       const deferred = $q.defer();
 
+      console.log( $stateParams );
+
       const user = User.get(
         {
           userId: $stateParams.userId
@@ -106,7 +108,7 @@ angular.module( 'BookingSystem.users',
 
       user.$promise.catch( () => {
         $mdToast.show( $mdToast.simple()
-            .content( 'Måltid kunde inte hämtas, var god försök igen.' )
+            .content( 'Användaren kunde inte hämtas, var god försök igen.' )
             .position( 'top right' )
             .theme( 'warn' )
         );
@@ -120,7 +122,7 @@ angular.module( 'BookingSystem.users',
 
         .catch( () => {
           $mdToast.show( $mdToast.simple()
-              .content( 'Måltidsegenskaper kunde inte hämtas, var god försök igen.' )
+              .content( 'Användaresegenskaper kunde inte hämtas, var god försök igen.' )
               .position( 'top right' )
               .theme( 'warn' )
           );
@@ -181,7 +183,7 @@ angular.module( 'BookingSystem.users',
               .error( () => {
 
                 $mdToast.show( $mdToast.simple()
-                    .content( 'Måltiden "' + $scope.user.Name + '" sparades, men det gick inte att ladda upp och spara den önskade bilden.' )
+                    .content( 'Användaren "' + $scope.user.Name + '" sparades, men det gick inte att ladda upp och spara den önskade bilden.' )
                     .position( 'top right' )
                     .theme( 'warn' )
                 );
@@ -200,8 +202,8 @@ angular.module( 'BookingSystem.users',
           // If there there was a foreign key reference
           if ( response.status === 409 ){
             $mdToast.show( $mdToast.simple()
-                .content( 'Det finns redan en måltid som heter "' + $scope.user.Name +
-                '". Två måltider kan inte heta lika.' )
+                .content( 'Det finns redan en användare som heter "' + $scope.user.Name +
+                '". Två användare kan inte heta lika.' )
                 .position( 'top right' )
                 .theme( 'warn' )
             );
@@ -210,7 +212,7 @@ angular.module( 'BookingSystem.users',
           // If there was a problem with the in-data
           else if ( response.status === 400 || response.status === 500 ){
             $mdToast.show( $mdToast.simple()
-                .content( 'Ett oväntat fel uppstod när måltiden skulle sparas' )
+                .content( 'Ett oväntat fel uppstod när användaren skulle sparas' )
                 .position( 'top right' )
                 .theme( 'warn' )
             );
@@ -219,7 +221,7 @@ angular.module( 'BookingSystem.users',
           // If the entry was not found
           if ( response.status === 404 ) {
             $mdToast.show( $mdToast.simple()
-                .content( 'Måltiden "' + $scope.user.Name + '" existerar inte längre. Hann kanske någon radera den?' )
+                .content( 'Användaren "' + $scope.user.Name + '" existerar inte längre. Hann kanske någon radera den?' )
                 .position( 'top right' )
                 .theme( 'warn' )
             );
@@ -242,7 +244,7 @@ angular.module( 'BookingSystem.users',
         .then( ( response ) => {
 
           $mdToast.show( $mdToast.simple()
-              .content( 'Måltiden "' + $scope.user.Name + '" raderades med ett lyckat resultat' )
+              .content( 'Användaren "' + $scope.user.Name + '" raderades med ett lyckat resultat' )
               .position( 'top right' )
               .theme( 'success' )
           );
@@ -259,8 +261,8 @@ angular.module( 'BookingSystem.users',
             response.data.Message === 'Foreign key references exists'
           ){
             $mdToast.show( $mdToast.simple()
-                .content( 'Måltiden kan inte raderas eftersom det finns' +
-                ' en lokalbokning eller en lokalmåltid som refererar till måltiden' )
+                .content( 'Användaren kan inte raderas eftersom det finns' +
+                ' en lokalbokning, resursbokning eller måltidsbokning som refererar till användaren' )
                 .position( 'top right' )
                 .theme( 'warn' )
             );
@@ -269,7 +271,7 @@ angular.module( 'BookingSystem.users',
           // If there was a problem with the in-data
           else if ( response.status === 400 || response.status === 500 ){
             $mdToast.show( $mdToast.simple()
-                .content( 'Ett oväntat fel uppstod när måltiden skulle tas bort' )
+                .content( 'Ett oväntat fel uppstod när användaren skulle tas bort' )
                 .position( 'top right' )
                 .theme( 'warn' )
             );
@@ -278,7 +280,7 @@ angular.module( 'BookingSystem.users',
           // If the entry was not found
           if ( response.status === 404 ) {
             $mdToast.show( $mdToast.simple()
-                .content( 'Måltiden "' + $scope.user.Name + '" existerar inte längre. Hann kanske någon radera den?' )
+                .content( 'Användaren "' + $scope.user.Name + '" existerar inte längre. Hann kanske någon radera den?' )
                 .position( 'top right' )
                 .theme( 'warn' )
             );
@@ -314,11 +316,12 @@ angular.module( 'BookingSystem.users',
 
     };
 
+    /*
     const saveSuccess = () => {
 
       // Display success message
       $mdToast.show( $mdToast.simple()
-          .content( 'Måltiden "' + $scope.user.Name + '" sparades med ett lyckat resultat' )
+          .content( 'Användaren "' + $scope.user.Name + '" sparades med ett lyckat resultat' )
           .position( 'top right' )
           .theme( 'success' )
       );
@@ -326,6 +329,7 @@ angular.module( 'BookingSystem.users',
       // Redirect
       history.back();
     };
+    */
 
     /* Private Methods END */
 
@@ -355,7 +359,7 @@ angular.module( 'BookingSystem.users',
               .error( () => {
 
                 $mdToast.show( $mdToast.simple()
-                    .content( 'Måltiden "' + $scope.user.Name + '" skapades, men det gick inte att ladda upp och spara den önskade bilden.' )
+                    .content( 'Användaren "' + $scope.user.Name + '" skapades, men det gick inte att ladda upp och spara den önskade bilden.' )
                     .position( 'top right' )
                     .theme( 'warn' )
                 );
@@ -371,8 +375,8 @@ angular.module( 'BookingSystem.users',
           // If there there was a foreign key reference
           if ( response.status === 409 ){
             $mdToast.show( $mdToast.simple()
-              .content( 'Det finns redan en måltid som heter "' + $scope.user.Name +
-                '". Två måltider kan inte heta lika.' )
+              .content( 'Det finns redan en användare som heter "' + $scope.user.Name +
+                '". Två användare kan inte heta lika.' )
               .position( 'top right' )
               .theme( 'warn' )
             );
@@ -381,7 +385,7 @@ angular.module( 'BookingSystem.users',
           // If there was a problem with the in-data
           else {
             $mdToast.show( $mdToast.simple()
-              .content( 'Ett oväntat fel uppstod när måltiden skulle sparas' )
+              .content( 'Ett oväntat fel uppstod när användaren skulle sparas' )
               .position( 'top right' )
               .theme( 'warn' )
             );

@@ -27,6 +27,7 @@ const BookingSystem = angular
     'BookingSystem.resourceBooking',
     'BookingSystem.mealBooking',
     'BookingSystem.bookingTypes',
+    'BookingSystem.users',
 
     // Services
     'BookingSystem.authService',
@@ -44,6 +45,7 @@ const BookingSystem = angular
     'BookingSystem.bookingServices',
     'BookingSystem.resourceBookingServices',
     'BookingSystem.mealBookingServices',
+    'BookingSystem.usersServices',
 
     // Directives
     'BookingSystem.calendarDaysHeaderDirective',

@@ -12,29 +12,14 @@ angular.module( 'BookingSystem.usersServices',
       API_URL + 'User/:userId',
       {userId: '@userId'},
       {
-        /*
-        queryFreeForPeriod: {
-          url: API_URL + 'Location/free/:fromDate/:toDate/:locationBookingId',
+        changePasswordForUser: {
+          url: API_URL + 'User/password/:userId',
           id: '@id',
-          method: 'GET',
-          isArray: true,
+          method: 'POST',
           params: {
-            locationBookingId: '@locationBookingId',
-            fromDate: '@fromDate',
-            toDate: '@toDate'
-          }
-        },
-        // Search for location
-        querySearch: {
-          url: API_URL + 'Location/search/:column',
-          id: '@id',
-          method: 'GET',
-          isArray: true,
-          params: {
-            column: '@column'
+            userId: '@userId'
           }
         }
-        */
       }
     );
   }]
