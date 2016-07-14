@@ -11,7 +11,7 @@ using Microsoft.AspNet.Identity;
 
 namespace BookingSystemAuth.Controllers
 {
-    [Authorize(Users = "Administrator")]
+    [Authorize(Users = "administrator")]
     public class UserController : ApiController
     {
         // Shared variables
