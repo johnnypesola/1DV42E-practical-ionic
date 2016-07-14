@@ -1,0 +1,19 @@
+<ion-view view-title="Användare">
+    <ion-content>
+        <ion-list>
+            <ion-item ng-repeat="user in users" href="#/app/user-details/{{user.Id}}">
+                {{user.FirstName}} {{user.SurName}} ({{user.UserName}})
+            </ion-item>
+        </ion-list>
+
+    </ion-content>
+
+    <md-button
+            class="md-fab md-warn md-lower-right-button"
+            aria-label="Skapa"
+            href="#/app/user-create"
+            >
+        <span class="icon ion-plus-round md-big-icon"></span>
+    </md-button>
+
+</ion-view>

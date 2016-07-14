@@ -1,0 +1,30 @@
+<ion-modal-view view-title="Radera Måltidsbokning">
+    <ion-header-bar class="bar-positive">
+        <h1 class="title">Bekräfta</h1>
+    </ion-header-bar>
+    <ion-content padding="true">
+
+        <div class="row padding" layout-align="center">
+            <h4>
+                Vill du verkligen ta bort användaren?
+            </h4>
+        </div>
+
+        <div class="row padding" layout-align="center">
+
+            <md-button
+                    class="md-raised md-primary"
+                    ng-click="deleteUser()"
+                    >
+                Ja
+            </md-button>
+            <md-button
+                    class="md-raised md-primary"
+                    ng-click="modal.hide()"
+                    >
+                Nej
+            </md-button>
+        </div>
+
+    </ion-content>
+</ion-modal-view>
