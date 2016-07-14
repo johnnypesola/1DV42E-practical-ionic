@@ -15,6 +15,7 @@ using Microsoft.Owin.Security.OAuth;
 using BookingSystemAuth.Models;
 using BookingSystemAuth.Providers;
 using BookingSystemAuth.Results;
+using Newtonsoft.Json.Linq;
 
 namespace BookingSystemAuth.Controllers
 {
@@ -408,6 +409,51 @@ namespace BookingSystemAuth.Controllers
             }
 
             base.Dispose(disposing);
+        }
+
+        // POST a picture for logged in user
+        [Route("Image")]
+        [AcceptVerbs("POST")]
+        [HttpPost]
+        public IHttpActionResult Post()
+        {
+            string base64string;
+            JObject returnData;
+            ImageService imageService = new ImageService();
+            UserStore userStore = new UserStore();
+            string UploadImagePath;
+            const string IMAGE_PATH = "Content/upload/img/user";
+
+            try
+            {
+                // Process image data
+                base64string = Request.Content.ReadAsStringAsync().Result;
+
+                // Get userId of logged in user
+                int userId = int.Parse(User.Identity.GetUserId());
+
+                // Get user from DB
+                IdentityUser user = userStore.FindByIdAsync(userId).Result;
+
+                // Save image
+                UploadImagePath = imageService.SaveImage(IMAGE_PATH, base64string, userId);
+
+                // Attach path to object
+                user.ImageSrc = UploadImagePath;
+
+                // Save user
+                userStore.UpdateAsync(user);
+
+                // Build return JSON object
+                returnData = JObject.Parse(String.Format("{{ 'imgpath' : '{0}'}}", UploadImagePath));
+
+                // Return path to uploaded image
+                return Ok(returnData);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         #region Helpers

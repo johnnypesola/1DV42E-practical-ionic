@@ -13,13 +13,13 @@ namespace BookingSystemAuth.Models
         private UserDAL _userDAL;
 
         // Properties
-        public UserDAL UserDAL
+        private UserDAL UserDAL
         {
             get
             {
                 return _userDAL ?? (_userDAL = new UserDAL());
             }
-            private set
+            set
             {
                 _userDAL = value;
             }
@@ -228,6 +228,14 @@ namespace BookingSystemAuth.Models
             }
 
             return Task.FromResult<IdentityUser>(null);
+        }
+
+        // Not part of identity below
+        public Task<IList<IdentityUser>> GetUsers()
+        {
+            List<IdentityUser> usersList = UserDAL.GetUsers().ToList();
+
+            return Task.FromResult<IList<IdentityUser>>(usersList);
         }
     }
 }

@@ -65,12 +65,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BookingSystem\BookingSystem.csproj">
-      <Project>{39708B4B-F657-4D6A-96E5-CE8B7000088A}</Project>
-      <Name>BookingSystem</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>

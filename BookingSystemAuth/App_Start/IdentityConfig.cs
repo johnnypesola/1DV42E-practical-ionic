@@ -10,23 +10,37 @@ namespace BookingSystemAuth
 
     public class ApplicationUserManager : UserManager<IdentityUser, int>
     {
+        // Fields
+        private UserStore _userStore;
+
+        // Properties
+        private UserStore UserStore
+        {
+            get
+            {
+                return _userStore ?? (_userStore = new UserStore());
+            }
+        }
+
+        // Constructor
         public ApplicationUserManager(IUserStore<IdentityUser, int> store)
             : base(store)
         {
         }
 
+        // Public methods
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
-            var manager = new ApplicationUserManager(new UserStore());
+            var userStore = new ApplicationUserManager(new UserStore());
 
             // Configure validation logic for usernames
-            manager.UserValidator = new UserValidator<IdentityUser, int>(manager)
+            userStore.UserValidator = new UserValidator<IdentityUser, int>(userStore)
             {
                 AllowOnlyAlphanumericUserNames = false,
                 RequireUniqueEmail = true
             };
             // Configure validation logic for passwords
-            manager.PasswordValidator = new PasswordValidator
+            userStore.PasswordValidator = new PasswordValidator
             {
                 RequiredLength = 6,
                 RequireNonLetterOrDigit = false,
@@ -37,9 +51,11 @@ namespace BookingSystemAuth
             var dataProtectionProvider = options.DataProtectionProvider;
             if (dataProtectionProvider != null)
             {
-                manager.UserTokenProvider = new DataProtectorTokenProvider<IdentityUser, int>(dataProtectionProvider.Create("ASP.NET Identity"));
+                userStore.UserTokenProvider = new DataProtectorTokenProvider<IdentityUser, int>(dataProtectionProvider.Create("ASP.NET Identity"));
             }
-            return manager;
+            return userStore;
         }
+
+
     }
 }
