@@ -83,6 +83,14 @@
                     <p>Bokningstyper</p>
                 </div>
             </ion-item>
+
+            <ion-item menu-close ui-sref="app.users-list" ui-sref-active="active" class="pointer" ng-if="userInfo.userName === 'administrator'">
+                <div class="item-icon-left">
+                    <i class="icon ion-person menu-icon-color"></i>
+                    <p>Användare</p>
+                </div>
+            </ion-item>
+
             <ion-item menu-close ng-click="logout()">
                 <div class="item-icon-left">
                     <i class="icon ion-log-out menu-icon-color"></i>
