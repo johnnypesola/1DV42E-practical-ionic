@@ -26,6 +26,38 @@ angular.module( 'BookingSystem.routes',
         }
       })
 
+      // Users
+
+      .state( 'app.users-list', {
+        url: '/user-list',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/users/users-list.html',
+            controller: 'UsersListCtrl'
+          }
+        }
+      })
+
+      .state( 'app.user-details', {
+        url: '/user-details/:userId',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/users/user-details.html',
+            controller: 'UserDetailsCtrl'
+          }
+        }
+      })
+
+      .state( 'app.user-create', {
+        url: '/user-create',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/users/user-create.html',
+            controller: 'UserCreateCtrl'
+          }
+        }
+      })
+
       // Bookings
 
       .state( 'app.booking-details', {
