@@ -28,7 +28,7 @@ namespace BookingSystemAuth.Controllers
         {
             try
             {
-                IEnumerable<IdentityUser> Users = userStore. GetUsers().Result;
+                IEnumerable<IdentityUser> Users = userStore.GetUsers().Result;
 
                 if (Users == null)
                 {
@@ -68,6 +68,21 @@ namespace BookingSystemAuth.Controllers
         [AcceptVerbs("POST")]
         public IHttpActionResult Post(IdentityUser User)
         {
+            IdentityUser userFromDB = null;
+
+            if (User.Id > 0)
+            {
+                userFromDB = userStore.FindByIdAsync(User.Id).Result;
+            }
+
+            if (userFromDB == null)
+            {
+                return NotFound();
+            }
+
+            // We should not overwrite the password in a normal update action.
+            User.PasswordHash = userFromDB.PasswordHash;
+
             // Check for bad values, done by the data annotations in the model class.
             if (!ModelState.IsValid)
             {
@@ -77,17 +92,7 @@ namespace BookingSystemAuth.Controllers
             // Try to save User
             try
             {
-                IdentityUser userFromDB = userStore.FindByIdAsync(User.Id).Result;
-
-                if(userFromDB == null)
-                {
-                    return NotFound();
-                }
-
-                // We should not overwrite the password in a normal update action.
-                User.PasswordHash = userFromDB.PasswordHash;
-
-                userStore.UpdateAsync(userFromDB);
+                userStore.UpdateAsync(User);
             }
             catch (DataBaseEntryNotFoundException)
             {

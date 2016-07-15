@@ -235,6 +235,12 @@ namespace BookingSystemAuth.Models
         {
             List<IdentityUser> usersList = UserDAL.GetUsers().ToList();
 
+            // Clear passwords. We dont want to expose theese
+            foreach( IdentityUser user in usersList)
+            {
+                user.PasswordHash = String.Empty;
+            }
+
             return Task.FromResult<IList<IdentityUser>>(usersList);
         }
     }
