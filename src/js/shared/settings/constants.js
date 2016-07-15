@@ -2,12 +2,12 @@ angular.module( 'BookingSystem.constants',
 
   []
 )
-  //.constant( 'API_URL', 'http://localhost:56147/api/' )
-  //.constant( 'API_LOGIN_URL', 'http://localhost:56147/Token' )
-  //.constant( 'API_LOGOUT_URL', 'http://localhost:56147/api/Account/Logout' )
-  .constant( 'API_URL', 'http://bokning.vvfors.se/api/' )
-  .constant( 'API_LOGIN_URL', 'http://bokning.vvfors.se/Token' )
-  .constant( 'API_LOGOUT_URL', 'http://bokning.vvfors.se/api/Account/Logout' )
+  .constant( 'API_URL', 'http://localhost:56147/api/' )
+  .constant( 'API_LOGIN_URL', 'http://localhost:56147/Token' )
+  .constant( 'API_LOGOUT_URL', 'http://localhost:56147/api/Account/Logout' )
+  //.constant( 'API_URL', 'http://bokning.vvfors.se/api/' )
+  //.constant( 'API_LOGIN_URL', 'http://bokning.vvfors.se/Token' )
+  //.constant( 'API_LOGOUT_URL', 'http://bokning.vvfors.se/api/Account/Logout' )
   .constant( 'API_IMG_PATH_URL', 'http://bokning.vvfors.se/' )
   .constant( 'UPLOAD_IMG_MAX_WIDTH', '300' )
   .constant( 'UPLOAD_IMG_MAX_HEIGHT', '300' )
