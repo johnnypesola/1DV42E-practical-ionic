@@ -68,31 +68,36 @@ namespace BookingSystemAuth.Controllers
         [AcceptVerbs("POST")]
         public IHttpActionResult Post(IdentityUser User)
         {
-            IdentityUser userFromDB = null;
-
-            if (User.Id > 0)
-            {
-                userFromDB = userStore.FindByIdAsync(User.Id).Result;
-            }
-
-            if (userFromDB == null)
-            {
-                return NotFound();
-            }
-
-            // We should not overwrite the password in a normal update action.
-            User.PasswordHash = userFromDB.PasswordHash;
-
-            // Check for bad values, done by the data annotations in the model class.
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
             // Try to save User
             try
             {
-                userStore.UpdateAsync(User);
+                IdentityUser userFromDB = null;
+
+                // Check for bad values, done by the data annotations in the model class.
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                // Update existing user
+                if (User.Id > 0)
+                {
+                    userFromDB = userStore.FindByIdAsync(User.Id).Result;
+
+                    if (userFromDB == null)
+                    {
+                        return NotFound();
+                    }
+
+                    // We should not overwrite the password in a normal update action.
+                    User.PasswordHash = userFromDB.PasswordHash;
+
+                    userStore.UpdateAsync(User);
+                }
+                else
+                {
+                    userStore.CreateAsync(User);
+                }
             }
             catch (DataBaseEntryNotFoundException)
             {
@@ -111,7 +116,7 @@ namespace BookingSystemAuth.Controllers
                 return InternalServerError();
             }
 
-            // Respond that the booking was created and redirect
+            // Respond that the user was created and redirect
             return Ok(User);
         }
 

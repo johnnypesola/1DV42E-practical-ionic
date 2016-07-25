@@ -286,7 +286,7 @@ namespace BookingSystemAuth.Models
                 }
                 catch (Exception exception)
                 {
-                    if (exception.Message == "There is already a user with the given name.")
+                    if (exception.Message == "There is already a user with this username or email address.")
                     {
                         throw new DuplicateNameException(exception.Message);
                     }
