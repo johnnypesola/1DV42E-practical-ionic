@@ -91,7 +91,7 @@
                 </div>
             </ion-item>
 
-            <ion-item menu-close ng-click="logout()">
+            <ion-item menu-close ng-click="logout()" ng-if="userInfo">
                 <div class="item-icon-left">
                     <i class="icon ion-log-out menu-icon-color"></i>
                     <p>Logga ut</p>
