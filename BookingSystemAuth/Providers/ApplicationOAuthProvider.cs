@@ -36,24 +36,27 @@ namespace BookingSystemAuth.Providers
 
             IdentityUser user = await userManager.FindByNameAsync(context.UserName);
 
-            // If the user is locked out
-            if(user.LockoutEndDate > DateTime.Now)
-            {
-                context.SetError("account_locked", user.LockoutEndDate.ToString());
-
-                return;
-            }
-
             // No user was found
-            if(user == null)
+            if (user == null)
             {
                 context.SetError("invalid_grant", "The user name or password is incorrect.");
 
                 return;
             }
 
-            // Wrong password
-            if (user.PasswordHash != givenHashedPassword)
+            // If the user is locked out
+            if (user.LockoutEndDate > DateTime.Now)
+            {
+                context.SetError("account_locked", user.LockoutEndDate.ToString());
+
+                return;
+            }
+
+            // Verify password
+            var passwordResult = userManager.PasswordHasher.VerifyHashedPassword(user.PasswordHash, context.Password);
+
+            // In case of wrong password
+            if (passwordResult != PasswordVerificationResult.Success)
             {
                 // Increase failed login attempt
                 IdentityResult result = await userManager.AccessFailedAsync(user.Id);
