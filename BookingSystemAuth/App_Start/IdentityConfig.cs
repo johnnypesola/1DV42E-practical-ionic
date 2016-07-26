@@ -55,7 +55,5 @@ namespace BookingSystemAuth
             }
             return userStore;
         }
-
-
     }
 }

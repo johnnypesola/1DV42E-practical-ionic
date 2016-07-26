@@ -8,18 +8,46 @@ using System.Web.Http;
 using System.Data;
 using System.IO;
 using Microsoft.AspNet.Identity;
+using System.Net.Http;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin.Security;
 
 namespace BookingSystemAuth.Controllers
 {
     [Authorize(Users = "administrator")]
-    public class UserController : ApiController
+    public class UserController : BaseAuthController
     {
         // Shared variables
         const string IMAGE_PATH = "Content/upload/img/user";
 
         // Set up Service.
-        UserStore userStore = new UserStore();
-        ApplicationUserManager userManager = new ApplicationUserManager(new UserStore());
+        private UserStore userStore = new UserStore();
+        private ApplicationUserManager _userManager;
+
+        public UserController()
+        {
+        }
+
+        public UserController(ApplicationUserManager userManager,
+            ISecureDataFormat<AuthenticationTicket> accessTokenFormat)
+        {
+            UserManager = userManager;
+            AccessTokenFormat = accessTokenFormat;
+        }
+
+        public ApplicationUserManager UserManager
+        {
+            get
+            {
+                return _userManager ?? Request.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            }
+            private set
+            {
+                _userManager = value;
+            }
+        }
+
+        public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; private set; }
 
         // GET: api/User
         [Route("api/User")]
@@ -96,7 +124,16 @@ namespace BookingSystemAuth.Controllers
                 }
                 else
                 {
-                    userStore.CreateAsync(User);
+                    IdentityResult result = UserManager.CreateAsync(User, User.PasswordHash).Result;
+
+                    if (!result.Succeeded)
+                    {
+                        if (!result.Succeeded)
+                        {
+                            return GetErrorResult(result);
+                        }
+                    }
+
                 }
             }
             catch (DataBaseEntryNotFoundException)
@@ -144,7 +181,7 @@ namespace BookingSystemAuth.Controllers
                 }
 
                 // Save password
-                IdentityResult result = userManager.AddPasswordAsync(userId, model.NewPassword).Result;
+                IdentityResult result = UserManager.AddPasswordAsync(userId, model.NewPassword).Result;
                     
                 if (!result.Succeeded)
                 {

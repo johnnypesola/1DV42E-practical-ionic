@@ -37,6 +37,7 @@ namespace BookingSystemAuth.Models
         public bool EmailAddressConfirmed { get; set; }
 
         //[Required(ErrorMessage = "PasswordHash is required.")]
+        [DataType(DataType.Password)]
         [StringLength(256, ErrorMessage = "PasswordHash string length surpassed the limit of 256.")]
         public string PasswordHash { get; set; }
 
