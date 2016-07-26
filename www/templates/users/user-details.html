@@ -115,6 +115,27 @@
                 </div>
 
                 <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="userForm.password.$error">
+                        <div ng-message="pattern">Får endast innehålla specialtecknen: &_-.,~^@()%!</div>
+                        <div ng-message="minlength">Måste innehålla minst 6 tecken</div>
+                    </div>
+
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Nytt lösenord</label>
+                        <input
+                                name="password"
+                                type="password"
+                                ng-model="user.Password"
+                                ng-disabled="!isEditMode"
+                                ng-pattern="TEXT_FIELD_REGEXP"
+                                maxlength="50"
+                                ng-minlength="6"
+                                >
+                    </md-input-container>
+                </div>
+
+                <div layout-gt-xs="row" class="pos-relative">
                     <md-input-container class="md-block" flex-gt-xs>
 
                         <label>Är avstängd</label>
@@ -137,10 +158,6 @@
 
                 <h5><span class="faded">Antal felaktiga inloggningar</span></h5>
                 <p>{{user.AccessFailedCount | count}}</p>
-
-                <div layout-gt-xs="row" ng-show="user.userProperties.length">
-                    <span class="faded">Måltidsegenskaper</span>
-                </div>
 
             </form>
         </div>

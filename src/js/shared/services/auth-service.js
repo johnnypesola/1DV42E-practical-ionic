@@ -232,12 +232,28 @@ angular.module( 'BookingSystem.authService',
 
         .catch( ( response ) => {
 
-          // Display error message
-          mdToast.show( mdToast.simple()
-              .content( 'Felaktigt användarnamn eller lösenord' )
-              .position( 'top right' )
-              .theme( 'warn' )
-          );
+          console.log( response );
+
+          // If wrong credentials were entered
+          if ( response.data.error === 'invalid_grant' ) {
+
+            // Display error message
+            mdToast.show( mdToast.simple()
+                .content( 'Felaktigt användarnamn eller lösenord' )
+                .position( 'top right' )
+                .theme( 'warn' )
+            );
+          }
+          else if ( response.data.error === 'account_locked' ) {
+
+            // Display error message
+            mdToast.show( mdToast.simple()
+                .content( 'Du har gjort för många felaktiga inloggningar. Kontot är spärrat till och med ' + response.data.error_description )
+                .position( 'top right' )
+                .theme( 'warn' )
+            );
+          }
+
         });
     };
 

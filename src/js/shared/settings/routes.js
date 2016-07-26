@@ -49,6 +49,7 @@ angular.module( 'BookingSystem.routes',
       })
 
       .state( 'app.user-create', {
+        cache: false,
         url: '/user-create',
         views: {
           'menuContent': {
@@ -112,6 +113,7 @@ angular.module( 'BookingSystem.routes',
       })
 
       .state( 'app.meal-booking-create', {
+        cache: false,
         url: '/meal-booking-create',
         params: {
           date: null,
@@ -152,6 +154,7 @@ angular.module( 'BookingSystem.routes',
       })
 
       .state( 'app.resource-booking-create', {
+        cache: false,
         url: '/resource-booking-create',
         params: {
           date: null,
@@ -192,6 +195,7 @@ angular.module( 'BookingSystem.routes',
       })
 
       .state( 'app.location-booking-create', {
+        cache: false,
         url: '/location-booking-create',
         params: {
           date: null,
@@ -229,6 +233,7 @@ angular.module( 'BookingSystem.routes',
       })
 
       .state( 'app.furnituring-create', {
+        cache: false,
         url: '/furnituring-create',
         views: {
           'menuContent': {
@@ -261,6 +266,7 @@ angular.module( 'BookingSystem.routes',
       })
 
       .state( 'app.meal-property-create', {
+        cache: false,
         url: '/meal-property-create',
         views: {
           'menuContent': {
@@ -293,6 +299,7 @@ angular.module( 'BookingSystem.routes',
       })
 
       .state( 'app.meal-create', {
+        cache: false,
         url: '/meal-create',
         views: {
           'menuContent': {
@@ -325,6 +332,7 @@ angular.module( 'BookingSystem.routes',
       })
 
       .state( 'app.resource-create', {
+        cache: false,
         url: '/resource-create',
         views: {
           'menuContent': {
@@ -357,6 +365,7 @@ angular.module( 'BookingSystem.routes',
       })
 
       .state( 'app.customer-create', {
+        cache: false,
         url: '/customer-create',
         views: {
           'menuContent': {
@@ -389,6 +398,7 @@ angular.module( 'BookingSystem.routes',
       })
 
       .state( 'app.bookingtype-create', {
+        cache: false,
         url: '/bookingtype-create',
         views: {
           'menuContent': {
@@ -420,6 +430,7 @@ angular.module( 'BookingSystem.routes',
       })
 
       .state( 'app.location-create', {
+        cache: false,
         url: '/location-create',
         views: {
           'menuContent': {

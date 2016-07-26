@@ -160,7 +160,8 @@ angular.module( 'BookingSystem.users',
           EmailAddress: $scope.user.EmailAddress,
           CellPhoneNumber: $scope.user.CellPhoneNumber,
           ImageSrc: $scope.user.ImageSrc,
-          IsLockedOut: $scope.user.IsLockedOut
+          IsLockedOut: $scope.user.IsLockedOut,
+          PasswordHash: $scope.user.Password
         }
       ).$promise
 
@@ -300,6 +301,9 @@ angular.module( 'BookingSystem.users',
 
     /* Init vars */
     $scope.isEditMode = true;
+    $scope.user = {
+      IsLockedOut: false
+    };
 
     /* Private methods START */
 
@@ -310,12 +314,11 @@ angular.module( 'BookingSystem.users',
 
     };
 
-    /*
     const saveSuccess = () => {
 
       // Display success message
       $mdToast.show( $mdToast.simple()
-          .content( 'Användaren "' + $scope.user.Name + '" sparades med ett lyckat resultat' )
+          .content( 'Användaren "' + $scope.user.FirstName + ' ' + $scope.user.SurName + '" sparades med ett lyckat resultat' )
           .position( 'top right' )
           .theme( 'success' )
       );
@@ -323,7 +326,6 @@ angular.module( 'BookingSystem.users',
       // Redirect
       history.back();
     };
-    */
 
     /* Private Methods END */
 
@@ -336,8 +338,15 @@ angular.module( 'BookingSystem.users',
       // Save user
       User.save(
         {
-          UserId: 0,
-          Name: $scope.user.Name
+          Id: 0,
+          UserName: $scope.user.UserName,
+          FirstName: $scope.user.FirstName,
+          SurName: $scope.user.SurName,
+          EmailAddress: $scope.user.EmailAddress,
+          CellPhoneNumber: $scope.user.CellPhoneNumber,
+          ImageSrc: $scope.user.ImageSrc,
+          IsLockedOut: $scope.user.IsLockedOut,
+          PasswordHash: $scope.user.Password
         }
       ).$promise
 
@@ -347,20 +356,28 @@ angular.module( 'BookingSystem.users',
           if ( typeof $scope.user.ImageForUpload !== 'undefined' ) {
 
             // Upload image
-            uploadImage( response.UserId )
+            uploadImage( response.Id )
 
               // Image upload failed
               .error( () => {
 
                 $mdToast.show( $mdToast.simple()
-                    .content( 'Användaren "' + $scope.user.Name + '" skapades, men det gick inte att ladda upp och spara den önskade bilden.' )
+                    .content( 'Användaren "' + $scope.user.FirstName + ' ' + $scope.user.SurName + '" skapades, men det gick inte att ladda upp och spara den önskade bilden.' )
                     .position( 'top right' )
                     .theme( 'warn' )
                 );
 
                 // Redirect
                 history.back();
+              })
+
+              .then( () => {
+
+                saveSuccess();
               });
+          }
+          else {
+            saveSuccess();
           }
 
           // Something went wrong
@@ -369,8 +386,8 @@ angular.module( 'BookingSystem.users',
           // If there there was a foreign key reference
           if ( response.status === 409 ){
             $mdToast.show( $mdToast.simple()
-              .content( 'Det finns redan en användare som heter "' + $scope.user.Name +
-                '". Två användare kan inte heta lika.' )
+              .content( 'Det finns redan en användare med användarnamnet "' + $scope.user.UserName +
+                '" eller e-postadressen "' + $scope.user.EmailAddress + '"' )
               .position( 'top right' )
               .theme( 'warn' )
             );
