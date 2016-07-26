@@ -253,7 +253,6 @@ angular.module( 'BookingSystem.authService',
                 .theme( 'warn' )
             );
           }
-
         });
     };
 
