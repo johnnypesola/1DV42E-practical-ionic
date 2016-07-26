@@ -59,11 +59,14 @@ namespace BookingSystemAuth.Providers
             if (passwordResult != PasswordVerificationResult.Success)
             {
                 // Increase failed login attempt
-                IdentityResult result = await userManager.AccessFailedAsync(user.Id);
+                await userManager.AccessFailedAsync(user.Id);
 
                 context.SetError("invalid_grant", "The user name or password is incorrect.");
                 return;
             }
+
+            // Login was successful
+            userManager.ResetAccessFailedCount(user.Id);
 
             ClaimsIdentity oAuthIdentity = await user.GenerateUserIdentityAsync(userManager,
                OAuthDefaults.AuthenticationType);
