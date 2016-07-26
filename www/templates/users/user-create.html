@@ -4,55 +4,161 @@
         <div class="row padding">
 
             <form name="userForm">
+
                 <div layout-gt-xs="row">
-                    <image-uploader type="User" id="{{user.UserId}}" image-src="user.ImageSrc" base64-encoded-image="user.ImageForUpload"></image-uploader>
+                    <img class="show-image" ng-src="{{API_IMG_PATH_URL + user.ImageSrc}}" ng-show="user.ImageSrc" ng-hide="isEditMode || !user.ImageSrc">
+
+                    <div ng-if="isEditMode">
+                        <div layout-gt-xs="row">
+                            <image-uploader type="User" id="{{user.Id}}" image-src="user.ImageSrc" base64-encoded-image="user.ImageForUpload"></image-uploader>
+                        </div>
+                    </div>
                 </div>
 
                 <div layout-gt-xs="row" class="pos-relative">
 
-                    <div class="validation-messages" ng-messages="userForm.name.$error">
-                        <div ng-message="required">Var god ange namn</div>
+                    <div class="validation-messages" ng-messages="userForm.firstName.$error">
+                        <div ng-message="required">Var god ange förnamn</div>
                         <div ng-message="pattern">Får endast innehålla specialtecknen: &_-.,~^@()%!</div>
                     </div>
 
                     <md-input-container class="md-block" flex-gt-xs>
-                        <label>Namn</label>
+                        <label>Förnamn</label>
                         <input
-                            ng-model="user.Name"
-                            name="name"
-                            ng-required="true"
-                            ng-pattern="TEXT_FIELD_REGEXP"
-                            maxlength="50"
-                        >
+                                ng-model="user.FirstName"
+                                ng-disabled="!isEditMode"
+                                name="firstName"
+                                ng-required="true"
+                                ng-pattern="TEXT_FIELD_REGEXP"
+                                maxlength="50"
+                                >
                     </md-input-container>
-
                 </div>
+
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="userForm.surName.$error">
+                        <div ng-message="required">Var god ange efternamn</div>
+                        <div ng-message="pattern">Får endast innehålla specialtecknen: &_-.,~^@()%!</div>
+                    </div>
+
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Efternamn</label>
+                        <input
+                                ng-model="user.SurName"
+                                ng-disabled="!isEditMode"
+                                name="surName"
+                                ng-required="true"
+                                ng-pattern="TEXT_FIELD_REGEXP"
+                                maxlength="50"
+                                >
+                    </md-input-container>
+                </div>
+
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="userForm.username.$error">
+                        <div ng-message="required">Var god ange användarnamn</div>
+                        <div ng-message="pattern">Får endast innehålla specialtecknen: &_-.,~^@()%!</div>
+                    </div>
+
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Användarnamn</label>
+                        <input
+                                ng-model="user.UserName"
+                                ng-disabled="!isEditMode"
+                                name="username"
+                                ng-required="true"
+                                ng-pattern="TEXT_FIELD_REGEXP"
+                                maxlength="50"
+                                >
+                    </md-input-container>
+                </div>
+
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="userForm.password.$error">
+                        <div ng-message="required">Var god ange lösenord</div>
+                        <div ng-message="pattern">Får endast innehålla specialtecknen: &_-.,~^@()%!</div>
+                        <div ng-message="minlength">Måste innehålla minst 6 tecken</div>
+                    </div>
+
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Lösenord</label>
+                        <input
+                                name="password"
+                                type="password"
+                                ng-required="true"
+                                ng-model="user.Password"
+                                ng-disabled="!isEditMode"
+                                ng-pattern="TEXT_FIELD_REGEXP"
+                                maxlength="50"
+                                ng-minlength="6"
+                                >
+                    </md-input-container>
+                </div>
+
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="userForm.email.$error">
+                        <div ng-message="email">Ange en giltig e-postadress</div>
+                    </div>
+
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>E-postadress</label>
+                        <input
+                                name="email"
+                                type="email"
+                                ng-model="user.EmailAddress"
+                                ng-disabled="!isEditMode"
+                                maxlength="50"
+                                >
+                    </md-input-container>
+                </div>
+
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="userForm.cellPhoneNumber.$error">
+                        <div ng-message="pattern">Får endast innehålla nummer</div>
+                    </div>
+
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Mobilnummer</label>
+                        <input
+                                name="cellPhoneNumber"
+                                type="text"
+                                ng-model="user.CellPhoneNumber"
+                                ng-disabled="!isEditMode"
+                                ng-pattern="NUMERIC_SPACE_REGEXP"
+                                maxlength="20"
+                                >
+                    </md-input-container>
+                </div>
+
+                <div layout-gt-xs="row" class="pos-relative">
+                    <md-input-container class="md-block" flex-gt-xs>
+
+                        <label>Är avstängd</label>
+
+                        <md-select
+                                name="isLockedOut"
+                                ng-model="user.IsLockedOut"
+                                ng-disabled="!isEditMode"
+                                >
+                            <md-option ng-value="true">
+                                Ja
+                            </md-option>
+                            <md-option ng-value="false">
+                                Nej
+                            </md-option>
+                        </md-select>
+
+                    </md-input-container>
+                </div>
+
             </form>
-        </div>
 
-        <div layout-gt-xs="row" ng-show="user.userProperties.length">
-            <span class="faded">Måltidsegenskaper</span>
         </div>
-        <div layout-gt-xs="row">
-            <div
-                    class="custom-chip"
-                    ng-repeat="userProperty in user.userProperties"
-                    >
-                {{userProperty.UserPropertyName}}
-            </div>
-        </div>
-
-        <div layout-gt-xs="row">
-            <div class="col">
-                <md-button
-                        md-no-ink
-                        class="md-primary"
-                        ng-click="selectModal.show()"
-                >
-                <i class="icon ion-ios-nutrition"></i> Välj Måltidsegenskaper</md-button>
-            </div>
-        </div>
-
 
         <md-button
             class="md-raised md-primary"

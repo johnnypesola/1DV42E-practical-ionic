@@ -40,6 +40,12 @@ angular.module( 'BookingSystem.filters',
     };
   })
 
+  .filter( 'bool', () => {
+    return function( value ) {
+      return value ? 'ja' : 'nej';
+    };
+  })
+
   .filter( 'percentage', ['$filter', ( $filter ) => {
     return function ( input ) {
       return $filter( 'number' )( input * 100, 0 ) + '%';
