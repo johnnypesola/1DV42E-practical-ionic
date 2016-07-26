@@ -30,11 +30,34 @@ namespace BookingSystemAuth.Providers
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
             var userManager = context.OwinContext.GetUserManager<ApplicationUserManager>();
+            string givenHashedPassword = userManager.PasswordHasher.HashPassword(context.Password);
 
-            IdentityUser user = await userManager.FindAsync(context.UserName, context.Password);
+            //IdentityUser user = await userManager.FindAsync(context.UserName, context.Password);
 
-            if (user == null)
+            IdentityUser user = await userManager.FindByNameAsync(context.UserName);
+
+            // If the user is locked out
+            if(user.LockoutEndDate > DateTime.Now)
             {
+                context.SetError("account_locked", user.LockoutEndDate.ToString());
+
+                return;
+            }
+
+            // No user was found
+            if(user == null)
+            {
+                context.SetError("invalid_grant", "The user name or password is incorrect.");
+
+                return;
+            }
+
+            // Wrong password
+            if (user.PasswordHash != givenHashedPassword)
+            {
+                // Increase failed login attempt
+                IdentityResult result = await userManager.AccessFailedAsync(user.Id);
+
                 context.SetError("invalid_grant", "The user name or password is incorrect.");
                 return;
             }

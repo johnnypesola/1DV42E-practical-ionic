@@ -7,7 +7,12 @@ using System.Threading.Tasks;
 
 namespace BookingSystemAuth.Models
 {
-    public class UserStore : IUserStore<IdentityUser, int> , IUserRoleStore<IdentityUser, int>, IUserPasswordStore<IdentityUser, int>, IUserEmailStore<IdentityUser, int>
+    public class UserStore : 
+        IUserStore<IdentityUser, int>, 
+        IUserRoleStore<IdentityUser, int>,
+        IUserPasswordStore<IdentityUser, int>,
+        IUserEmailStore<IdentityUser, int>,
+        IUserLockoutStore<IdentityUser, int>
     {
         // Fields
         private UserDAL _userDAL;
@@ -242,6 +247,65 @@ namespace BookingSystemAuth.Models
             }
 
             return Task.FromResult<IList<IdentityUser>>(usersList);
+        }
+
+        public Task<DateTimeOffset> GetLockoutEndDateAsync(IdentityUser user)
+        {
+            if(user.LockoutEndDate == null)
+            {
+                user = UserDAL.GetUserById(user.Id);
+
+                if (user != null)
+                {
+                    var returnDate = (user.LockoutEndDate != null ? user.LockoutEndDate.Value : new DateTimeOffset());
+
+                    return Task.FromResult<DateTimeOffset>(returnDate);
+                }
+
+                return Task.FromResult<DateTimeOffset>(new DateTimeOffset());
+            }
+
+            return Task.FromResult<DateTimeOffset>(user.LockoutEndDate.Value);
+        }
+
+        public Task SetLockoutEndDateAsync(IdentityUser user, DateTimeOffset lockoutEnd)
+        {
+            user.LockoutEndDate = lockoutEnd.ToLocalTime().AddMinutes(10).DateTime;
+
+            return Task.FromResult<object>(null);
+        }
+
+        public Task<int> IncrementAccessFailedCountAsync(IdentityUser user)
+        {
+            user.AccessFailedCount++;
+
+            return Task.FromResult<int>(user.AccessFailedCount);
+        }
+
+        public Task ResetAccessFailedCountAsync(IdentityUser user)
+        {
+            user.AccessFailedCount = 0;
+
+            return Task.FromResult<object>(null);
+        }
+
+        public Task<int> GetAccessFailedCountAsync(IdentityUser user)
+        {
+            user = UserDAL.GetUserById(user.Id);
+
+            return Task.FromResult<int>(user.AccessFailedCount);
+        }
+
+        public Task<bool> GetLockoutEnabledAsync(IdentityUser user)
+        {
+            // Should always return true. No DataBase implementation.
+            return Task.FromResult<bool>(true);
+        }
+
+        public Task SetLockoutEnabledAsync(IdentityUser user, bool enabled)
+        {
+            // Not really implemented, since the method "GetLockoutEnabledAsync" always returns true.
+            return Task.FromResult<object>(null);
         }
     }
 }

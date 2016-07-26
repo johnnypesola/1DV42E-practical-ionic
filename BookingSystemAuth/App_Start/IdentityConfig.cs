@@ -3,6 +3,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using BookingSystemAuth.Models;
+using System;
 
 namespace BookingSystemAuth
 {
@@ -48,11 +49,18 @@ namespace BookingSystemAuth
                 RequireLowercase = false,
                 RequireUppercase = false,
             };
+
+            // Configure user lockout
+            userStore.UserLockoutEnabledByDefault = true;
+            userStore.DefaultAccountLockoutTimeSpan = TimeSpan.FromHours(1);
+            userStore.MaxFailedAccessAttemptsBeforeLockout = 10;
+
             var dataProtectionProvider = options.DataProtectionProvider;
             if (dataProtectionProvider != null)
             {
                 userStore.UserTokenProvider = new DataProtectorTokenProvider<IdentityUser, int>(dataProtectionProvider.Create("ASP.NET Identity"));
             }
+
             return userStore;
         }
     }

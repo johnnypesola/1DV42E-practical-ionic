@@ -53,6 +53,8 @@ namespace BookingSystemAuth.Models
 
         public bool IsLockedOut { get; set; }
 
+        public DateTime? LockoutEndDate { get; set; } = new DateTime();
+
         // Identity specific
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<IdentityUser, int> manager, string authenticationType)
         {

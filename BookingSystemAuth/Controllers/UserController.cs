@@ -117,8 +117,16 @@ namespace BookingSystemAuth.Controllers
                         return NotFound();
                     }
 
-                    // We should not overwrite the password in a normal update action.
-                    User.PasswordHash = userFromDB.PasswordHash;
+                    // We should not overwrite the password in a normal update action, only if a new password is set.
+                    if(User.PasswordHash.Length <= 1)
+                    {
+                        User.PasswordHash = userFromDB.PasswordHash;
+                    }
+                    else
+                    {
+                        // Hash new password
+                        User.PasswordHash = UserManager.PasswordHasher.HashPassword(User.PasswordHash);
+                    }                    
 
                     userStore.UpdateAsync(User);
                 }
