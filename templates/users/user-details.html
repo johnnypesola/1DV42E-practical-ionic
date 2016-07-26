@@ -80,6 +80,7 @@
                 <div layout-gt-xs="row" class="pos-relative">
 
                     <div class="validation-messages" ng-messages="userForm.email.$error">
+                        <div ng-message="required">Var god ange e-postadress</div>
                         <div ng-message="email">Ange en giltig e-postadress</div>
                     </div>
 
@@ -88,6 +89,7 @@
                         <input
                                 name="email"
                                 type="email"
+                                ng-required="true"
                                 ng-model="user.EmailAddress"
                                 ng-disabled="!isEditMode"
                                 maxlength="50"
