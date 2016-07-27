@@ -133,7 +133,7 @@ namespace BookingSystemAuth.Controllers
         [AcceptVerbs("DELETE")]
         public IHttpActionResult Delete(int ResourceId)
         {
-            string imageResource;
+            ImageService imageService = new ImageService();
             Resource deletedResource;
 
             try
@@ -141,14 +141,8 @@ namespace BookingSystemAuth.Controllers
                 // Delete info from database
                 deletedResource = resourceService.ResourceDelete(ResourceId);
 
-                // Get image path
-                imageResource = HttpContext.Current.Server.MapPath(String.Format(@"~/{0}", deletedResource.ImageSrc));
-                
-                // Remove uploaded file if it exists
-                if (File.Exists(@imageResource))
-                {
-                    File.Delete(@imageResource);
-                }
+                // Delete image
+                imageService.DeleteImage(deletedResource.ImageSrc);
             }
             catch (FormatException)
             {

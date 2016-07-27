@@ -16,6 +16,7 @@ namespace BookingSystemAuth.Models
     {
         // Fields
         private UserDAL _userDAL;
+        private const string ADMIN_USERNAME = "administrator";
 
         // Properties
         private UserDAL UserDAL
@@ -57,7 +58,8 @@ namespace BookingSystemAuth.Models
 
         public Task DeleteAsync(IdentityUser user)
         {
-            if(user != null)
+            // Do not delete administrator
+            if(user != null && user.UserName != null && user.UserName != ADMIN_USERNAME)
             {
                 UserDAL.DeleteUser(user.Id);
             }
@@ -240,8 +242,15 @@ namespace BookingSystemAuth.Models
         {
             List<IdentityUser> usersList = UserDAL.GetUsers().ToList();
 
+            // Remove administrator from list
+            var adminUser = usersList.SingleOrDefault(r => r.UserName == ADMIN_USERNAME);
+            if (adminUser != null)
+            {
+                usersList.Remove(adminUser);
+            }
+
             // Clear passwords. We dont want to expose theese
-            foreach( IdentityUser user in usersList)
+            foreach ( IdentityUser user in usersList)
             {
                 user.PasswordHash = String.Empty;
             }

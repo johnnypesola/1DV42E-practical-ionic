@@ -51,8 +51,6 @@ namespace BookingSystemAuth.Models
 
         public int AccessFailedCount { get; set; }
 
-        public bool IsLockedOut { get; set; }
-
         public DateTime? LockoutEndDate { get; set; } = DateTime.Now;
 
         // Identity specific

@@ -108,7 +108,7 @@ namespace BookingSystemAuth.Controllers
         [AcceptVerbs("DELETE")]
         public IHttpActionResult Delete(int MealId)
         {
-            string imageFile;
+            ImageService imageService = new ImageService();
             Meal deletedMeal;
 
             try
@@ -116,14 +116,8 @@ namespace BookingSystemAuth.Controllers
                 // Delete info from database
                 deletedMeal = mealService.MealDelete(MealId);
 
-                // Get image path
-                imageFile = HttpContext.Current.Server.MapPath(String.Format(@"~/{0}", deletedMeal.ImageSrc));
-
-                // Remove uploaded file if it exists
-                if (File.Exists(imageFile))
-                {
-                    File.Delete(imageFile);
-                }
+                // Delete image
+                imageService.DeleteImage(deletedMeal.ImageSrc);
             }
             catch (FormatException)
             {

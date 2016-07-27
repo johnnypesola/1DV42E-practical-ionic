@@ -134,7 +134,7 @@ namespace BookingSystemAuth.Controllers
         [AcceptVerbs("DELETE")]
         public IHttpActionResult Delete(int CustomerId)
         {
-            string imageFile;
+            ImageService imageService = new ImageService();
             Customer deletedCustomer;
 
             try
@@ -142,14 +142,8 @@ namespace BookingSystemAuth.Controllers
                 // Delete info from database
                 deletedCustomer = customerService.DeleteCustomer(CustomerId);
 
-                // Get image path
-                imageFile = HttpContext.Current.Server.MapPath(String.Format(@"~/{0}", deletedCustomer.ImageSrc));
-
-                // Remove uploaded file if it exists
-                if (File.Exists(imageFile))
-                {
-                    File.Delete(imageFile);
-                }
+                // Delete image
+                imageService.DeleteImage(deletedCustomer.ImageSrc);
 
             }
             catch (FormatException)

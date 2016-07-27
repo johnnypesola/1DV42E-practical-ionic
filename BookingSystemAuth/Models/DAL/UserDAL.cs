@@ -80,7 +80,6 @@ namespace BookingSystemAuth.Models
                                 CellPhoneNumber = reader.GetSafeString(reader.GetOrdinal("CellPhoneNumber")),
                                 ImageSrc = reader.GetSafeString(reader.GetOrdinal("ImageSrc")),
                                 AccessFailedCount = reader.GetSafeInt32(reader.GetOrdinal("AccessFailedCount")),
-                                IsLockedOut = reader.GetBoolean(reader.GetOrdinal("IsLockedOut")),
                                 LockoutEndDate = reader.GetSafeDateTime(reader.GetOrdinal("LockoutEndDate"))
                             };
                         }
@@ -132,7 +131,6 @@ namespace BookingSystemAuth.Models
                                 CellPhoneNumber = reader.GetSafeString(reader.GetOrdinal("CellPhoneNumber")),
                                 ImageSrc = reader.GetSafeString(reader.GetOrdinal("ImageSrc")),
                                 AccessFailedCount = reader.GetSafeInt32(reader.GetOrdinal("AccessFailedCount")),
-                                IsLockedOut = reader.GetBoolean(reader.GetOrdinal("IsLockedOut")),
                                 LockoutEndDate = reader.GetSafeDateTime(reader.GetOrdinal("LockoutEndDate"))
                             };
                         }
@@ -184,7 +182,6 @@ namespace BookingSystemAuth.Models
                                 CellPhoneNumber = reader.GetSafeString(reader.GetOrdinal("CellPhoneNumber")),
                                 ImageSrc = reader.GetSafeString(reader.GetOrdinal("ImageSrc")),
                                 AccessFailedCount = reader.GetSafeInt32(reader.GetOrdinal("AccessFailedCount")),
-                                IsLockedOut = reader.GetBoolean(reader.GetOrdinal("IsLockedOut")),
                                 LockoutEndDate = reader.GetSafeDateTime(reader.GetOrdinal("LockoutEndDate"))
                             };
                         }
@@ -234,7 +231,6 @@ namespace BookingSystemAuth.Models
                                 CellPhoneNumber = reader.GetSafeString(reader.GetOrdinal("CellPhoneNumber")),
                                 ImageSrc = reader.GetSafeString(reader.GetOrdinal("ImageSrc")),
                                 AccessFailedCount = reader.GetSafeInt32(reader.GetOrdinal("AccessFailedCount")),
-                                IsLockedOut = reader.GetBoolean(reader.GetOrdinal("IsLockedOut")),
                                 LockoutEndDate = reader.GetSafeDateTime(reader.GetOrdinal("LockoutEndDate"))
                             });
                         }
@@ -274,7 +270,6 @@ namespace BookingSystemAuth.Models
                     cmd.Parameters.Add("@CellPhoneNumber", SqlDbType.VarChar, 20).Value = User.CellPhoneNumber;
                     cmd.Parameters.Add("@ImageSrc", SqlDbType.VarChar, 50).Value = User.ImageSrc;
                     cmd.Parameters.Add("@AccessFailedCount", SqlDbType.Int).Value = User.AccessFailedCount;
-                    cmd.Parameters.Add("@IsLockedOut", SqlDbType.Bit).Value = User.IsLockedOut;
                     cmd.Parameters.Add("@LockoutEndDate", SqlDbType.SmallDateTime).Value = User.LockoutEndDate;
 
                     // Add out parameter for Stored procedure
@@ -323,7 +318,6 @@ namespace BookingSystemAuth.Models
                     cmd.Parameters.Add("@CellPhoneNumber", SqlDbType.VarChar, 20).Value = User.CellPhoneNumber;
                     cmd.Parameters.Add("@ImageSrc", SqlDbType.VarChar, 50).Value = User.ImageSrc;
                     cmd.Parameters.Add("@AccessFailedCount", SqlDbType.Int).Value = User.AccessFailedCount;
-                    cmd.Parameters.Add("@IsLockedOut", SqlDbType.Bit).Value = User.IsLockedOut;
                     cmd.Parameters.Add("@LockoutEndDate", SqlDbType.SmallDateTime).Value = User.LockoutEndDate;
 
                     // Open DB connection

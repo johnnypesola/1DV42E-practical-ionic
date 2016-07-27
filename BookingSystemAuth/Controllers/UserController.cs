@@ -118,7 +118,7 @@ namespace BookingSystemAuth.Controllers
                     }
 
                     // We should not overwrite the password in a normal update action, only if a new password is set.
-                    if(User.PasswordHash.Length <= 1)
+                    if(User.PasswordHash == null || User.PasswordHash.Length <= 1)
                     {
                         User.PasswordHash = userFromDB.PasswordHash;
                     }
@@ -222,7 +222,7 @@ namespace BookingSystemAuth.Controllers
         [AcceptVerbs("DELETE")]
         public IHttpActionResult Delete(int UserId)
         {
-            string imageUser;
+            ImageService imageService = new ImageService();
 
             try
             {
@@ -235,14 +235,8 @@ namespace BookingSystemAuth.Controllers
                 // Delete info from database
                 userStore.DeleteAsync(User);
 
-                // Get image path
-                imageUser = HttpContext.Current.Server.MapPath(String.Format(@"~/{0}", User.ImageSrc));
-
-                // Remove uploaded file if it exists
-                if (File.Exists(@imageUser))
-                {
-                    File.Delete(@imageUser);
-                }
+                // Delete image
+                imageService.DeleteImage(User.ImageSrc);
             }
             catch (FormatException)
             {

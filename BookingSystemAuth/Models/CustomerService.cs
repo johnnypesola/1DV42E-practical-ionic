@@ -88,37 +88,22 @@ namespace BookingSystemAuth.Models
             // Preparare validation return data
             ICollection<ValidationResult> validationResults;
 
-            // Try to validate given data
-            if(customer.Validate(out validationResults))
+            // If a new customer should be created
+            if(customer.CustomerId == 0)
             {
-                // If a new customer should be created
-                if(customer.CustomerId == 0)
-                {
-                    CustomerDAL.InsertCustomer(customer);
-                }
-                // Existing customer should be updated
-                else
-                {
-                    // Check that the customer exists before update
-                    if(CustomerDAL.GetCustomerById(customer.CustomerId) == null)
-                    {
-                        throw new ApplicationException(String.Format("Kunden {0} som skulle uppdateras är tyvärr borttagen.", customer.Name));
-                    }
-
-                    // Update existing customer
-                    CustomerDAL.UpdateCustomer(customer);
-                }
+                CustomerDAL.InsertCustomer(customer);
             }
-            // Validation failed
+            // Existing customer should be updated
             else
             {
-                // Create exception
-                ApplicationException exception = new ApplicationException("Kundobjektet innehöll felaktiga värden. Var god försök igen.");
-                
-                // Add validation data to exception.
-                exception.Data.Add("ValidationResults", validationResults);
+                // Check that the customer exists before update
+                if(CustomerDAL.GetCustomerById(customer.CustomerId) == null)
+                {
+                    throw new ApplicationException(String.Format("Kunden {0} som skulle uppdateras är tyvärr borttagen.", customer.Name));
+                }
 
-                throw exception;
+                // Update existing customer
+                CustomerDAL.UpdateCustomer(customer);
             }
         }
     }
