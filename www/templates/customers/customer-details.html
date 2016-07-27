@@ -7,7 +7,12 @@
 
             <form name="customerForm">
                 <div layout-gt-xs="row">
-                    <img class="show-image" ng-src="{{API_IMG_PATH_URL + customer.ImageSrc}}" ng-show="isImgVisible" ng-hide="isEditMode || !customer.ImageSrc" show-on-load>
+                    <img
+                        class="show-image"
+                        ng-src="{{API_IMG_PATH_URL + customer.ImageSrc}}"
+                        ng-show="isImgVisible"
+                        ng-hide="isEditMode || !customer.ImageSrc"
+                    >
 
                     <div ng-if="isEditMode">
                         <image-uploader type="Customer" id="{{customer.CustomerId}}" image-src="customer.ImageSrc" base64-encoded-image="customer.ImageForUpload"></image-uploader>

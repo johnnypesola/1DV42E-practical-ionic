@@ -7,9 +7,10 @@ angular.module( 'BookingSystem.users',
   )
 
   //Controller
-  .controller( 'UsersListCtrl', [ '$rootScope', '$scope', '$state', 'User', '$mdToast', ( $rootScope, $scope, $state, User, $mdToast ) => {
+  .controller( 'UsersListCtrl', [ '$rootScope', '$scope', '$state', 'User', '$mdToast', 'API_IMG_PATH_URL', ( $rootScope, $scope, $state, User, $mdToast, API_IMG_PATH_URL ) => {
 
     /* Init vars */
+    $scope.API_IMG_PATH_URL = API_IMG_PATH_URL;
 
     /* Private methods START */
 

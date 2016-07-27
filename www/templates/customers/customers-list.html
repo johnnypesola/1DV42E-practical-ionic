@@ -1,10 +1,13 @@
 <ion-view view-title="Kunder">
     <ion-content>
-        <ion-list>
-            <ion-item ng-repeat="customer in customers" href="#/app/customer-details/{{customer.CustomerId}}">
-                {{customer.Name}}
-            </ion-item>
-        </ion-list>
+
+        <md-list>
+            <md-list-item ng-repeat="customer in customers" href="#/app/customer-details/{{customer.CustomerId}}" class="noright">
+                <img ng-src="{{ API_IMG_PATH_URL + customer.ImageSrc | thumbnail }}" class="md-avatar" ng-if="customer.ImageSrc" />
+                <img src="img/photo_missing.svg" class="md-avatar" ng-if="!customer.ImageSrc">
+                <p>{{ customer.Name }}</p>
+            </md-list-item>
+        </md-list>
 
     </ion-content>
 

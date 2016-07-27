@@ -9,9 +9,10 @@ angular.module( 'BookingSystem.customers',
   )
 
   // List controller
-  .controller( 'CustomersListCtrl', [ '$rootScope', '$scope', '$state', 'Customer', '$mdToast', ( $rootScope, $scope, $state, Customer, $mdToast ) => {
+  .controller( 'CustomersListCtrl', [ '$rootScope', '$scope', '$state', 'Customer', '$mdToast', 'API_IMG_PATH_URL', ( $rootScope, $scope, $state, Customer, $mdToast, API_IMG_PATH_URL ) => {
 
     /* Init vars */
+    $scope.API_IMG_PATH_URL = API_IMG_PATH_URL;
 
     /* Private methods START */
 

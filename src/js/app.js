@@ -53,6 +53,7 @@ const BookingSystem = angular
     'BookingSystem.imageUploaderDirective',
     'BookingSystem.ngMinMaxDirectives',
     'BookingSystem.calendarDayDirective',
+    'BookingSystem.imageShowOnLoadDirective',
 
     // Filters
     'BookingSystem.filters'

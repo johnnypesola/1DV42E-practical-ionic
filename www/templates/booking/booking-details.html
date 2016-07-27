@@ -13,7 +13,12 @@
 
                     <div class="item item-avatar">
 
-                        <img class="top-35" ng-src="{{ customerImageSrc }}">
+                        <img
+                            class="top-35"
+                            ng-src="{{ customerImageSrc }}"
+                            show-on-load
+                            ng-show="imageVisible"
+                        >
 
                         <md-input-container class="md-block">
 

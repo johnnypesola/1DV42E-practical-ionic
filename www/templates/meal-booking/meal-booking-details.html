@@ -4,7 +4,11 @@
         <div class="list">
 
             <div class="item item-avatar">
-                <img src="{{ API_IMG_PATH_URL + customer.ImageSrc }}">
+                <img
+                    src="{{ API_IMG_PATH_URL + customer.ImageSrc }}"
+                    show-on-load
+                    ng-show="imageVisible"
+                >
                 <span class="label rel-t-5">Kund</span>
                 <h2 class="rel-t-5">{{customer.Name}}</h2>
             </div>
