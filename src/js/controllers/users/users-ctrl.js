@@ -256,7 +256,7 @@ angular.module( 'BookingSystem.users',
           ){
             $mdToast.show( $mdToast.simple()
                 .content( 'Användaren kan inte raderas eftersom det finns' +
-                ' en lokalbokning, resursbokning eller måltidsbokning som refererar till användaren' )
+                ' en eller flera bokningar som refererar till användaren' )
                 .position( 'top right' )
                 .theme( 'warn' )
             );
@@ -310,11 +310,11 @@ angular.module( 'BookingSystem.users',
 
     };
 
-    const saveSuccess = () => {
+    const saveSuccess = ( user ) => {
 
       // Display success message
       $mdToast.show( $mdToast.simple()
-          .content( 'Användaren "' + $scope.user.FirstName + ' ' + $scope.user.SurName + '" sparades med ett lyckat resultat' )
+          .content( 'Användaren "' + user.FirstName + ' ' + user.SurName + '" sparades med ett lyckat resultat' )
           .position( 'top right' )
           .theme( 'success' )
       );
@@ -368,11 +368,11 @@ angular.module( 'BookingSystem.users',
 
               .then( () => {
 
-                saveSuccess();
+                saveSuccess( $scope.user );
               });
           }
           else {
-            saveSuccess();
+            saveSuccess( $scope.user );
           }
 
           // Something went wrong
@@ -390,6 +390,7 @@ angular.module( 'BookingSystem.users',
 
           // If there was a problem with the in-data
           else {
+
             $mdToast.show( $mdToast.simple()
               .content( 'Ett oväntat fel uppstod när användaren skulle sparas' )
               .position( 'top right' )
