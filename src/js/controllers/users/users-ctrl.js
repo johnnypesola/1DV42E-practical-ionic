@@ -160,7 +160,6 @@ angular.module( 'BookingSystem.users',
           EmailAddress: $scope.user.EmailAddress,
           CellPhoneNumber: $scope.user.CellPhoneNumber,
           ImageSrc: $scope.user.ImageSrc,
-          IsLockedOut: $scope.user.IsLockedOut,
           PasswordHash: $scope.user.Password
         }
       ).$promise
@@ -301,9 +300,6 @@ angular.module( 'BookingSystem.users',
 
     /* Init vars */
     $scope.isEditMode = true;
-    $scope.user = {
-      IsLockedOut: false
-    };
 
     /* Private methods START */
 
@@ -345,7 +341,6 @@ angular.module( 'BookingSystem.users',
           EmailAddress: $scope.user.EmailAddress,
           CellPhoneNumber: $scope.user.CellPhoneNumber,
           ImageSrc: $scope.user.ImageSrc,
-          IsLockedOut: $scope.user.IsLockedOut,
           PasswordHash: $scope.user.Password
         }
       ).$promise

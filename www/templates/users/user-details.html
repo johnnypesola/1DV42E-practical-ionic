@@ -137,27 +137,6 @@
                     </md-input-container>
                 </div>
 
-                <div layout-gt-xs="row" class="pos-relative">
-                    <md-input-container class="md-block" flex-gt-xs>
-
-                        <label>Är avstängd</label>
-
-                        <md-select
-                                name="isLockedOut"
-                                ng-model="user.IsLockedOut"
-                                ng-disabled="!isEditMode"
-                                >
-                            <md-option ng-value="true">
-                                Ja
-                            </md-option>
-                            <md-option ng-value="false">
-                                Nej
-                            </md-option>
-                        </md-select>
-
-                    </md-input-container>
-                </div>
-
                 <h5><span class="faded">Antal felaktiga inloggningar</span></h5>
                 <p>{{user.AccessFailedCount | count}}</p>
 
