@@ -1,11 +1,11 @@
-<ion-view view-title="Användare">
+<ion-view view-title="Dina uppgifter">
     <ion-content padding="true">
 
-        <h1>{{user.FirstName}} {{user.SurName}}</h1>
+        <h1>Mina uppgifter</h1>
 
         <div class="row padding">
 
-            <form name="userForm">
+            <form name="accountForm">
 
                 <div layout-gt-xs="row">
                     <img class="show-image" ng-src="{{API_IMG_PATH_URL + user.ImageSrc}}" ng-show="user.ImageSrc" ng-hide="isEditMode || !user.ImageSrc">
@@ -19,7 +19,7 @@
 
                 <div layout-gt-xs="row" class="pos-relative">
 
-                    <div class="validation-messages" ng-messages="userForm.firstName.$error">
+                    <div class="validation-messages" ng-messages="accountForm.firstName.$error">
                         <div ng-message="required">Var god ange förnamn</div>
                         <div ng-message="pattern">Får endast innehålla specialtecknen: &_-.,~^@()%!</div>
                     </div>
@@ -39,7 +39,7 @@
 
                 <div layout-gt-xs="row" class="pos-relative">
 
-                    <div class="validation-messages" ng-messages="userForm.surName.$error">
+                    <div class="validation-messages" ng-messages="accountForm.surName.$error">
                         <div ng-message="required">Var god ange efternamn</div>
                         <div ng-message="pattern">Får endast innehålla specialtecknen: &_-.,~^@()%!</div>
                     </div>
@@ -59,7 +59,7 @@
 
                 <div layout-gt-xs="row" class="pos-relative">
 
-                    <div class="validation-messages" ng-messages="userForm.username.$error">
+                    <div class="validation-messages" ng-messages="accountForm.username.$error">
                         <div ng-message="required">Var god ange användarnamn</div>
                         <div ng-message="pattern">Får endast innehålla specialtecknen: &_-.,~^@()%!</div>
                     </div>
@@ -79,7 +79,7 @@
 
                 <div layout-gt-xs="row" class="pos-relative">
 
-                    <div class="validation-messages" ng-messages="userForm.email.$error">
+                    <div class="validation-messages" ng-messages="accountForm.email.$error">
                         <div ng-message="required">Var god ange e-postadress</div>
                         <div ng-message="email">Ange en giltig e-postadress</div>
                     </div>
@@ -99,7 +99,7 @@
 
                 <div layout-gt-xs="row" class="pos-relative">
 
-                    <div class="validation-messages" ng-messages="userForm.cellPhoneNumber.$error">
+                    <div class="validation-messages" ng-messages="accountForm.cellPhoneNumber.$error">
                         <div ng-message="pattern">Får endast innehålla nummer</div>
                     </div>
 
@@ -118,7 +118,7 @@
 
                 <div layout-gt-xs="row" class="pos-relative">
 
-                    <div class="validation-messages" ng-messages="userForm.password.$error">
+                    <div class="validation-messages" ng-messages="accountForm.newPassword.$error">
                         <div ng-message="pattern">Får endast innehålla specialtecknen: &_-.,~^@()%!</div>
                         <div ng-message="minlength">Måste innehålla minst 6 tecken</div>
                     </div>
@@ -126,9 +126,9 @@
                     <md-input-container class="md-block" flex-gt-xs>
                         <label>Nytt lösenord</label>
                         <input
-                                name="password"
+                                name="newPassword"
                                 type="password"
-                                ng-model="user.Password"
+                                ng-model="user.NewPassword"
                                 ng-disabled="!isEditMode"
                                 ng-pattern="TEXT_FIELD_REGEXP"
                                 maxlength="50"
@@ -137,42 +137,54 @@
                     </md-input-container>
                 </div>
 
-                <h5><span class="faded">Antal felaktiga inloggningar</span></h5>
-                <p>{{user.AccessFailedCount | count}}</p>
+                <div layout-gt-xs="row" class="pos-relative">
+
+                    <div class="validation-messages" ng-messages="accountForm.oldPassword.$error">
+                        <div ng-message="required">Var god ange befintligt lösenord</div>
+                        <div ng-message="pattern">Får endast innehålla specialtecknen: &_-.,~^@()%!</div>
+                        <div ng-message="minlength">Måste innehålla minst 6 tecken</div>
+                    </div>
+
+                    <md-input-container class="md-block" flex-gt-xs>
+                        <label>Befintligt lösenord</label>
+                        <input
+                                name="oldPassword"
+                                type="password"
+                                ng-model="user.CurrentPassword"
+                                ng-required="true"
+                                ng-disabled="!isEditMode"
+                                ng-pattern="TEXT_FIELD_REGEXP"
+                                maxlength="50"
+                                ng-minlength="6"
+                                >
+                    </md-input-container>
+                </div>
 
             </form>
         </div>
 
+        <div class="edit-buttons-container">
+
+            <md-button
+                    ng-show="isEditMode"
+                    ng-click="abortEditMode()"
+                    class="md-raised"
+                    >
+                Avbryt
+            </md-button>
+
+            <md-button
+                    ng-show="isEditMode"
+                    class="md-raised md-primary"
+                    ng-click="saveUser()"
+                    ng-disabled="accountForm.$invalid"
+                    >
+                Spara
+            </md-button>
+
+        </div>
+
     </ion-content>
-
-    <div class="edit-buttons-container">
-
-        <md-button
-                ng-show="isEditMode"
-                ng-click="abortEditMode()"
-                class="md-raised"
-                >
-            Avbryt
-        </md-button>
-
-        <md-button
-                ng-show="isEditMode"
-                class="md-raised md-primary"
-                ng-click="saveUser()"
-                ng-disabled="userForm.$invalid"
-                >
-            Spara
-        </md-button>
-
-        <md-button
-                ng-show="isEditMode"
-                class="md-fab md-mini md-warn"
-                ng-click="deleteModal.show()"
-                >
-            <span class="icon ion-trash-a md-medium-icon"></span>
-        </md-button>
-
-    </div>
 
     <md-button
             class="md-fab md-warn md-lower-right-button"

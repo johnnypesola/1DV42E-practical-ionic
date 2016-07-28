@@ -69,7 +69,7 @@
                                 ng-disabled="!isEditMode"
                                 name="username"
                                 ng-required="true"
-                                ng-pattern="TEXT_FIELD_REGEXP"
+                                ng-pattern="USERNAME_REGEXP"
                                 maxlength="50"
                                 >
                     </md-input-container>
@@ -132,27 +132,6 @@
                                 ng-pattern="NUMERIC_SPACE_REGEXP"
                                 maxlength="20"
                                 >
-                    </md-input-container>
-                </div>
-
-                <div layout-gt-xs="row" class="pos-relative">
-                    <md-input-container class="md-block" flex-gt-xs>
-
-                        <label>Är avstängd</label>
-
-                        <md-select
-                                name="isLockedOut"
-                                ng-model="user.IsLockedOut"
-                                ng-disabled="!isEditMode"
-                                >
-                            <md-option ng-value="true">
-                                Ja
-                            </md-option>
-                            <md-option ng-value="false">
-                                Nej
-                            </md-option>
-                        </md-select>
-
                     </md-input-container>
                 </div>
 
