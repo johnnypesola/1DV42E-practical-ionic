@@ -36,7 +36,6 @@ namespace BookingSystemAuth.Models
 
         public bool EmailAddressConfirmed { get; set; }
 
-        //[Required(ErrorMessage = "PasswordHash is required.")]
         [DataType(DataType.Password)]
         [StringLength(256, ErrorMessage = "PasswordHash string length surpassed the limit of 256.")]
         public string PasswordHash { get; set; }
@@ -52,6 +51,10 @@ namespace BookingSystemAuth.Models
         public int AccessFailedCount { get; set; }
 
         public DateTime? LockoutEndDate { get; set; } = DateTime.Now;
+
+        [DataType(DataType.Password)]
+        [StringLength(256, ErrorMessage = "CurrentPasswordHash string length surpassed the limit of 256.")]
+        public string CurrentPasswordHash { get; set; }
 
         // Identity specific
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<IdentityUser, int> manager, string authenticationType)

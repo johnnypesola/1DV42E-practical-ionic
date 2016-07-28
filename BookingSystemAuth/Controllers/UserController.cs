@@ -63,6 +63,12 @@ namespace BookingSystemAuth.Controllers
                     return NotFound();
                 }
 
+                // Clear passwords. We dont want to expose theese
+                foreach (IdentityUser user in Users)
+                {
+                    user.PasswordHash = String.Empty;
+                }
+
                 return Ok(Users);
             }
             catch
@@ -83,6 +89,10 @@ namespace BookingSystemAuth.Controllers
                 {
                     return NotFound();
                 }
+
+                // Hide Password hash
+                User.PasswordHash = String.Empty;
+
                 return Ok(User);
             }
             catch

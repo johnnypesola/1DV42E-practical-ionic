@@ -119,6 +119,7 @@ namespace BookingSystemAuth.Providers
         {
             IDictionary<string, string> data = new Dictionary<string, string>
             {
+                { "Id", user.Id.ToString() },
                 { "UserName", user.UserName },
                 { "FirstName", user.FirstName },
                 { "SurName", user.SurName },
