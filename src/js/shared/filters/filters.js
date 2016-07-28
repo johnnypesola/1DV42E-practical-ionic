@@ -46,6 +46,26 @@ angular.module( 'BookingSystem.filters',
     };
   })
 
+  .filter( 'listLetterIcon', () => {
+    return function( value ) {
+      return value.charAt( 0 ).toUpperCase();
+    };
+  })
+
+  .filter( 'thumbnail', [ 'THUMBNAIL_EXTENSION', ( THUMBNAIL_EXTENSION ) => {
+    return function( value ) {
+
+      const fileNamePartsArray = value.split( '.' );
+
+      const spliceIndex = fileNamePartsArray.length - 1;
+
+      fileNamePartsArray.splice( spliceIndex, 0, THUMBNAIL_EXTENSION );
+
+      return fileNamePartsArray.join( '.' );
+    };
+  }]
+  )
+
   .filter( 'percentage', ['$filter', ( $filter ) => {
     return function ( input ) {
       return $filter( 'number' )( input * 100, 0 ) + '%';

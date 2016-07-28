@@ -12,6 +12,7 @@ angular.module( 'BookingSystem.constants',
   .constant( 'UPLOAD_IMG_MAX_WIDTH', '300' )
   .constant( 'UPLOAD_IMG_MAX_HEIGHT', '300' )
   .constant( 'PHOTO_MISSING_SRC', 'img/photo_missing.svg' )
+  .constant( 'THUMBNAIL_EXTENSION', 'thumbnail' )
   .constant( 'DEFAULT_MAP_ZOOM', 5 )
   .constant( 'DEFAULT_LATITUDE', 67.2792 )
   .constant( 'DEFAULT_LONGITUDE', 4.2361 )

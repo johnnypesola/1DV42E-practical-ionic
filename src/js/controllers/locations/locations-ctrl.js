@@ -25,9 +25,10 @@ angular.module( 'BookingSystem.locations',
   )
 
   // Controller
-  .controller( 'LocationsListCtrl', [ '$rootScope', '$scope', '$state', '$mdToast', 'Location', ( $rootScope, $scope, $state, $mdToast, Location ) => {
+  .controller( 'LocationsListCtrl', [ '$rootScope', '$scope', '$state', '$mdToast', 'Location', 'API_IMG_PATH_URL', ( $rootScope, $scope, $state, $mdToast, Location, API_IMG_PATH_URL ) => {
 
     /* Init vars */
+    $scope.API_IMG_PATH_URL = API_IMG_PATH_URL;
 
     /* Private methods START */
 

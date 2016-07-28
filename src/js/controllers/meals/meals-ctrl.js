@@ -7,9 +7,10 @@ angular.module( 'BookingSystem.meals',
   )
 
   //Controller
-  .controller( 'MealsListCtrl', [ '$rootScope', '$scope', '$state', 'Meal', '$mdToast', ( $rootScope, $scope, $state, Meal, $mdToast ) => {
+  .controller( 'MealsListCtrl', [ '$rootScope', '$scope', '$state', 'Meal', '$mdToast', 'API_IMG_PATH_URL', ( $rootScope, $scope, $state, Meal, $mdToast, API_IMG_PATH_URL ) => {
 
     /* Init vars */
+    $scope.API_IMG_PATH_URL = API_IMG_PATH_URL;
 
     /* Private methods START */
 

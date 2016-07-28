@@ -26,6 +26,19 @@ angular.module( 'BookingSystem.routes',
         }
       })
 
+      // Account
+
+      .state( 'app.account', {
+        cache: false,
+        url: '/account',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/account/account.html',
+            controller: 'AccountCtrl'
+          }
+        }
+      })
+
       // Users
 
       .state( 'app.users-list', {

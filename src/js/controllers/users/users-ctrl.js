@@ -7,9 +7,10 @@ angular.module( 'BookingSystem.users',
   )
 
   //Controller
-  .controller( 'UsersListCtrl', [ '$rootScope', '$scope', '$state', 'User', '$mdToast', ( $rootScope, $scope, $state, User, $mdToast ) => {
+  .controller( 'UsersListCtrl', [ '$rootScope', '$scope', '$state', 'User', '$mdToast', 'API_IMG_PATH_URL', ( $rootScope, $scope, $state, User, $mdToast, API_IMG_PATH_URL ) => {
 
     /* Init vars */
+    $scope.API_IMG_PATH_URL = API_IMG_PATH_URL;
 
     /* Private methods START */
 
@@ -160,7 +161,6 @@ angular.module( 'BookingSystem.users',
           EmailAddress: $scope.user.EmailAddress,
           CellPhoneNumber: $scope.user.CellPhoneNumber,
           ImageSrc: $scope.user.ImageSrc,
-          IsLockedOut: $scope.user.IsLockedOut,
           PasswordHash: $scope.user.Password
         }
       ).$promise
@@ -257,7 +257,7 @@ angular.module( 'BookingSystem.users',
           ){
             $mdToast.show( $mdToast.simple()
                 .content( 'Användaren kan inte raderas eftersom det finns' +
-                ' en lokalbokning, resursbokning eller måltidsbokning som refererar till användaren' )
+                ' en eller flera bokningar som refererar till användaren' )
                 .position( 'top right' )
                 .theme( 'warn' )
             );
@@ -301,9 +301,6 @@ angular.module( 'BookingSystem.users',
 
     /* Init vars */
     $scope.isEditMode = true;
-    $scope.user = {
-      IsLockedOut: false
-    };
 
     /* Private methods START */
 
@@ -314,11 +311,11 @@ angular.module( 'BookingSystem.users',
 
     };
 
-    const saveSuccess = () => {
+    const saveSuccess = ( user ) => {
 
       // Display success message
       $mdToast.show( $mdToast.simple()
-          .content( 'Användaren "' + $scope.user.FirstName + ' ' + $scope.user.SurName + '" sparades med ett lyckat resultat' )
+          .content( 'Användaren "' + user.FirstName + ' ' + user.SurName + '" sparades med ett lyckat resultat' )
           .position( 'top right' )
           .theme( 'success' )
       );
@@ -345,7 +342,6 @@ angular.module( 'BookingSystem.users',
           EmailAddress: $scope.user.EmailAddress,
           CellPhoneNumber: $scope.user.CellPhoneNumber,
           ImageSrc: $scope.user.ImageSrc,
-          IsLockedOut: $scope.user.IsLockedOut,
           PasswordHash: $scope.user.Password
         }
       ).$promise
@@ -373,11 +369,11 @@ angular.module( 'BookingSystem.users',
 
               .then( () => {
 
-                saveSuccess();
+                saveSuccess( $scope.user );
               });
           }
           else {
-            saveSuccess();
+            saveSuccess( $scope.user );
           }
 
           // Something went wrong
@@ -395,6 +391,7 @@ angular.module( 'BookingSystem.users',
 
           // If there was a problem with the in-data
           else {
+
             $mdToast.show( $mdToast.simple()
               .content( 'Ett oväntat fel uppstod när användaren skulle sparas' )
               .position( 'top right' )

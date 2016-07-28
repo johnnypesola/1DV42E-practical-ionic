@@ -7,7 +7,12 @@
 
             <form name="customerForm">
                 <div layout-gt-xs="row">
-                    <img class="show-image" ng-src="{{API_IMG_PATH_URL + customer.ImageSrc}}" ng-show="isImgVisible" ng-hide="isEditMode || !customer.ImageSrc" show-on-load>
+                    <img
+                        class="show-image"
+                        ng-src="{{API_IMG_PATH_URL + customer.ImageSrc}}"
+                        ng-show="isImgVisible"
+                        ng-hide="isEditMode || !customer.ImageSrc"
+                    >
 
                     <div ng-if="isEditMode">
                         <image-uploader type="Customer" id="{{customer.CustomerId}}" image-src="customer.ImageSrc" base64-encoded-image="customer.ImageForUpload"></image-uploader>
@@ -194,37 +199,36 @@
             </form>
         </div>
 
+        <div class="edit-buttons-container">
+
+            <md-button
+                    ng-show="isEditMode"
+                    ng-click="abortEditMode()"
+                    class="md-raised"
+                    >
+                Avbryt
+            </md-button>
+
+            <md-button
+                    ng-show="isEditMode"
+                    class="md-raised md-primary"
+                    ng-click="saveCustomer()"
+                    ng-disabled="customerForm.$invalid"
+                    >
+                Spara
+            </md-button>
+
+            <md-button
+                    ng-show="isEditMode"
+                    class="md-fab md-mini md-warn"
+                    ng-click="modal.show()"
+                    >
+                <span class="icon ion-trash-a md-medium-icon"></span>
+            </md-button>
+
+        </div>
+
     </ion-content>
-
-    <div class="edit-buttons-container">
-
-        <md-button
-                ng-show="isEditMode"
-                ng-click="abortEditMode()"
-                class="md-raised"
-                >
-            Avbryt
-        </md-button>
-
-        <md-button
-                ng-show="isEditMode"
-                class="md-raised md-primary"
-                ng-click="saveCustomer()"
-                ng-disabled="customerForm.$invalid"
-                >
-            Spara
-        </md-button>
-
-        <md-button
-                ng-show="isEditMode"
-                class="md-fab md-mini md-warn"
-                ng-click="modal.show()"
-                >
-            <span class="icon ion-trash-a md-medium-icon"></span>
-        </md-button>
-
-
-    </div>
 
     <md-button
             class="md-fab md-warn md-lower-right-button"

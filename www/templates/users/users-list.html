@@ -1,10 +1,13 @@
 <ion-view view-title="Användare">
     <ion-content>
-        <ion-list>
-            <ion-item ng-repeat="user in users" href="#/app/user-details/{{user.Id}}">
-                {{user.FirstName}} {{user.SurName}} ({{user.UserName}})
-            </ion-item>
-        </ion-list>
+
+        <md-list>
+            <md-list-item ng-repeat="user in users" href="#/app/user-details/{{user.Id}}" class="noright">
+                <img ng-src="{{ API_IMG_PATH_URL + user.ImageSrc | thumbnail }}" class="md-avatar" ng-if="user.ImageSrc" />
+                <img src="img/photo_missing.svg" class="md-avatar" ng-if="!user.ImageSrc">
+                <p>{{user.FirstName}} {{user.SurName}} ({{user.UserName}})</p>
+            </md-list-item>
+        </md-list>
 
     </ion-content>
 
