@@ -289,6 +289,8 @@ angular.module( 'BookingSystem.locationBooking',
       });
 
       $scope.customer = customer;
+
+      return customer.$promise;
     };
 
     const addTimeToDate = function( dateObj, hour, minute ) {
@@ -488,7 +490,12 @@ angular.module( 'BookingSystem.locationBooking',
     /* Initialization START */
 
     setupModal();
-    getLocationBooking().then( () => { initDate(); getCustomer(); getLocations(); });
+    getLocationBooking().then( () => {
+      initDate();
+      getCustomer().then( () => {
+        getLocations();
+      });
+    });
     initTimeSelectData();
 
     /* Initialization END */
@@ -554,6 +561,9 @@ angular.module( 'BookingSystem.locationBooking',
 
     const getLocations = function() {
 
+      // Create promise
+      const deferred = $q.defer();
+
       if ( areDateVariablesDefined() ){
 
         const startMomentDate = addTimeToDate( $scope.bookingStartDate, $scope.bookingStartHour, $scope.bookingStartMinute );
@@ -573,6 +583,9 @@ angular.module( 'BookingSystem.locationBooking',
 
             // Add free locations to scope
             $scope.locations = response;
+
+            // Resolve promise
+            deferred.resolve();
           })
 
           // Could not get free locations
@@ -583,8 +596,13 @@ angular.module( 'BookingSystem.locationBooking',
               .position( 'top right' )
               .theme( 'warn' )
             );
+
+            // Reject promise
+            deferred.reject();
           });
       }
+
+      return deferred.promise;
     };
 
     const getCustomers = function(){
@@ -807,14 +825,16 @@ angular.module( 'BookingSystem.locationBooking',
     /* Initialization START */
 
     initDate();
-    getLocations();
-    initTimeSelectData();
+    getLocations().then( () => {
 
-    if ( $state.params.customerId ){
-      getCustomer();
-    } else {
-      getCustomers();
-    }
+      if ( $state.params.customerId ){
+        getCustomer();
+      } else {
+        getCustomers();
+      }
+
+    });
+    initTimeSelectData();
 
     /* Initialization END */
 

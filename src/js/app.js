@@ -28,6 +28,7 @@ const BookingSystem = angular
     'BookingSystem.mealBooking',
     'BookingSystem.bookingTypes',
     'BookingSystem.users',
+    'BookingSystem.account',
 
     // Services
     'BookingSystem.authService',
@@ -46,6 +47,7 @@ const BookingSystem = angular
     'BookingSystem.resourceBookingServices',
     'BookingSystem.mealBookingServices',
     'BookingSystem.usersServices',
+    'BookingSystem.accountServices',
 
     // Directives
     'BookingSystem.calendarDaysHeaderDirective',
@@ -53,6 +55,7 @@ const BookingSystem = angular
     'BookingSystem.imageUploaderDirective',
     'BookingSystem.ngMinMaxDirectives',
     'BookingSystem.calendarDayDirective',
+    'BookingSystem.imageShowOnLoadDirective',
 
     // Filters
     'BookingSystem.filters'
@@ -79,6 +82,7 @@ BookingSystem.run( ['$ionicPlatform', '$rootScope', ( $ionicPlatform, $rootScope
 
   // Global REGEXP
   $rootScope.TEXT_FIELD_REGEXP = /^[0-9a-zA-ZåäöÅÄÖé\-_&\.,~\^@()/%\s\!]*$/;
+  $rootScope.USERNAME_REGEXP = /^[0-9a-zA-Z\-_&\.,~\^@()/%\s\!]*$/;
   $rootScope.NUMERIC_SPACE_REGEXP = /^[0-9\s\+\-]*$/;
   $rootScope.NUMERIC_STRICT_REGEXP = /^[0-9]*$/;
   $rootScope.NUMERIC_DOT_REGEXP = /^[0-9]*[\.]?[0-9]*?$/;
@@ -86,7 +90,8 @@ BookingSystem.run( ['$ionicPlatform', '$rootScope', ( $ionicPlatform, $rootScope
 }] );
 
 // Controller for nav bar
-BookingSystem.controller( 'NavigationCtrl', ['$scope', '$state', ( $scope, $state ) => {
+BookingSystem.controller( 'NavigationCtrl', ['$scope', '$state', 'API_IMG_PATH_URL', ( $scope, $state, API_IMG_PATH_URL ) => {
 
+  $scope.API_IMG_PATH_URL = API_IMG_PATH_URL;
 }]
 );

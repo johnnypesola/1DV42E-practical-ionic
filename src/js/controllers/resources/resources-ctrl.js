@@ -10,9 +10,10 @@ angular.module( 'BookingSystem.resources',
   )
 
   //List controller
-  .controller( 'ResourcesListCtrl', [ '$rootScope', '$scope', '$state', '$mdToast', 'Resource', ( $rootScope, $scope, $state, $mdToast, Resource ) => {
+  .controller( 'ResourcesListCtrl', [ '$rootScope', '$scope', '$state', '$mdToast', 'Resource', 'API_IMG_PATH_URL', ( $rootScope, $scope, $state, $mdToast, Resource, API_IMG_PATH_URL ) => {
 
     /* Init vars */
+    $scope.API_IMG_PATH_URL = API_IMG_PATH_URL;
 
     /* Private methods START */
 

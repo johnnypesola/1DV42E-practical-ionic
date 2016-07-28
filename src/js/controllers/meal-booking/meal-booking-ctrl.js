@@ -305,6 +305,8 @@ angular.module( 'BookingSystem.mealBooking',
       });
 
       $scope.customer = customer;
+
+      return customer.$promise;
     };
 
     const addTimeToDate = function( dateObj, hour, minute ) {

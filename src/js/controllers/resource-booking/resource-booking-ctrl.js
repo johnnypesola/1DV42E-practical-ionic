@@ -291,6 +291,8 @@ angular.module( 'BookingSystem.resourceBooking',
     });
 
     $scope.customer = customer;
+
+    return customer.$promise;
   };
 
   const addTimeToDate = function( dateObj, hour, minute ) {
@@ -469,7 +471,12 @@ angular.module( 'BookingSystem.resourceBooking',
   /* Initialization START */
 
   setupModal();
-  getResourceBooking().then( () => { initDate(); getCustomer(); getResources(); });
+  getResourceBooking().then( () => {
+    initDate();
+    getCustomer().then( () => {
+      getResources();
+    });
+  });
   initTimeSelectData();
 
   /* Initialization END */
@@ -534,6 +541,9 @@ angular.module( 'BookingSystem.resourceBooking',
 
   const getResources = function() {
 
+    // Create promise
+    const deferred = $q.defer();
+
     if ( areDateVariablesDefined() ){
 
       const startMomentDate = addTimeToDate( $scope.bookingStartDate, $scope.bookingStartHour, $scope.bookingStartMinute );
@@ -553,6 +563,9 @@ angular.module( 'BookingSystem.resourceBooking',
 
           // Add free resources to scope
           $scope.resources = response;
+
+          // Resolve promise
+          deferred.resolve();
         })
 
         // Could not get free resources
@@ -563,8 +576,13 @@ angular.module( 'BookingSystem.resourceBooking',
             .position( 'top right' )
             .theme( 'warn' )
           );
+
+          // Reject promise
+          deferred.reject();
         });
     }
+
+    return deferred.promise;
   };
 
   const getCustomers = function(){
@@ -758,13 +776,13 @@ angular.module( 'BookingSystem.resourceBooking',
   /* Initialization START */
 
   initDate();
-  getResources();
-
-  if ( $state.params.customerId ){
-    getCustomer();
-  } else {
-    getCustomers();
-  }
+  getResources().then( () => {
+    if ( $state.params.customerId ){
+      getCustomer();
+    } else {
+      getCustomers();
+    }
+  });
 
   initTimeSelectData();
 

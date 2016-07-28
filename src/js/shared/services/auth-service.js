@@ -3,7 +3,7 @@ angular.module( 'BookingSystem.authService',
   // Dependencies
   ['ngCookies']
 )
-  .service( 'AuthService', [ '$q', '$cookies', '$timeout', '$rootScope', 'API_URL', 'MODAL_ANIMATION', '$injector', 'API_LOGIN_URL', '$http', '$httpParamSerializer', '$state', 'API_LOGOUT_URL', function( $q, $cookies, $timeout, $rootScope, API_URL, MODAL_ANIMATION, $injector, API_LOGIN_URL, $http, $httpParamSerializer, $state, API_LOGOUT_URL ) {
+  .service( 'AuthService', [ '$q', '$cookies', '$timeout', '$rootScope', 'API_URL', 'MODAL_ANIMATION', '$injector', '$http', 'Account', '$state', function( $q, $cookies, $timeout, $rootScope, API_URL, MODAL_ANIMATION, $injector, $http, Account, $state ) {
 
     // Init values
     const CURRENT_USER_STR = 'currentUser';
@@ -54,33 +54,12 @@ angular.module( 'BookingSystem.authService',
 
     this.login = function ( username, password ) {
 
-      const deferred = $q.defer();
-
-      $http.post( API_LOGIN_URL,
-        $httpParamSerializer({
-          grant_type: 'password',
-          UserName: username,
-          Password: password
-        }),
-        {
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-        }
-      )
-        .then( ( response ) => {
-          deferred.resolve( response );
-        })
-
-        .catch( ( response ) => {
-          deferred.reject( response );
-        });
-
-      // Return promise
-      return deferred.promise;
+      return Account.login( username, password );
     };
 
     this.logout = function () {
 
-      const promise = $http.post( API_LOGOUT_URL );
+      const promise = Account.logout();
 
       promise.then( () => {
         that.clearCredentials();
@@ -130,6 +109,7 @@ angular.module( 'BookingSystem.authService',
 
       // Store some not so sensitive values in rootScope
       $rootScope.userInfo = {
+        id: userObj.id,
         userName: userObj.userName,
         firstName: userObj.firstName,
         surName: userObj.surName,
@@ -216,6 +196,7 @@ angular.module( 'BookingSystem.authService',
           // Save http header credentials
           that.setCredentials(
             {
+              id: response.data.Id,
               userName: response.data.UserName,
               firstName: response.data.FirstName,
               surName: response.data.SurName,
@@ -231,8 +212,6 @@ angular.module( 'BookingSystem.authService',
         })
 
         .catch( ( response ) => {
-
-          console.log( response );
 
           // If wrong credentials were entered
           if ( response.data.error === 'invalid_grant' ) {
