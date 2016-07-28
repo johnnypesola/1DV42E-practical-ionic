@@ -28,6 +28,7 @@ const BookingSystem = angular
     'BookingSystem.mealBooking',
     'BookingSystem.bookingTypes',
     'BookingSystem.users',
+    'BookingSystem.account',
 
     // Services
     'BookingSystem.authService',
@@ -46,6 +47,7 @@ const BookingSystem = angular
     'BookingSystem.resourceBookingServices',
     'BookingSystem.mealBookingServices',
     'BookingSystem.usersServices',
+    'BookingSystem.accountServices',
 
     // Directives
     'BookingSystem.calendarDaysHeaderDirective',
@@ -88,7 +90,8 @@ BookingSystem.run( ['$ionicPlatform', '$rootScope', ( $ionicPlatform, $rootScope
 }] );
 
 // Controller for nav bar
-BookingSystem.controller( 'NavigationCtrl', ['$scope', '$state', ( $scope, $state ) => {
+BookingSystem.controller( 'NavigationCtrl', ['$scope', '$state', 'API_IMG_PATH_URL', ( $scope, $state, API_IMG_PATH_URL ) => {
 
+  $scope.API_IMG_PATH_URL = API_IMG_PATH_URL;
 }]
 );

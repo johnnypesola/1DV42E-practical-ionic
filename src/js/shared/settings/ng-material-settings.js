@@ -44,6 +44,7 @@ angular.module( 'BookingSystem.ngMaterialSettings',
 // Custom mdToast themes
 .config( ['$mdThemingProvider', ( $mdThemingProvider ) => {
   $mdThemingProvider.theme( 'warn' );
+  $mdThemingProvider.theme( 'success' );
 }]
 );
 
