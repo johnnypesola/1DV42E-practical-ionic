@@ -5,25 +5,46 @@
 
     <div class="bar bar-subheader">
 
-        <calendar-days-header date="weekDate"
-        >
+        <calendar-days-header date="weekDate">
         </calendar-days-header>
 
-        <button
-                class="button"
-                ng-click="toPreviousWeek()"
-        >
-            <span class="icon ion-arrow-left-c md-big-icon"></span>
-        </button>
+        <div style="float: left;">
+            <button
+                    class="button"
+                    ng-click="toPreviousMonth()"
+            >
+                <span class="icon ion-chevron-left md-big-icon"></span>
+            </button>
 
-        <h2 class="title">{{weekDate.format('MMMM YYYY' ) }} <span class="title-small-text"> vecka {{weekDate.week()}}</span></h2>
+            <button
+                    class="button"
+                    ng-click="toPreviousWeek()"
+            >
+                <span class="icon ion-ios-arrow-left md-big-icon"></span>
+            </button>
+        </div>
 
-        <button
-                class="button"
-                ng-click="toNextWeek()"
-        >
-            <span class="icon ion-arrow-right-c md-big-icon"></span>
-        </button>
+        <h2 class="title">
+            {{weekDate.format('MMMM YYYY' ) }} <span class="title-small-text"> v. {{weekDate.week()}}</span>
+        </h2>
+
+        <div style="float: right;">
+
+            <button
+                    class="button"
+                    ng-click="toNextWeek()"
+                    >
+                <span class="icon ion-ios-arrow-right md-big-icon"></span>
+            </button>
+
+            <button
+                    class="button"
+                    ng-click="toNextMonth()"
+                    >
+                <span class="icon ion-chevron-right md-big-icon"></span>
+            </button>
+
+        </div>
 
     </div>
 
