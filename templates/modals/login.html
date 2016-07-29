@@ -9,7 +9,7 @@
           <form name="loginForm" class="col">
 
               <p>
-                  Var god ange dina inloggingsuppgifter för att komma åt bokningssystemet. Saknar du uppgifter så kontakta ansvarig.
+                  Var god ange dina inloggingsuppgifter för att komma åt känslig information i bokningssystemet. Saknar du uppgifter så kontakta ansvarig.
               </p>
 
               <div layout-gt-xs="row" class="pos-relative">
@@ -57,6 +57,12 @@
                           class="md-raised md-primary" type="submit"
                           ng-click="loginFromModal( loginData.username, loginData.password )"
                   >Logga in</md-button>
+
+                  <md-button
+                          class="md-raised" type="submit"
+                          ng-click="abortLoginFromModal()"
+                  >Avbryt</md-button>
+
               </md-input-container>
 
           </form>

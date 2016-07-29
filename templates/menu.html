@@ -42,7 +42,7 @@
                     <p>Bokningar</p>
                 </div>
             </ion-item>
-            <ion-item menu-close ui-sref="app.customers-list" ui-sref-active="active" class="pointer">
+            <ion-item menu-close ui-sref="app.customers-list" ui-sref-active="active" class="pointer" ng-if="userInfo">
                 <div class="item-icon-left">
                     <i class="icon ion-briefcase menu-icon-color"></i>
                     <p>Kunder</p>
@@ -54,31 +54,33 @@
                     <p>Lokaler/platser</p>
                 </div>
             </ion-item>
-            <ion-item menu-close ui-sref="app.furnituring-list" ui-sref-active="active" class="pointer">
+            <ion-item menu-close ui-sref="app.furnituring-list" ui-sref-active="active" class="pointer" ng-if="userInfo">
                 <div class="item-icon-left">
                     <i class="icon ion-ios-keypad menu-icon-color"></i>
                     <p>Möbleringar</p>
                 </div>
             </ion-item>
-            <ion-item menu-close ui-sref="app.meals-list" ui-sref-active="active" class="pointer">
+            <ion-item menu-close ui-sref="app.meals-list" ui-sref-active="active" class="pointer" ng-if="userInfo">
                 <div class="item-icon-left">
                     <i class="icon ion-android-restaurant menu-icon-color"></i>
                     <p>Måltider</p>
                 </div>
             </ion-item>
-            <ion-item menu-close ui-sref="app.meal-properties-list" ui-sref-active="active" class="pointer">
+            <ion-item menu-close ui-sref="app.meal-properties-list" ui-sref-active="active" class="pointer" ng-if="userInfo">
                 <div class="item-icon-left">
                     <i class="icon ion-ios-nutrition menu-icon-color"></i>
                     <p>Måltidsegenskaper</p>
                 </div>
             </ion-item>
-            <ion-item menu-close ui-sref="app.resources-list" ui-sref-active="active" class="pointer">
+            <ion-item menu-close ui-sref="app.resources-list" ui-sref-active="active" class="pointer" ng-if="userInfo">
                 <div class="item-icon-left">
                     <i class="icon ion-cube menu-icon-color"></i>
                     <p>Resurser</p>
                 </div>
             </ion-item>
-            <ion-item menu-close ui-sref="app.bookingtypes-list" ui-sref-active="active" class="pointer">
+
+            <!-- Not implemented at the moment. -->
+            <ion-item menu-close ui-sref="app.bookingtypes-list" ui-sref-active="active" class="pointer" ng-if="false">
                 <div class="item-icon-left">
                     <i class="icon ion-pricetag menu-icon-color"></i>
                     <p>Bokningstyper</p>
@@ -96,6 +98,13 @@
                 <div class="item-icon-left">
                     <i class="icon ion-person menu-icon-color"></i>
                     <p>Mina uppgifter</p>
+                </div>
+            </ion-item>
+
+            <ion-item menu-close ng-click="showLogin()" ng-if="!userInfo">
+                <div class="item-icon-left">
+                    <i class="icon ion-log-out menu-icon-color"></i>
+                    <p>Logga in</p>
                 </div>
             </ion-item>
 
