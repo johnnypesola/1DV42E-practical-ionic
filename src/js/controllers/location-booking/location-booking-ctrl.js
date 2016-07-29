@@ -775,6 +775,10 @@ angular.module( 'BookingSystem.locationBooking',
           // Set a furnituring if if there is a furnituring at all.
           const furnituringId = ( $scope.locationBooking.SelectedFurnituring ? $scope.locationBooking.SelectedFurnituring.FurnituringId : null );
 
+          // Prepare date variables
+          const startTime = addTimeToDate( $scope.bookingStartDate, $scope.bookingStartHour, $scope.bookingStartMinute ).format();
+          const endTime = addTimeToDate( $scope.bookingEndDate, $scope.bookingEndHour, $scope.bookingEndMinute ).format();
+
           // Save locationBooking
           LocationBooking.save(
             {
@@ -782,8 +786,8 @@ angular.module( 'BookingSystem.locationBooking',
               LocationBookingId: 0,
               LocationId: $scope.locationBooking.LocationId,
               FurnituringId: furnituringId,
-              StartTime: addTimeToDate( $scope.bookingStartDate, $scope.bookingStartHour, $scope.bookingStartMinute ).format(),
-              EndTime: addTimeToDate( $scope.bookingEndDate, $scope.bookingEndHour, $scope.bookingEndMinute ).format(),
+              StartTime: startTime,
+              EndTime: endTime,
               NumberOfPeople: $scope.locationBooking.NumberOfPeople,
               Provisional: $scope.locationBooking.Provisional
             }
@@ -801,7 +805,10 @@ angular.module( 'BookingSystem.locationBooking',
                 // Resolve promise
                 deferred.resolve();
 
-                $ionicHistory.goBack();
+                // Redirect to booking view
+                $state.go( 'app.booking-view', {
+                  weekDate: startTime
+                });
 
                 // Something went wrong
               }).catch( ( response ) => {

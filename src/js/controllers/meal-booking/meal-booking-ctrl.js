@@ -766,14 +766,18 @@ angular.module( 'BookingSystem.mealBooking',
       createBookingContainerIfNeeded()
         .then( () => {
 
+          // Prepare date variables
+          const startTime = addTimeToDate( $scope.bookingStartDate, $scope.bookingStartHour, $scope.bookingStartMinute ).format();
+          const endTime = addTimeToDate( $scope.bookingEndDate, $scope.bookingEndHour, $scope.bookingEndMinute ).format();
+
           // Save mealBooking
           MealBooking.save(
             {
               BookingId: $scope.mealBooking.BookingId,
               MealBookingId: 0,
               MealId: $scope.mealBooking.MealId,
-              StartTime: addTimeToDate( $scope.bookingStartDate, $scope.bookingStartHour, $scope.bookingStartMinute ).format(),
-              EndTime: addTimeToDate( $scope.bookingEndDate, $scope.bookingEndHour, $scope.bookingEndMinute ).format(),
+              StartTime: startTime,
+              EndTime: endTime,
               LocationId: $scope.mealBooking.LocationId,
               DeliveryAddress: $scope.mealBooking.DeliveryAddress,
               MealCount: $scope.mealBooking.MealCount,
@@ -794,7 +798,10 @@ angular.module( 'BookingSystem.mealBooking',
                 // Resolve promise
                 deferred.resolve();
 
-                $ionicHistory.goBack();
+                // Redirect to booking view
+                $state.go( 'app.booking-view', {
+                  weekDate: startTime
+                });
 
                 // Something went wrong
               }).catch( ( response ) => {

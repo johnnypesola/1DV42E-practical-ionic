@@ -90,7 +90,8 @@ angular.module( 'BookingSystem.routes',
       .state( 'app.booking-view', {
         url: '/booking-view',
         params: {
-          bookingType: 'booking'
+          bookingType: 'booking',
+          weekDate: null
         },
         views: {
           'menuContent': {

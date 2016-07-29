@@ -14,9 +14,11 @@ angular.module( 'BookingSystem.bookings',
     const updateIntervalTime = DATA_SYNC_INTERVAL_TIME;
     let updateInterval = null, weekStartDate = null, weekEndDate = null;
     $scope.zoom = DEFAULT_CALENDAR_ZOOM;
-    $scope.weekDate = moment();
+    $scope.weekDate = ( $stateParams.weekDate ? moment( $stateParams.weekDate ) : moment() );
     $scope.bookingTypes = BOOKING_TYPES;
     $scope.bookingsType = $scope.bookingTypes.booking;
+
+    console.log( $stateParams.weekDate );
 
     /* Private methods START */
 

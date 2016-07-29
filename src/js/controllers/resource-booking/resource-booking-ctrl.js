@@ -515,13 +515,13 @@ angular.module( 'BookingSystem.resourceBooking',
     // We need to make it to a regular date object since that's what angular material date picker requires.
     if ( $state.params.date ) {
 
-      $scope.bookingStartDate = moment( $state.params.startTime ).toDate();
-      $scope.bookingStartHour = moment( $state.params.startTime ).hour();
-      $scope.bookingStartMinute = moment( $state.params.startTime ).minute();
+      $scope.bookingStartDate = moment( $state.params.date ).toDate();
+      $scope.bookingStartHour = moment( $state.params.date ).hour();
+      $scope.bookingStartMinute = moment( $state.params.date ).minute();
 
-      $scope.bookingEndDate = moment( $state.params.endTime ).toDate();
-      $scope.bookingEndHour = moment( $state.params.endTime ).hour();
-      $scope.bookingEndMinute = moment( $state.params.endTime ).add( 59, 'minutes' ).minute();
+      $scope.bookingEndDate = moment( $state.params.date ).toDate();
+      $scope.bookingEndHour = moment( $state.params.date ).hour();
+      $scope.bookingEndMinute = moment( $state.params.date ).add( 59, 'minutes' ).minute();
 
     } else {
 
@@ -729,6 +729,10 @@ angular.module( 'BookingSystem.resourceBooking',
     createBookingContainerIfNeeded()
       .then( () => {
 
+        // Prepare date variables
+        const startTime = addTimeToDate( $scope.bookingStartDate, $scope.bookingStartHour, $scope.bookingStartMinute ).format();
+        const endTime = addTimeToDate( $scope.bookingEndDate, $scope.bookingEndHour, $scope.bookingEndMinute ).format();
+
         // Save resourceBooking
         ResourceBooking.save(
           {
@@ -736,8 +740,8 @@ angular.module( 'BookingSystem.resourceBooking',
             ResourceBookingId: 0,
             ResourceId: $scope.resourceBooking.Resource.ResourceId,
             ResourceCount: $scope.resourceBooking.ResourceCount,
-            StartTime: addTimeToDate( $scope.bookingStartDate, $scope.bookingStartHour, $scope.bookingStartMinute ).format(),
-            EndTime: addTimeToDate( $scope.bookingEndDate, $scope.bookingEndHour, $scope.bookingEndMinute ).format(),
+            StartTime: startTime,
+            EndTime: endTime,
             Provisional: $scope.resourceBooking.Provisional
           }
         ).$promise
@@ -746,7 +750,7 @@ angular.module( 'BookingSystem.resourceBooking',
           .then( ( response ) => {
 
             $mdToast.show( $mdToast.simple()
-              .content( ' Resursbokningen skapades med ett lyckat resultat' )
+              .content( 'Resursbokningen skapades med ett lyckat resultat' )
               .position( 'top right' )
               .theme( 'success' )
             );
@@ -754,7 +758,10 @@ angular.module( 'BookingSystem.resourceBooking',
             // Resolve promise
             deferred.resolve();
 
-            $ionicHistory.goBack();
+            // Redirect to booking view
+            $state.go( 'app.booking-view', {
+              weekDate: startTime
+            });
 
             // Something went wrong
           }).catch( ( response ) => {
