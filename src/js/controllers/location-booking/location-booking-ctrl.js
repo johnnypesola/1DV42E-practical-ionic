@@ -17,13 +17,13 @@ angular.module( 'BookingSystem.locationBooking',
 
     /* Private methods START */
 
-    const setupWeekStartAndEndDates = function ( offset = 0 ) {
+    const setupWeekStartAndEndDates = function ( offset = 0, timeType = 'weeks' ) {
 
       // Add or subtract offset weeks from current weekdate object.
       if ( offset > 0 ) {
-        $scope.weekDate = moment( $scope.weekDate ).add( 1, 'weeks' );
+        $scope.weekDate = moment( $scope.weekDate ).add( offset, timeType );
       } else if ( offset < 0 ) {
-        $scope.weekDate = moment( $scope.weekDate ).subtract( 1, 'weeks' );
+        $scope.weekDate = moment( $scope.weekDate ).subtract( Math.abs( offset ), timeType );
       }
 
       weekStartDate = moment( $scope.weekDate ).startOf( 'week' );
@@ -37,8 +37,6 @@ angular.module( 'BookingSystem.locationBooking',
         fromDate: weekStartDate.format( 'YYYY-MM-DD' ),
         toDate: weekEndDate.format( 'YYYY-MM-DD' )
       });
-
-      // const locationBookings = LocationBooking.query();
 
       // In case LocationBooking cannot be fetched, display an error to user.
       locationBookings.$promise.catch( () => {
@@ -116,6 +114,18 @@ angular.module( 'BookingSystem.locationBooking',
 
     $scope.toPreviousWeek = function() {
       setupWeekStartAndEndDates( -1 );
+
+      getLocationBookings();
+    };
+
+    $scope.toNextMonth = function() {
+      setupWeekStartAndEndDates( 1, 'month' );
+
+      getLocationBookings();
+    };
+
+    $scope.toPreviousMonth = function() {
+      setupWeekStartAndEndDates( -1, 'month' );
 
       getLocationBookings();
     };
@@ -765,6 +775,10 @@ angular.module( 'BookingSystem.locationBooking',
           // Set a furnituring if if there is a furnituring at all.
           const furnituringId = ( $scope.locationBooking.SelectedFurnituring ? $scope.locationBooking.SelectedFurnituring.FurnituringId : null );
 
+          // Prepare date variables
+          const startTime = addTimeToDate( $scope.bookingStartDate, $scope.bookingStartHour, $scope.bookingStartMinute ).format();
+          const endTime = addTimeToDate( $scope.bookingEndDate, $scope.bookingEndHour, $scope.bookingEndMinute ).format();
+
           // Save locationBooking
           LocationBooking.save(
             {
@@ -772,8 +786,8 @@ angular.module( 'BookingSystem.locationBooking',
               LocationBookingId: 0,
               LocationId: $scope.locationBooking.LocationId,
               FurnituringId: furnituringId,
-              StartTime: addTimeToDate( $scope.bookingStartDate, $scope.bookingStartHour, $scope.bookingStartMinute ).format(),
-              EndTime: addTimeToDate( $scope.bookingEndDate, $scope.bookingEndHour, $scope.bookingEndMinute ).format(),
+              StartTime: startTime,
+              EndTime: endTime,
               NumberOfPeople: $scope.locationBooking.NumberOfPeople,
               Provisional: $scope.locationBooking.Provisional
             }
@@ -791,7 +805,10 @@ angular.module( 'BookingSystem.locationBooking',
                 // Resolve promise
                 deferred.resolve();
 
-                $ionicHistory.goBack();
+                // Redirect to booking view
+                $state.go( 'app.booking-view', {
+                  weekDate: startTime
+                });
 
                 // Something went wrong
               }).catch( ( response ) => {

@@ -85,17 +85,28 @@
 
                         </div>
 
-                        <md-input-container class="md-block">
-                            <label>Anteckningar</label>
-                        <textarea
-                                ng-model="booking.Notes"
-                                md-maxlength="200"
-                                rows="5"
-                                md-select-on-focus
-                                ng-disabled="!isEditMode"
-                                maxlength="200"
-                                ></textarea>
-                        </md-input-container>
+                        <div class="pos-relative">
+
+                            <div class="validation-messages" ng-messages="bookingForm.Notes.$error">
+                                <div ng-message="pattern">Tillåtna specialtecken: &_-.,~^@()%!</div>
+                            </div>
+
+                            <md-input-container class="md-block">
+                                <label>Anteckningar</label>
+                            <textarea
+                                    name="Notes"
+                                    ng-model="booking.Notes"
+                                    md-maxlength="200"
+                                    rows="5"
+                                    md-select-on-focus
+                                    ng-disabled="!isEditMode"
+                                    maxlength="200"
+                                    ng-pattern="TEXT_FIELD_REGEXP"
+                                    ></textarea>
+                            </md-input-container>
+
+                        </div>
+
                     </div>
 
                     <!--
