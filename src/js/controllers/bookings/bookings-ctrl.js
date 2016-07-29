@@ -14,9 +14,11 @@ angular.module( 'BookingSystem.bookings',
     const updateIntervalTime = DATA_SYNC_INTERVAL_TIME;
     let updateInterval = null, weekStartDate = null, weekEndDate = null;
     $scope.zoom = DEFAULT_CALENDAR_ZOOM;
-    $scope.weekDate = moment();
+    $scope.weekDate = ( $stateParams.weekDate ? moment( $stateParams.weekDate ) : moment() );
     $scope.bookingTypes = BOOKING_TYPES;
     $scope.bookingsType = $scope.bookingTypes.booking;
+
+    console.log( $stateParams.weekDate );
 
     /* Private methods START */
 
@@ -37,13 +39,13 @@ angular.module( 'BookingSystem.bookings',
       });
     };
 
-    const setupWeekStartAndEndDates = function ( offset = 0 ) {
+    const setupWeekStartAndEndDates = function ( offset = 0, timeType = 'weeks' ) {
 
       // Add or subtract offset weeks from current weekdate object.
       if ( offset > 0 ) {
-        $scope.weekDate = moment( $scope.weekDate ).add( 1, 'weeks' );
+        $scope.weekDate = moment( $scope.weekDate ).add( offset, timeType );
       } else if ( offset < 0 ) {
-        $scope.weekDate = moment( $scope.weekDate ).subtract( 1, 'weeks' );
+        $scope.weekDate = moment( $scope.weekDate ).subtract( Math.abs( offset ), timeType );
       }
 
       weekStartDate = moment( $scope.weekDate ).startOf( 'week' );
@@ -193,6 +195,28 @@ angular.module( 'BookingSystem.bookings',
 
     $scope.toPreviousWeek = function() {
       setupWeekStartAndEndDates( -1 );
+
+      getBookings();
+    };
+
+    $scope.toNextMonth = function() {
+      setupWeekStartAndEndDates( 1, 'month' );
+
+      getBookings();
+    };
+
+    $scope.toPreviousMonth = function() {
+      setupWeekStartAndEndDates( -1, 'month' );
+
+      getBookings();
+    };
+
+    $scope.resetTimeToNow = function() {
+
+      $scope.weekDate = moment();
+
+      weekStartDate = moment().startOf( 'week' );
+      weekEndDate = moment().endOf( 'week' );
 
       getBookings();
     };
@@ -488,7 +512,9 @@ angular.module( 'BookingSystem.bookings',
       // Redirect to create view
       $state.go( 'app.' + bookingTypeStr + '-create', {
         bookingId: $stateParams.id,
-        customerId: $scope.booking.CustomerId
+        customerId: $scope.booking.CustomerId,
+        startTime: $scope.booking.StartTime,
+        endTime: $scope.booking.EndTime
       });
     };
 

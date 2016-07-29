@@ -17,13 +17,13 @@ angular.module( 'BookingSystem.mealBooking',
 
     /* Private methods START */
 
-    const setupWeekStartAndEndDates = function ( offset = 0 ) {
+    const setupWeekStartAndEndDates = function ( offset = 0, timeType = 'weeks' ) {
 
       // Add or subtract offset weeks from current weekdate object.
       if ( offset > 0 ) {
-        $scope.weekDate = moment( $scope.weekDate ).add( 1, 'weeks' );
+        $scope.weekDate = moment( $scope.weekDate ).add( offset, timeType );
       } else if ( offset < 0 ) {
-        $scope.weekDate = moment( $scope.weekDate ).subtract( 1, 'weeks' );
+        $scope.weekDate = moment( $scope.weekDate ).subtract( Math.abs( offset ), timeType );
       }
 
       weekStartDate = moment( $scope.weekDate ).startOf( 'week' );
@@ -116,6 +116,18 @@ angular.module( 'BookingSystem.mealBooking',
 
     $scope.toPreviousWeek = function() {
       setupWeekStartAndEndDates( -1 );
+
+      getMealBookings();
+    };
+
+    $scope.toNextMonth = function() {
+      setupWeekStartAndEndDates( 1, 'month' );
+
+      getMealBookings();
+    };
+
+    $scope.toPreviousMonth = function() {
+      setupWeekStartAndEndDates( -1, 'month' );
 
       getMealBookings();
     };
@@ -754,14 +766,18 @@ angular.module( 'BookingSystem.mealBooking',
       createBookingContainerIfNeeded()
         .then( () => {
 
+          // Prepare date variables
+          const startTime = addTimeToDate( $scope.bookingStartDate, $scope.bookingStartHour, $scope.bookingStartMinute ).format();
+          const endTime = addTimeToDate( $scope.bookingEndDate, $scope.bookingEndHour, $scope.bookingEndMinute ).format();
+
           // Save mealBooking
           MealBooking.save(
             {
               BookingId: $scope.mealBooking.BookingId,
               MealBookingId: 0,
               MealId: $scope.mealBooking.MealId,
-              StartTime: addTimeToDate( $scope.bookingStartDate, $scope.bookingStartHour, $scope.bookingStartMinute ).format(),
-              EndTime: addTimeToDate( $scope.bookingEndDate, $scope.bookingEndHour, $scope.bookingEndMinute ).format(),
+              StartTime: startTime,
+              EndTime: endTime,
               LocationId: $scope.mealBooking.LocationId,
               DeliveryAddress: $scope.mealBooking.DeliveryAddress,
               MealCount: $scope.mealBooking.MealCount,
@@ -782,7 +798,10 @@ angular.module( 'BookingSystem.mealBooking',
                 // Resolve promise
                 deferred.resolve();
 
-                $ionicHistory.goBack();
+                // Redirect to booking view
+                $state.go( 'app.booking-view', {
+                  weekDate: startTime
+                });
 
                 // Something went wrong
               }).catch( ( response ) => {
