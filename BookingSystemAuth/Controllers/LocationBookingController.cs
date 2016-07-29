@@ -11,12 +11,11 @@ using System.Text.RegularExpressions;
 
 namespace BookingSystemAuth.Controllers
 {
-    [Authorize]
     public class LocationBookingBookingController : ApiController
     {
         
         // Set up Service.
-        LocationBookingService locationBookingService = new LocationBookingService();  
+        LocationBookingService locationBookingService = new LocationBookingService();
 
         // GET: api/LocationBooking
         [Route("api/LocationBooking")]
@@ -110,6 +109,7 @@ namespace BookingSystemAuth.Controllers
         }
 
         // POST: api/LocationBooking
+        [Authorize]
         [Route("api/LocationBooking")]
         [AcceptVerbs("POST")]
         public IHttpActionResult Post(LocationBooking locationBooking)
@@ -143,6 +143,7 @@ namespace BookingSystemAuth.Controllers
         }
 
         // DELETE: api/LocationBooking/5
+        [Authorize]
         [Route("api/LocationBooking/{LocationBookingId:int}")]
         [AcceptVerbs("DELETE")]
         public IHttpActionResult Delete(int LocationBookingId)

@@ -14,7 +14,6 @@ using Newtonsoft.Json.Linq;
 
 namespace BookingSystemAuth.Controllers
 {
-    [Authorize]
     public class LocationController : ApiController
     {
         // Shared variables
@@ -67,6 +66,7 @@ namespace BookingSystemAuth.Controllers
 
         // GET: api/Location/free/2015-01-01/2015-01-02
         // GET: api/Location/free/2015-01-01/2015-01-02?fromTime=10.00&toTime=10.00
+        [Authorize]
         [Route("api/Location/free/{fromDate:datetime}/{toDate:datetime}/{locationBookingExceptionId:int?}")]
         [AcceptVerbs("GET")]
         public IHttpActionResult Get(string fromDate, string toDate, string fromTime = "00:00:00", string toTime = "23:59:59", int locationBookingExceptionId = 0)
@@ -92,6 +92,7 @@ namespace BookingSystemAuth.Controllers
         }
 
         // GET: api/Location/search/ColumnName?value=hello
+        [Authorize]
         [Route("api/Location/search/{columnName}")]
         [AcceptVerbs("GET")]
         public IHttpActionResult Get(string columnName, string value)
@@ -120,6 +121,7 @@ namespace BookingSystemAuth.Controllers
         }
 
         // POST: api/Location
+        [Authorize]
         [Route("api/Location")]
         [AcceptVerbs("POST")]
         public IHttpActionResult Post(Location location)
@@ -157,6 +159,7 @@ namespace BookingSystemAuth.Controllers
         }
 
         // DELETE: api/Location/5
+        [Authorize]
         [Route("api/Location/{LocationId:int}")]
         [AcceptVerbs("DELETE")]
         public IHttpActionResult Delete(int LocationId)
@@ -193,6 +196,7 @@ namespace BookingSystemAuth.Controllers
         }
 
         // POST a picture for a location
+        [Authorize]
         [Route("api/Location/image/{LocationId:int}")]
         [AcceptVerbs("POST")]
         [HttpPost]

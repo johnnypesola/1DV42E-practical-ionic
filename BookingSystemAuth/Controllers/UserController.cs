@@ -11,6 +11,7 @@ using Microsoft.AspNet.Identity;
 using System.Net.Http;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using System.Threading.Tasks;
 
 namespace BookingSystemAuth.Controllers
 {
@@ -80,11 +81,11 @@ namespace BookingSystemAuth.Controllers
         // GET: api/User/5
         [Route("api/User/{UserId:int}")]
         [AcceptVerbs("GET")]
-        public IHttpActionResult Get(int UserId)
+        public async Task<IHttpActionResult> Get(int UserId)
         {
             try
             {
-                IdentityUser User = userStore.FindByIdAsync(UserId).Result;
+                IdentityUser User = await userStore.FindByIdAsync(UserId);
                 if (User == null)
                 {
                     return NotFound();
@@ -104,7 +105,7 @@ namespace BookingSystemAuth.Controllers
         // POST: api/User
         [Route("api/User")]
         [AcceptVerbs("POST")]
-        public IHttpActionResult Post(IdentityUser User)
+        public async Task<IHttpActionResult> Post(IdentityUser User)
         {
             // Try to save User
             try
@@ -120,7 +121,7 @@ namespace BookingSystemAuth.Controllers
                 // Update existing user
                 if (User.Id > 0)
                 {
-                    userFromDB = userStore.FindByIdAsync(User.Id).Result;
+                    userFromDB = await userStore.FindByIdAsync(User.Id);
 
                     if (userFromDB == null)
                     {
@@ -138,7 +139,7 @@ namespace BookingSystemAuth.Controllers
                         User.PasswordHash = UserManager.PasswordHasher.HashPassword(User.PasswordHash);
                     }                    
 
-                    userStore.UpdateAsync(User);
+                    await userStore.UpdateAsync(User);
                 }
                 else
                 {
@@ -272,7 +273,7 @@ namespace BookingSystemAuth.Controllers
         [Route("api/User/image/{UserId:int}")]
         [AcceptVerbs("POST")]
         [HttpPost]
-        public IHttpActionResult Post(int UserId)
+        public async Task<IHttpActionResult> Post(int UserId)
         {
             string base64string;
             JObject returnData;
@@ -282,7 +283,7 @@ namespace BookingSystemAuth.Controllers
             try
             {
                 // Check that user with specific Id exists
-                IdentityUser user = userStore.FindByIdAsync(UserId).Result;
+                IdentityUser user = await userStore.FindByIdAsync(UserId);
                 if (user == null)
                 {
                     return NotFound();
@@ -298,7 +299,7 @@ namespace BookingSystemAuth.Controllers
                 user.ImageSrc = UploadImagePath;
 
                 // Save user
-                userStore.UpdateAsync(user);
+                await userStore.UpdateAsync(user);
 
                 // Build return JSON object
                 returnData = JObject.Parse(String.Format("{{ 'imgpath' : '{0}'}}", UploadImagePath));

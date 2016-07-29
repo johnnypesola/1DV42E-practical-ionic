@@ -11,7 +11,6 @@ using System.Text.RegularExpressions;
 
 namespace BookingSystemAuth.Controllers
 {
-    [Authorize]
     public class ResourceBookingBookingController : ApiController
     {
         
@@ -110,6 +109,7 @@ namespace BookingSystemAuth.Controllers
         }
 
         // POST: api/ResourceBooking
+        [Authorize]
         [Route("api/ResourceBooking")]
         [AcceptVerbs("POST")]
         public IHttpActionResult Post(ResourceBooking resourceBooking)
@@ -143,6 +143,7 @@ namespace BookingSystemAuth.Controllers
         }
 
         // DELETE: api/ResourceBooking/5
+        [Authorize]
         [Route("api/ResourceBooking/{ResourceBookingId:int}")]
         [AcceptVerbs("DELETE")]
         public IHttpActionResult Delete(int ResourceBookingId)

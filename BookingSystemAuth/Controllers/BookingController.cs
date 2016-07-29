@@ -11,7 +11,6 @@ using Newtonsoft.Json.Linq;
 
 namespace BookingSystemAuth.Controllers
 {
-    [Authorize]
     public class BookingController : ApiController
     {
         public BookingService bookingService;
@@ -64,6 +63,7 @@ namespace BookingSystemAuth.Controllers
         }
 
         // GET: api/Booking/empty
+        [Authorize]
         [Route("api/Booking/empty/{infoOrCount}")]
         [AcceptVerbs("GET")]
         public IHttpActionResult GetEmpty(String infoOrCount)
@@ -173,7 +173,7 @@ namespace BookingSystemAuth.Controllers
                 else if (moreOrLess == "less")
                 {
                     // Get bookings
-                    IEnumerable<CalendarBookingDay> bookings = bookingService.CheckDaysForPeriod(startTime, endTime);
+                    IEnumerable<CalendarBookingDay> bookings = bookingService.CheckDaysForPeriod(startTime.StartOfDay(), endTime.EndOfDay());
 
                     if (bookings == null)
                     {
@@ -193,8 +193,9 @@ namespace BookingSystemAuth.Controllers
             }
         }
 
-        
+
         // GET: api/Booking/search/ColumnName?value=hello
+        [Authorize]
         [Route("api/Booking/search/{columnName}")]
         [AcceptVerbs("GET")]
         public IHttpActionResult Get(string columnName, string value)
@@ -221,9 +222,10 @@ namespace BookingSystemAuth.Controllers
                 return InternalServerError();
             }
         }
-        
+
 
         // POST api/Booking
+        [Authorize]
         [Route("api/Booking")]
         [AcceptVerbs("POST")]
         public IHttpActionResult Post(Booking booking)
@@ -250,6 +252,7 @@ namespace BookingSystemAuth.Controllers
         }
 
         // DELETE: api/Booking/5
+        [Authorize]
         [Route("api/Booking/{BookingId:int}")]
         [AcceptVerbs("DELETE")]
         public IHttpActionResult Delete(int BookingId)
