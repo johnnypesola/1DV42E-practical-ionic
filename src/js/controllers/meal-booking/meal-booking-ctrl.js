@@ -17,13 +17,13 @@ angular.module( 'BookingSystem.mealBooking',
 
     /* Private methods START */
 
-    const setupWeekStartAndEndDates = function ( offset = 0 ) {
+    const setupWeekStartAndEndDates = function ( offset = 0, timeType = 'weeks' ) {
 
       // Add or subtract offset weeks from current weekdate object.
       if ( offset > 0 ) {
-        $scope.weekDate = moment( $scope.weekDate ).add( 1, 'weeks' );
+        $scope.weekDate = moment( $scope.weekDate ).add( offset, timeType );
       } else if ( offset < 0 ) {
-        $scope.weekDate = moment( $scope.weekDate ).subtract( 1, 'weeks' );
+        $scope.weekDate = moment( $scope.weekDate ).subtract( Math.abs( offset ), timeType );
       }
 
       weekStartDate = moment( $scope.weekDate ).startOf( 'week' );
@@ -116,6 +116,18 @@ angular.module( 'BookingSystem.mealBooking',
 
     $scope.toPreviousWeek = function() {
       setupWeekStartAndEndDates( -1 );
+
+      getMealBookings();
+    };
+
+    $scope.toNextMonth = function() {
+      setupWeekStartAndEndDates( 1, 'month' );
+
+      getMealBookings();
+    };
+
+    $scope.toPreviousMonth = function() {
+      setupWeekStartAndEndDates( -1, 'month' );
 
       getMealBookings();
     };

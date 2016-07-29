@@ -17,13 +17,13 @@ angular.module( 'BookingSystem.resourceBooking',
 
   /* Private methods START */
 
-  const setupWeekStartAndEndDates = function ( offset = 0 ) {
+  const setupWeekStartAndEndDates = function ( offset = 0, timeType = 'weeks' ) {
 
     // Add or subtract offset weeks from current weekdate object.
     if ( offset > 0 ) {
-      $scope.weekDate = moment( $scope.weekDate ).add( 1, 'weeks' );
+      $scope.weekDate = moment( $scope.weekDate ).add( offset, timeType );
     } else if ( offset < 0 ) {
-      $scope.weekDate = moment( $scope.weekDate ).subtract( 1, 'weeks' );
+      $scope.weekDate = moment( $scope.weekDate ).subtract( Math.abs( offset ), timeType );
     }
 
     weekStartDate = moment( $scope.weekDate ).startOf( 'week' );
@@ -116,6 +116,18 @@ angular.module( 'BookingSystem.resourceBooking',
 
   $scope.toPreviousWeek = function() {
     setupWeekStartAndEndDates( -1 );
+
+    getResourceBookings();
+  };
+
+  $scope.toNextMonth = function() {
+    setupWeekStartAndEndDates( 1, 'month' );
+
+    getResourceBookings();
+  };
+
+  $scope.toPreviousMonth = function() {
+    setupWeekStartAndEndDates( -1, 'month' );
 
     getResourceBookings();
   };
@@ -503,13 +515,13 @@ angular.module( 'BookingSystem.resourceBooking',
     // We need to make it to a regular date object since that's what angular material date picker requires.
     if ( $state.params.date ) {
 
-      $scope.bookingStartDate = moment( $state.params.date ).toDate();
-      $scope.bookingStartHour = moment( $state.params.date ).hour();
-      $scope.bookingStartMinute = moment( $state.params.date ).minute();
+      $scope.bookingStartDate = moment( $state.params.startTime ).toDate();
+      $scope.bookingStartHour = moment( $state.params.startTime ).hour();
+      $scope.bookingStartMinute = moment( $state.params.startTime ).minute();
 
-      $scope.bookingEndDate = moment( $state.params.date ).toDate();
-      $scope.bookingEndHour = moment( $state.params.date ).hour();
-      $scope.bookingEndMinute = moment( $state.params.date ).add( 59, 'minutes' ).minute();
+      $scope.bookingEndDate = moment( $state.params.endTime ).toDate();
+      $scope.bookingEndHour = moment( $state.params.endTime ).hour();
+      $scope.bookingEndMinute = moment( $state.params.endTime ).add( 59, 'minutes' ).minute();
 
     } else {
 
