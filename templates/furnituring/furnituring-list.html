@@ -1,10 +1,11 @@
 <ion-view view-title="Möbleringar">
     <ion-content>
-        <ion-list>
-            <ion-item ng-repeat="furnituring in furniturings" href="#/app/furnituring-details/{{furnituring.FurnituringId}}">
-                {{furnituring.Name}}
-            </ion-item>
-        </ion-list>
+
+        <md-list>
+            <md-list-item ng-repeat="furnituring in furniturings" href="#/app/customer-details/{{furnituring.FurnituringId}}" class="noright">
+                <p>{{ furnituring.Name }}</p>
+            </md-list-item>
+        </md-list>
 
     </ion-content>
 
