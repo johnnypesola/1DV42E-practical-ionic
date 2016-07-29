@@ -77,9 +77,9 @@ angular.module( 'BookingSystem.users',
       });
     };
 
-    const uploadImage = function( UserId ){
+    const uploadImage = function( user, UserId ){
 
-      return UserImage.upload( $scope.user.ImageForUpload, UserId );
+      return UserImage.upload( user.ImageForUpload, UserId );
 
     };
 
@@ -173,7 +173,12 @@ angular.module( 'BookingSystem.users',
           if ( typeof $scope.user.ImageForUpload !== 'undefined' ) {
 
             // Upload image
-            uploadImage( response.Id )
+            uploadImage( $scope.user, response.Id )
+
+              .success( () => {
+
+                saveSuccess();
+              })
 
               // Image upload failed
               .error( () => {
@@ -183,14 +188,11 @@ angular.module( 'BookingSystem.users',
                     .position( 'top right' )
                     .theme( 'warn' )
                 );
-
-                // Redirect
-                history.back();
               });
 
+          } else {
+            saveSuccess();
           }
-
-          saveSuccess();
 
           // Something went wrong
         }).catch( ( response ) => {
@@ -305,9 +307,9 @@ angular.module( 'BookingSystem.users',
     /* Private methods START */
 
     // Upload image
-    const uploadImage = ( UserId ) => {
+    const uploadImage = ( user, UserId ) => {
 
-      return UserImage.upload( $scope.user.ImageForUpload, UserId );
+      return UserImage.upload( user.ImageForUpload, UserId );
 
     };
 
@@ -352,7 +354,12 @@ angular.module( 'BookingSystem.users',
           if ( typeof $scope.user.ImageForUpload !== 'undefined' ) {
 
             // Upload image
-            uploadImage( response.Id )
+            uploadImage( $scope.user, response.Id )
+
+              .success( () => {
+
+                saveSuccess( $scope.user );
+              })
 
               // Image upload failed
               .error( () => {
@@ -365,14 +372,8 @@ angular.module( 'BookingSystem.users',
 
                 // Redirect
                 history.back();
-              })
-
-              .then( () => {
-
-                saveSuccess( $scope.user );
               });
-          }
-          else {
+          } else {
             saveSuccess( $scope.user );
           }
 

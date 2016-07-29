@@ -172,8 +172,12 @@
 
       $scope.showAddHour = function( hour ){
 
-        $scope.hideAllAddButtonsCallback();
-        $scope.visibleAddButtonHour = hour;
+        // Only if user is logged in
+        if ( $rootScope.userInfo ) {
+
+          $scope.hideAllAddButtonsCallback();
+          $scope.visibleAddButtonHour = hour;
+        }
       };
 
       $scope.hideAddButton = function() {
@@ -217,10 +221,14 @@
 
       $scope.showEvent = function( id ) {
 
-        // Redirect to edit view
-        $state.go( 'app.' + $scope.bookingsType + '-details', {
-          id: id
-        });
+        // Only if user is logged in
+        if ( $rootScope.userInfo ) {
+
+          // Redirect to edit view
+          $state.go( 'app.' + $scope.bookingsType + '-details', {
+            id: id
+          });
+        }
       };
 
       /* Public methods END */

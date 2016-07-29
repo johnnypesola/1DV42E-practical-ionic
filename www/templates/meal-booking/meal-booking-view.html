@@ -36,9 +36,10 @@
     </ion-content>
 
     <md-button
-            class="md-fab md-warn md-lower-right-button md-ink-ripple"
-            aria-label="Skapa"
-            href="#/app/meal-booking-create"
+        ng-if="userInfo"
+        class="md-fab md-warn md-lower-right-button md-ink-ripple"
+        aria-label="Skapa"
+        href="#/app/meal-booking-create"
     >
         <span class="icon ion-plus-round md-big-icon"></span>
     </md-button>
