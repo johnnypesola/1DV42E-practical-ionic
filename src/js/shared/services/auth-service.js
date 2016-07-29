@@ -125,18 +125,23 @@ angular.module( 'BookingSystem.authService',
 
       // Get current logged in user from cookie
       const currentUser = that.getCredentials();
-      const expiredDateObj = new Date( currentUser.expires );
 
-      // Check that current user has token, and that it has not expired
-      if (
-        currentUser.token !== undefined &&
-        currentDateObj < expiredDateObj
-      ) {
-        returnValue = 'Bearer ' + currentUser.token;
-      }
-      // Token has expired
-      else {
-        that.clearCredentials();
+      // If user is logged in.
+      if ( currentUser ) {
+
+        const expiredDateObj = new Date( currentUser.expires );
+
+        // Check that current user has token, and that it has not expired
+        if (
+          currentUser.token !== undefined &&
+          currentDateObj < expiredDateObj
+        ) {
+          returnValue = 'Bearer ' + currentUser.token;
+        }
+        // Token has expired
+        else {
+          that.clearCredentials();
+        }
       }
 
       return returnValue;
@@ -235,6 +240,15 @@ angular.module( 'BookingSystem.authService',
         });
     };
 
+    $rootScope.abortLoginFromModal = function() {
+
+      $rootScope.loginModal.hide();
+
+      // Redirect to start page
+      $state.go( 'app.start' );
+
+    };
+
     $rootScope.logout = function() {
 
       that.logout().then( () => {
@@ -242,7 +256,11 @@ angular.module( 'BookingSystem.authService',
         // Redirect to start page
         $state.go( 'app.start' );
       });
+    };
 
+    $rootScope.showLogin = function() {
+
+      that.showLoginModal();
     };
 
     // Init values

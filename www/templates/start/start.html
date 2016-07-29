@@ -3,26 +3,6 @@
 
         <md-content>
             <md-tabs md-dynamic-height md-border-bottom>
-                <md-tab label="Boka">
-                    <md-content class="md-padding">
-
-                        <a class="button button-full" href="#/app/location-booking-create">
-                            <i class="icon ion-ios-location menu-icon-color rel-l-20"></i>
-                            Boka Lokal/Plats
-                        </a>
-
-                        <a class="button button-full" href="#/app/resource-booking-create">
-                            <i class="icon ion-cube menu-icon-color rel-l-20"></i>
-                            Boka Resurs
-                        </a>
-
-                        <a class="button button-full" href="#/app/meal-booking-create">
-                            <i class="icon ion-android-restaurant menu-icon-color rel-l-20"></i>
-                            Boka Måltid
-                        </a>
-
-                    </md-content>
-                </md-tab>
                 <md-tab label="Visa">
                     <md-content class="md-padding">
 
@@ -50,7 +30,7 @@
 
                         <h3>Övrigt</h3>
 
-                        <a class="button button-full" href="#/app/customers-list">
+                        <a class="button button-full" href="#/app/customers-list" ng-if="userInfo">
                             <i class="icon ion-briefcase menu-icon-color rel-l-20"></i>
                             Kunder
                         </a>
@@ -60,28 +40,50 @@
                             Lokaler/Platser
                         </a>
 
-                        <a class="button button-full" href="#/app/resources-list">
+                        <a class="button button-full" href="#/app/resources-list" ng-if="userInfo">
                             <i class="icon ion-cube menu-icon-color rel-l-20"></i>
                             Resurser
                         </a>
 
-                        <a class="button button-full" href="#/app/meals-list">
+                        <a class="button button-full" href="#/app/meals-list" ng-if="userInfo">
                             <i class="icon ion-android-restaurant menu-icon-color rel-l-20"></i>
                             Måltider
                         </a>
 
-                        <a class="button button-full" href="#/app/furnituring-list">
+                        <a class="button button-full" href="#/app/furnituring-list" ng-if="userInfo">
                             <i class="icon ion-ios-keypad menu-icon-color rel-l-20"></i>
                             Möbleringar
                         </a>
 
-                        <a class="button button-full" href="#/app/meal-properties-list">
+                        <a class="button button-full" href="#/app/meal-properties-list" ng-if="userInfo">
                             <i class="icon ion-ios-nutrition menu-icon-color rel-l-20"></i>
                             Måltidsegenskaper
                         </a>
 
                     </md-content>
                 </md-tab>
+
+                <md-tab label="Boka" ng-if="userInfo">
+                    <md-content class="md-padding">
+
+                        <a class="button button-full" href="#/app/location-booking-create">
+                            <i class="icon ion-ios-location menu-icon-color rel-l-20"></i>
+                            Boka Lokal/Plats
+                        </a>
+
+                        <a class="button button-full" href="#/app/resource-booking-create">
+                            <i class="icon ion-cube menu-icon-color rel-l-20"></i>
+                            Boka Resurs
+                        </a>
+
+                        <a class="button button-full" href="#/app/meal-booking-create">
+                            <i class="icon ion-android-restaurant menu-icon-color rel-l-20"></i>
+                            Boka Måltid
+                        </a>
+
+                    </md-content>
+                </md-tab>
+
             </md-tabs>
         </md-content>
     </ion-content>
