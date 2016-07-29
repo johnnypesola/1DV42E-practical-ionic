@@ -131,18 +131,13 @@ angular.module( 'BookingSystem.meals',
         );
       })
 
-        // In case meal cannot be fetched, display an error to user.
         .then( () => {
-          meal.mealProperties = MealHasProperty.queryForMeal(
-            {
-              mealId: $stateParams.mealId
-            }
-          );
 
           // Resolve promise
           deferred.resolve();
         })
 
+        // In case meal cannot be fetched, display an error to user.
         .catch( () => {
           $mdToast.show( $mdToast.simple()
               .content( 'Måltidsegenskaper kunde inte hämtas, var god försök igen.' )
@@ -173,6 +168,18 @@ angular.module( 'BookingSystem.meals',
 
         mealProperty.isSelected = match;
       });
+    };
+
+    const getMealSpecificProperties = function() {
+
+      $scope.meal.mealProperties = MealHasProperty.queryForMeal(
+        {
+          mealId: $stateParams.mealId
+        }
+      );
+
+      return $scope.meal.mealProperties.$promise;
+
     };
 
     const saveMealProperties = function(){
@@ -255,40 +262,46 @@ angular.module( 'BookingSystem.meals',
 
           $scope.endEditMode();
 
-          if ( typeof $scope.meal.ImageForUpload !== 'undefined' ) {
-
-            // Upload image
-            uploadImage( response.MealId )
-
-              // Image upload failed
-              .error( () => {
-
-                $mdToast.show( $mdToast.simple()
-                    .content( 'Måltiden "' + $scope.meal.Name + '" sparades, men det gick inte att ladda upp och spara den önskade bilden.' )
-                    .position( 'top right' )
-                    .theme( 'warn' )
-                );
-
-                // Redirect
-                history.back();
-              });
-
-          }
-
           saveMealProperties( response.MealId )
 
-          .then( () => {
+            .then( () => {
 
-            saveSuccess();
+              if ( typeof $scope.meal.ImageForUpload !== 'undefined' ) {
 
-          }).catch( () => {
+                // Upload image
+                uploadImage( response.MealId )
 
-            $mdToast.show( $mdToast.simple()
-              .content( 'Uppgifter om måltiden sparades, men måltidsegenskaper kunde inte sparas. Var god försök igen.' )
-              .position( 'top right' )
-              .theme( 'warn' )
-            );
-          });
+                  .success( () => {
+
+                    saveSuccess();
+                  })
+
+                  // Image upload failed
+                  .error( () => {
+
+                    $mdToast.show( $mdToast.simple()
+                        .content( 'Måltiden "' + $scope.meal.Name + '" sparades, men det gick inte att ladda upp och spara den önskade bilden.' )
+                        .position( 'top right' )
+                        .theme( 'warn' )
+                    );
+
+                    // Redirect
+                    history.back();
+                  });
+              }
+              else {
+                saveSuccess();
+              }
+            })
+
+            .catch( () => {
+
+              $mdToast.show( $mdToast.simple()
+                .content( 'Uppgifter om måltiden sparades, men måltidsegenskaper kunde inte sparas. Var god försök igen.' )
+                .position( 'top right' )
+                .theme( 'warn' )
+              );
+            });
 
           // Something went wrong
         }).catch( ( response ) => {
@@ -421,6 +434,11 @@ angular.module( 'BookingSystem.meals',
       .then( () => {
         return getAllMealProperties();
       })
+
+      .then( () => {
+        return getMealSpecificProperties();
+      })
+
       .then( () => {
         processMealProperties();
       });
