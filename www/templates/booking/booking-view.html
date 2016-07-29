@@ -40,6 +40,7 @@
     </ion-content>
 
     <md-button
+            ng-if="userInfo"
             class="md-fab md-warn md-lower-right-button-footer md-ink-ripple"
             aria-label="Skapa"
             ng-click="modal.show()"
@@ -79,7 +80,6 @@
                 <i class="icon ion-android-restaurant assertive"></i> Måltider
             </a>
         </div>
-
     </div>
 
 </ion-view>

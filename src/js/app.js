@@ -90,7 +90,7 @@ BookingSystem.run( ['$ionicPlatform', '$rootScope', ( $ionicPlatform, $rootScope
 }] );
 
 // Controller for nav bar
-BookingSystem.controller( 'NavigationCtrl', ['$scope', '$state', 'API_IMG_PATH_URL', ( $scope, $state, API_IMG_PATH_URL ) => {
+BookingSystem.controller( 'NavigationCtrl', ['$scope', '$state', 'API_IMG_PATH_URL', 'AuthService', ( $scope, $state, API_IMG_PATH_URL, AuthService ) => {
 
   $scope.API_IMG_PATH_URL = API_IMG_PATH_URL;
 }]

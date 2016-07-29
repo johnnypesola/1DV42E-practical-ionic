@@ -23,6 +23,7 @@ angular.module( 'BookingSystem.httpSettings',
         if ( AuthService.apiUrlEqualsUrl( config.url ) ) {
 
           // If user is not logged in, reject with 401 unauthorized
+          /*
           if ( !AuthService.isLoggedInCheck() ) {
 
             return $q.reject({
@@ -30,6 +31,7 @@ angular.module( 'BookingSystem.httpSettings',
               status: 401
             });
           }
+          */
 
           // User is logged in, set http Authentication header
           config.headers.Authorization = AuthService.getAuthHeader();
