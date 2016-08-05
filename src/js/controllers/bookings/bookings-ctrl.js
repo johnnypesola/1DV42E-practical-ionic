@@ -18,8 +18,6 @@ angular.module( 'BookingSystem.bookings',
     $scope.bookingTypes = BOOKING_TYPES;
     $scope.bookingsType = $scope.bookingTypes.booking;
 
-    console.log( $stateParams.weekDate );
-
     /* Private methods START */
 
     const setupModal = function(){

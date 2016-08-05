@@ -122,8 +122,6 @@ angular.module( 'BookingSystem.mealProperties',
 
       $scope.isEditMode = false;
       $scope.mealProperty = $scope.mealPropertyBackup;
-
-      console.log( $scope.mealPropertyBackup );
     };
 
     $scope.saveMealProperty = function() {
