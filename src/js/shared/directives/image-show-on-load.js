@@ -6,7 +6,6 @@
     // Dependencies
     []
   )
-
     .directive( 'showOnLoad', () => {
       return {
         link: function( scope, element ) {
