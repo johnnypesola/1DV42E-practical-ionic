@@ -6,6 +6,16 @@
 
 http://johnnypesola.github.io/1DV42E-practical-ionic
 
+#### Accounts to test with:
+
+**Administrator**
+Username: administrator   
+Password: superpassword
+
+**User**
+Username: user
+Password: password
+
 ### What is this?
 
 This is a booking system app for the course 1DV42E at the Linnaeus University. This app is being developed for a customer whom has set the terms for the used technology.
