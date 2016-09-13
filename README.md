@@ -5,15 +5,15 @@
 ### Latest working demo
 
 http://johnnypesola.github.io/1DV42E-practical-ionic
-
-#### Accounts to test with:
-
-**Administrator**
+   
+Accounts to test with:   
+   
+**Administrator**   
 Username: administrator   
 Password: superpassword
-
-**User**
-Username: user
+   
+**User**   
+Username: user   
 Password: password
 
 ### What is this?
