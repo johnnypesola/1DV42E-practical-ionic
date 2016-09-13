@@ -251,10 +251,19 @@ angular.module( 'BookingSystem.authService',
 
     $rootScope.logout = function() {
 
+      // Inject ionic modal to avoid circular dependency.
+      const mdToast = $injector.get( '$mdToast' );
+
       that.logout().then( () => {
 
         // Redirect to start page
         $state.go( 'app.start' );
+
+        // Display message
+        mdToast.show( mdToast.simple()
+          .content( 'Du är nu utloggad' )
+          .position( 'top right' )
+        );
       });
     };
 
