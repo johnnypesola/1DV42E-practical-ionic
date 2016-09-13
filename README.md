@@ -32,7 +32,7 @@ At the time beeing we are using the [Ionic 1](http://ionic.io/) framework with A
 #### Backend
 The backend is built using [ASP.NET webapi 2](http://www.asp.net/web-api) with ADO.NET. All data is stored in a MS SQL database. Manipulation to the data is done through a set of MS SQL stored procedures.
    
-Check out the [backend branch with authentication](https://github.com/johnnypesola/1DV42E-practical-ionic/tree/backend-auth)
+Check out the [backend branch with authentication](https://github.com/johnnypesola/1DV42E-practical-ionic/tree/backend-auth-new)
 
 #### Authentication
 ##### ASP.NET Identity 2 (Storing user credentials)
