@@ -22,17 +22,6 @@ angular.module( 'BookingSystem.httpSettings',
         // If the base url of the request is the same as the API url
         if ( AuthService.apiUrlEqualsUrl( config.url ) ) {
 
-          // If user is not logged in, reject with 401 unauthorized
-          /*
-          if ( !AuthService.isLoggedInCheck() ) {
-
-            return $q.reject({
-              config: config,
-              status: 401
-            });
-          }
-          */
-
           // User is logged in, set http Authentication header
           config.headers.Authorization = AuthService.getAuthHeader();
         }
