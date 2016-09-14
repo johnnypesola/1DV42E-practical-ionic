@@ -44,7 +44,7 @@ angular.module( 'BookingSystem.bookingHelperServices',
           concurrentBookingsArray.push( bookingsArray[i] );
         }
       }
-      
+
       // Set concurrent bookings count
       targetBooking.ConcurrentBookings = concurrentBookingsArray.length; // - concurrentBookingsFalsePositiveCount;
 
