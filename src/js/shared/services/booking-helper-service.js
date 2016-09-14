@@ -44,27 +44,7 @@ angular.module( 'BookingSystem.bookingHelperServices',
           concurrentBookingsArray.push( bookingsArray[i] );
         }
       }
-
-      // TODO: Figure out how many of the concurrent bookings are concurrent with eachother
-      /*
-      for ( i = 0; i < concurrentBookingsArray.length; i++ ){
-
-        for ( j = 0; j < concurrentBookingsArray.length; j++ ){
-
-          if (
-            !doBookingsCollide(
-              concurrentBookingsArray[i].StartTime,
-              concurrentBookingsArray[i].EndTime,
-              concurrentBookingsArray[j].StartTime,
-              concurrentBookingsArray[j].EndTime
-            )
-          ){
-            concurrentBookingsFalsePositiveCount++;
-          }
-        }
-      }
-      */
-
+      
       // Set concurrent bookings count
       targetBooking.ConcurrentBookings = concurrentBookingsArray.length; // - concurrentBookingsFalsePositiveCount;
 
