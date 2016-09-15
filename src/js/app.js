@@ -15,7 +15,6 @@ const BookingSystem = angular
     'BookingSystem.httpSettings',
 
     // Controllers
-    'BookingSystem.login',
     'BookingSystem.meals',
     'BookingSystem.resources',
     'BookingSystem.bookings',
