@@ -28,6 +28,8 @@ namespace BookingSystemAuth.Models
         const string THUMBNAIL_EXTRA_FILENAME = ".thumbnail";
         const string IMAGE_FILE_EXTENSION = "jpg";
 
+        static readonly Color PADDING_COLOR = Color.Black;
+
         public string SaveImage(string IMAGE_PATH, string base64string, int objectId)
         {
             bytes = Convert.FromBase64String(base64string);
@@ -44,7 +46,12 @@ namespace BookingSystemAuth.Models
                     image.Height < MIN_IMAGE_HEIGHT
                    )
                 {
-                    throw new Exception("Maximum image dimensions are: Width: 400px and Height: 400px. Minimum image dimensions are: Width: 10px and Height 10px.");
+                    throw new Exception(
+                        String.Format(
+                            "Maximum image dimensions are: Width: {0}px and Height: {1}px. Minimum image dimensions are: Width: {2}px and Height {3}px.", 
+                            MAX_IMAGE_WIDTH, MAX_IMAGE_HEIGHT, MIN_IMAGE_WIDTH, MIN_IMAGE_HEIGHT
+                        )
+                    );
                 }
 
                 // Build uploadpath
@@ -104,24 +111,37 @@ namespace BookingSystemAuth.Models
         /// <returns>The resized image.</returns>
         public static Bitmap ResizeImage(Image image, int width, int height)
         {
-            var destRect = new Rectangle(0, 0, width, height);
+            // Calculate the aspect ratio for the destination image
+            double ratioX = (double)width / (double)image.Width;
+            double ratioY = (double)height / (double)image.Height;
+
+            double ratio = ratioX < ratioY ? ratioX : ratioY;
+
+            // Calculate the height and width for the destnation image
+            int newHeight = Convert.ToInt32(image.Height * ratio);
+            int newWidth = Convert.ToInt32(image.Width * ratio);
+
+            // Calculate center positioning of new resized image
+            int posX = Convert.ToInt32((width - ((double)image.Width * ratio)) / 2);
+            int posY = Convert.ToInt32((height - ((double)image.Height * ratio)) / 2);
+
+            // Create image
             var destImage = new Bitmap(width, height);
 
             destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
 
             using (var graphics = Graphics.FromImage(destImage))
             {
+                // Set options
                 graphics.CompositingMode = CompositingMode.SourceCopy;
                 graphics.CompositingQuality = CompositingQuality.HighQuality;
                 graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 graphics.SmoothingMode = SmoothingMode.HighQuality;
                 graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-                using (var wrapMode = new ImageAttributes())
-                {
-                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
-                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
-                }
+                // Draw
+                graphics.Clear(PADDING_COLOR);
+                graphics.DrawImage(image, posX, posY, newWidth, newHeight);
             }
 
             return destImage;

@@ -200,6 +200,9 @@ namespace BookingSystemAuth.Controllers
                 // Get user from DB
                 IdentityUser user = userStore.FindByIdAsync(userId).Result;
 
+                // Remove old image, if one exists
+                imageService.DeleteImage(user.ImageSrc);
+
                 // Save image
                 UploadImagePath = imageService.SaveImage(IMAGE_PATH, base64string, userId);
 

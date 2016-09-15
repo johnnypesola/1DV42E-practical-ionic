@@ -190,6 +190,9 @@ namespace BookingSystemAuth.Controllers
                 // Process image data
                 base64string = Request.Content.ReadAsStringAsync().Result;
 
+                // Remove old image, if one exists
+                imageService.DeleteImage(customer.ImageSrc);
+
                 // Save image
                 UploadImagePath = imageService.SaveImage(IMAGE_PATH, base64string, CustomerId);
 

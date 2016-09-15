@@ -99,8 +99,8 @@ namespace BookingSystemAuth.Controllers
                 return InternalServerError();
             }
 
-            // Respond that the booking was created and redirect
-            return Ok(meal); //CreatedAtRoute("DefaultApi", new { id = meal.MealId }, meal);
+            // Respond that the booking was created
+            return Ok(meal);
         }
 
         // DELETE: api/Meal/5
@@ -181,7 +181,6 @@ namespace BookingSystemAuth.Controllers
             {
                 return BadRequest(e.Message);
             }
-
         }
     }
 }
