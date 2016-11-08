@@ -67,11 +67,12 @@ angular.module( 'BookingSystem.locations',
   )
 
   //Edit
-  .controller( 'LocationDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', '$mdToast', 'Location', 'LocationImage', 'API_IMG_PATH_URL', 'DEFAULT_MAP_ZOOM', 'DEFAULT_LONGITUDE', 'DEFAULT_LATITUDE', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, $mdToast, Location, LocationImage, API_IMG_PATH_URL, DEFAULT_MAP_ZOOM, DEFAULT_LONGITUDE, DEFAULT_LATITUDE ) => {
+  .controller( 'LocationDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', '$mdToast', 'Location', 'LocationImage', 'API_IMG_PATH_URL', 'DEFAULT_MAP_ZOOM', 'DEFAULT_LONGITUDE', 'DEFAULT_LATITUDE', 'LocationFurnituring', '$q', 'Furnituring', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, $mdToast, Location, LocationImage, API_IMG_PATH_URL, DEFAULT_MAP_ZOOM, DEFAULT_LONGITUDE, DEFAULT_LATITUDE, LocationFurnituring, $q, Furnituring ) => {
 
     /* Init vars */
 
-    const modalTemplateUrl = 'templates/modals/location-delete.html';
+    const selectLocationFurnituringModalTemplateUrl = 'templates/modals/select-location-furnituring.html';
+    const deleteModalTemplateUrl = 'templates/modals/location-delete.html';
     const googleMapsTemplateUrl = 'templates/modals/google-maps.html';
 
     $scope.locationBackup = {};
@@ -82,22 +83,54 @@ angular.module( 'BookingSystem.locations',
     /* Private methods START */
     const setupDeleteModal = function(){
 
-      $ionicModal.fromTemplateUrl( modalTemplateUrl, {
+      const deferred = $q.defer();
+
+      $ionicModal.fromTemplateUrl( deleteModalTemplateUrl, {
         scope: $scope,
         animation: MODAL_ANIMATION
       })
       .then( ( response ) => {
 
         $scope.deleteModal = response;
+
+        deferred.resolve();
       });
 
       // Cleanup the modal when we're done with it!
       $scope.$on( '$destroy', () => {
         $scope.deleteModal.remove();
       });
+
+      return deferred.promise;
+    };
+
+    const setupSelectLocationFurnituringModal = function(){
+
+      const deferred = $q.defer();
+
+      $ionicModal.fromTemplateUrl( selectLocationFurnituringModalTemplateUrl, {
+        scope: $scope,
+        animation: MODAL_ANIMATION
+      })
+        .then( ( response ) => {
+
+          $scope.selectModal = response;
+
+          deferred.resolve();
+        });
+
+      // Cleanup the modal when we're done with it!
+      $scope.$on( '$destroy', () => {
+
+        $scope.selectModal.remove();
+      });
+
+      return deferred.promise;
     };
 
     const setupGoogleMapsModal = function(){
+
+      const deferred = $q.defer();
 
       $ionicModal.fromTemplateUrl( googleMapsTemplateUrl, {
         scope: $scope,
@@ -106,12 +139,16 @@ angular.module( 'BookingSystem.locations',
         .then( ( response ) => {
 
           $scope.mapsModal = response;
+
+          deferred.resolve();
         });
 
       // Cleanup the modal when we're done with it!
       $scope.$on( '$destroy', () => {
         $scope.mapsModal.remove();
       });
+
+      return deferred.promise;
     };
 
     const uploadImage = function( LocationId ){
@@ -182,6 +219,40 @@ angular.module( 'BookingSystem.locations',
       };
     };
 
+    const getAllFurniturings = function() {
+      $scope.furniturings = Furnituring.query();
+
+      return $scope.furniturings.$promise;
+    };
+
+    const processFurniturings = function() {
+
+      $scope.furniturings.forEach( ( furnituring ) => {
+
+        const isMatch = $scope.location.furniturings.some( ( locationHasThisFurnituring ) => {
+
+          return furnituring.Name === locationHasThisFurnituring.FurnituringName;
+        });
+
+        furnituring.isSelected = isMatch;
+
+        // Defines default max number of people for furnituring if not defined.
+        if ( !furnituring.maxPeople ){
+          furnituring.maxPeople = 4;
+        }
+      });
+    };
+
+    const getFurnituringsForLocation = function() {
+
+      $scope.location.furniturings = LocationFurnituring.queryForLocation(
+        {
+          locationId: $stateParams.locationId
+        });
+
+      return $scope.location.furniturings.$promise;
+    };
+
     const getLocation = function () {
 
       const location = Location.get(
@@ -199,12 +270,59 @@ angular.module( 'BookingSystem.locations',
           .theme( 'warn' )
         );
       });
+
       $scope.location = location;
+
+      return location.$promise;
+    };
+
+    const isMaxPeopleForLocationFurnituringsMissing = function() {
+
+      let isMissing = false;
+      const newFurnituringsArray = [];
+
+      $scope.location.furniturings.forEach( ( furnituring ) => {
+
+        // Check if there are any elements where max people property is missing or where its value is undefined/null.
+        if ( !( 'maxPeople' in furnituring ) || furnituring.maxPeople === undefined || furnituring.maxPeople === null ) {
+
+          isMissing = true;
+        } else {
+
+          newFurnituringsArray.push( furnituring );
+        }
+      });
+
+      if ( isMissing ) {
+
+        // Missing values detected. Overwrite location furniturings array with safe array elements.
+        $scope.location.furniturings = newFurnituringsArray;
+      }
+
+      return isMissing;
+    };
+
+    const syncFurnituringForLocation = function() {
+
+      // Filter out furniturings that are not selected.
+      const newFurnituringArray = $scope.furniturings.filter( ( furnituring ) => {
+
+        return furnituring.isSelected;
+      });
+
+      $scope.location.furniturings = newFurnituringArray;
     };
 
     /* Private Methods END */
 
     /* Public Methods START */
+
+    $scope.showSelectModal = function() {
+
+      // Show modal
+      $scope.selectModal.show();
+
+    };
 
     $scope.startEditMode = function () {
 
@@ -388,9 +506,26 @@ angular.module( 'BookingSystem.locations',
 
     /* Initialization START */
 
-    setupDeleteModal();
-    setupGoogleMapsModal();
-    getLocation();
+    setupDeleteModal()
+      .then( () => {
+        return setupSelectLocationFurnituringModal();
+      })
+      .then( () => {
+        return setupGoogleMapsModal();
+      })
+      .then( () => {
+        return getLocation();
+      })
+      .then( () => {
+        return getAllFurniturings();
+      })
+      .then( () => {
+        return getFurnituringsForLocation();
+      })
+      .then( () => {
+        processFurniturings();
+      });
+
     initMapVariables();
 
     // Add watch on $scope.map.bounds to check (every time it changes) if return boundary data is received from google maps
@@ -410,6 +545,21 @@ angular.module( 'BookingSystem.locations',
       },
       true
     );
+
+    // Execute action on hide modal
+    $scope.$on( 'modal.hidden', () => {
+
+      syncFurnituringForLocation();
+
+      if ( isMaxPeopleForLocationFurnituringsMissing() ){
+
+        $mdToast.show( $mdToast.simple()
+            .content( 'Uppgifter om max antal personer var ogiltig för en eller flera möbleringar. Var god försök igen.' )
+            .position( 'top right' )
+            .theme( 'warn' )
+        );
+      }
+    });
 
     /* Initialization END */
 

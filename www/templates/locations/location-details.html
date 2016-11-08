@@ -123,6 +123,40 @@
                     </md-input-container>
                 </div>
 
+                <div layout-gt-xs="row" ng-show="location.furniturings.length">
+                    <span class="faded">Tillgängliga möbleringar</span>
+                </div>
+                <div layout-gt-xs="row" style="height: 300px;">
+                    <div
+                            class="custom-chip"
+                            ng-repeat="furnituring in location.furniturings"
+                    >
+                        {{furnituring.FurnituringName}} <span class="faded">{{furnituring.MaxPeople}} personer</span>
+                    </div>
+
+                </div>
+
+                <pre>
+                    <h2>furniturings</h2>
+                    {{ furniturings | json }}
+                </pre>
+
+                <pre>
+                    <h2>location furniturings</h2>
+                    {{ location.furniturings | json }}
+                </pre>
+
+                <div layout-gt-xs="row" ng-show="isEditMode">
+                    <div class="col">
+                        <md-button
+                                md-no-ink
+                                class="md-primary"
+                                ng-click="showSelectModal()"
+                                >
+                            <i class="icon ion-ios-keypad"></i> Välj Möbleringar</md-button>
+                    </div>
+                </div>
+
             </form>
 
         </div>

@@ -1,0 +1,45 @@
+<ion-modal-view view-title="Välj möbleringar">
+    <ion-header-bar class="bar-positive">
+
+        <div class="buttons">
+            <button class="button" ng-click="selectModal.hide()">
+                <i class="icon ion-ios-arrow-back"></i> Tillbaka</button>
+        </div>
+
+        <h1 class="title">Välj möbleringar för lokal / plats</h1>
+    </ion-header-bar>
+    <ion-content padding="true">
+
+        <ion-list>
+            <ion-item ng-repeat="furnituring in furniturings">
+                <md-checkbox
+                        ng-model="furnituring.isSelected"
+                        aria-label="Selected"
+                        class="no-margin-bottom"
+                        ng-disabled="!isEditMode"
+                        >
+                    {{furnituring.Name}}
+
+                </md-checkbox>
+
+                <span class="faded" ng-class="{'invisible': !furnituring.isSelected}">
+                    med max
+                    <input flex
+                       class="location-furnituring-max-people"
+                       type="number"
+                       ng-model="furnituring.maxPeople"
+                       min="1"
+                       max="9999"
+                    >
+                    personer
+                </span>
+
+            </ion-item>
+        </ion-list>
+
+        <pre>
+            {{ furniturings | json }}
+        </pre>
+
+    </ion-content>
+</ion-modal-view>
