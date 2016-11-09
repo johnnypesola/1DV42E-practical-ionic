@@ -50,7 +50,7 @@
                     </div>
 
                     <md-input-container class="md-block" flex-gt-xs>
-                        <label>Max antal personer</label>
+                        <label>Totalt max antal personer för lokal/plats</label>
                         <input
                                 type="number"
                                 name="MaxPeople"
@@ -131,7 +131,7 @@
                             class="custom-chip"
                             ng-repeat="furnituring in location.furniturings"
                     >
-                        {{furnituring.FurnituringName}} <span class="faded">{{furnituring.MaxPeople}} personer</span>
+                        {{furnituring.Name}} <span class="faded">max {{furnituring.MaxPeople}} personer</span>
                     </div>
 
                 </div>

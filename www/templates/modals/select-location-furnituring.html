@@ -10,32 +10,39 @@
     </ion-header-bar>
     <ion-content padding="true">
 
-        <ion-list>
-            <ion-item ng-repeat="furnituring in furniturings">
-                <md-checkbox
-                        ng-model="furnituring.isSelected"
-                        aria-label="Selected"
-                        class="no-margin-bottom"
-                        ng-disabled="!isEditMode"
-                        >
-                    {{furnituring.Name}}
+        <form name="furnituringForm">
 
-                </md-checkbox>
+            <ion-list>
+                <ion-item ng-repeat="furnituring in furniturings">
 
-                <span class="faded" ng-class="{'invisible': !furnituring.isSelected}">
-                    med max
-                    <input flex
-                       class="location-furnituring-max-people"
-                       type="number"
-                       ng-model="furnituring.maxPeople"
-                       min="1"
-                       max="9999"
-                    >
-                    personer
-                </span>
+                    <md-checkbox
+                            ng-model="furnituring.isSelected"
+                            aria-label="Selected"
+                            class="no-margin-bottom"
+                            ng-disabled="!isEditMode"
+                            >
+                        {{furnituring.Name}}
 
-            </ion-item>
-        </ion-list>
+                    </md-checkbox>
+
+                    <span class="faded" ng-class="{'invisible': !furnituring.isSelected}">
+                        med max
+                        <input flex
+                               class="location-furnituring-max-people"
+                               type="number"
+                               ng-model="furnituring.MaxPeople"
+                               min="1"
+                               max="{{location.MaxPeople}}"
+                               ng-required="true"
+                               ng-pattern="/^[0-9]*$/"
+                               enforce-num-validation
+                           >
+                        personer
+                    </span>
+
+                </ion-item>
+            </ion-list>
+        </form>
 
         <pre>
             {{ furniturings | json }}

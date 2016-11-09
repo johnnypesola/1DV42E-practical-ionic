@@ -237,8 +237,8 @@ angular.module( 'BookingSystem.locations',
         furnituring.isSelected = isMatch;
 
         // Defines default max number of people for furnituring if not defined.
-        if ( !furnituring.maxPeople ){
-          furnituring.maxPeople = 4;
+        if ( !furnituring.MaxPeople ){
+          furnituring.MaxPeople = 4;
         }
       });
     };
@@ -284,7 +284,7 @@ angular.module( 'BookingSystem.locations',
       $scope.location.furniturings.forEach( ( furnituring ) => {
 
         // Check if there are any elements where max people property is missing or where its value is undefined/null.
-        if ( !( 'maxPeople' in furnituring ) || furnituring.maxPeople === undefined || furnituring.maxPeople === null ) {
+        if ( !( 'MaxPeople' in furnituring ) || furnituring.MaxPeople === undefined || furnituring.MaxPeople === null ) {
 
           isMissing = true;
         } else {
@@ -500,6 +500,16 @@ angular.module( 'BookingSystem.locations',
 
           history.back();
         });
+    };
+
+    $scope.checkFurnituringMaxPeopleInput = function( inputValue ) {
+
+      console.log( inputValue );
+      /*
+      if ( inputValue > $scope.furnituring.MaxPeople ) {
+
+      }
+      */
     };
 
     /* Public Methods END */

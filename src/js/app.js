@@ -55,6 +55,7 @@ const BookingSystem = angular
     'BookingSystem.ngMinMaxDirectives',
     'BookingSystem.calendarDayDirective',
     'BookingSystem.imageShowOnLoadDirective',
+    'BookingSystem.enforceNumValidationDirective',
 
     // Filters
     'BookingSystem.filters'
