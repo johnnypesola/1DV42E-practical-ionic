@@ -434,11 +434,9 @@ angular.module( 'BookingSystem.meals',
       .then( () => {
         return getAllMealProperties();
       })
-
       .then( () => {
         return getMealSpecificProperties();
       })
-
       .then( () => {
         processMealProperties();
       });

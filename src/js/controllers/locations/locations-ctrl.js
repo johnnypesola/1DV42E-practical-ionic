@@ -58,6 +58,7 @@ angular.module( 'BookingSystem.locations',
 
     /* Initialization START */
     $scope.$on( '$ionicView.beforeEnter', ( event, data ) => {
+
       getLocations();
     });
 
@@ -67,11 +68,12 @@ angular.module( 'BookingSystem.locations',
   )
 
   //Edit
-  .controller( 'LocationDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', '$mdToast', 'Location', 'LocationImage', 'API_IMG_PATH_URL', 'DEFAULT_MAP_ZOOM', 'DEFAULT_LONGITUDE', 'DEFAULT_LATITUDE', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, $mdToast, Location, LocationImage, API_IMG_PATH_URL, DEFAULT_MAP_ZOOM, DEFAULT_LONGITUDE, DEFAULT_LATITUDE ) => {
+  .controller( 'LocationDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', '$mdToast', 'Location', 'LocationImage', 'API_IMG_PATH_URL', 'DEFAULT_MAP_ZOOM', 'DEFAULT_LONGITUDE', 'DEFAULT_LATITUDE', 'LocationFurnituring', '$q', 'Furnituring', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, $mdToast, Location, LocationImage, API_IMG_PATH_URL, DEFAULT_MAP_ZOOM, DEFAULT_LONGITUDE, DEFAULT_LATITUDE, LocationFurnituring, $q, Furnituring ) => {
 
     /* Init vars */
 
-    const modalTemplateUrl = 'templates/modals/location-delete.html';
+    const selectLocationFurnituringModalTemplateUrl = 'templates/modals/select-location-furnituring.html';
+    const deleteModalTemplateUrl = 'templates/modals/location-delete.html';
     const googleMapsTemplateUrl = 'templates/modals/google-maps.html';
 
     $scope.locationBackup = {};
@@ -82,22 +84,54 @@ angular.module( 'BookingSystem.locations',
     /* Private methods START */
     const setupDeleteModal = function(){
 
-      $ionicModal.fromTemplateUrl( modalTemplateUrl, {
+      const deferred = $q.defer();
+
+      $ionicModal.fromTemplateUrl( deleteModalTemplateUrl, {
         scope: $scope,
         animation: MODAL_ANIMATION
       })
-      .then( ( response ) => {
+        .then( ( response ) => {
 
-        $scope.deleteModal = response;
-      });
+          $scope.deleteModal = response;
+
+          deferred.resolve();
+        });
 
       // Cleanup the modal when we're done with it!
       $scope.$on( '$destroy', () => {
         $scope.deleteModal.remove();
       });
+
+      return deferred.promise;
+    };
+
+    const setupSelectLocationFurnituringModal = function(){
+
+      const deferred = $q.defer();
+
+      $ionicModal.fromTemplateUrl( selectLocationFurnituringModalTemplateUrl, {
+        scope: $scope,
+        animation: MODAL_ANIMATION
+      })
+        .then( ( response ) => {
+
+          $scope.selectModal = response;
+
+          deferred.resolve();
+        });
+
+      // Cleanup the modal when we're done with it!
+      $scope.$on( '$destroy', () => {
+
+        $scope.selectModal.remove();
+      });
+
+      return deferred.promise;
     };
 
     const setupGoogleMapsModal = function(){
+
+      const deferred = $q.defer();
 
       $ionicModal.fromTemplateUrl( googleMapsTemplateUrl, {
         scope: $scope,
@@ -106,12 +140,16 @@ angular.module( 'BookingSystem.locations',
         .then( ( response ) => {
 
           $scope.mapsModal = response;
+
+          deferred.resolve();
         });
 
       // Cleanup the modal when we're done with it!
       $scope.$on( '$destroy', () => {
         $scope.mapsModal.remove();
       });
+
+      return deferred.promise;
     };
 
     const uploadImage = function( LocationId ){
@@ -123,9 +161,9 @@ angular.module( 'BookingSystem.locations',
     const saveSuccess = function() {
       // Display success message
       $mdToast.show( $mdToast.simple()
-        .content( 'Lokalen/Platsen "' + $scope.location.Name + '" sparades med ett lyckat resultat' )
-        .position( 'top right' )
-        .theme( 'success' )
+          .content( 'Lokalen/Platsen "' + $scope.location.Name + '" sparades med ett lyckat resultat' )
+          .position( 'top right' )
+          .theme( 'success' )
       );
 
       // Redirect
@@ -182,6 +220,40 @@ angular.module( 'BookingSystem.locations',
       };
     };
 
+    const getAllFurniturings = function() {
+      $scope.furniturings = Furnituring.query();
+
+      return $scope.furniturings.$promise;
+    };
+
+    const processFurniturings = function() {
+
+      $scope.furniturings.forEach( ( furnituring ) => {
+
+        const isMatch = $scope.location.furniturings.some( ( locationHasThisFurnituring ) => {
+
+          return furnituring.Name === locationHasThisFurnituring.FurnituringName;
+        });
+
+        furnituring.isSelected = isMatch;
+
+        // Defines default max number of people for furnituring if not defined.
+        if ( !furnituring.MaxPeople ){
+          furnituring.MaxPeople = 4;
+        }
+      });
+    };
+
+    const getFurnituringsForLocation = function() {
+
+      $scope.location.furniturings = LocationFurnituring.queryForLocation(
+        {
+          locationId: $stateParams.locationId
+        });
+
+      return $scope.location.furniturings.$promise;
+    };
+
     const getLocation = function () {
 
       const location = Location.get(
@@ -194,17 +266,119 @@ angular.module( 'BookingSystem.locations',
       location.$promise.catch( () => {
 
         $mdToast.show( $mdToast.simple()
-          .content( 'Lokal/plats kunde inte hämtas, var god försök igen.' )
-          .position( 'top right' )
-          .theme( 'warn' )
+            .content( 'Lokal/plats kunde inte hämtas, var god försök igen.' )
+            .position( 'top right' )
+            .theme( 'warn' )
         );
       });
+
       $scope.location = location;
+
+      return location.$promise;
+    };
+
+    const isMaxPeopleForLocationFurnituringsMissing = function() {
+
+      let isMissing = false;
+      const newFurnituringsArray = [];
+
+      $scope.location.furniturings.forEach( ( furnituring ) => {
+
+        // Check if there are any elements where max people property is missing or where its value is undefined/null.
+        if ( !( 'MaxPeople' in furnituring ) || furnituring.MaxPeople === undefined || furnituring.MaxPeople === null ) {
+
+          isMissing = true;
+        } else {
+
+          newFurnituringsArray.push( furnituring );
+        }
+      });
+
+      if ( isMissing ) {
+
+        // Missing values detected. Overwrite location furniturings array with safe array elements.
+        $scope.location.furniturings = newFurnituringsArray;
+      }
+
+      return isMissing;
+    };
+
+    const filterSelectedFurnituringForLocation = function() {
+
+      // Filter out furniturings that are not selected.
+      /*
+      $scope.location.furniturings = $scope.furniturings.filter( ( furnituring ) => {
+
+        return furnituring.isSelected;
+      });
+      */
+
+      const newFurnituringsArray = [];
+
+      $scope.furniturings.forEach( ( furnituring ) => {
+
+        if ( furnituring.isSelected ) {
+          newFurnituringsArray.push({
+            LocationId: $stateParams.locationId,
+            FurnituringId: furnituring.FurnituringId,
+            MaxPeople: furnituring.MaxPeople,
+            FurnituringName: furnituring.Name
+          });
+        }
+      });
+
+      console.log( newFurnituringsArray );
+
+      $scope.location.furniturings = newFurnituringsArray;
+
+      console.log( $scope.location );
+    };
+
+    const removeOldFurnituringsForLocation = function() {
+
+      return LocationFurnituring.removeForLocation({
+        locationId: $stateParams.locationId
+      }).$promise;
+    };
+
+    const saveFurnituringsForLocation = function() {
+
+      const deferred = $q.defer();
+      const postDataArray = [];
+
+      removeOldFurnituringsForLocation()
+        .finally( () => {
+
+          $scope.location.furniturings.forEach( ( furnituring ) => {
+
+            postDataArray.push({
+              LocationId: $stateParams.locationId,
+              FurnituringId: furnituring.FurnituringId,
+              MaxPeople: furnituring.MaxPeople
+            });
+          });
+
+          LocationFurnituring.saveForLocation( postDataArray ).$promise
+            .then( () => {
+
+              // Resolve promise
+              deferred.resolve();
+            });
+        });
+
+      return deferred.promise;
     };
 
     /* Private Methods END */
 
     /* Public Methods START */
+
+    $scope.showSelectModal = function() {
+
+      // Show modal
+      $scope.selectModal.show();
+
+    };
 
     $scope.startEditMode = function () {
 
@@ -254,7 +428,7 @@ angular.module( 'BookingSystem.locations',
 
             uploadImage( response.LocationId )
 
-            // Image upload successful
+              // Image upload successful
               .success( () => {
                 saveSuccess();
               })
@@ -262,16 +436,26 @@ angular.module( 'BookingSystem.locations',
               .error( () => {
 
                 $mdToast.show( $mdToast.simple()
-                  .content( 'Lokalen/Platsen sparades, men det gick inte att ladda upp och spara den önskade bilden.' )
-                  .position( 'top right' )
-                  .theme( 'warn' )
+                    .content( 'Lokalen/Platsen sparades, men det gick inte att ladda upp och spara den önskade bilden.' )
+                    .position( 'top right' )
+                    .theme( 'warn' )
                 );
               });
           }
-          else {
 
-            saveSuccess();
-          }
+          saveFurnituringsForLocation()
+            .then( () => {
+
+              saveSuccess();
+
+            }).catch( () => {
+
+              $mdToast.show( $mdToast.simple()
+                  .content( 'Uppgifter om lokalen sparades, men lokalens möbleringar kunde inte sparas. Var god försök igen.' )
+                  .position( 'top right' )
+                  .theme( 'warn' )
+              );
+            });
 
           // Something went wrong
         }).catch( ( response ) => {
@@ -279,28 +463,28 @@ angular.module( 'BookingSystem.locations',
           // If there there was a foreign key reference
           if ( response.status === 409 ){
             $mdToast.show( $mdToast.simple()
-              .content( 'Det finns redan en lokal/plats som heter "' + $scope.location.Name +
+                .content( 'Det finns redan en lokal/plats som heter "' + $scope.location.Name +
                 '". Två lokaler eller platser kan inte heta lika.' )
-              .position( 'top right' )
-              .theme( 'warn' )
+                .position( 'top right' )
+                .theme( 'warn' )
             );
           }
 
           // If there was a problem with the in-data
           else if ( response.status === 400 || response.status === 500 ){
             $mdToast.show( $mdToast.simple()
-              .content( 'Ett oväntat fel uppstod när lokalen/platsen skulle sparas' )
-              .position( 'top right' )
-              .theme( 'warn' )
+                .content( 'Ett oväntat fel uppstod när lokalen/platsen skulle sparas' )
+                .position( 'top right' )
+                .theme( 'warn' )
             );
           }
 
           // If the entry was not found
           if ( response.status === 404 ) {
             $mdToast.show( $mdToast.simple()
-              .content( 'Lokalen/platsen "' + $scope.location.Name + '" existerar inte längre. Hann kanske någon radera den?' )
-              .position( 'top right' )
-              .theme( 'warn' )
+                .content( 'Lokalen/platsen "' + $scope.location.Name + '" existerar inte längre. Hann kanske någon radera den?' )
+                .position( 'top right' )
+                .theme( 'warn' )
             );
 
             history.back();
@@ -338,9 +522,9 @@ angular.module( 'BookingSystem.locations',
         .then( ( response ) => {
 
           $mdToast.show( $mdToast.simple()
-            .content( 'Lokalen/platsen "' + $scope.location.Name + '" raderades med ett lyckat resultat' )
-            .position( 'top right' )
-            .theme( 'success' )
+              .content( 'Lokalen/platsen "' + $scope.location.Name + '" raderades med ett lyckat resultat' )
+              .position( 'top right' )
+              .theme( 'success' )
           );
 
           history.back();
@@ -355,28 +539,28 @@ angular.module( 'BookingSystem.locations',
             response.data.Message === 'Foreign key references exists'
           ){
             $mdToast.show( $mdToast.simple()
-              .content( 'Lokalen/platsen kan inte raderas eftersom det finns' +
+                .content( 'Lokalen/platsen kan inte raderas eftersom det finns' +
                 ' en bokning eller en lokalmöblering som refererar till lokalen/platsen' )
-              .position( 'top right' )
-              .theme( 'warn' )
+                .position( 'top right' )
+                .theme( 'warn' )
             );
           }
 
           // If there was a problem with the in-data
           else if ( response.status === 400 || response.status === 500 ){
             $mdToast.show( $mdToast.simple()
-              .content( 'Ett oväntat fel uppstod när lokalen/platsen skulle tas bort' )
-              .position( 'top right' )
-              .theme( 'warn' )
+                .content( 'Ett oväntat fel uppstod när lokalen/platsen skulle tas bort' )
+                .position( 'top right' )
+                .theme( 'warn' )
             );
           }
 
           // If the entry was not found
           if ( response.status === 404 ) {
             $mdToast.show( $mdToast.simple()
-              .content( 'Lokalen/platsen "' + $scope.location.Name + '" existerar inte längre. Hann kanske någon radera den?' )
-              .position( 'top right' )
-              .theme( 'warn' )
+                .content( 'Lokalen/platsen "' + $scope.location.Name + '" existerar inte längre. Hann kanske någon radera den?' )
+                .position( 'top right' )
+                .theme( 'warn' )
             );
           }
 
@@ -388,16 +572,35 @@ angular.module( 'BookingSystem.locations',
 
     /* Initialization START */
 
-    setupDeleteModal();
-    setupGoogleMapsModal();
-    getLocation();
+    setupDeleteModal()
+      .then( () => {
+        return setupSelectLocationFurnituringModal();
+      })
+      .then( () => {
+        return setupGoogleMapsModal();
+      })
+      .then( () => {
+        return getLocation();
+      })
+      .then( () => {
+        return getAllFurniturings();
+      })
+      .then( () => {
+        return getFurnituringsForLocation();
+      })
+      .then( () => {
+        processFurniturings();
+      });
+
     initMapVariables();
 
     // Add watch on $scope.map.bounds to check (every time it changes) if return boundary data is received from google maps
     $scope.$watch(
 
       // Get $scope.map.bounds on change
-      () => {return $scope.map.bounds;},
+      () => {
+        return $scope.map.bounds;
+      },
 
       // Do the following on change
       ( nv, ov ) => {
@@ -410,6 +613,38 @@ angular.module( 'BookingSystem.locations',
       },
       true
     );
+
+    // Watch locations max people count for changes, decrease the furniturings max people count if needed.
+    $scope.$watch( 'location.MaxPeople', ( newValue ) => {
+
+      if ( $scope.location && $scope.location.furniturings ) {
+
+        $scope.location.furniturings.forEach( ( furnituring ) => {
+
+          // If furnituring max people exceeds location limit, or if its undefined.
+          if ( furnituring.MaxPeople > $scope.location.MaxPeople || furnituring.MaxPeople === undefined ) {
+
+            // Lower the furniturings max people count to locations max people count.
+            furnituring.MaxPeople = $scope.location.MaxPeople;
+          }
+        });
+      }
+    });
+
+    // Execute action on hide modal
+    $scope.$on( 'modal.hidden', () => {
+
+      filterSelectedFurnituringForLocation();
+
+      if ( isMaxPeopleForLocationFurnituringsMissing() ){
+
+        $mdToast.show( $mdToast.simple()
+            .content( 'Uppgifter om max antal personer var ogiltig för en eller flera möbleringar. Var god försök igen.' )
+            .position( 'top right' )
+            .theme( 'warn' )
+        );
+      }
+    });
 
     /* Initialization END */
 
