@@ -228,19 +228,25 @@ angular.module( 'BookingSystem.locations',
 
     const processFurniturings = function() {
 
+      // Loop for all furniturings
       $scope.furniturings.forEach( ( furnituring ) => {
 
-        const isMatch = $scope.location.furniturings.some( ( locationHasThisFurnituring ) => {
+        // Loop for furniturings accociated with location
+        $scope.location.furniturings.forEach( ( locationHasThisFurnituring ) => {
 
-          return furnituring.Name === locationHasThisFurnituring.FurnituringName;
+          // If location has this furnituring.
+          if ( furnituring.FurnituringId === locationHasThisFurnituring.FurnituringId ){
+
+            // Mark furnituring as selected
+            furnituring.isSelected = true;
+
+            // Defines default max number of people for furnituring if not defined or if its higher than max value for location
+            if ( !furnituring.MaxPeople || furnituring.MaxPeople > $scope.location.MaxPeople ){
+
+              furnituring.MaxPeople = locationHasThisFurnituring.MaxPeople || $scope.location.MaxPeople;
+            }
+          }
         });
-
-        furnituring.isSelected = isMatch;
-
-        // Defines default max number of people for furnituring if not defined.
-        if ( !furnituring.MaxPeople ){
-          furnituring.MaxPeople = 4;
-        }
       });
     };
 
@@ -306,13 +312,6 @@ angular.module( 'BookingSystem.locations',
     const filterSelectedFurnituringForLocation = function() {
 
       // Filter out furniturings that are not selected.
-      /*
-      $scope.location.furniturings = $scope.furniturings.filter( ( furnituring ) => {
-
-        return furnituring.isSelected;
-      });
-      */
-
       const newFurnituringsArray = [];
 
       $scope.furniturings.forEach( ( furnituring ) => {
@@ -327,11 +326,7 @@ angular.module( 'BookingSystem.locations',
         }
       });
 
-      console.log( newFurnituringsArray );
-
       $scope.location.furniturings = newFurnituringsArray;
-
-      console.log( $scope.location );
     };
 
     const removeOldFurnituringsForLocation = function() {
@@ -375,9 +370,10 @@ angular.module( 'BookingSystem.locations',
 
     $scope.showSelectModal = function() {
 
+      processFurniturings();
+
       // Show modal
       $scope.selectModal.show();
-
     };
 
     $scope.startEditMode = function () {
@@ -587,9 +583,6 @@ angular.module( 'BookingSystem.locations',
       })
       .then( () => {
         return getFurnituringsForLocation();
-      })
-      .then( () => {
-        processFurniturings();
       });
 
     initMapVariables();
@@ -652,7 +645,7 @@ angular.module( 'BookingSystem.locations',
   )
 
   //Create
-  .controller( 'LocationCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', '$mdToast', 'Location', 'LocationImage', 'DEFAULT_LATITUDE', 'DEFAULT_LONGITUDE', 'DEFAULT_MAP_ZOOM', '$ionicModal', 'MODAL_ANIMATION', ( $rootScope, $stateParams, $scope, $state, $mdToast, Location, LocationImage, DEFAULT_LATITUDE, DEFAULT_LONGITUDE, DEFAULT_MAP_ZOOM, $ionicModal, MODAL_ANIMATION ) => {
+  .controller( 'LocationCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', '$mdToast', 'Location', 'LocationImage', 'DEFAULT_LATITUDE', 'DEFAULT_LONGITUDE', 'DEFAULT_MAP_ZOOM', '$ionicModal', 'MODAL_ANIMATION', 'Furnituring', 'LocationFurnituring', '$q', ( $rootScope, $stateParams, $scope, $state, $mdToast, Location, LocationImage, DEFAULT_LATITUDE, DEFAULT_LONGITUDE, DEFAULT_MAP_ZOOM, $ionicModal, MODAL_ANIMATION, Furnituring, LocationFurnituring, $q ) => {
 
     /* Init vars */
     $scope.location = {
@@ -661,9 +654,34 @@ angular.module( 'BookingSystem.locations',
     };
     $scope.markers = [];
 
+    const selectLocationFurnituringModalTemplateUrl = 'templates/modals/select-location-furnituring.html';
     const googleMapsTemplateUrl = 'templates/modals/google-maps.html';
 
     /* Private methods START */
+
+    const setupSelectLocationFurnituringModal = function(){
+
+      const deferred = $q.defer();
+
+      $ionicModal.fromTemplateUrl( selectLocationFurnituringModalTemplateUrl, {
+        scope: $scope,
+        animation: MODAL_ANIMATION
+      })
+        .then( ( response ) => {
+
+          $scope.selectModal = response;
+
+          deferred.resolve();
+        });
+
+      // Cleanup the modal when we're done with it!
+      $scope.$on( '$destroy', () => {
+
+        $scope.selectModal.remove();
+      });
+
+      return deferred.promise;
+    };
 
     const uploadImage = function( LocationId ){
 
@@ -735,8 +753,53 @@ angular.module( 'BookingSystem.locations',
       };
     };
 
-    // Convert markers from data fetched from backend to match google maps format.
+    const filterSelectedFurnituringForLocation = function() {
 
+      // Filter out furniturings that are not selected.
+      const newFurnituringsArray = [];
+
+      $scope.furniturings.forEach( ( furnituring ) => {
+
+        if ( furnituring.isSelected ) {
+          newFurnituringsArray.push({
+            LocationId: $stateParams.locationId,
+            FurnituringId: furnituring.FurnituringId,
+            MaxPeople: furnituring.MaxPeople,
+            FurnituringName: furnituring.Name
+          });
+        }
+      });
+
+      $scope.location.furniturings = newFurnituringsArray;
+    };
+
+    const isMaxPeopleForLocationFurnituringsMissing = function() {
+
+      let isMissing = false;
+      const newFurnituringsArray = [];
+
+      $scope.location.furniturings.forEach( ( furnituring ) => {
+
+        // Check if there are any elements where max people property is missing or where its value is undefined/null.
+        if ( !( 'MaxPeople' in furnituring ) || furnituring.MaxPeople === undefined || furnituring.MaxPeople === null ) {
+
+          isMissing = true;
+        } else {
+
+          newFurnituringsArray.push( furnituring );
+        }
+      });
+
+      if ( isMissing ) {
+
+        // Missing values detected. Overwrite location furniturings array with safe array elements.
+        $scope.location.furniturings = newFurnituringsArray;
+      }
+
+      return isMissing;
+    };
+
+    // Convert markers from data fetched from backend to match google maps format.
     const initMarkers = function() {
 
       $scope.markers[0] =
@@ -763,9 +826,58 @@ angular.module( 'BookingSystem.locations',
 
     };
 
+    const getAllFurniturings = function() {
+      $scope.furniturings = Furnituring.query();
+
+      return $scope.furniturings.$promise;
+    };
+
+    const saveFurnituringsForLocation = function( locationId ) {
+
+      const deferred = $q.defer();
+      const postDataArray = [];
+
+      $scope.location.furniturings.forEach( ( furnituring ) => {
+
+        postDataArray.push({
+          LocationId: locationId,
+          FurnituringId: furnituring.FurnituringId,
+          MaxPeople: furnituring.MaxPeople
+        });
+      });
+
+      LocationFurnituring.saveForLocation( postDataArray ).$promise
+        .then( () => {
+
+          // Resolve promise
+          deferred.resolve();
+        });
+
+      return deferred.promise;
+    };
+
+    const processFurniturings = function() {
+
+      $scope.furniturings.forEach( ( furnituring ) => {
+
+        // Defines default max number of people for furnituring if not defined.
+        if ( !furnituring.MaxPeople ){
+          furnituring.MaxPeople = $scope.location.MaxPeople;
+        }
+      });
+    };
+
     /* Private Methods END */
 
     /* Public Methods START */
+
+    $scope.showSelectModal = function() {
+
+      processFurniturings();
+
+      // Show modal
+      $scope.selectModal.show();
+    };
 
     $scope.saveLocation = function() {
 
@@ -808,12 +920,22 @@ angular.module( 'BookingSystem.locations',
                 );
               });
           }
-          else {
 
-            saveSuccess();
-          }
+          saveFurnituringsForLocation( response.LocationId )
+            .then( () => {
 
-          // Something went wrong
+              saveSuccess();
+
+            }).catch( () => {
+
+              $mdToast.show( $mdToast.simple()
+                  .content( 'Uppgifter om lokalen sparades, men lokalens möbleringar kunde inte sparas. Var god försök igen.' )
+                  .position( 'top right' )
+                  .theme( 'warn' )
+              );
+            });
+
+        // Something went wrong
         }).catch( ( response ) => {
 
           // If there there was a foreign key reference
@@ -841,11 +963,17 @@ angular.module( 'BookingSystem.locations',
 
     /* Initialization START */
 
-    setupGoogleMapsModal();
+    setupSelectLocationFurnituringModal()
+      .then( () => {
+        return setupGoogleMapsModal();
+      })
+      .then( () => {
+        return getAllFurniturings();
+      });
+
     initMapVariables();
 
     // Add watch on $scope.map.bounds to check (every time it changes) if return boundary data is received from google maps
-
     $scope.$watch(
 
       // Get $scope.map.bounds on change
@@ -862,6 +990,38 @@ angular.module( 'BookingSystem.locations',
       },
       true
     );
+
+    // Watch locations max people count for changes, decrease the furniturings max people count if needed.
+    $scope.$watch( 'location.MaxPeople', ( newValue ) => {
+
+      if ( $scope.location && $scope.location.furniturings ) {
+
+        $scope.location.furniturings.forEach( ( furnituring ) => {
+
+          // If furnituring max people exceeds location limit, or if its undefined.
+          if ( furnituring.MaxPeople > $scope.location.MaxPeople || furnituring.MaxPeople === undefined ) {
+
+            // Lower the furniturings max people count to locations max people count.
+            furnituring.MaxPeople = $scope.location.MaxPeople;
+          }
+        });
+      }
+    });
+
+    // Execute action on hide modal
+    $scope.$on( 'modal.hidden', () => {
+
+      filterSelectedFurnituringForLocation();
+
+      if ( isMaxPeopleForLocationFurnituringsMissing() ){
+
+        $mdToast.show( $mdToast.simple()
+            .content( 'Uppgifter om max antal personer var ogiltig för en eller flera möbleringar. Var god försök igen.' )
+            .position( 'top right' )
+            .theme( 'warn' )
+        );
+      }
+    });
 
     /* Initialization END */
 

@@ -56,7 +56,7 @@
                                 name="MaxPeople"
                                 ng-required="true"
                                 ng-model="location.MaxPeople"
-                                ng-pattern="/^[0-9]*$/"
+                                ng-pattern="NUMERIC_STRICT_REGEXP"
                                 min="0"
                                 ng-disabled="!isEditMode"
                         >
@@ -72,18 +72,21 @@
                     </div>
 
                     <md-input-container class="md-block" flex-gt-xs>
-                        <label>Pris per timme</label>
+                        <label>Pris per timme (kr)</label>
                         <input
                                 type="number"
                                 name="BookingPricePerHour"
                                 ng-required="true"
                                 ng-model="location.BookingPricePerHour"
-                                ng-pattern="/^[0-9]*$/"
+                                ng-pattern="NUMERIC_DOT_REGEXP"
                                 min="0"
                                 ng-disabled="!isEditMode"
                         >
                     </md-input-container>
                 </div>
+
+                <!-- NOT IMPLEMENTED YET
+
                 <div layout-gt-xs="row">
 
                     <div class="validation-messages" ng-messages="locationForm.MinutesMarginBeforeBooking.$error">
@@ -103,6 +106,7 @@
                         >
                     </md-input-container>
                 </div>
+
                 <div layout-gt-xs="row">
 
                     <div class="validation-messages" ng-messages="locationForm.MinutesMarginAfterBooking.$error">
@@ -122,6 +126,7 @@
                         >
                     </md-input-container>
                 </div>
+                -->
 
                 <div layout-gt-xs="row" ng-show="location.furniturings.length">
                     <span class="faded">Tillgängliga möbleringar</span>
