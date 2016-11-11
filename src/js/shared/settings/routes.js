@@ -424,6 +424,7 @@ angular.module( 'BookingSystem.routes',
 
       //Locations
       .state( 'app.locations-list', {
+        cache: false,
         url: '/locations-list',
         views: {
           'menuContent': {

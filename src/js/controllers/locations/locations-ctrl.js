@@ -25,16 +25,55 @@ angular.module( 'BookingSystem.locations',
   )
 
   // Controller
-  .controller( 'LocationsListCtrl', [ '$rootScope', '$scope', '$state', '$mdToast', 'Location', 'API_IMG_PATH_URL', ( $rootScope, $scope, $state, $mdToast, Location, API_IMG_PATH_URL ) => {
+  .controller( 'LocationsListCtrl', [ '$rootScope', '$scope', '$state', '$mdToast', 'Location', 'API_IMG_PATH_URL', 'PAGINATION_COUNT', ( $rootScope, $scope, $state, $mdToast, Location, API_IMG_PATH_URL, PAGINATION_COUNT ) => {
 
     /* Init vars */
     $scope.API_IMG_PATH_URL = API_IMG_PATH_URL;
+    $scope.noMoreLocationsAvailable = false;
+    $scope.locations = [];
+    let pageNum = 1;
 
     /* Private methods START */
 
+    $scope.loadMore = function() {
+
+      console.log( 'loadMore exec' );
+
+      const newItems = Location.queryPagination({
+        pageNum: pageNum,
+        itemCount: PAGINATION_COUNT
+      });
+
+      newItems.$promise.then( () => {
+
+        console.log( 'loadMore then', pageNum );
+
+        // If there aren't any more items
+        if ( newItems.length === 0 ) {
+
+          $scope.noMoreItemsAvailable = true;
+
+        } else {
+
+          newItems.forEach( ( newItem ) => {
+
+            $scope.locations.push( newItem );
+          });
+
+          $scope.$broadcast( 'scroll.infiniteScrollComplete' );
+        }
+      });
+
+      pageNum++;
+    };
+
+    /*
     const getLocations = function () {
 
-      const locations = Location.query();
+      const locations = Location.queryPagination({
+        pageNum: pageNum,
+        itemCount: PAGINATION_COUNT
+      });
 
       // In case locations cannot be fetched, display an error to user.
       locations.$promise.catch( () => {
@@ -49,6 +88,7 @@ angular.module( 'BookingSystem.locations',
       $scope.locations = locations;
 
     };
+    */
 
     /* Private Methods END */
 
@@ -59,7 +99,7 @@ angular.module( 'BookingSystem.locations',
     /* Initialization START */
     $scope.$on( '$ionicView.beforeEnter', ( event, data ) => {
 
-      getLocations();
+      // getLocations();
     });
 
     /* Initialization END */
