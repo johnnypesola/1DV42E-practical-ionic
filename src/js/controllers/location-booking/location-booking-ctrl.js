@@ -163,7 +163,7 @@ angular.module( 'BookingSystem.locationBooking',
   }]
 )
 
-  .controller( 'LocationBookingDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', 'LocationBooking', '$mdToast', 'Location', 'Customer', 'BookingHelper', '$q', '$ionicHistory', 'API_IMG_PATH_URL', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, LocationBooking, $mdToast, Location, Customer, BookingHelper, $q, $ionicHistory, API_IMG_PATH_URL ) => {
+  .controller( 'LocationBookingDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', 'LocationBooking', '$mdToast', 'Location', 'Customer', 'BookingHelper', '$q', '$ionicHistory', 'API_IMG_PATH_URL', 'LocationFurnituring', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, LocationBooking, $mdToast, Location, Customer, BookingHelper, $q, $ionicHistory, API_IMG_PATH_URL, LocationFurnituring ) => {
 
     /* Init vars */
 
@@ -247,6 +247,9 @@ angular.module( 'BookingSystem.locationBooking',
 
     const getLocations = function() {
 
+      const deferred = $q.defer();
+      const promise = deferred.promise;
+
       if ( areDateVariablesDefined() ){
 
         const startMomentDate = addTimeToDate( $scope.bookingStartDate, $scope.bookingStartHour, $scope.bookingStartMinute );
@@ -267,6 +270,8 @@ angular.module( 'BookingSystem.locationBooking',
 
             // Add free locations to scope
             $scope.locations = response;
+
+            deferred.resolve();
           })
 
           // Could not get free locations
@@ -277,6 +282,57 @@ angular.module( 'BookingSystem.locationBooking',
               .position( 'top right' )
               .theme( 'warn' )
             );
+
+            deferred.reject();
+          });
+      } else {
+
+        deferred.reject();
+      }
+
+      return promise;
+    };
+
+    const getLocationFurniturings = function () {
+
+      if ( $scope.locationBooking.LocationId ){
+        $scope.furniturings = LocationFurnituring.queryForLocation(
+          {
+            locationId: $scope.locationBooking.LocationId
+          }
+        );
+
+        // If furniturings could not be fetched
+        $scope.furniturings.$promise.catch( () => {
+
+          $mdToast.show( $mdToast.simple()
+              .content( 'Möbleringar för vald lokal kunde inte hämtas.' )
+              .position( 'top right' )
+              .theme( 'warn' )
+          );
+        });
+      }
+      else {
+        $scope.furnituring = [];
+      }
+
+      // return promise
+      return $scope.furniturings.$promise;
+    };
+
+    const initSelectedFurnituring = function () {
+
+      if ( !$scope.locationBooking.SelectedFurnituring ) {
+
+        getLocationFurniturings()
+          .then( () => {
+
+            // After we get all the furniturings for the locations, select the right one.
+            $scope.locationBooking.SelectedFurnituring = $scope.furniturings.find( ( furnituring ) => {
+
+              return furnituring.FurnituringId === $scope.locationBooking.FurnituringId;
+
+            });
           });
       }
     };
@@ -386,26 +442,7 @@ angular.module( 'BookingSystem.locationBooking',
     $scope.updateFurniturings = function() {
 
       // Get all available furniturings for selected location
-      if ( $scope.locationBooking.LocationId ){
-        $scope.furniturings = LocationFurnituring.queryForLocation(
-          {
-            locationId: $scope.locationBooking.LocationId
-          }
-        );
-
-        // If furniturings could not be fetched
-        $scope.furniturings.$promise.catch( () => {
-
-          $mdToast.show( $mdToast.simple()
-              .content( 'Möbleringar för vald lokal kunde inte hämtas.' )
-              .position( 'top right' )
-              .theme( 'warn' )
-          );
-        });
-      }
-      else {
-        $scope.furnituring = [];
-      }
+      getLocationFurniturings();
     };
 
     $scope.checkEndDate = function() {
@@ -503,7 +540,9 @@ angular.module( 'BookingSystem.locationBooking',
     getLocationBooking().then( () => {
       initDate();
       getCustomer().then( () => {
-        getLocations();
+        getLocations().then( () => {
+          initSelectedFurnituring();
+        });
       });
     });
     initTimeSelectData();

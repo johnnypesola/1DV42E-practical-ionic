@@ -7,13 +7,44 @@ angular.module( 'BookingSystem.meals',
   )
 
   //Controller
-  .controller( 'MealsListCtrl', [ '$rootScope', '$scope', '$state', 'Meal', '$mdToast', 'API_IMG_PATH_URL', ( $rootScope, $scope, $state, Meal, $mdToast, API_IMG_PATH_URL ) => {
+  .controller( 'MealsListCtrl', [ '$rootScope', '$scope', '$state', 'Meal', '$mdToast', 'API_IMG_PATH_URL', 'PAGINATION_COUNT', ( $rootScope, $scope, $state, Meal, $mdToast, API_IMG_PATH_URL, PAGINATION_COUNT ) => {
 
     /* Init vars */
     $scope.API_IMG_PATH_URL = API_IMG_PATH_URL;
+    $scope.noMoreItemsAvailable = false;
+    $scope.meals = [];
+    let pageNum = 1;
 
     /* Private methods START */
 
+    $scope.loadMore = function() {
+
+      const newItems = Meal.queryPagination({
+        pageNum: pageNum,
+        itemCount: PAGINATION_COUNT
+      });
+
+      newItems.$promise.then( () => {
+
+        // If there aren't any more items
+        if ( newItems.length === 0 ) {
+
+          $scope.noMoreItemsAvailable = true;
+
+        } else {
+
+          newItems.forEach( ( newItem ) => {
+
+            $scope.meals.push( newItem );
+          });
+
+          $scope.$broadcast( 'scroll.infiniteScrollComplete' );
+        }
+      });
+
+      pageNum++;
+    };
+    /*
     const getMeals = function() {
 
       const meals = Meal.query();
@@ -30,6 +61,7 @@ angular.module( 'BookingSystem.meals',
 
       $scope.meals = meals;
     };
+    */
 
     /* Private Methods END */
 

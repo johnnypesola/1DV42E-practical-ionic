@@ -14,7 +14,19 @@ angular.module( 'BookingSystem.mealsServices',
 
     return $resource(
       API_URL + 'Meal/:mealId',
-      {mealId: '@mealId'}
+      {mealId: '@mealId'},
+      {
+        // Paginate
+        queryPagination: {
+          url: API_URL + 'Meal/paginate/:pageNum/:itemCount',
+          method: 'GET',
+          isArray: true,
+          params: {
+            pageNum: '@pageNum',
+            itemCount: '@itemCount'
+          }
+        }
+      }
     );
   }]
   )
