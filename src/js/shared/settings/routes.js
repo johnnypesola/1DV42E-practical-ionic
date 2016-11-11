@@ -293,6 +293,7 @@ angular.module( 'BookingSystem.routes',
       //Meals
 
       .state( 'app.meals-list', {
+        cache: false,
         url: '/meals-list',
         views: {
           'menuContent': {

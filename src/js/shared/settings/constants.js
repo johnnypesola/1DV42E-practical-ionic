@@ -19,7 +19,7 @@ angular.module( 'BookingSystem.constants',
   .constant( 'MODAL_ANIMATION', 'slide-in-up' )
   .constant( 'DATA_SYNC_INTERVAL_TIME', 60000 * 5 ) // Every 5 minutes
   .constant( 'DEFAULT_CALENDAR_ZOOM', 2 )
-  .constant( 'PAGINATION_COUNT', 15 )
+  .constant( 'PAGINATION_COUNT', 20 )
   .constant( 'BOOKING_TYPES', {
     booking : 'booking',
     location : 'location-booking',

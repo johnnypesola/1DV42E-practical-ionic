@@ -29,7 +29,7 @@ angular.module( 'BookingSystem.locations',
 
     /* Init vars */
     $scope.API_IMG_PATH_URL = API_IMG_PATH_URL;
-    $scope.noMoreLocationsAvailable = false;
+    $scope.noMoreItemsAvailable = false;
     $scope.locations = [];
     let pageNum = 1;
 
@@ -37,16 +37,12 @@ angular.module( 'BookingSystem.locations',
 
     $scope.loadMore = function() {
 
-      console.log( 'loadMore exec' );
-
       const newItems = Location.queryPagination({
         pageNum: pageNum,
         itemCount: PAGINATION_COUNT
       });
 
       newItems.$promise.then( () => {
-
-        console.log( 'loadMore then', pageNum );
 
         // If there aren't any more items
         if ( newItems.length === 0 ) {
