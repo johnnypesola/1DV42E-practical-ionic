@@ -45,6 +45,31 @@ namespace BookingSystemAuth.Controllers
             }
         }
 
+        // GET: api/Location
+        [Route("api/Meal/paginate/{Index:int}/{PageSize:int}")]
+        [AcceptVerbs("GET")]
+        public IHttpActionResult Get(int Index, int PageSize)
+        {
+            const string sortByColumn = "Name ASC";
+            int count = 0;
+
+            try
+            {
+                IEnumerable<Meal> meals = mealService.GetPageWise(sortByColumn, PageSize, Index, out count);
+
+                if (meals == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(meals);
+            }
+            catch
+            {
+                return InternalServerError();
+            }
+        }
+
         // GET: api/Meal/5
         [Route("api/Meal/{MealId:int}")]
         [AcceptVerbs("GET")]

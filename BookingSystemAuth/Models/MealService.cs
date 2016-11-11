@@ -63,6 +63,11 @@ namespace BookingSystemAuth.Models
             return MealDAL.GetMeals();
         }
 
+        public IEnumerable<Meal> GetPageWise(string sortColumn, int pageSize, int pageIndex, out int totalRowCount)
+        {
+            return MealDAL.GetMealsPageWise(sortColumn, pageSize, pageIndex, out totalRowCount);
+        }
+
 
         public void SaveMeal(Meal Meal)
         {

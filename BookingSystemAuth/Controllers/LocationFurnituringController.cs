@@ -162,7 +162,7 @@ namespace BookingSystemAuth.Controllers
             return Ok();
         }
 
-        // DELETE: api/LocationFurnituring/5/5
+        // DELETE: api/LocationFurnituring/5
         [Route("api/LocationFurnituring/{LocationId:int}")]
         [AcceptVerbs("DELETE")]
         public IHttpActionResult Delete(int LocationId)

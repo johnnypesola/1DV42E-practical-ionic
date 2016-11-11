@@ -128,6 +128,63 @@ namespace BookingSystemAuth.Models
             }
         }
 
+        public IEnumerable<Meal> GetMealsPageWise(string sortColumn, int pageSize, int pageIndex, out int totalRowCount)
+        {
+            // Create connection object
+            using (this.CreateConnection())
+            {
+                try
+                {
+                    List<Meal> mealsReturnList;
+                    SqlCommand cmd;
+
+                    // Create list object
+                    mealsReturnList = new List<Meal>(pageSize);
+
+                    // Connect to database and execute given stored procedure
+                    cmd = this.Setup("appSchema.usp_MealList", DALOptions.closedConnection);
+
+                    // Add parameter for Stored procedure
+                    cmd.Parameters.Add("@SortOrder", SqlDbType.VarChar, 25).Value = sortColumn;
+                    cmd.Parameters.Add("@PageIndex", SqlDbType.Int).Value = pageIndex;
+                    cmd.Parameters.Add("@PageSize", SqlDbType.Int).Value = pageSize;
+                    cmd.Parameters.Add("@TotalRowCount", SqlDbType.Int).Direction = ParameterDirection.Output;
+
+                    // Open DB connection
+                    connection.Open();
+
+                    // Get all data from stored procedure
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        // Get all data rows
+                        while (reader.Read())
+                        {
+                            // Create new Meal object from database values and add to list
+                            mealsReturnList.Add(new Meal
+                            {
+                                MealId = reader.GetSafeInt16(reader.GetOrdinal("MealId")),
+                                Name = reader.GetSafeString(reader.GetOrdinal("Name")),
+                                ImageSrc = reader.GetSafeString(reader.GetOrdinal("ImageSrc"))
+                            });
+                        }
+                    }
+
+                    // Get total row count
+                    totalRowCount = Convert.ToInt32(cmd.Parameters["@TotalRowCount"].Value);
+
+                    // Remove unused list rows, free memory.
+                    mealsReturnList.TrimExcess();
+
+                    // Return list
+                    return mealsReturnList;
+                }
+                catch
+                {
+                    throw new ApplicationException(DAL_ERROR_MSG);
+                }
+            }
+        }
+
         public void InsertMeal(Meal Meal)
         {
             // Create connection object
