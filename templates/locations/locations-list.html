@@ -2,12 +2,18 @@
     <ion-content>
 
         <md-list>
-            <md-list-item ng-repeat="location in locations" href="#/app/location-details/{{location.LocationId}}" class="noright">
+            <md-list-item ng-repeat="location in locations" href="#/app/location-details/{{location.LocationId}}" class="noright" aria-label="Visa {{ location.Name }}">
                 <img ng-src="{{ API_IMG_PATH_URL + location.ImageSrc | thumbnail }}" class="md-avatar" ng-if="location.ImageSrc" />
                 <img src="img/photo_missing.svg" class="md-avatar" ng-if="!location.ImageSrc">
                 <p>{{ location.Name }}</p>
             </md-list-item>
         </md-list>
+
+        <ion-infinite-scroll
+            ng-if="!noMoreItemsAvailable"
+            on-infinite="loadMore()"
+            distance="10%"
+        ></ion-infinite-scroll>
 
     </ion-content>
 
