@@ -19,8 +19,7 @@
                             ng-model="furnituring.isSelected"
                             aria-label="Selected"
                             class="no-margin-bottom"
-                            ng-disabled="!isEditMode"
-                            >
+                    >
                         {{furnituring.Name}}
 
                     </md-checkbox>
@@ -34,7 +33,7 @@
                                min="1"
                                max="{{location.MaxPeople}}"
                                ng-required="true"
-                               ng-pattern="/^[0-9]*$/"
+                               ng-pattern="NUMERIC_STRICT_REGEXP"
                                enforce-num-validation
                            >
                         personer

@@ -35,6 +35,16 @@ angular.module( 'BookingSystem.locationsServices',
           params: {
             column: '@column'
           }
+        },
+        // Paginate
+        queryPagination: {
+          url: API_URL + 'Location/paginate/:pageNum/:itemCount',
+          method: 'GET',
+          isArray: true,
+          params: {
+            pageNum: '@pageNum',
+            itemCount: '@itemCount'
+          }
         }
       }
     );
