@@ -63,29 +63,6 @@ angular.module( 'BookingSystem.locations',
       pageNum++;
     };
 
-    /*
-    const getLocations = function () {
-
-      const locations = Location.queryPagination({
-        pageNum: pageNum,
-        itemCount: PAGINATION_COUNT
-      });
-
-      // In case locations cannot be fetched, display an error to user.
-      locations.$promise.catch( () => {
-
-        $mdToast.show( $mdToast.simple()
-          .content( 'Lokaler och platser kunde inte hämtas, var god försök igen.' )
-          .position( 'top right' )
-          .theme( 'warn' )
-        );
-      });
-
-      $scope.locations = locations;
-
-    };
-    */
-
     /* Private Methods END */
 
     /* Public Methods START */
@@ -190,8 +167,18 @@ angular.module( 'BookingSystem.locations',
 
     const uploadImage = function( LocationId ){
 
-      return LocationImage.upload( $scope.location.ImageForUpload, LocationId );
+      const deferred = $q.defer();
 
+      // If there is an image to upload.
+      if ( typeof $scope.location.ImageForUpload !== 'undefined' ){
+
+        return LocationImage.upload( $scope.location.ImageForUpload, LocationId );
+      }
+
+      // Resolve promise, no image to upload.
+      deferred.resolve();
+
+      return deferred.promise;
     };
 
     const saveSuccess = function() {
@@ -456,26 +443,22 @@ angular.module( 'BookingSystem.locations',
           $scope.endEditMode();
 
           // Upload image
-          if ( typeof $scope.location.ImageForUpload !== 'undefined' ){
+          uploadImage( response.LocationId )
 
-            uploadImage( response.LocationId )
+          // Image upload failed
+          .error( () => {
 
-              // Image upload successful
-              .success( () => {
-                saveSuccess();
-              })
-              // Image upload failed
-              .error( () => {
+            $mdToast.show( $mdToast.simple()
+                .content( 'Lokalen/Platsen sparades, men det gick inte att ladda upp och spara den önskade bilden.' )
+                .position( 'top right' )
+                .theme( 'warn' )
+            );
+          })
 
-                $mdToast.show( $mdToast.simple()
-                    .content( 'Lokalen/Platsen sparades, men det gick inte att ladda upp och spara den önskade bilden.' )
-                    .position( 'top right' )
-                    .theme( 'warn' )
-                );
-              });
-          }
+          .finally( () => {
 
-          saveFurnituringsForLocation()
+            saveFurnituringsForLocation()
+
             .then( () => {
 
               saveSuccess();
@@ -488,6 +471,7 @@ angular.module( 'BookingSystem.locations',
                   .theme( 'warn' )
               );
             });
+          });
 
           // Something went wrong
         }).catch( ( response ) => {
@@ -873,21 +857,33 @@ angular.module( 'BookingSystem.locations',
       const deferred = $q.defer();
       const postDataArray = [];
 
-      $scope.location.furniturings.forEach( ( furnituring ) => {
+      // Check that there are furniturings to save.
 
-        postDataArray.push({
-          LocationId: locationId,
-          FurnituringId: furnituring.FurnituringId,
-          MaxPeople: furnituring.MaxPeople
+      console.log( '$scope.location.furniturings', $scope.location.furniturings );
+
+      if ( $scope.location.furniturings ) {
+
+        $scope.location.furniturings.forEach( ( furnituring ) => {
+
+          postDataArray.push({
+            LocationId: locationId,
+            FurnituringId: furnituring.FurnituringId,
+            MaxPeople: furnituring.MaxPeople
+          });
         });
-      });
 
-      LocationFurnituring.saveForLocation( postDataArray ).$promise
-        .then( () => {
+        LocationFurnituring.saveForLocation( postDataArray ).$promise
+          .then( () => {
 
-          // Resolve promise
-          deferred.resolve();
-        });
+            // Resolve promise
+            deferred.resolve();
+          });
+
+      } else {
+
+        // Resolve promise
+        deferred.resolve();
+      }
 
       return deferred.promise;
     };
@@ -942,10 +938,6 @@ angular.module( 'BookingSystem.locations',
 
             uploadImage( response.LocationId )
 
-            // Image upload successful
-              .success( () => {
-                saveSuccess();
-              })
               // Image upload failed
               .error( () => {
 
