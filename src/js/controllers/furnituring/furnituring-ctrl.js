@@ -57,11 +57,12 @@ angular.module( 'BookingSystem.furnituring',
     }]
     )
 
-    .controller( 'FurnituringDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', 'Furnituring', '$mdToast', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, Furnituring, $mdToast ) => {
+    .controller( 'FurnituringDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', 'Furnituring', '$mdToast', 'FurnituringImage', '$q', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, Furnituring, $mdToast, FurnituringImage, $q ) => {
 
       /* Init vars */
 
       const modalTemplateUrl = 'templates/modals/furnituring-delete.html';
+      const savePromisesArray = [];
       $scope.editMode = false;
       $scope.furnituringBackup = {};
 
@@ -81,16 +82,47 @@ angular.module( 'BookingSystem.furnituring',
         $scope.$on( '$destroy', () => {
           $scope.modal.remove();
         });
+      };
 
-        // Execute action on hide modal
-        // $scope.$on( 'modal.hidden', () => {
-          // Execute action
-        // });
+      const uploadImage = ( FurnituringId ) => {
 
-        // Execute action on remove modal
-        // $scope.$on( 'modal.removed', () => {
-          // Execute action
-        // });
+        const deferred = $q.defer();
+
+        if ( typeof $scope.furnituring.ImageForUpload !== 'undefined' ) {
+
+          const result = FurnituringImage.upload( $scope.furnituring.ImageForUpload, FurnituringId );
+
+          // Image upload failed
+          result.error( () => {
+
+            $mdToast.show( $mdToast.simple()
+                .content( 'Möbleringen "' + $scope.furnituring.Name + '" skapades, men det gick inte att ladda upp och spara den önskade bilden.' )
+                .position( 'top right' )
+                .theme( 'warn' )
+            );
+          });
+
+          savePromisesArray.push( result );
+
+          return result;
+        }
+
+        savePromisesArray.push( deferred.promise );
+
+        // Return resolved promise if no image is available for upload
+        deferred.resolve();
+
+        return deferred.promise;
+      };
+
+      const saveSuccess = () => {
+
+        // Display success message
+        $mdToast.show( $mdToast.simple()
+            .content( 'Möbleringen "' + $scope.furnituring.Name + '" sparades med ett lyckat resultat' )
+            .position( 'top right' )
+            .theme( 'success' )
+        );
       };
 
       const getFurnituring = function () {
@@ -112,6 +144,40 @@ angular.module( 'BookingSystem.furnituring',
         });
 
         $scope.furnituring = furnituring;
+      };
+
+      const handleSaveErrors = function ( response ) {
+
+        // If there there was a foreign key reference
+        if ( response.status === 409 ){
+          $mdToast.show( $mdToast.simple()
+              .content( 'Det finns redan en möblering som heter "' + $scope.furnituring.Name +
+              '". Två möbleringar kan inte heta lika.' )
+              .position( 'top right' )
+              .theme( 'warn' )
+          );
+        }
+
+        // If there was a problem with the in-data
+        else if ( response.status === 400 || response.status === 500 ){
+
+          $mdToast.show( $mdToast.simple()
+              .content( 'Ett oväntat fel uppstod när möbleringen skulle sparas' )
+              .position( 'top right' )
+              .theme( 'warn' )
+          );
+        }
+
+        // If the entry was not found
+        if ( response.status === 404 ) {
+          $mdToast.show( $mdToast.simple()
+              .content( 'Möbleringen "' + $scope.furnituring.Name + '" existerar inte längre. Hann kanske någon radera den?' )
+              .position( 'top right' )
+              .theme( 'warn' )
+          );
+
+          history.back();
+        }
       };
 
       /* Private Methods END */
@@ -148,55 +214,35 @@ angular.module( 'BookingSystem.furnituring',
         Furnituring.save(
           {
             FurnituringId: $stateParams.furnituringId,
-            Name: $scope.furnituring.Name
+            Name: $scope.furnituring.Name,
+            ImageSrc: $scope.furnituring.ImageSrc
           }
         ).$promise
 
           // If everything went ok
           .then( ( response ) => {
 
-            $scope.endEditMode();
+            // Upload image
+            uploadImage( response.FurnituringId )
 
-            $mdToast.show( $mdToast.simple()
-              .content( 'Möbleringen "' + $scope.furnituring.Name + '" sparades med ett lyckat resultat' )
-              .position( 'top right' )
-              .theme( 'success' )
-            );
+              .finally( () => {
 
-            history.back();
+                // Redirect
+                history.back();
+              });
+
+            // Only show success message if all save promises resolved without errors.
+            $q.all( savePromisesArray )
+              .then( () => {
+
+                $scope.endEditMode();
+                saveSuccess();
+              });
 
             // Something went wrong
           }).catch( ( response ) => {
 
-            // If there there was a foreign key reference
-            if ( response.status === 409 ){
-              $mdToast.show( $mdToast.simple()
-                .content( 'Det finns redan en möblering som heter "' + $scope.furnituring.Name +
-                  '". Två möbleringar kan inte heta lika.' )
-                .position( 'top right' )
-                .theme( 'warn' )
-              );
-            }
-
-            // If there was a problem with the in-data
-            else if ( response.status === 400 || response.status === 500 ){
-              $mdToast.show( $mdToast.simple()
-                .content( 'Ett oväntat fel uppstod när möbleringen skulle sparas' )
-                .position( 'top right' )
-                .theme( 'warn' )
-              );
-            }
-
-            // If the entry was not found
-            if ( response.status === 404 ) {
-              $mdToast.show( $mdToast.simple()
-                .content( 'Möbleringen "' + $scope.furnituring.Name + '" existerar inte längre. Hann kanske någon radera den?' )
-                .position( 'top right' )
-                .theme( 'warn' )
-              );
-
-              history.back();
-            }
+            handleSaveErrors( response );
           });
       };
 
@@ -271,12 +317,73 @@ angular.module( 'BookingSystem.furnituring',
     }]
     )
 
-    .controller( 'FurnituringCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'Furnituring', '$mdToast', ( $rootScope, $stateParams, $scope, $state, Furnituring, $mdToast ) => {
+    .controller( 'FurnituringCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'Furnituring', '$mdToast', 'FurnituringImage', '$q', ( $rootScope, $stateParams, $scope, $state, Furnituring, $mdToast, FurnituringImage, $q ) => {
 
       /* Init vars */
       $scope.furnituring = {};
+      const savePromisesArray = [];
 
       /* Private methods START */
+
+      const uploadImage = ( FurnituringId ) => {
+
+        const deferred = $q.defer();
+
+        if ( typeof $scope.furnituring.ImageForUpload !== 'undefined' ) {
+
+          const result = FurnituringImage.upload( $scope.furnituring.ImageForUpload, FurnituringId );
+
+          // Image upload failed
+          result.error( () => {
+
+            $mdToast.show( $mdToast.simple()
+                .content( 'Möbleringen "' + $scope.furnituring.Name + '" skapades, men det gick inte att ladda upp och spara den önskade bilden.' )
+                .position( 'top right' )
+                .theme( 'warn' )
+            );
+          });
+
+          savePromisesArray.push( result );
+
+          return result;
+        }
+
+        // Return resolved promise if no image is available for upload
+        deferred.resolve();
+
+        return deferred.promise;
+      };
+
+      const saveSuccess = () => {
+
+        // Display success message
+        $mdToast.show( $mdToast.simple()
+            .content( 'Möbleringen "' + $scope.furnituring.Name + '" sparades med ett lyckat resultat' )
+            .position( 'top right' )
+            .theme( 'success' )
+        );
+      };
+
+      const handleSaveErrors = function ( response ) {
+        // If there there was a foreign key reference
+        if ( response.status === 409 ){
+          $mdToast.show( $mdToast.simple()
+              .content( 'Det finns redan en möblering som heter "' + $scope.furnituring.Name +
+              '". Två möbleringar kan inte heta lika.' )
+              .position( 'top right' )
+              .theme( 'warn' )
+          );
+        }
+
+        // If there was a problem with the in-data
+        else {
+          $mdToast.show( $mdToast.simple()
+              .content( 'Ett oväntat fel uppstod när möbleringen skulle sparas' )
+              .position( 'top right' )
+              .theme( 'warn' )
+          );
+        }
+      };
 
       /* Private Methods END */
 
@@ -297,35 +404,29 @@ angular.module( 'BookingSystem.furnituring',
           // If everything went ok
           .then( ( response ) => {
 
-            $mdToast.show( $mdToast.simple()
-              .content( 'Möbleringen "' + $scope.furnituring.Name + '" skapades med ett lyckat resultat' )
-              .position( 'top right' )
-              .theme( 'success' )
-            );
+            if ( typeof $scope.furnituring.ImageForUpload !== 'undefined' ) {
 
-            history.back();
+              // Upload image
+              uploadImage( response.FurnituringId )
+
+                .finally( () => {
+
+                  // Redirect
+                  history.back();
+                });
+            }
+
+            // Only show success message if all save promises resolved without errors.
+            $q.all( savePromisesArray )
+              .then( () => {
+
+                saveSuccess();
+              });
 
             // Something went wrong
           }).catch( ( response ) => {
 
-            // If there there was a foreign key reference
-            if ( response.status === 409 ){
-              $mdToast.show( $mdToast.simple()
-                .content( 'Det finns redan en möblering som heter "' + $scope.furnituring.Name +
-                  '". Två möbleringar kan inte heta lika.' )
-                .position( 'top right' )
-                .theme( 'warn' )
-              );
-            }
-
-            // If there was a problem with the in-data
-            else {
-              $mdToast.show( $mdToast.simple()
-                .content( 'Ett oväntat fel uppstod när möbleringen skulle sparas' )
-                .position( 'top right' )
-                .theme( 'warn' )
-              );
-            }
+            handleSaveErrors( response );
           });
       };
 

@@ -7,6 +7,16 @@
 
             <form name="furnituringForm">
 
+                <div layout-gt-xs="row">
+                    <img class="show-image" ng-src="{{API_IMG_PATH_URL + furnituring.ImageSrc}}" ng-show="furnituring.ImageSrc" ng-hide="isEditMode || !furnituring.ImageSrc">
+
+                    <div ng-if="isEditMode">
+                        <div layout-gt-xs="row">
+                            <image-uploader type="Furnituring" id="{{furnituring.MealId}}" image-src="furnituring.ImageSrc" base64-encoded-image="furnituring.ImageForUpload"></image-uploader>
+                        </div>
+                    </div>
+                </div>
+
                 <div layout-gt-xs="row" class="pos-relative">
 
                     <div class="validation-messages" ng-messages="furnituringForm.name.$error">

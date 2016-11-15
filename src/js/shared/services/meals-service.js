@@ -34,12 +34,12 @@ angular.module( 'BookingSystem.mealsServices',
   .factory( 'MealImage', ['$http', 'API_URL', ( $http, API_URL ) => {
 
     return {
-      upload : function( imageData, customerId ) {
+      upload : function( imageData, mealId ) {
 
         return $http(
           {
             method: 'POST',
-            url: API_URL + 'Meal/image/' + customerId,
+            url: API_URL + 'Meal/image/' + mealId,
             data: imageData,
             headers: {'Content-Type': undefined}
           }

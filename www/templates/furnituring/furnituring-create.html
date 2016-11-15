@@ -4,6 +4,9 @@
         <div class="row padding">
 
             <form name="furnituringForm">
+                <div layout-gt-xs="row">
+                    <image-uploader type="Furnituring" id="{{furnituring.FurnituringId}}" image-src="furnituring.ImageSrc" base64-encoded-image="furnituring.ImageForUpload"></image-uploader>
+                </div>
 
                 <div layout-gt-xs="row" class="pos-relative">
 
@@ -36,7 +39,7 @@
 
         <pre>
         {{ furnituringForm | json }}
-    </pre>
+        </pre>
 
     </ion-content>
 </ion-view>

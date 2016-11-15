@@ -361,6 +361,7 @@ angular.module( 'BookingSystem.routes',
       //Customers
 
       .state( 'app.customers-list', {
+        cache: false,
         url: '/customers-list',
         views: {
           'menuContent': {
