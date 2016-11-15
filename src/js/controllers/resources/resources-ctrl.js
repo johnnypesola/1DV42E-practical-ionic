@@ -10,42 +10,51 @@ angular.module( 'BookingSystem.resources',
   )
 
   //List controller
-  .controller( 'ResourcesListCtrl', [ '$rootScope', '$scope', '$state', '$mdToast', 'Resource', 'API_IMG_PATH_URL', ( $rootScope, $scope, $state, $mdToast, Resource, API_IMG_PATH_URL ) => {
+  .controller( 'ResourcesListCtrl', [ '$rootScope', '$scope', '$state', '$mdToast', 'Resource', 'API_IMG_PATH_URL', 'PAGINATION_COUNT', ( $rootScope, $scope, $state, $mdToast, Resource, API_IMG_PATH_URL, PAGINATION_COUNT ) => {
 
     /* Init vars */
     $scope.API_IMG_PATH_URL = API_IMG_PATH_URL;
+    $scope.noMoreItemsAvailable = false;
+    $scope.resources = [];
+    let pageNum = 1;
 
     /* Private methods START */
-
-    const getResources = function () {
-
-      const resources = Resource.query();
-
-      // In case resources cannot be fetched, display an error to user.
-      resources.$promise.catch( () => {
-
-        $mdToast.show( $mdToast.simple()
-          .content( 'Resurser kunde inte hämtas, var god försök igen.' )
-          .position( 'top right' )
-          .theme( 'warn' )
-        );
-      });
-
-      $scope.resources = resources;
-
-    };
 
     /* Private Methods END */
 
     /* Public Methods START */
 
+    $scope.loadMore = function() {
+
+      const newItems = Resource.queryPagination({
+        pageNum: pageNum,
+        itemCount: PAGINATION_COUNT
+      });
+
+      newItems.$promise.then( () => {
+
+        // If there aren't any more items
+        if ( newItems.length === 0 || newItems.length < PAGINATION_COUNT ) {
+
+          $scope.noMoreItemsAvailable = true;
+
+        }
+
+        newItems.forEach( ( newItem ) => {
+
+          $scope.resources.push( newItem );
+        });
+
+        $scope.$broadcast( 'scroll.infiniteScrollComplete' );
+
+      });
+
+      pageNum++;
+    };
+
     /* Public Methods END */
 
     /* Initialization START */
-
-    $scope.$on( '$ionicView.beforeEnter', ( event, data ) => {
-      getResources();
-    });
 
     /* Initialization END */
   }]
