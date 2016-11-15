@@ -26,7 +26,7 @@ namespace BookingSystemAuth.Models
             FurnituringDelete(Furnituring.FurnituringId);
         }
 
-        public void FurnituringDelete(int FurnituringId)
+        public Furnituring FurnituringDelete(int FurnituringId)
         {
             if (FurnituringId < 0)
             {
@@ -45,6 +45,7 @@ namespace BookingSystemAuth.Models
             // Delete Furnituring
             FurnituringDAL.DeleteFurnituring(FurnituringId);
 
+            return Furnituring;
         }
 
         public Furnituring GetFurnituring(int FurnituringId)
@@ -62,6 +63,10 @@ namespace BookingSystemAuth.Models
             return FurnituringDAL.GetFurniturings();
         }
 
+        public IEnumerable<Furnituring> GetPageWise(string sortColumn, int pageSize, int pageIndex, out int totalRowCount)
+        {
+            return FurnituringDAL.GetFurnituringsPageWise(sortColumn, pageSize, pageIndex, out totalRowCount);
+        }
 
         public void SaveFurnituring(Furnituring Furnituring)
         {

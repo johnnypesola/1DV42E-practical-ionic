@@ -45,7 +45,7 @@ namespace BookingSystemAuth.Controllers
             }
         }
 
-        // GET: api/Location
+        // GET: api/Meal/paginate/1/10
         [Route("api/Meal/paginate/{Index:int}/{PageSize:int}")]
         [AcceptVerbs("GET")]
         public IHttpActionResult Get(int Index, int PageSize)

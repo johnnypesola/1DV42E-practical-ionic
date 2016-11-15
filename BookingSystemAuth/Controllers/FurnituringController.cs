@@ -7,12 +7,16 @@ using System.Web.Http;
 using BookingSystemAuth.Models;
 using System.Web.Http.Cors;
 using System.Data;
+using Newtonsoft.Json.Linq;
 
 namespace BookingSystemAuth.Controllers
 {
-    [Authorize]
+//    [Authorize]
     public class FurnituringController : ApiController
     {
+        // Shared variables
+        const string IMAGE_PATH = "Content/upload/img/furnituring";
+
         // Set up Service.
         FurnituringService furnituringService = new FurnituringService();  
 
@@ -24,6 +28,31 @@ namespace BookingSystemAuth.Controllers
             try
             {
                 IEnumerable<Furnituring> furniturings = furnituringService.GetFurniturings();
+
+                if (furniturings == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(furniturings);
+            }
+            catch
+            {
+                return InternalServerError();
+            }
+        }
+
+        // GET: api/Furnituring/paginate/1/10
+        [Route("api/Furnituring/paginate/{Index:int}/{PageSize:int}")]
+        [AcceptVerbs("GET")]
+        public IHttpActionResult Get(int Index, int PageSize)
+        {
+            const string sortByColumn = "Name ASC";
+            int count = 0;
+
+            try
+            {
+                IEnumerable<Furnituring> furniturings = furnituringService.GetPageWise(sortByColumn, PageSize, Index, out count);
 
                 if (furniturings == null)
                 {
@@ -101,9 +130,16 @@ namespace BookingSystemAuth.Controllers
         [AcceptVerbs("DELETE")]
         public IHttpActionResult Delete(int FurnituringId)
         {
+            ImageService imageService = new ImageService();
+            Furnituring deletedFurnituring;
+
             try
             {
-                furnituringService.FurnituringDelete(FurnituringId);
+                // Delete info from database
+                deletedFurnituring = furnituringService.FurnituringDelete(FurnituringId);
+
+                // Delete image
+                imageService.DeleteImage(deletedFurnituring.ImageSrc);
             }
             catch (FormatException)
             {
@@ -123,6 +159,50 @@ namespace BookingSystemAuth.Controllers
             }
 
             return Ok();
+        }
+
+        // POST a picture for a furnituring
+        [Route("api/Furnituring/image/{FurnituringId:int}")]
+        [AcceptVerbs("POST")]
+        [HttpPost]
+        public IHttpActionResult Post(int FurnituringId)
+        {
+            string base64string;
+            JObject returnData;
+            ImageService imageService = new ImageService();
+            string UploadImagePath;
+
+            try
+            {
+                // Check that location with specific Id exists
+                Furnituring furnituring = furnituringService.GetFurnituring(FurnituringId);
+                if (furnituring == null)
+                {
+                    return NotFound();
+                }
+
+                // Process image data
+                base64string = Request.Content.ReadAsStringAsync().Result;
+
+                // Save image
+                UploadImagePath = imageService.SaveImage(IMAGE_PATH, base64string, FurnituringId);
+
+                // Attach path to object
+                furnituring.ImageSrc = UploadImagePath;
+
+                // Save location
+                furnituringService.SaveFurnituring(furnituring);
+
+                // Build return JSON object
+                returnData = JObject.Parse(String.Format("{{ 'imgpath' : '{0}'}}", UploadImagePath));
+
+                // Return path to uploaded image
+                return Ok(returnData);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

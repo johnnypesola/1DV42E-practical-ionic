@@ -199,6 +199,7 @@ namespace BookingSystemAuth.Models
 
                     // Add in parameters for Stored procedure
                     cmd.Parameters.Add("@Name", SqlDbType.VarChar, 50).Value = Meal.Name;
+                    cmd.Parameters.Add("@ImageSrc", SqlDbType.VarChar, 50).Value = Meal.ImageSrc;
 
                     // Add out parameter for Stored procedure
                     cmd.Parameters.Add("@InsertId", SqlDbType.SmallInt).Direction = ParameterDirection.Output;

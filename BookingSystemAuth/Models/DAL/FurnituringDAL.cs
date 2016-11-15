@@ -67,7 +67,8 @@ namespace BookingSystemAuth.Models
                             return new Furnituring
                             {
                                 FurnituringId = reader.GetSafeInt16(reader.GetOrdinal("FurnituringId")),
-                                Name = reader.GetSafeString(reader.GetOrdinal("Name"))
+                                Name = reader.GetSafeString(reader.GetOrdinal("Name")),
+                                ImageSrc = reader.GetSafeString(reader.GetOrdinal("ImageSrc"))
                             };
                         }
                     }
@@ -108,7 +109,8 @@ namespace BookingSystemAuth.Models
                             FurnituringsReturnList.Add(new Furnituring
                             {
                                 FurnituringId = reader.GetSafeInt16(reader.GetOrdinal("FurnituringId")),
-                                Name = reader.GetSafeString(reader.GetOrdinal("Name"))
+                                Name = reader.GetSafeString(reader.GetOrdinal("Name")),
+                                ImageSrc = reader.GetSafeString(reader.GetOrdinal("ImageSrc"))
                             });
                         }
                     }
@@ -118,6 +120,63 @@ namespace BookingSystemAuth.Models
 
                     // Return list
                     return FurnituringsReturnList;
+                }
+                catch
+                {
+                    throw new ApplicationException(DAL_ERROR_MSG);
+                }
+            }
+        }
+
+        public IEnumerable<Furnituring> GetFurnituringsPageWise(string sortColumn, int pageSize, int pageIndex, out int totalRowCount)
+        {
+            // Create connection object
+            using (this.CreateConnection())
+            {
+                try
+                {
+                    List<Furnituring> mealsReturnList;
+                    SqlCommand cmd;
+
+                    // Create list object
+                    mealsReturnList = new List<Furnituring>(pageSize);
+
+                    // Connect to database and execute given stored procedure
+                    cmd = this.Setup("appSchema.usp_FurnituringList", DALOptions.closedConnection);
+
+                    // Add parameter for Stored procedure
+                    cmd.Parameters.Add("@SortOrder", SqlDbType.VarChar, 25).Value = sortColumn;
+                    cmd.Parameters.Add("@PageIndex", SqlDbType.Int).Value = pageIndex;
+                    cmd.Parameters.Add("@PageSize", SqlDbType.Int).Value = pageSize;
+                    cmd.Parameters.Add("@TotalRowCount", SqlDbType.Int).Direction = ParameterDirection.Output;
+
+                    // Open DB connection
+                    connection.Open();
+
+                    // Get all data from stored procedure
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        // Get all data rows
+                        while (reader.Read())
+                        {
+                            // Create new Meal object from database values and add to list
+                            mealsReturnList.Add(new Furnituring
+                            {
+                                FurnituringId = reader.GetSafeInt16(reader.GetOrdinal("FurnituringId")),
+                                Name = reader.GetSafeString(reader.GetOrdinal("Name")),
+                                ImageSrc = reader.GetSafeString(reader.GetOrdinal("ImageSrc"))
+                            });
+                        }
+                    }
+
+                    // Get total row count
+                    totalRowCount = Convert.ToInt32(cmd.Parameters["@TotalRowCount"].Value);
+
+                    // Remove unused list rows, free memory.
+                    mealsReturnList.TrimExcess();
+
+                    // Return list
+                    return mealsReturnList;
                 }
                 catch
                 {
@@ -140,6 +199,7 @@ namespace BookingSystemAuth.Models
 
                     // Add in parameters for Stored procedure
                     cmd.Parameters.Add("@Name", SqlDbType.VarChar, 50).Value = Furnituring.Name;
+                    cmd.Parameters.Add("@ImageSrc", SqlDbType.VarChar, 50).Value = Furnituring.ImageSrc;
 
                     // Add out parameter for Stored procedure
                     cmd.Parameters.Add("@InsertId", SqlDbType.SmallInt).Direction = ParameterDirection.Output;
@@ -180,6 +240,7 @@ namespace BookingSystemAuth.Models
                     // Add in parameters for Stored procedure
                     cmd.Parameters.Add("@FurnituringId", SqlDbType.SmallInt).Value = Furnituring.FurnituringId;
                     cmd.Parameters.Add("@Name", SqlDbType.VarChar, 50).Value = Furnituring.Name;
+                    cmd.Parameters.Add("@ImageSrc", SqlDbType.VarChar, 50).Value = Furnituring.ImageSrc;
 
                     // Open DB connection
                     connection.Open();
