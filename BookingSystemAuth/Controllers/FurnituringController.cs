@@ -11,7 +11,7 @@ using Newtonsoft.Json.Linq;
 
 namespace BookingSystemAuth.Controllers
 {
-//    [Authorize]
+    [Authorize]
     public class FurnituringController : ApiController
     {
         // Shared variables

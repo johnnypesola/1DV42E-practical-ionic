@@ -66,6 +66,11 @@ namespace BookingSystemAuth.Models
             return CustomerDAL.GetCustomers();
         }
 
+        public IEnumerable<Customer> GetPageWise(string sortColumn, int pageSize, int pageIndex, out int totalRowCount)
+        {
+            return CustomerDAL.GetCustomersPageWise(sortColumn, pageSize, pageIndex, out totalRowCount);
+        }
+
         public IEnumerable<Customer> SearchFor(SearchContainer searchContainer)
         {
             return CustomerDAL.SearchFor(searchContainer);
