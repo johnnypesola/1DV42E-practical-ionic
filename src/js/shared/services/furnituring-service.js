@@ -15,7 +15,19 @@
 
       return $resource(
         API_URL + 'Furnituring/:furnituringId',
-        {furnituringId: '@furnituringId'}
+        {furnituringId: '@furnituringId'},
+        {
+          // Paginate
+          queryPagination: {
+            url: API_URL + 'Furnituring/paginate/:pageNum/:itemCount',
+            method: 'GET',
+            isArray: true,
+            params: {
+              pageNum: '@pageNum',
+              itemCount: '@itemCount'
+            }
+          }
+        }
       );
     }]
     )

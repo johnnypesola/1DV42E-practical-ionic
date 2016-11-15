@@ -227,6 +227,7 @@ angular.module( 'BookingSystem.routes',
       // Furniturings
 
       .state( 'app.furnituring-list', {
+        cache: false,
         url: '/furnituring-list',
         views: {
           'menuContent': {

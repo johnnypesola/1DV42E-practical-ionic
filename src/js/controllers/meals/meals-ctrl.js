@@ -17,6 +17,10 @@ angular.module( 'BookingSystem.meals',
 
     /* Private methods START */
 
+    /* Private Methods END */
+
+    /* Public Methods START */
+
     $scope.loadMore = function() {
 
       const newItems = Meal.queryPagination({
@@ -27,53 +31,27 @@ angular.module( 'BookingSystem.meals',
       newItems.$promise.then( () => {
 
         // If there aren't any more items
-        if ( newItems.length === 0 ) {
+        if ( newItems.length === 0 || newItems.length < PAGINATION_COUNT ) {
 
           $scope.noMoreItemsAvailable = true;
 
-        } else {
-
-          newItems.forEach( ( newItem ) => {
-
-            $scope.meals.push( newItem );
-          });
-
-          $scope.$broadcast( 'scroll.infiniteScrollComplete' );
         }
+
+        newItems.forEach( ( newItem ) => {
+
+          $scope.meals.push( newItem );
+        });
+
+        $scope.$broadcast( 'scroll.infiniteScrollComplete' );
+
       });
 
       pageNum++;
     };
-    /*
-    const getMeals = function() {
-
-      const meals = Meal.query();
-
-      // In case meals cannot be fetched, display an error to user.
-      meals.$promise.catch( () => {
-
-        $mdToast.show( $mdToast.simple()
-          .content( 'Måltider kunde inte hämtas, var god försök igen.' )
-          .position( 'top right' )
-          .theme( 'warn' )
-        );
-      });
-
-      $scope.meals = meals;
-    };
-    */
-
-    /* Private Methods END */
-
-    /* Public Methods START */
 
     /* Public Methods END */
 
     /* Initialization START */
-
-    $scope.$on( '$ionicView.beforeEnter', ( event, data ) => {
-      getMeals();
-    });
 
     /* Initialization END */
 

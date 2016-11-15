@@ -35,6 +35,10 @@ angular.module( 'BookingSystem.locations',
 
     /* Private methods START */
 
+    /* Private Methods END */
+
+    /* Public Methods START */
+
     $scope.loadMore = function() {
 
       const newItems = Location.queryPagination({
@@ -45,35 +49,26 @@ angular.module( 'BookingSystem.locations',
       newItems.$promise.then( () => {
 
         // If there aren't any more items
-        if ( newItems.length === 0 ) {
+        if ( newItems.length === 0 || newItems.length < PAGINATION_COUNT ) {
 
           $scope.noMoreItemsAvailable = true;
 
-        } else {
-
-          newItems.forEach( ( newItem ) => {
-
-            $scope.locations.push( newItem );
-          });
-
-          $scope.$broadcast( 'scroll.infiniteScrollComplete' );
         }
+
+        newItems.forEach( ( newItem ) => {
+
+          $scope.locations.push( newItem );
+        });
+
+        $scope.$broadcast( 'scroll.infiniteScrollComplete' );
       });
 
       pageNum++;
     };
 
-    /* Private Methods END */
-
-    /* Public Methods START */
-
     /* Public Methods END */
 
     /* Initialization START */
-    $scope.$on( '$ionicView.beforeEnter', ( event, data ) => {
-
-      // getLocations();
-    });
 
     /* Initialization END */
 

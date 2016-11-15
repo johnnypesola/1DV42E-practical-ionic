@@ -7,40 +7,50 @@ angular.module( 'BookingSystem.furnituring',
     )
 
     // Controller
-    .controller( 'FurnituringListCtrl', [ '$rootScope', '$scope', '$state', 'Furnituring', '$mdToast', ( $rootScope, $scope, $state, Furnituring, $mdToast ) => {
+    .controller( 'FurnituringListCtrl', [ '$rootScope', '$scope', '$state', 'Furnituring', '$mdToast', 'API_IMG_PATH_URL', 'PAGINATION_COUNT', ( $rootScope, $scope, $state, Furnituring, $mdToast, API_IMG_PATH_URL, PAGINATION_COUNT ) => {
 
       /* Init vars */
+      $scope.API_IMG_PATH_URL = API_IMG_PATH_URL;
+      $scope.noMoreItemsAvailable = false;
+      $scope.furniturings = [];
+      let pageNum = 1;
 
       /* Private methods START */
-
-      const getFurniturings = function () {
-
-        const furniturings = Furnituring.query();
-
-        // In case furnituring cannot be fetched, display an error to user.
-        furniturings.$promise.catch( () => {
-
-          $mdToast.show( $mdToast.simple()
-            .content( 'Möbleringar kunde inte hämtas, var god försök igen.' )
-            .position( 'top right' )
-            .theme( 'warn' )
-          );
-        });
-
-        $scope.furniturings = furniturings;
-
-      };
 
       /* Private Methods END */
 
       /* Public Methods START */
 
+      $scope.loadMore = function() {
+
+        const newItems = Furnituring.queryPagination({
+          pageNum: pageNum,
+          itemCount: PAGINATION_COUNT
+        });
+
+        newItems.$promise.then( () => {
+
+          // If there aren't any more items
+          if ( newItems.length === 0 || newItems.length < PAGINATION_COUNT ) {
+
+            $scope.noMoreItemsAvailable = true;
+
+          }
+
+          newItems.forEach( ( newItem ) => {
+
+            $scope.furniturings.push( newItem );
+          });
+
+          $scope.$broadcast( 'scroll.infiniteScrollComplete' );
+        });
+
+        pageNum++;
+      };
+
       /* Public Methods END */
 
       /* Initialization START */
-      $scope.$on( '$ionicView.beforeEnter', ( event, data ) => {
-        getFurniturings();
-      });
 
       /* Initialization END */
 
