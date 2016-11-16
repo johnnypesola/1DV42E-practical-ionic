@@ -295,7 +295,7 @@ angular.module( 'BookingSystem.meals',
       }
     };
 
-    handleDeleteErrors = function( response ) {
+    const handleDeleteErrors = function( response ) {
 
       // If there there was a foreign key reference
       if (
@@ -424,7 +424,6 @@ angular.module( 'BookingSystem.meals',
         .catch( ( response ) => {
 
           handleDeleteErrors( response );
-
         });
     };
 
