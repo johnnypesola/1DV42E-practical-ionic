@@ -79,7 +79,7 @@ angular.module( 'BookingSystem.locations',
   .controller( 'LocationDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$state', '$ionicModal', '$mdToast', 'Location', 'LocationImage', 'API_IMG_PATH_URL', 'DEFAULT_MAP_ZOOM', 'DEFAULT_LONGITUDE', 'DEFAULT_LATITUDE', 'LocationFurnituring', '$q', 'Furnituring', ( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $state, $ionicModal, $mdToast, Location, LocationImage, API_IMG_PATH_URL, DEFAULT_MAP_ZOOM, DEFAULT_LONGITUDE, DEFAULT_LATITUDE, LocationFurnituring, $q, Furnituring ) => {
 
     /* Init vars */
-
+    const selectLocationFurnituringModalName = 'selectFurnituringModal';
     const selectLocationFurnituringModalTemplateUrl = 'templates/modals/select-location-furnituring.html';
     const deleteModalTemplateUrl = 'templates/modals/location-delete.html';
     const googleMapsTemplateUrl = 'templates/modals/google-maps.html';
@@ -119,6 +119,7 @@ angular.module( 'BookingSystem.locations',
       const deferred = $q.defer();
 
       $ionicModal.fromTemplateUrl( selectLocationFurnituringModalTemplateUrl, {
+        id: selectLocationFurnituringModalName,
         scope: $scope,
         animation: MODAL_ANIMATION
       })
@@ -669,17 +670,21 @@ angular.module( 'BookingSystem.locations',
     });
 
     // Execute action on hide modal
-    $scope.$on( 'modal.hidden', () => {
+    $scope.$on( 'modal.hidden', ( event, modal ) => {
 
-      filterSelectedFurnituringForLocation();
+      // Only do things if the correct modal is hidden
+      if ( modal.id === selectLocationFurnituringModalName ) {
 
-      if ( isMaxPeopleForLocationFurnituringsMissing() ){
+        filterSelectedFurnituringForLocation();
 
-        $mdToast.show( $mdToast.simple()
-            .content( 'Uppgifter om max antal personer var ogiltig för en eller flera möbleringar. Var god försök igen.' )
-            .position( 'top right' )
-            .theme( 'warn' )
-        );
+        if ( isMaxPeopleForLocationFurnituringsMissing() ){
+
+          $mdToast.show( $mdToast.simple()
+              .content( 'Uppgifter om max antal personer var ogiltig för en eller flera möbleringar. Var god försök igen.' )
+              .position( 'top right' )
+              .theme( 'warn' )
+          );
+        }
       }
     });
 
@@ -699,6 +704,7 @@ angular.module( 'BookingSystem.locations',
     $scope.markers = [];
     const savePromisesArray = [];
 
+    const selectLocationFurnituringModalName = 'selectFurnituringModal';
     const selectLocationFurnituringModalTemplateUrl = 'templates/modals/select-location-furnituring.html';
     const googleMapsTemplateUrl = 'templates/modals/google-maps.html';
 
@@ -709,6 +715,7 @@ angular.module( 'BookingSystem.locations',
       const deferred = $q.defer();
 
       $ionicModal.fromTemplateUrl( selectLocationFurnituringModalTemplateUrl, {
+        id: selectLocationFurnituringModalName,
         scope: $scope,
         animation: MODAL_ANIMATION
       })
@@ -929,6 +936,9 @@ angular.module( 'BookingSystem.locations',
                 .position( 'top right' )
                 .theme( 'warn' )
             );
+
+            // Reject promise
+            deferred.reject();
           });
 
       } else {
@@ -1013,7 +1023,7 @@ angular.module( 'BookingSystem.locations',
 
             .finally( () => {
 
-              return saveFurnituringsForLocation();
+              return saveFurnituringsForLocation( response.LocationId );
             })
 
             .then( () => {
@@ -1086,17 +1096,21 @@ angular.module( 'BookingSystem.locations',
     });
 
     // Execute action on hide modal
-    $scope.$on( 'modal.hidden', () => {
+    $scope.$on( 'modal.hidden', ( event, modal ) => {
 
-      filterSelectedFurnituringForLocation();
+      // Only do things if the correct modal is hidden
+      if ( modal.id === selectLocationFurnituringModalName ) {
 
-      if ( isMaxPeopleForLocationFurnituringsMissing() ){
+        filterSelectedFurnituringForLocation();
 
-        $mdToast.show( $mdToast.simple()
-            .content( 'Uppgifter om max antal personer var ogiltig för en eller flera möbleringar. Var god försök igen.' )
-            .position( 'top right' )
-            .theme( 'warn' )
-        );
+        if ( isMaxPeopleForLocationFurnituringsMissing() ){
+
+          $mdToast.show( $mdToast.simple()
+              .content( 'Uppgifter om max antal personer var ogiltig för en eller flera möbleringar. Var god försök igen.' )
+              .position( 'top right' )
+              .theme( 'warn' )
+          );
+        }
       }
     });
 
