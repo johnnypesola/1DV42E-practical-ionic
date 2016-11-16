@@ -83,6 +83,7 @@ angular.module( 'BookingSystem.locations',
     const selectLocationFurnituringModalTemplateUrl = 'templates/modals/select-location-furnituring.html';
     const deleteModalTemplateUrl = 'templates/modals/location-delete.html';
     const googleMapsTemplateUrl = 'templates/modals/google-maps.html';
+    const savePromisesArray = [];
 
     $scope.locationBackup = {};
     $scope.API_IMG_PATH_URL = API_IMG_PATH_URL;
@@ -160,17 +161,32 @@ angular.module( 'BookingSystem.locations',
       return deferred.promise;
     };
 
-    const uploadImage = function( LocationId ){
+    const uploadImage = ( LocationId ) => {
 
       const deferred = $q.defer();
 
-      // If there is an image to upload.
-      if ( typeof $scope.location.ImageForUpload !== 'undefined' ){
+      if ( typeof $scope.location.ImageForUpload !== 'undefined' ) {
 
-        return LocationImage.upload( $scope.location.ImageForUpload, LocationId );
+        const result = LocationImage.upload( $scope.location.ImageForUpload, LocationId );
+
+        // Image upload failed
+        result.error( () => {
+
+          $mdToast.show( $mdToast.simple()
+              .content( 'Lokalen/Platsen sparades, men det gick inte att ladda upp och spara den önskade bilden.' )
+              .position( 'top right' )
+              .theme( 'warn' )
+          );
+        });
+
+        savePromisesArray.push( result );
+
+        return result;
       }
 
-      // Resolve promise, no image to upload.
+      savePromisesArray.push( deferred.promise );
+
+      // Return resolved promise if no image is available for upload
       deferred.resolve();
 
       return deferred.promise;
@@ -183,9 +199,6 @@ angular.module( 'BookingSystem.locations',
           .position( 'top right' )
           .theme( 'success' )
       );
-
-      // Redirect
-      history.back();
     };
 
     const moveMarkerOnClick = function( map, eventName, args ) {
@@ -354,6 +367,76 @@ angular.module( 'BookingSystem.locations',
       }).$promise;
     };
 
+    const handleSaveErrors = function( response ) {
+
+      // If there there was a foreign key reference
+      if ( response.status === 409 ){
+        $mdToast.show( $mdToast.simple()
+            .content( 'Det finns redan en lokal/plats som heter "' + $scope.location.Name +
+            '". Två lokaler eller platser kan inte heta lika.' )
+            .position( 'top right' )
+            .theme( 'warn' )
+        );
+      }
+
+      // If there was a problem with the in-data
+      else if ( response.status === 400 || response.status === 500 ){
+        $mdToast.show( $mdToast.simple()
+            .content( 'Ett oväntat fel uppstod när lokalen/platsen skulle sparas' )
+            .position( 'top right' )
+            .theme( 'warn' )
+        );
+      }
+
+      // If the entry was not found
+      if ( response.status === 404 ) {
+        $mdToast.show( $mdToast.simple()
+            .content( 'Lokalen/platsen "' + $scope.location.Name + '" existerar inte längre. Hann kanske någon radera den?' )
+            .position( 'top right' )
+            .theme( 'warn' )
+        );
+
+        history.back();
+      }
+    };
+
+    const handleDeleteErrors = function( response ) {
+
+      // If there there was a foreign key reference
+      if (
+        response.status === 400 &&
+        response.data.Message !== 'undefined' &&
+        response.data.Message === 'Foreign key references exists'
+      ){
+        $mdToast.show( $mdToast.simple()
+            .content( 'Lokalen/platsen kan inte raderas eftersom det finns' +
+            ' en bokning eller en lokalmöblering som refererar till lokalen/platsen' )
+            .position( 'top right' )
+            .theme( 'warn' )
+        );
+      }
+
+      // If there was a problem with the in-data
+      else if ( response.status === 400 || response.status === 500 ){
+        $mdToast.show( $mdToast.simple()
+            .content( 'Ett oväntat fel uppstod när lokalen/platsen skulle tas bort' )
+            .position( 'top right' )
+            .theme( 'warn' )
+        );
+      }
+
+      // If the entry was not found
+      if ( response.status === 404 ) {
+        $mdToast.show( $mdToast.simple()
+            .content( 'Lokalen/platsen "' + $scope.location.Name + '" existerar inte längre. Hann kanske någon radera den?' )
+            .position( 'top right' )
+            .theme( 'warn' )
+        );
+      }
+
+      history.back();
+    };
+
     const saveFurnituringsForLocation = function() {
 
       const deferred = $q.defer();
@@ -376,8 +459,21 @@ angular.module( 'BookingSystem.locations',
 
               // Resolve promise
               deferred.resolve();
+            })
+            .catch( () => {
+
+              $mdToast.show( $mdToast.simple()
+                  .content( 'Uppgifter om lokalen sparades, men lokalens möbleringar kunde inte sparas. Var god försök igen.' )
+                  .position( 'top right' )
+                  .theme( 'warn' )
+              );
+
+              // Reject promise
+              deferred.reject();
             });
         });
+
+      savePromisesArray.push( deferred.promise );
 
       return deferred.promise;
     };
@@ -440,66 +536,30 @@ angular.module( 'BookingSystem.locations',
           // Upload image
           uploadImage( response.LocationId )
 
-          // Image upload failed
-          .error( () => {
+            .finally( () => {
 
-            $mdToast.show( $mdToast.simple()
-                .content( 'Lokalen/Platsen sparades, men det gick inte att ladda upp och spara den önskade bilden.' )
-                .position( 'top right' )
-                .theme( 'warn' )
-            );
-          })
+              return saveFurnituringsForLocation();
+            })
 
-          .finally( () => {
+            .then( () => {
 
-            saveFurnituringsForLocation()
+              // Redirect
+              history.back();
+            });
 
+          // Only show success message if all save promises resolved without errors.
+          $q.all( savePromisesArray )
             .then( () => {
 
               saveSuccess();
 
-            }).catch( () => {
-
-              $mdToast.show( $mdToast.simple()
-                  .content( 'Uppgifter om lokalen sparades, men lokalens möbleringar kunde inte sparas. Var god försök igen.' )
-                  .position( 'top right' )
-                  .theme( 'warn' )
-              );
             });
-          });
 
-          // Something went wrong
+        // Something went wrong
         }).catch( ( response ) => {
 
-          // If there there was a foreign key reference
-          if ( response.status === 409 ){
-            $mdToast.show( $mdToast.simple()
-                .content( 'Det finns redan en lokal/plats som heter "' + $scope.location.Name +
-                '". Två lokaler eller platser kan inte heta lika.' )
-                .position( 'top right' )
-                .theme( 'warn' )
-            );
-          }
+          handleSaveErrors( response );
 
-          // If there was a problem with the in-data
-          else if ( response.status === 400 || response.status === 500 ){
-            $mdToast.show( $mdToast.simple()
-                .content( 'Ett oväntat fel uppstod när lokalen/platsen skulle sparas' )
-                .position( 'top right' )
-                .theme( 'warn' )
-            );
-          }
-
-          // If the entry was not found
-          if ( response.status === 404 ) {
-            $mdToast.show( $mdToast.simple()
-                .content( 'Lokalen/platsen "' + $scope.location.Name + '" existerar inte längre. Hann kanske någon radera den?' )
-                .position( 'top right' )
-                .theme( 'warn' )
-            );
-
-            history.back();
-          }
         });
     };
 
@@ -543,39 +603,8 @@ angular.module( 'BookingSystem.locations',
         // Something went wrong
         .catch( ( response ) => {
 
-          // If there there was a foreign key reference
-          if (
-            response.status === 400 &&
-            response.data.Message !== 'undefined' &&
-            response.data.Message === 'Foreign key references exists'
-          ){
-            $mdToast.show( $mdToast.simple()
-                .content( 'Lokalen/platsen kan inte raderas eftersom det finns' +
-                ' en bokning eller en lokalmöblering som refererar till lokalen/platsen' )
-                .position( 'top right' )
-                .theme( 'warn' )
-            );
-          }
+          handleDeleteErrors( response );
 
-          // If there was a problem with the in-data
-          else if ( response.status === 400 || response.status === 500 ){
-            $mdToast.show( $mdToast.simple()
-                .content( 'Ett oväntat fel uppstod när lokalen/platsen skulle tas bort' )
-                .position( 'top right' )
-                .theme( 'warn' )
-            );
-          }
-
-          // If the entry was not found
-          if ( response.status === 404 ) {
-            $mdToast.show( $mdToast.simple()
-                .content( 'Lokalen/platsen "' + $scope.location.Name + '" existerar inte längre. Hann kanske någon radera den?' )
-                .position( 'top right' )
-                .theme( 'warn' )
-            );
-          }
-
-          history.back();
         });
     };
 
@@ -668,6 +697,7 @@ angular.module( 'BookingSystem.locations',
       GPSLongitude: 0
     };
     $scope.markers = [];
+    const savePromisesArray = [];
 
     const selectLocationFurnituringModalTemplateUrl = 'templates/modals/select-location-furnituring.html';
     const googleMapsTemplateUrl = 'templates/modals/google-maps.html';
@@ -698,10 +728,35 @@ angular.module( 'BookingSystem.locations',
       return deferred.promise;
     };
 
-    const uploadImage = function( LocationId ){
+    const uploadImage = ( LocationId ) => {
 
-      return LocationImage.upload( $scope.location.ImageForUpload, LocationId );
+      const deferred = $q.defer();
 
+      if ( typeof $scope.location.ImageForUpload !== 'undefined' ) {
+
+        const result = LocationImage.upload( $scope.location.ImageForUpload, LocationId );
+
+        // Image upload failed
+        result.error( () => {
+
+          $mdToast.show( $mdToast.simple()
+              .content( 'Lokalen/Platsen sparades, men det gick inte att ladda upp och spara den önskade bilden.' )
+              .position( 'top right' )
+              .theme( 'warn' )
+          );
+        });
+
+        savePromisesArray.push( result );
+
+        return result;
+      }
+
+      savePromisesArray.push( deferred.promise );
+
+      // Return resolved promise if no image is available for upload
+      deferred.resolve();
+
+      return deferred.promise;
     };
 
     const saveSuccess = function() {
@@ -711,9 +766,6 @@ angular.module( 'BookingSystem.locations',
         .position( 'top right' )
         .theme( 'success' )
       );
-
-      // Redirect
-      history.back();
     };
 
     const setupGoogleMapsModal = function(){
@@ -853,9 +905,6 @@ angular.module( 'BookingSystem.locations',
       const postDataArray = [];
 
       // Check that there are furniturings to save.
-
-      console.log( '$scope.location.furniturings', $scope.location.furniturings );
-
       if ( $scope.location.furniturings ) {
 
         $scope.location.furniturings.forEach( ( furnituring ) => {
@@ -872,6 +921,14 @@ angular.module( 'BookingSystem.locations',
 
             // Resolve promise
             deferred.resolve();
+          })
+          .catch( () => {
+
+            $mdToast.show( $mdToast.simple()
+                .content( 'Uppgifter om lokalen sparades, men lokalens möbleringar kunde inte sparas. Var god försök igen.' )
+                .position( 'top right' )
+                .theme( 'warn' )
+            );
           });
 
       } else {
@@ -880,7 +937,31 @@ angular.module( 'BookingSystem.locations',
         deferred.resolve();
       }
 
+      savePromisesArray.push( deferred.promise );
+
       return deferred.promise;
+    };
+
+    const handleSaveErrors = function( response ) {
+
+      // If there there was a foreign key reference
+      if ( response.status === 409 ){
+        $mdToast.show( $mdToast.simple()
+            .content( 'Det finns redan en lokal eller plats som heter "' + $scope.location.Name +
+            '". Två lokaler/platser kan inte heta lika.' )
+            .position( 'top right' )
+            .theme( 'warn' )
+        );
+      }
+
+      // If there was a problem with the in-data
+      else {
+        $mdToast.show( $mdToast.simple()
+            .content( 'Ett oväntat fel uppstod när lokalen/platsen skulle sparas' )
+            .position( 'top right' )
+            .theme( 'warn' )
+        );
+      }
     };
 
     const processFurniturings = function() {
@@ -928,57 +1009,30 @@ angular.module( 'BookingSystem.locations',
         // If everything went ok
         .then( ( response ) => {
 
-          // Upload image
-          if ( typeof $scope.location.ImageForUpload !== 'undefined' ){
+          uploadImage( response.LocationId )
 
-            uploadImage( response.LocationId )
+            .finally( () => {
 
-              // Image upload failed
-              .error( () => {
+              return saveFurnituringsForLocation();
+            })
 
-                $mdToast.show( $mdToast.simple()
-                  .content( 'Lokalen/Platsen sparades, men det gick inte att ladda upp och spara den önskade bilden.' )
-                  .position( 'top right' )
-                  .theme( 'warn' )
-                );
-              });
-          }
+            .then( () => {
 
-          saveFurnituringsForLocation( response.LocationId )
+              // Redirect
+              history.back();
+            });
+
+          // Only show success message if all save promises resolved without errors.
+          $q.all( savePromisesArray )
             .then( () => {
 
               saveSuccess();
-
-            }).catch( () => {
-
-              $mdToast.show( $mdToast.simple()
-                  .content( 'Uppgifter om lokalen sparades, men lokalens möbleringar kunde inte sparas. Var god försök igen.' )
-                  .position( 'top right' )
-                  .theme( 'warn' )
-              );
             });
 
         // Something went wrong
         }).catch( ( response ) => {
 
-          // If there there was a foreign key reference
-          if ( response.status === 409 ){
-            $mdToast.show( $mdToast.simple()
-              .content( 'Det finns redan en lokal eller plats som heter "' + $scope.location.Name +
-                '". Två lokaler/platser kan inte heta lika.' )
-              .position( 'top right' )
-              .theme( 'warn' )
-            );
-          }
-
-          // If there was a problem with the in-data
-          else {
-            $mdToast.show( $mdToast.simple()
-              .content( 'Ett oväntat fel uppstod när lokalen/platsen skulle sparas' )
-              .position( 'top right' )
-              .theme( 'warn' )
-            );
-          }
+          handleSaveErrors( response );
         });
     };
 

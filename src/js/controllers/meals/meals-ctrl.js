@@ -295,6 +295,43 @@ angular.module( 'BookingSystem.meals',
       }
     };
 
+    handleDeleteErrors = function( response ) {
+
+      // If there there was a foreign key reference
+      if (
+        response.status === 400 &&
+        response.data.Message !== 'undefined' &&
+        response.data.Message === 'Foreign key references exists'
+      ){
+        $mdToast.show( $mdToast.simple()
+            .content( 'Måltiden kan inte raderas eftersom det finns' +
+            ' en lokalbokning eller en lokalmåltid som refererar till måltiden' )
+            .position( 'top right' )
+            .theme( 'warn' )
+        );
+      }
+
+      // If there was a problem with the in-data
+      else if ( response.status === 400 || response.status === 500 ){
+        $mdToast.show( $mdToast.simple()
+            .content( 'Ett oväntat fel uppstod när måltiden skulle tas bort' )
+            .position( 'top right' )
+            .theme( 'warn' )
+        );
+      }
+
+      // If the entry was not found
+      if ( response.status === 404 ) {
+        $mdToast.show( $mdToast.simple()
+            .content( 'Måltiden "' + $scope.meal.Name + '" existerar inte längre. Hann kanske någon radera den?' )
+            .position( 'top right' )
+            .theme( 'warn' )
+        );
+      }
+
+      history.back();
+    };
+
     /* Private Methods END */
 
     /* Public Methods START */
@@ -386,39 +423,8 @@ angular.module( 'BookingSystem.meals',
         // Something went wrong
         .catch( ( response ) => {
 
-          // If there there was a foreign key reference
-          if (
-            response.status === 400 &&
-            response.data.Message !== 'undefined' &&
-            response.data.Message === 'Foreign key references exists'
-          ){
-            $mdToast.show( $mdToast.simple()
-                .content( 'Måltiden kan inte raderas eftersom det finns' +
-                ' en lokalbokning eller en lokalmåltid som refererar till måltiden' )
-                .position( 'top right' )
-                .theme( 'warn' )
-            );
-          }
+          handleDeleteErrors( response );
 
-          // If there was a problem with the in-data
-          else if ( response.status === 400 || response.status === 500 ){
-            $mdToast.show( $mdToast.simple()
-                .content( 'Ett oväntat fel uppstod när måltiden skulle tas bort' )
-                .position( 'top right' )
-                .theme( 'warn' )
-            );
-          }
-
-          // If the entry was not found
-          if ( response.status === 404 ) {
-            $mdToast.show( $mdToast.simple()
-                .content( 'Måltiden "' + $scope.meal.Name + '" existerar inte längre. Hann kanske någon radera den?' )
-                .position( 'top right' )
-                .theme( 'warn' )
-            );
-          }
-
-          history.back();
         });
     };
 
