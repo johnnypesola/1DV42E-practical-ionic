@@ -59,7 +59,6 @@ angular.module( 'BookingSystem.meals',
   )
 
   //Edit controller
-
   .controller( 'MealDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$ionicModal', '$state', 'Meal', 'MealProperty','MealHasProperty', '$mdToast', 'API_IMG_PATH_URL', 'MealImage', '$q',( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $ionicModal, $state, Meal, MealProperty, MealHasProperty, $mdToast, API_IMG_PATH_URL, MealImage, $q ) => {
     /* Init vars */
 
@@ -221,7 +220,6 @@ angular.module( 'BookingSystem.meals',
       const postDataArray = [];
 
       // Delete previous meal properties
-
       const mealPropertyResource = MealHasProperty.removeForMeal(
         {
           mealId: $scope.meal.MealId
@@ -342,8 +340,6 @@ angular.module( 'BookingSystem.meals',
           uploadImage( response.MealId )
 
             .finally( () => {
-
-              console.log( 'finally' );
 
               return saveMealProperties( response.MealId );
             })
@@ -473,6 +469,7 @@ angular.module( 'BookingSystem.meals',
     /* Initialization END */
   }]
   )
+
   //Create controller
   .controller( 'MealCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'Meal', '$mdToast', 'MealImage', 'MODAL_ANIMATION', '$ionicModal', 'MealProperty', 'MealHasProperty', '$q', ( $rootScope, $stateParams, $scope, $state, Meal, $mdToast, MealImage, MODAL_ANIMATION, $ionicModal, MealProperty, MealHasProperty, $q ) => {
 
