@@ -124,7 +124,8 @@ angular.module( 'BookingSystem.routes',
         cache: false,
         url: '/meal-booking-create',
         params: {
-          date: null,
+          startTime: null,
+          endTime: null,
           bookingId: null,
           customerId: null
         },
@@ -162,7 +163,8 @@ angular.module( 'BookingSystem.routes',
         cache: false,
         url: '/resource-booking-create',
         params: {
-          date: null,
+          startTime: null,
+          endTime: null,
           bookingId: null,
           customerId: null
         },
@@ -200,7 +202,8 @@ angular.module( 'BookingSystem.routes',
         cache: false,
         url: '/location-booking-create',
         params: {
-          date: null,
+          startTime: null,
+          endTime: null,
           bookingId: null,
           customerId: null
         },

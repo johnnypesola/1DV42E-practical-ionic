@@ -419,8 +419,6 @@ angular.module( 'BookingSystem.bookings',
             .theme( 'success' )
           );
 
-          $ionicHistory.goBack();
-
           // Something went wrong
         }).catch( ( response ) => {
 
@@ -440,8 +438,6 @@ angular.module( 'BookingSystem.bookings',
               .position( 'top right' )
               .theme( 'warn' )
             );
-
-            $ionicHistory.goBack();
           }
         });
     };
@@ -501,11 +497,14 @@ angular.module( 'BookingSystem.bookings',
             );
           }
 
-          $ionicHistory.goBack();
+          // Redirect
+          history.back();
         });
     };
 
     $scope.createBookingOfType = function( bookingTypeStr ) {
+
+      console.log( $scope.booking.StartTime, $scope.booking.EndTime );
 
       // Redirect to create view
       $state.go( 'app.' + bookingTypeStr + '-create', {

@@ -203,7 +203,8 @@
 
           // Redirect to create view
           $state.go( 'app.' + bookingType + '-create', {
-            date: calendarDayMomentDate,
+            startTime: moment( calendarDayMomentDate ),
+            endTime: moment( calendarDayMomentDate ).add( 59, 'minutes' ),
             id: null
           });
 

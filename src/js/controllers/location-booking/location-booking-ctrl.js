@@ -570,15 +570,15 @@ angular.module( 'BookingSystem.locationBooking',
       // Initialize date if its not set in incoming state params.
       // It does not matter if its a normal date object or moment.js object. Make it a regular date object either way.
       // We need to make it to a regular date object since that's what angular material date picker requires.
-      if ( $state.params.date ) {
+      if ( $state.params.startTime && $state.params.endTime ) {
 
-        $scope.bookingStartDate = moment( $state.params.date ).toDate();
-        $scope.bookingStartHour = moment( $state.params.date ).hour();
-        $scope.bookingStartMinute = moment( $state.params.date ).minute();
+        $scope.bookingStartDate = moment( $state.params.startTime ).toDate();
+        $scope.bookingStartHour = moment( $state.params.startTime ).hour();
+        $scope.bookingStartMinute = moment( $state.params.startTime ).minute();
 
-        $scope.bookingEndDate = moment( $state.params.date ).toDate();
-        $scope.bookingEndHour = moment( $state.params.date ).hour();
-        $scope.bookingEndMinute = moment( $state.params.date ).add( 59, 'minutes' ).minute();
+        $scope.bookingEndDate = moment( $state.params.endTime ).toDate();
+        $scope.bookingEndHour = moment( $state.params.endTime ).hour();
+        $scope.bookingEndMinute = moment( $state.params.endTime ).minute();
 
       } else {
 
