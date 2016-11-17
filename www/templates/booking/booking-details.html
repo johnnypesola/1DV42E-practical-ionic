@@ -211,11 +211,15 @@
             </form>
         </div>
 
+    </ion-content>
+
+    <div class="edit-buttons-container">
+
         <md-button
                 ng-show="isEditMode"
                 ng-click="abortEditMode()"
                 class="md-raised"
-        >
+                >
             Avbryt
         </md-button>
 
@@ -224,7 +228,7 @@
                 class="md-raised md-primary"
                 ng-click="saveBooking()"
                 ng-disabled="bookingForm.$invalid"
-        >
+                >
             Spara
         </md-button>
 
@@ -232,11 +236,10 @@
                 ng-show="isEditMode"
                 class="md-fab md-mini md-warn"
                 ng-click="modal.show()"
-        >
+                >
             <span class="icon ion-trash-a md-medium-icon"></span>
         </md-button>
-
-    </ion-content>
+    </div>
 
     <md-button
             class="md-fab md-warn md-lower-right-button"

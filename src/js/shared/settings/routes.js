@@ -74,7 +74,6 @@ angular.module( 'BookingSystem.routes',
       })
 
       // Bookings
-
       .state( 'app.booking-details', {
         url: '/booking-details',
         params: {

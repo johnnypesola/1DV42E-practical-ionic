@@ -388,7 +388,7 @@ angular.module( 'BookingSystem.bookings',
     $scope.abortEditMode = function() {
       const $scope = this;
 
-      $scope.$parent.isEditMode = false;
+      $scope.isEditMode = false;
       $scope.booking = $scope.bookingBackup;
     };
 

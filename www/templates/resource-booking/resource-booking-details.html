@@ -179,36 +179,36 @@
 
         </div>
 
-        <div class="edit-buttons-container">
-
-            <md-button
-                    ng-show="isEditMode"
-                    ng-click="abortEditMode()"
-                    class="md-raised"
-                    >
-                Avbryt
-            </md-button>
-
-            <md-button
-                    ng-show="isEditMode"
-                    class="md-raised md-primary"
-                    ng-click="saveResourceBooking()"
-                    ng-disabled="resourceBookingForm.$invalid"
-                    >
-                Spara
-            </md-button>
-
-            <md-button
-                    ng-show="isEditMode"
-                    class="md-fab md-mini md-warn"
-                    ng-click="modal.show()"
-                    >
-                <span class="icon ion-trash-a md-medium-icon"></span>
-            </md-button>
-
-        </div>
-
     </ion-content>
+
+    <div class="edit-buttons-container">
+
+        <md-button
+                ng-show="isEditMode"
+                ng-click="abortEditMode()"
+                class="md-raised"
+                >
+            Avbryt
+        </md-button>
+
+        <md-button
+                ng-show="isEditMode"
+                class="md-raised md-primary"
+                ng-click="saveResourceBooking()"
+                ng-disabled="resourceBookingForm.$invalid"
+                >
+            Spara
+        </md-button>
+
+        <md-button
+                ng-show="isEditMode"
+                class="md-fab md-mini md-warn"
+                ng-click="modal.show()"
+                >
+            <span class="icon ion-trash-a md-medium-icon"></span>
+        </md-button>
+
+    </div>
 
     <md-button
             class="md-fab md-warn md-lower-right-button"
