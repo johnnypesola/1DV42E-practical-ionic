@@ -459,7 +459,7 @@ angular.module( 'BookingSystem.mealBooking',
           // Resolve promise
           deferred.resolve();
 
-          $ionicHistory.goBack();
+          history.back();
 
           // Something went wrong
         }).catch( ( response ) => {
@@ -798,10 +798,8 @@ angular.module( 'BookingSystem.mealBooking',
                 // Resolve promise
                 deferred.resolve();
 
-                // Redirect to booking view
-                $state.go( 'app.booking-view', {
-                  weekDate: startTime
-                });
+                // Redirect
+                history.back();
 
                 // Something went wrong
               }).catch( ( response ) => {

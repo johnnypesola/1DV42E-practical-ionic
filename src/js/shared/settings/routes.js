@@ -75,10 +75,7 @@ angular.module( 'BookingSystem.routes',
 
       // Bookings
       .state( 'app.booking-details', {
-        url: '/booking-details',
-        params: {
-          id: null
-        },
+        url: '/booking-details/:id',
         views: {
           'menuContent': {
             templateUrl: 'templates/booking/booking-details.html',
@@ -114,10 +111,7 @@ angular.module( 'BookingSystem.routes',
       })
 
       .state( 'app.meal-booking-details', {
-        url: '/meal-booking-details',
-        params: {
-          id: null
-        },
+        url: '/meal-booking-details/:id',
         views: {
           'menuContent': {
             templateUrl: 'templates/meal-booking/meal-booking-details.html',
@@ -155,10 +149,7 @@ angular.module( 'BookingSystem.routes',
       })
 
       .state( 'app.resource-booking-details', {
-        url: '/resource-booking-details',
-        params: {
-          id: null
-        },
+        url: '/resource-booking-details/:id',
         views: {
           'menuContent': {
             templateUrl: 'templates/resource-booking/resource-booking-details.html',
@@ -196,10 +187,7 @@ angular.module( 'BookingSystem.routes',
       })
 
       .state( 'app.location-booking-details', {
-        url: '/location-booking-details',
-        params: {
-          id: null
-        },
+        url: '/location-booking-details/:id',
         views: {
           'menuContent': {
             templateUrl: 'templates/location-booking/location-booking-details.html',

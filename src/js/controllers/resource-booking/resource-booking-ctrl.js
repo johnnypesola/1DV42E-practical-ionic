@@ -358,6 +358,7 @@ angular.module( 'BookingSystem.resourceBooking',
           .theme( 'success' )
         );
 
+        // Redirect
         history.back();
       })
       // Something went wrong
@@ -383,6 +384,7 @@ angular.module( 'BookingSystem.resourceBooking',
           );
         }
 
+        // Redirect
         history.back();
       });
   };
@@ -441,7 +443,8 @@ angular.module( 'BookingSystem.resourceBooking',
         // Resolve promise
         deferred.resolve();
 
-        $ionicHistory.goBack();
+        // Redirect
+        history.back();
 
         // Something went wrong
       }).catch( ( response ) => {
@@ -758,10 +761,8 @@ angular.module( 'BookingSystem.resourceBooking',
             // Resolve promise
             deferred.resolve();
 
-            // Redirect to booking view
-            $state.go( 'app.booking-view', {
-              weekDate: startTime
-            });
+            // Redirect
+            history.back();
 
             // Something went wrong
           }).catch( ( response ) => {
