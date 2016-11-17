@@ -14,7 +14,19 @@ angular.module( 'BookingSystem.customersServices',
 
     return $resource(
       API_URL + 'Customer/:customerId',
-      {customerId: '@customerId'}
+      {customerId: '@customerId'},
+      {
+        // Paginate
+        queryPagination: {
+          url: API_URL + 'Customer/paginate/:pageNum/:itemCount',
+          method: 'GET',
+          isArray: true,
+          params: {
+            pageNum: '@pageNum',
+            itemCount: '@itemCount'
+          }
+        }
+      }
     );
   }]
   )

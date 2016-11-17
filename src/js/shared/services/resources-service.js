@@ -26,6 +26,16 @@ angular.module( 'BookingSystem.resourcesServices',
             fromDate: '@fromDate',
             toDate: '@toDate'
           }
+        },
+        // Paginate
+        queryPagination: {
+          url: API_URL + 'Resource/paginate/:pageNum/:itemCount',
+          method: 'GET',
+          isArray: true,
+          params: {
+            pageNum: '@pageNum',
+            itemCount: '@itemCount'
+          }
         }
       }
     );

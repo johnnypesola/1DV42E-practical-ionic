@@ -17,6 +17,10 @@ angular.module( 'BookingSystem.meals',
 
     /* Private methods START */
 
+    /* Private Methods END */
+
+    /* Public Methods START */
+
     $scope.loadMore = function() {
 
       const newItems = Meal.queryPagination({
@@ -27,53 +31,27 @@ angular.module( 'BookingSystem.meals',
       newItems.$promise.then( () => {
 
         // If there aren't any more items
-        if ( newItems.length === 0 ) {
+        if ( newItems.length === 0 || newItems.length < PAGINATION_COUNT ) {
 
           $scope.noMoreItemsAvailable = true;
 
-        } else {
-
-          newItems.forEach( ( newItem ) => {
-
-            $scope.meals.push( newItem );
-          });
-
-          $scope.$broadcast( 'scroll.infiniteScrollComplete' );
         }
+
+        newItems.forEach( ( newItem ) => {
+
+          $scope.meals.push( newItem );
+        });
+
+        $scope.$broadcast( 'scroll.infiniteScrollComplete' );
+
       });
 
       pageNum++;
     };
-    /*
-    const getMeals = function() {
-
-      const meals = Meal.query();
-
-      // In case meals cannot be fetched, display an error to user.
-      meals.$promise.catch( () => {
-
-        $mdToast.show( $mdToast.simple()
-          .content( 'Måltider kunde inte hämtas, var god försök igen.' )
-          .position( 'top right' )
-          .theme( 'warn' )
-        );
-      });
-
-      $scope.meals = meals;
-    };
-    */
-
-    /* Private Methods END */
-
-    /* Public Methods START */
 
     /* Public Methods END */
 
     /* Initialization START */
-
-    $scope.$on( '$ionicView.beforeEnter', ( event, data ) => {
-      getMeals();
-    });
 
     /* Initialization END */
 
@@ -81,12 +59,12 @@ angular.module( 'BookingSystem.meals',
   )
 
   //Edit controller
-
   .controller( 'MealDetailsCtrl', [ '$rootScope', '$scope', '$stateParams', 'MODAL_ANIMATION', '$ionicModal', '$state', 'Meal', 'MealProperty','MealHasProperty', '$mdToast', 'API_IMG_PATH_URL', 'MealImage', '$q',( $rootScope, $scope, $stateParams, MODAL_ANIMATION, $ionicModal, $state, Meal, MealProperty, MealHasProperty, $mdToast, API_IMG_PATH_URL, MealImage, $q ) => {
     /* Init vars */
 
     const selectMealPropertiesModalTemplateUrl = 'templates/modals/select-meal-properties.html';
     const deleteModalTemplateUrl = 'templates/modals/meals-delete.html';
+    const savePromisesArray = [];
     $scope.isEditMode = false;
     $scope.mealBackup = {};
     $scope.API_IMG_PATH_URL = API_IMG_PATH_URL;
@@ -127,10 +105,35 @@ angular.module( 'BookingSystem.meals',
       });
     };
 
-    const uploadImage = function( MealId ){
+    const uploadImage = ( MealId ) => {
 
-      return MealImage.upload( $scope.meal.ImageForUpload, MealId );
+      const deferred = $q.defer();
 
+      if ( typeof $scope.meal.ImageForUpload !== 'undefined' ) {
+
+        const result = MealImage.upload( $scope.meal.ImageForUpload, MealId );
+
+        // Image upload failed
+        result.error( () => {
+
+          $mdToast.show( $mdToast.simple()
+              .content( 'Måltiden "' + $scope.meal.Name + '" sparades, men det gick inte att ladda upp och spara den önskade bilden.' )
+              .position( 'top right' )
+              .theme( 'warn' )
+          );
+        });
+
+        savePromisesArray.push( result );
+
+        return result;
+      }
+
+      savePromisesArray.push( deferred.promise );
+
+      // Return resolved promise if no image is available for upload
+      deferred.resolve();
+
+      return deferred.promise;
     };
 
     const saveSuccess = function() {
@@ -140,9 +143,6 @@ angular.module( 'BookingSystem.meals',
           .position( 'top right' )
           .theme( 'success' )
       );
-
-      // Redirect
-      history.back();
     };
 
     const getMeal = function () {
@@ -220,7 +220,6 @@ angular.module( 'BookingSystem.meals',
       const postDataArray = [];
 
       // Delete previous meal properties
-
       const mealPropertyResource = MealHasProperty.removeForMeal(
         {
           mealId: $scope.meal.MealId
@@ -243,14 +242,94 @@ angular.module( 'BookingSystem.meals',
         MealHasProperty.saveForMeal( postDataArray ).$promise
 
           .then( () => {
-
-            // Resolve promise
             deferred.resolve();
+          })
+
+          .catch( () => {
+            $mdToast.show( $mdToast.simple()
+                .content( 'Uppgifter om måltiden sparades, men måltidsegenskaper kunde inte sparas. Var god försök igen.' )
+                .position( 'top right' )
+                .theme( 'warn' )
+            );
+
+            deferred.reject();
           });
       });
 
+      savePromisesArray.push( deferred.promise );
+
       // Return promise
       return deferred.promise;
+    };
+
+    const handleSaveErrors = function( response ) {
+
+      // If there there was a foreign key reference
+      if ( response.status === 409 ){
+        $mdToast.show( $mdToast.simple()
+            .content( 'Det finns redan en måltid som heter "' + $scope.meal.Name +
+            '". Två måltider kan inte heta lika.' )
+            .position( 'top right' )
+            .theme( 'warn' )
+        );
+      }
+
+      // If there was a problem with the in-data
+      else if ( response.status === 400 || response.status === 500 ){
+        $mdToast.show( $mdToast.simple()
+            .content( 'Ett oväntat fel uppstod när måltiden skulle sparas' )
+            .position( 'top right' )
+            .theme( 'warn' )
+        );
+      }
+
+      // If the entry was not found
+      if ( response.status === 404 ) {
+        $mdToast.show( $mdToast.simple()
+            .content( 'Måltiden "' + $scope.meal.Name + '" existerar inte längre. Hann kanske någon radera den?' )
+            .position( 'top right' )
+            .theme( 'warn' )
+        );
+
+        history.back();
+      }
+    };
+
+    const handleDeleteErrors = function( response ) {
+
+      // If there there was a foreign key reference
+      if (
+        response.status === 400 &&
+        response.data.Message !== 'undefined' &&
+        response.data.Message === 'Foreign key references exists'
+      ){
+        $mdToast.show( $mdToast.simple()
+            .content( 'Måltiden kan inte raderas eftersom det finns' +
+            ' en lokalbokning eller en lokalmåltid som refererar till måltiden' )
+            .position( 'top right' )
+            .theme( 'warn' )
+        );
+      }
+
+      // If there was a problem with the in-data
+      else if ( response.status === 400 || response.status === 500 ){
+        $mdToast.show( $mdToast.simple()
+            .content( 'Ett oväntat fel uppstod när måltiden skulle tas bort' )
+            .position( 'top right' )
+            .theme( 'warn' )
+        );
+      }
+
+      // If the entry was not found
+      if ( response.status === 404 ) {
+        $mdToast.show( $mdToast.simple()
+            .content( 'Måltiden "' + $scope.meal.Name + '" existerar inte längre. Hann kanske någon radera den?' )
+            .position( 'top right' )
+            .theme( 'warn' )
+        );
+      }
+
+      history.back();
     };
 
     /* Private Methods END */
@@ -294,79 +373,30 @@ angular.module( 'BookingSystem.meals',
 
           $scope.endEditMode();
 
-          saveMealProperties( response.MealId )
+          // Upload image
+          uploadImage( response.MealId )
 
-            .then( () => {
+            .finally( () => {
 
-              if ( typeof $scope.meal.ImageForUpload !== 'undefined' ) {
-
-                // Upload image
-                uploadImage( response.MealId )
-
-                  .success( () => {
-
-                    saveSuccess();
-                  })
-
-                  // Image upload failed
-                  .error( () => {
-
-                    $mdToast.show( $mdToast.simple()
-                        .content( 'Måltiden "' + $scope.meal.Name + '" sparades, men det gick inte att ladda upp och spara den önskade bilden.' )
-                        .position( 'top right' )
-                        .theme( 'warn' )
-                    );
-
-                    // Redirect
-                    history.back();
-                  });
-              }
-              else {
-                saveSuccess();
-              }
+              return saveMealProperties( response.MealId );
             })
+            .finally( () => {
 
-            .catch( () => {
-
-              $mdToast.show( $mdToast.simple()
-                .content( 'Uppgifter om måltiden sparades, men måltidsegenskaper kunde inte sparas. Var god försök igen.' )
-                .position( 'top right' )
-                .theme( 'warn' )
-              );
+              // Redirect
+              history.back();
             });
 
-          // Something went wrong
+          // Only show success message if all save promises resolved without errors.
+          $q.all( savePromisesArray )
+            .then( () => {
+
+              saveSuccess();
+            });
+
+        // Something went wrong
         }).catch( ( response ) => {
 
-          // If there there was a foreign key reference
-          if ( response.status === 409 ){
-            $mdToast.show( $mdToast.simple()
-                .content( 'Det finns redan en måltid som heter "' + $scope.meal.Name +
-                '". Två måltider kan inte heta lika.' )
-                .position( 'top right' )
-                .theme( 'warn' )
-            );
-          }
-
-          // If there was a problem with the in-data
-          else if ( response.status === 400 || response.status === 500 ){
-            $mdToast.show( $mdToast.simple()
-                .content( 'Ett oväntat fel uppstod när måltiden skulle sparas' )
-                .position( 'top right' )
-                .theme( 'warn' )
-            );
-          }
-
-          // If the entry was not found
-          if ( response.status === 404 ) {
-            $mdToast.show( $mdToast.simple()
-                .content( 'Måltiden "' + $scope.meal.Name + '" existerar inte längre. Hann kanske någon radera den?' )
-                .position( 'top right' )
-                .theme( 'warn' )
-            );
-
-            history.back();
-          }
+          handleSaveErrors( response );
         });
     };
 
@@ -393,39 +423,7 @@ angular.module( 'BookingSystem.meals',
         // Something went wrong
         .catch( ( response ) => {
 
-          // If there there was a foreign key reference
-          if (
-            response.status === 400 &&
-            response.data.Message !== 'undefined' &&
-            response.data.Message === 'Foreign key references exists'
-          ){
-            $mdToast.show( $mdToast.simple()
-                .content( 'Måltiden kan inte raderas eftersom det finns' +
-                ' en lokalbokning eller en lokalmåltid som refererar till måltiden' )
-                .position( 'top right' )
-                .theme( 'warn' )
-            );
-          }
-
-          // If there was a problem with the in-data
-          else if ( response.status === 400 || response.status === 500 ){
-            $mdToast.show( $mdToast.simple()
-                .content( 'Ett oväntat fel uppstod när måltiden skulle tas bort' )
-                .position( 'top right' )
-                .theme( 'warn' )
-            );
-          }
-
-          // If the entry was not found
-          if ( response.status === 404 ) {
-            $mdToast.show( $mdToast.simple()
-                .content( 'Måltiden "' + $scope.meal.Name + '" existerar inte längre. Hann kanske någon radera den?' )
-                .position( 'top right' )
-                .theme( 'warn' )
-            );
-          }
-
-          history.back();
+          handleDeleteErrors( response );
         });
     };
 
@@ -476,11 +474,13 @@ angular.module( 'BookingSystem.meals',
     /* Initialization END */
   }]
   )
+
   //Create controller
   .controller( 'MealCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'Meal', '$mdToast', 'MealImage', 'MODAL_ANIMATION', '$ionicModal', 'MealProperty', 'MealHasProperty', '$q', ( $rootScope, $stateParams, $scope, $state, Meal, $mdToast, MealImage, MODAL_ANIMATION, $ionicModal, MealProperty, MealHasProperty, $q ) => {
 
     /* Init vars */
     const selectMealPropertiesModalTemplateUrl = 'templates/modals/select-meal-properties.html';
+    const savePromisesArray = [];
     $scope.meal = {
       mealProperties: []
     };
@@ -505,11 +505,35 @@ angular.module( 'BookingSystem.meals',
       });
     };
 
-    // Upload image
     const uploadImage = ( MealId ) => {
 
-      return MealImage.upload( $scope.meal.ImageForUpload, MealId );
+      const deferred = $q.defer();
 
+      if ( typeof $scope.meal.ImageForUpload !== 'undefined' ) {
+
+        const result = MealImage.upload( $scope.meal.ImageForUpload, MealId );
+
+        // Image upload failed
+        result.error( () => {
+
+          $mdToast.show( $mdToast.simple()
+              .content( 'Måltiden "' + $scope.meal.Name + '" skapades, men det gick inte att ladda upp och spara den önskade bilden.' )
+              .position( 'top right' )
+              .theme( 'warn' )
+          );
+        });
+
+        savePromisesArray.push( result );
+
+        return result;
+      }
+
+      savePromisesArray.push( deferred.promise );
+
+      // Return resolved promise if no image is available for upload
+      deferred.resolve();
+
+      return deferred.promise;
     };
 
     const getAllMealProperties = function() {
@@ -526,14 +550,10 @@ angular.module( 'BookingSystem.meals',
           .position( 'top right' )
           .theme( 'success' )
       );
-
-      // Redirect
-      history.back();
     };
 
     const saveMealProperties = function( mealId ){
 
-      const deferred = $q.defer();
       const postDataArray = [];
 
       // Process each and every one of the meal properties
@@ -546,15 +566,43 @@ angular.module( 'BookingSystem.meals',
       });
 
       // Save
-      MealHasProperty.saveForMeal( postDataArray ).$promise
-        .then( () => {
+      const result = MealHasProperty.saveForMeal( postDataArray );
 
-          // Resolve promise
-          deferred.resolve();
-        });
+      result.$promise.catch( () => {
+
+        $mdToast.show( $mdToast.simple()
+            .content( 'Uppgifter om måltiden sparades, men måltidsegenskaper kunde inte sparas. Var god försök igen.' )
+            .position( 'top right' )
+            .theme( 'warn' )
+        );
+      });
+
+      savePromisesArray.push( result.$promise );
 
       // Return promise
-      return deferred.promise;
+      return result.$promise;
+    };
+
+    const handleSaveErrors = function( response ) {
+
+      // If there there was a foreign key reference
+      if ( response.status === 409 ){
+        $mdToast.show( $mdToast.simple()
+            .content( 'Det finns redan en måltid som heter "' + $scope.meal.Name +
+            '". Två måltider kan inte heta lika.' )
+            .position( 'top right' )
+            .theme( 'warn' )
+        );
+      }
+
+      // If there was a problem with the in-data
+      else {
+        $mdToast.show( $mdToast.simple()
+            .content( 'Ett oväntat fel uppstod när måltiden skulle sparas' )
+            .position( 'top right' )
+            .theme( 'warn' )
+        );
+      }
     };
 
     /* Private Methods END */
@@ -576,61 +624,30 @@ angular.module( 'BookingSystem.meals',
         // If everything went ok
         .then( ( response ) => {
 
-          if ( typeof $scope.meal.ImageForUpload !== 'undefined' ) {
+          // Upload image
+          uploadImage( response.MealId )
 
-            // Upload image
-            uploadImage( response.MealId )
+            .finally( () => {
 
-              // Image upload failed
-              .error( () => {
+              return saveMealProperties( response.MealId );
+            })
+            .finally( () => {
 
-                $mdToast.show( $mdToast.simple()
-                    .content( 'Måltiden "' + $scope.meal.Name + '" skapades, men det gick inte att ladda upp och spara den önskade bilden.' )
-                    .position( 'top right' )
-                    .theme( 'warn' )
-                );
+              // Redirect
+              history.back();
+            });
 
-                // Redirect
-                history.back();
-              });
-          }
-
-          saveMealProperties( response.MealId )
-
+          // Only show success message if all save promises resolved without errors.
+          $q.all( savePromisesArray )
             .then( () => {
 
               saveSuccess();
-
-            }).catch( () => {
-
-              $mdToast.show( $mdToast.simple()
-                  .content( 'Uppgifter om måltiden sparades, men måltidsegenskaper kunde inte sparas. Var god försök igen.' )
-                  .position( 'top right' )
-                  .theme( 'warn' )
-              );
             });
 
           // Something went wrong
         }).catch( ( response ) => {
 
-          // If there there was a foreign key reference
-          if ( response.status === 409 ){
-            $mdToast.show( $mdToast.simple()
-              .content( 'Det finns redan en måltid som heter "' + $scope.meal.Name +
-                '". Två måltider kan inte heta lika.' )
-              .position( 'top right' )
-              .theme( 'warn' )
-            );
-          }
-
-          // If there was a problem with the in-data
-          else {
-            $mdToast.show( $mdToast.simple()
-              .content( 'Ett oväntat fel uppstod när måltiden skulle sparas' )
-              .position( 'top right' )
-              .theme( 'warn' )
-            );
-          }
+          handleSaveErrors( response );
         });
     };
 

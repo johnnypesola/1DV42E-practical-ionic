@@ -42,6 +42,7 @@ angular.module( 'BookingSystem.routes',
       // Users
 
       .state( 'app.users-list', {
+        cache: false,
         url: '/user-list',
         views: {
           'menuContent': {
@@ -227,6 +228,7 @@ angular.module( 'BookingSystem.routes',
       // Furniturings
 
       .state( 'app.furnituring-list', {
+        cache: false,
         url: '/furnituring-list',
         views: {
           'menuContent': {
@@ -260,6 +262,7 @@ angular.module( 'BookingSystem.routes',
       // MealProperties
 
       .state( 'app.meal-properties-list', {
+        cache: false,
         url: '/meal-properties-list',
         views: {
           'menuContent': {
@@ -327,6 +330,7 @@ angular.module( 'BookingSystem.routes',
       //Resources
 
       .state( 'app.resources-list', {
+        cache: false,
         url: '/resources-list',
         views: {
           'menuContent': {
@@ -360,6 +364,7 @@ angular.module( 'BookingSystem.routes',
       //Customers
 
       .state( 'app.customers-list', {
+        cache: false,
         url: '/customers-list',
         views: {
           'menuContent': {
@@ -393,6 +398,7 @@ angular.module( 'BookingSystem.routes',
       //BookingType
 
       .state( 'app.bookingtypes-list', {
+        cache: false,
         url: '/bookingtypes-list',
         views: {
           'menuContent': {

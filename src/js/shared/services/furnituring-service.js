@@ -15,10 +15,40 @@
 
       return $resource(
         API_URL + 'Furnituring/:furnituringId',
-        {furnituringId: '@furnituringId'}
+        {furnituringId: '@furnituringId'},
+        {
+          // Paginate
+          queryPagination: {
+            url: API_URL + 'Furnituring/paginate/:pageNum/:itemCount',
+            method: 'GET',
+            isArray: true,
+            params: {
+              pageNum: '@pageNum',
+              itemCount: '@itemCount'
+            }
+          }
+        }
       );
     }]
     )
+
+    .factory( 'FurnituringImage', ['$http', 'API_URL', ( $http, API_URL ) => {
+
+      return {
+        upload : function( imageData, furnituringId ) {
+
+          return $http(
+            {
+              method: 'POST',
+              url: API_URL + 'Furnituring/image/' + furnituringId,
+              data: imageData,
+              headers: {'Content-Type': undefined}
+            }
+          );
+        }
+      };
+    }]
+  )
 
     .factory( 'LocationFurnituring', ['$resource', 'API_URL', ( $resource, API_URL ) => {
 
