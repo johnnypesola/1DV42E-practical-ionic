@@ -2,7 +2,7 @@
     <ion-content>
 
         <md-list>
-            <md-list-item ng-repeat="meal in meals" href="#/app/meal-details/{{meal.MealId}}" class="noright">
+            <md-list-item ng-repeat="meal in meals" href="#/app/meal-details/{{meal.MealId}}" class="noright" aria-label="Visa {{ meal.Name }}">
                 <img ng-src="{{ API_IMG_PATH_URL + meal.ImageSrc | thumbnail }}" class="md-avatar" ng-if="meal.ImageSrc" />
                 <img src="img/photo_missing.svg" class="md-avatar" ng-if="!meal.ImageSrc">
                 <p>{{ meal.Name }}</p>

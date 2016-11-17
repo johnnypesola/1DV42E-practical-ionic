@@ -2,12 +2,18 @@
     <ion-content>
 
         <md-list>
-            <md-list-item ng-repeat="customer in customers" href="#/app/customer-details/{{customer.CustomerId}}" class="noright">
+            <md-list-item ng-repeat="customer in customers" href="#/app/customer-details/{{customer.CustomerId}}" class="noright" aria-label="Visa {{ customer.Name }}">
                 <img ng-src="{{ API_IMG_PATH_URL + customer.ImageSrc | thumbnail }}" class="md-avatar" ng-if="customer.ImageSrc" />
                 <img src="img/photo_missing.svg" class="md-avatar" ng-if="!customer.ImageSrc">
                 <p>{{ customer.Name }}</p>
             </md-list-item>
         </md-list>
+
+        <ion-infinite-scroll
+            ng-if="!noMoreItemsAvailable"
+            on-infinite="loadMore()"
+            distance="10%"
+        ></ion-infinite-scroll>
 
     </ion-content>
 
