@@ -504,8 +504,6 @@ angular.module( 'BookingSystem.bookings',
 
     $scope.createBookingOfType = function( bookingTypeStr ) {
 
-      console.log( $scope.booking.StartTime, $scope.booking.EndTime );
-
       // Redirect to create view
       $state.go( 'app.' + bookingTypeStr + '-create', {
         bookingId: $stateParams.id,

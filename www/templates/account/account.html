@@ -163,28 +163,28 @@
             </form>
         </div>
 
-        <div class="edit-buttons-container">
-
-            <md-button
-                    ng-show="isEditMode"
-                    ng-click="abortEditMode()"
-                    class="md-raised"
-                    >
-                Avbryt
-            </md-button>
-
-            <md-button
-                    ng-show="isEditMode"
-                    class="md-raised md-primary"
-                    ng-click="saveUser()"
-                    ng-disabled="accountForm.$invalid"
-                    >
-                Spara
-            </md-button>
-
-        </div>
-
     </ion-content>
+
+    <div class="edit-buttons-container">
+
+        <md-button
+                ng-show="isEditMode"
+                ng-click="abortEditMode()"
+                class="md-raised"
+                >
+            Avbryt
+        </md-button>
+
+        <md-button
+                ng-show="isEditMode"
+                class="md-raised md-primary"
+                ng-click="saveUser()"
+                ng-disabled="accountForm.$invalid"
+                >
+            Spara
+        </md-button>
+
+    </div>
 
     <md-button
             class="md-fab md-warn md-lower-right-button"

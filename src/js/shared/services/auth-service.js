@@ -1,15 +1,17 @@
 angular.module( 'BookingSystem.authService',
 
   // Dependencies
-  ['ngCookies']
+  ['ngStorage']
 )
-  .service( 'AuthService', [ '$q', '$cookies', '$timeout', '$rootScope', 'API_URL', 'MODAL_ANIMATION', '$injector', '$http', 'Account', '$state', function( $q, $cookies, $timeout, $rootScope, API_URL, MODAL_ANIMATION, $injector, $http, Account, $state ) {
+  .service( 'AuthService', [ '$q', '$timeout', '$rootScope', 'API_URL', 'MODAL_ANIMATION', '$injector', '$http', 'Account', '$state', '$localStorage', function( $q, $timeout, $rootScope, API_URL, MODAL_ANIMATION, $injector, $http, Account, $state, $localStorage ) {
 
     // Init values
-    const CURRENT_USER_STR = 'currentUser';
     const loginModalTemplateUrl = 'templates/modals/login.html';
     const that = this;
     let credentials = null;
+    $localStorage = $localStorage.$default({
+      credentials: {}
+    });
 
     this.showLoginModal = function(){
 
@@ -70,8 +72,8 @@ angular.module( 'BookingSystem.authService',
 
     this.isLoggedInCheck = function () {
 
-      // Try to get cookie credentials. Determine if user is logged in.
-      const isLoggedIn = $cookies.get( CURRENT_USER_STR ) !== undefined;
+      // Check if there are any credentials on local storage. Determine if user is logged in.
+      const isLoggedIn = ( Object.keys( $localStorage.credentials ).length > 0 );
 
       // Update rootscope variable if needed
       if ( $rootScope.isLoggedIn !== isLoggedIn ) {
@@ -88,16 +90,16 @@ angular.module( 'BookingSystem.authService',
 
       that.setRootScopeUserInfo( credentials );
 
-      $cookies.putObject( CURRENT_USER_STR, credentialsObj );
+      $localStorage.credentials = credentialsObj;
     };
 
     this.getCredentials = function () {
 
       if ( credentials === null ) {
 
-        credentials = $cookies.getObject( CURRENT_USER_STR );
+        credentials = $localStorage.credentials;
 
-        if ( credentials ) {
+        if ( Object.keys( credentials ).length > 0 ) {
           that.setRootScopeUserInfo( credentials );
         }
       }
@@ -123,7 +125,7 @@ angular.module( 'BookingSystem.authService',
       let returnValue = false;
       const currentDateObj = new Date();
 
-      // Get current logged in user from cookie
+      // Get current logged in user from localStorage
       const currentUser = that.getCredentials();
 
       // If user is logged in.
@@ -153,8 +155,8 @@ angular.module( 'BookingSystem.authService',
 
       $rootScope.userInfo = null;
 
-      // Clear credentials from cookie
-      $cookies.remove( CURRENT_USER_STR );
+      // Clear credentials from localStorage
+      $localStorage.credentials = {};
     };
 
     this.apiUrlEqualsUrl = function( configUrl ){
