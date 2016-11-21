@@ -116,6 +116,34 @@ namespace BookingSystemAuth.Controllers
             }
         }
 
+        // GET: api/Location/markbusy/2015-01-01/2015-01-02
+        // GET: api/Location/markbusy/2015-01-01/2015-01-02?fromTime=10.00&toTime=10.00
+        [Authorize]
+        [Route("api/Location/markbusy/{fromDate:datetime}/{toDate:datetime}/{locationBookingExceptionId:int?}")]
+        [AcceptVerbs("GET")]
+        [ActionName("Get")]
+        public IHttpActionResult GetBusy(string fromDate, string toDate, string fromTime = "00:00:00", string toTime = "23:59:59", int locationBookingExceptionId = 0)
+        {
+            DateTime startTime, endTime;
+
+            try
+            {
+                startTime = Convert.ToDateTime(String.Format("{0} {1}", fromDate, fromTime));
+                endTime = Convert.ToDateTime(String.Format("{0} {1}", toDate, toTime));
+
+                IEnumerable<Location> locations = locationService.GetLocationsMarkBusyForPeriod(startTime, endTime, locationBookingExceptionId);
+                if (locations == null)
+                {
+                    return NotFound();
+                }
+                return Ok(locations);
+            }
+            catch
+            {
+                return InternalServerError();
+            }
+        }
+
         // GET: api/Location/search/ColumnName?value=hello
         [Authorize]
         [Route("api/Location/search/{columnName}")]

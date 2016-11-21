@@ -260,6 +260,59 @@ namespace BookingSystemAuth.Models
             }
         }
 
+        public IEnumerable<Location> GetLocationsMarkBusyForPeriod(DateTime startTime, DateTime endTime, int locationBookingExceptionId)
+        {
+            // Create connection object
+            using (this.CreateConnection())
+            {
+                try
+                {
+                    List<Location> locationsReturnList;
+                    SqlCommand cmd;
+
+                    // Create list object
+                    locationsReturnList = new List<Location>(50);
+
+                    // Connect to database and execute given stored procedure
+                    cmd = this.Setup("appSchema.usp_LocationsListSimpleMarkBusyForPeriod");
+
+                    // Add parameter for Stored procedure
+                    cmd.Parameters.Add("@StartTime", SqlDbType.SmallDateTime).Value = startTime;
+                    cmd.Parameters.Add("@EndTime", SqlDbType.SmallDateTime).Value = endTime;
+                    cmd.Parameters.Add("@ExceptionId", SqlDbType.Int).Value = locationBookingExceptionId;
+
+                    // Get all data from stored procedure
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        // Get all data rows
+                        while (reader.Read())
+                        {
+                            // Create new Location object from database values and add to list
+                            locationsReturnList.Add(new Location
+                            {
+                                LocationId = reader.GetSafeInt32(reader.GetOrdinal("LocationId")),
+                                Name = reader.GetSafeString(reader.GetOrdinal("Name")),
+                                MaxPeople = reader.GetSafeInt16(reader.GetOrdinal("MaxPeople")),
+                                ImageSrc = reader.GetSafeString(reader.GetOrdinal("ImageSrc")),
+                                BookingPricePerHour = reader.GetSafeDecimal(reader.GetOrdinal("BookingPricePerHour")),
+                                IsBusy = reader.GetSafeBoolean(reader.GetOrdinal("IsBusy"))
+                            });
+                        }
+                    }
+
+                    // Remove unused list rows, free memory.
+                    locationsReturnList.TrimExcess();
+
+                    // Return list
+                    return locationsReturnList;
+                }
+                catch
+                {
+                    throw new ApplicationException(DAL_ERROR_MSG);
+                }
+            }
+        }
+
         public IEnumerable<Location> GetLocationsPageWise(string sortColumn, int pageSize, int pageIndex, out int totalRowCount)
         {
             // Create connection object

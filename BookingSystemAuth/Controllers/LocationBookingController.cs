@@ -108,6 +108,35 @@ namespace BookingSystemAuth.Controllers
             }
         }
 
+        // Get info if there are any bookings for a specific location for a period
+        [Route("api/LocationBooking/location/{locationId:int}/period/{fromDate:datetime}/{toDate:datetime}")]
+        [AcceptVerbs("GET")]
+        public IHttpActionResult Get(int locationId, string fromDate, string toDate)
+        {
+            DateTime startTime, endTime;
+
+            try
+            {
+                startTime = Convert.ToDateTime(fromDate);
+                endTime = Convert.ToDateTime(toDate);
+
+                // Get bookings
+                IEnumerable<LocationBooking> bookings = locationBookingService.GetForLocationForPeriod(locationId, startTime.StartOfDay(), endTime.EndOfDay());
+
+                if (bookings == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(bookings);
+
+            }
+            catch
+            {
+                return InternalServerError();
+            }
+        }
+
         // POST: api/LocationBooking
         [Authorize]
         [Route("api/LocationBooking")]

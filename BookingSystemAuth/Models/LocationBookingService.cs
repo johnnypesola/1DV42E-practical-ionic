@@ -38,6 +38,11 @@ namespace BookingSystemAuth.Models
             return LocationBookingDAL.GetLocationBookingsForPeriod(startTime, endTime).AsQueryable();
         }
 
+        public IQueryable<LocationBooking> GetForLocationForPeriod(int locationId, DateTime startTime, DateTime endTime)
+        {
+            return LocationBookingDAL.GetLocationBookingsForPeriod(startTime, endTime, locationId).AsQueryable();
+        }
+
         public void SaveLocationBooking(LocationBooking locationBooking)
         {
             // Preparare validation return data

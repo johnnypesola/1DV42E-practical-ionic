@@ -73,6 +73,11 @@ namespace BookingSystemAuth.Models
             return LocationDAL.GetLocationsFreeForPeriod(startTime, endTime, locationBookingExceptionId);
         }
 
+        public IEnumerable<Location> GetLocationsMarkBusyForPeriod(DateTime startTime, DateTime endTime, int locationBookingExceptionId)
+        {
+            return LocationDAL.GetLocationsMarkBusyForPeriod(startTime, endTime, locationBookingExceptionId);
+        }
+
         public IEnumerable<Location> GetPageWise(string sortColumn, int pageSize, int pageIndex, out int totalRowCount)
         {
             return LocationDAL.GetLocationsPageWise(sortColumn, pageSize, pageIndex, out totalRowCount);

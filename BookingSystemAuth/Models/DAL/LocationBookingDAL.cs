@@ -82,7 +82,7 @@ namespace BookingSystemAuth.Models
             }
         }
 
-        public IEnumerable<LocationBooking> GetLocationBookingsForPeriod(DateTime startTime, DateTime endTime)
+        public IEnumerable<LocationBooking> GetLocationBookingsForPeriod(DateTime startTime, DateTime endTime, int? locationId = null)
         {
             // Create connection object
             using (this.CreateConnection())
@@ -101,6 +101,11 @@ namespace BookingSystemAuth.Models
                     // Add parameter for Stored procedure
                     cmd.Parameters.Add("@StartTime", SqlDbType.SmallDateTime).Value = startTime;
                     cmd.Parameters.Add("@EndTime", SqlDbType.SmallDateTime).Value = endTime;
+
+                    if(locationId != null)
+                    {
+                        cmd.Parameters.Add("@LocationId", SqlDbType.Int).Value = locationId;
+                    }
 
                     // Open DB connection
                     connection.Open();

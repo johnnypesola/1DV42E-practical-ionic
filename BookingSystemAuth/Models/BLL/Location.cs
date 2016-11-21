@@ -50,5 +50,6 @@ namespace BookingSystemAuth.Models
         [DataType(DataType.Currency)]
         public decimal TotalBookingValue { get; set; }
 
+        public bool IsBusy { get; set; }
     }
 }
