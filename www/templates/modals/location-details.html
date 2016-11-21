@@ -1,0 +1,71 @@
+<ion-modal-view view-title="Radera Lokal/Plats">
+    <ion-header-bar class="bar-positive">
+
+        <div class="buttons">
+            <button class="button" ng-click="modal.hide()">
+                <i class="icon ion-ios-arrow-back"></i> Tillbaka</button>
+        </div>
+
+        <h1 class="title">{{detailedLocation.Name}}</h1>
+
+    </ion-header-bar>
+
+
+        <div class="bar bar-subheader">
+
+            <calendar-days-header date="weekDate">
+            </calendar-days-header>
+
+            <div style="float: left;">
+                <button
+                        class="button"
+                        ng-click="toPreviousMonth()"
+                        >
+                    <span class="icon ion-chevron-left md-big-icon"></span>
+                </button>
+
+                <button
+                        class="button"
+                        ng-click="toPreviousWeek()"
+                        >
+                    <span class="icon ion-ios-arrow-left md-big-icon"></span>
+                </button>
+            </div>
+
+            <h2 class="title">
+                {{weekDate.format('MMMM YYYY' ) }} <span class="title-small-text"> v. {{weekDate.week()}}</span>
+            </h2>
+
+            <div style="float: right;">
+
+                <button
+                        class="button"
+                        ng-click="toNextWeek()"
+                        >
+                    <span class="icon ion-ios-arrow-right md-big-icon"></span>
+                </button>
+
+                <button
+                        class="button"
+                        ng-click="toNextMonth()"
+                        >
+                    <span class="icon ion-chevron-right md-big-icon"></span>
+                </button>
+
+            </div>
+
+        </div>
+
+        <ion-content class="has-subheader" padding="false" id="booking-view-content">
+
+            <calendar-week
+                    date="weekDate"
+                    bookings="locationBookings"
+                    bookings-type="'location-booking'"
+                    zoom="zoom"
+                    >
+            </calendar-week>
+
+        </ion-content>
+
+</ion-modal-view>

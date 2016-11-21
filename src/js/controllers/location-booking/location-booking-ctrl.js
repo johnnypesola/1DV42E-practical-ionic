@@ -552,9 +552,10 @@ angular.module( 'BookingSystem.locationBooking',
   }]
   )
 
-  .controller( 'LocationBookingCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'LocationBooking', 'Location', 'BookingHelper', 'LocationFurnituring', 'Customer', '$q', '$mdToast', '$ionicHistory', 'API_IMG_PATH_URL', 'PHOTO_MISSING_SRC', ( $rootScope, $stateParams, $scope, $state, LocationBooking, Location, BookingHelper, LocationFurnituring, Customer, $q, $mdToast, $ionicHistory, API_IMG_PATH_URL, PHOTO_MISSING_SRC ) => {
+  .controller( 'LocationBookingCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'LocationBooking', 'Location', 'BookingHelper', 'LocationFurnituring', 'Customer', '$q', '$mdToast', '$ionicHistory', 'API_IMG_PATH_URL', 'PHOTO_MISSING_SRC', 'MODAL_ANIMATION', '$ionicModal', ( $rootScope, $stateParams, $scope, $state, LocationBooking, Location, BookingHelper, LocationFurnituring, Customer, $q, $mdToast, $ionicHistory, API_IMG_PATH_URL, PHOTO_MISSING_SRC, MODAL_ANIMATION, $ionicModal ) => {
 
     /* Init vars */
+    const modalTemplateUrl = 'templates/modals/location-details.html';
     $scope.locationBooking = {
       Provisional: true,
       BookingTypeId: 1
@@ -564,6 +565,22 @@ angular.module( 'BookingSystem.locationBooking',
     $scope.customerImageSrc = PHOTO_MISSING_SRC;
 
     /* Private methods START */
+    const setupModal = function(){
+
+      $ionicModal.fromTemplateUrl( modalTemplateUrl, {
+        scope: $scope,
+        animation: MODAL_ANIMATION
+      })
+        .then( ( response ) => {
+
+          $scope.modal = response;
+        });
+
+      // Cleanup the modal when we're done with it!
+      $scope.$on( '$destroy', () => {
+        $scope.modal.remove();
+      });
+    };
 
     const initDate = function() {
 
@@ -619,7 +636,7 @@ angular.module( 'BookingSystem.locationBooking',
         const startMomentDate = addTimeToDate( $scope.bookingStartDate, $scope.bookingStartHour, $scope.bookingStartMinute );
         const endMomentDate = addTimeToDate( $scope.bookingEndDate, $scope.bookingEndHour, $scope.bookingEndMinute );
 
-        Location.queryFreeForPeriod(
+        Location.queryMarkBusyForPeriod(
           {
             fromDate: startMomentDate.format( 'YYYY-MM-DD' ),
             fromTime: startMomentDate.format( 'HH:mm' ),
@@ -875,10 +892,18 @@ angular.module( 'BookingSystem.locationBooking',
       return promise;
     };
 
+    $scope.showLocationDetailsModal = function( location ) {
+
+      $scope.modal.show();
+
+      $scope.detailedLocation = location;
+    };
+
     /* Public Methods END */
 
     /* Initialization START */
 
+    setupModal();
     initDate();
     getLocations().then( () => {
 

@@ -149,6 +149,26 @@ input.invisible {
   visibility: hidden;
 }
 
+md-option .icon {
+  font-size: 17px !important;
+  line-height: 28px;
+  text-align: center;
+  padding: 3px 6px;
+  margin: 0 4px 0 0;
+  background: #f0f0f0;
+  border-radius: 50%;
+  // box-shadow: 1px 0px 1px 0px rgba(130,130,130,1);
+  border: 1px solid #d0d0d0;
+}
+
+md-option[disabled] .icon {
+  color: rgba(0,0,0,.87);
+}
+
+md-select-value .icon {
+  display: none;
+}
+
 // Edit buttons and form specific END
 
 // Custom chips specific START
@@ -537,3 +557,13 @@ md-toast.md-warn-theme {
 }
 
 // Custom md-toast themes END
+
+// Modal Z-index fixes (Place it above md- elements) START
+.modal-backdrop, .modal-backdrop-bg {
+  z-index: 100 !important;
+}
+.modal {
+  z-index: 101 !important;
+}
+
+// Modal Z-index fixes (Place it above md- elements) END

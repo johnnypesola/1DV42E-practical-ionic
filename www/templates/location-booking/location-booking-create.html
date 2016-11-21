@@ -144,8 +144,12 @@
                             ng-required="true"
                             ng-change="updateFurniturings()"
                         >
-                            <md-option ng-repeat="location in locations" value="{{location.LocationId}}">
-                                {{location.Name}}
+                            <md-option
+                                ng-repeat="location in locations"
+                                value="{{location.LocationId}}"
+                                ng-disabled="location.IsBusy"
+                            >
+                                <i class="icon ion-android-open" ng-click="showLocationDetailsModal( location )"></i> {{location.Name}} {{location.IsBusy ? '(Upptagen)' : ''}}
                             </md-option>
                         </md-select>
 

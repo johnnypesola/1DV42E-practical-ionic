@@ -26,6 +26,17 @@ angular.module( 'BookingSystem.locationsServices',
             toDate: '@toDate'
           }
         },
+        queryMarkBusyForPeriod: {
+          url: API_URL + 'Location/markbusy/:fromDate/:toDate/:locationBookingId',
+          id: '@id',
+          method: 'GET',
+          isArray: true,
+          params: {
+            locationBookingId: '@locationBookingId',
+            fromDate: '@fromDate',
+            toDate: '@toDate'
+          }
+        },
         // Search for location
         querySearch: {
           url: API_URL + 'Location/search/:column',
