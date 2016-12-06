@@ -6,10 +6,9 @@
                 <i class="icon ion-ios-arrow-back"></i> Tillbaka</button>
         </div>
 
-        <h1 class="title">{{detailedLocation.Name}}</h1>
+        <h1 class="title">Bokningar för {{detailedLocation.Name}}</h1>
 
     </ion-header-bar>
-
 
         <div class="bar bar-subheader">
 
@@ -63,6 +62,7 @@
                     bookings="locationBookings"
                     bookings-type="'location-booking'"
                     zoom="zoom"
+                    is-clickable="false"
                     >
             </calendar-week>
 

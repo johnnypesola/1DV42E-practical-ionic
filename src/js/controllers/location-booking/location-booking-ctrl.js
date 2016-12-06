@@ -552,10 +552,13 @@ angular.module( 'BookingSystem.locationBooking',
   }]
   )
 
-  .controller( 'LocationBookingCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'LocationBooking', 'Location', 'BookingHelper', 'LocationFurnituring', 'Customer', '$q', '$mdToast', '$ionicHistory', 'API_IMG_PATH_URL', 'PHOTO_MISSING_SRC', 'MODAL_ANIMATION', '$ionicModal', ( $rootScope, $stateParams, $scope, $state, LocationBooking, Location, BookingHelper, LocationFurnituring, Customer, $q, $mdToast, $ionicHistory, API_IMG_PATH_URL, PHOTO_MISSING_SRC, MODAL_ANIMATION, $ionicModal ) => {
+  .controller( 'LocationBookingCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'LocationBooking', 'Location', 'BookingHelper', 'LocationFurnituring', 'Customer', '$q', '$mdToast', '$ionicHistory', 'API_IMG_PATH_URL', 'PHOTO_MISSING_SRC', 'MODAL_ANIMATION', '$ionicModal', 'DEFAULT_CALENDAR_ZOOM', ( $rootScope, $stateParams, $scope, $state, LocationBooking, Location, BookingHelper, LocationFurnituring, Customer, $q, $mdToast, $ionicHistory, API_IMG_PATH_URL, PHOTO_MISSING_SRC, MODAL_ANIMATION, $ionicModal, DEFAULT_CALENDAR_ZOOM ) => {
 
     /* Init vars */
     const modalTemplateUrl = 'templates/modals/location-details.html';
+    let weekStartDate = null, weekEndDate = null;
+    let getLocationFurnituringsPromise = null;
+    let getLocationBookingsPromise = null;
     $scope.locationBooking = {
       Provisional: true,
       BookingTypeId: 1
@@ -563,6 +566,7 @@ angular.module( 'BookingSystem.locationBooking',
     $scope.furnituring = [];
     $scope.API_IMG_PATH_URL = API_IMG_PATH_URL;
     $scope.customerImageSrc = PHOTO_MISSING_SRC;
+    $scope.zoom = DEFAULT_CALENDAR_ZOOM;
 
     /* Private methods START */
     const setupModal = function(){
@@ -768,11 +772,65 @@ angular.module( 'BookingSystem.locationBooking',
       return deferred.promise;
     };
 
-    /* Private Methods END */
+    const setupWeekStartAndEndDates = function ( offset = 0, timeType = 'weeks' ) {
 
-    /* Public Methods START */
+      // Add or subtract offset weeks from current weekdate object.
+      if ( offset > 0 ) {
+        $scope.weekDate = moment( $scope.weekDate ).add( offset, timeType );
+      } else if ( offset < 0 ) {
+        $scope.weekDate = moment( $scope.weekDate ).subtract( Math.abs( offset ), timeType );
+      }
 
-    $scope.updateFurniturings = function() {
+      weekStartDate = moment( $scope.weekDate ).startOf( 'week' );
+      weekEndDate = moment( $scope.weekDate ).endOf( 'week' );
+    };
+
+    const getLocationBookings = function () {
+
+      const locationBookings = LocationBooking.queryLessForPeriod({
+
+        fromDate: weekStartDate.format( 'YYYY-MM-DD' ),
+        toDate: weekEndDate.format( 'YYYY-MM-DD' )
+      });
+
+      locationBookings.$promise
+
+        // In case LocationBooking cannot be fetched, display an error to user.
+        .catch( () => {
+
+          $mdToast.show( $mdToast.simple()
+              .content( 'Lokalbokningar kunde inte hämtas, var god försök igen.' )
+              .position( 'top right' )
+              .theme( 'warn' )
+          );
+        })
+
+        .then( ( locationBookings ) => {
+          $scope.locationBookings = locationBookings;
+
+          getLocationBookingsPromise = null;
+        });
+
+      getLocationBookingsPromise = locationBookings.$promise;
+    };
+
+    const tryToGetLocationBookings = function() {
+
+      // Only get locationBookings if we have fetched the furniturings. Check the promise used by that method.
+
+      if ( getLocationFurnituringsPromise === null ) {
+
+        getLocationBookings();
+
+      } else {
+        getLocationFurnituringsPromise.then( () => {
+
+          getLocationBookings();
+        });
+      }
+    };
+
+    const updateFurniturings = function() {
 
       // Get all available furniturings for selected location
       if ( $scope.locationBooking.LocationId ){
@@ -782,18 +840,47 @@ angular.module( 'BookingSystem.locationBooking',
           }
         );
 
-        // If furniturings could not be fetched
-        $scope.furniturings.$promise.catch( () => {
+        $scope.furniturings.$promise
 
-          $mdToast.show( $mdToast.simple()
-            .content( 'Möbleringar för vald lokal kunde inte hämtas.' )
-            .position( 'top right' )
-            .theme( 'warn' )
-          );
-        });
+          // If furniturings could not be fetched
+          .catch( () => {
+
+            $mdToast.show( $mdToast.simple()
+                .content( 'Möbleringar för vald lokal kunde inte hämtas.' )
+                .position( 'top right' )
+                .theme( 'warn' )
+            );
+          })
+
+          // If furniturings were fetched
+          .then( () => {
+
+            getLocationFurnituringsPromise = null;
+          });
       }
       else {
         $scope.furnituring = [];
+      }
+
+      // Save promise in private scope.
+      getLocationFurnituringsPromise = $scope.furniturings.$promise;
+    };
+
+    /* Private Methods END */
+
+    /* Public Methods START */
+
+    $scope.tryToUpdateFurniturings = function() {
+
+      // Only get locationBookings if we have fetched the furniturings. Check the promise used by that method.
+
+      if ( getLocationBookingsPromise === null ) {
+        updateFurniturings();
+      } else {
+        getLocationBookingsPromise.then( () => {
+
+          updateFurniturings();
+        });
       }
     };
 
@@ -894,9 +981,43 @@ angular.module( 'BookingSystem.locationBooking',
 
     $scope.showLocationDetailsModal = function( location ) {
 
+      // Calculate the correct week to show.
+
+      $scope.weekDate = moment( $scope.bookingStartDate ); // .set( 'hour', $scope.bookingStartHour ) );// .startOf( 'isoweek' );
+
+      // console.log( $scope.weekDate, $scope.bookingStartHour, $scope.weekDate.set( 'hour', $scope.bookingStartHour ) );
+
+      setupWeekStartAndEndDates();
+
+      tryToGetLocationBookings();
+
       $scope.modal.show();
 
       $scope.detailedLocation = location;
+    };
+
+    $scope.toNextWeek = function() {
+      setupWeekStartAndEndDates( 1 );
+
+      getLocationBookings();
+    };
+
+    $scope.toPreviousWeek = function() {
+      setupWeekStartAndEndDates( -1 );
+
+      getLocationBookings();
+    };
+
+    $scope.toNextMonth = function() {
+      setupWeekStartAndEndDates( 1, 'month' );
+
+      getLocationBookings();
+    };
+
+    $scope.toPreviousMonth = function() {
+      setupWeekStartAndEndDates( -1, 'month' );
+
+      getLocationBookings();
     };
 
     /* Public Methods END */

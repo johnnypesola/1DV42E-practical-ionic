@@ -12,6 +12,11 @@ angular.module( 'BookingSystem.calendarWeekDirective',
     /* Init vars */
     $scope.days = [];
 
+    // Default value for optional attribute
+    if ( angular.isUndefined( $scope.isClickable ) ) {
+      $scope.isClickable = true;
+    }
+
     /* Private methods START */
     const filterDayBookings = function( dayStartTime, dayEndTime, booking ){
 
@@ -110,12 +115,14 @@ angular.module( 'BookingSystem.calendarWeekDirective',
         date: '=',
         bookings: '=',
         bookingsType: '=',
-        zoom: '='
+        zoom: '=',
+        isClickable: '=?'
       },
       link: function ( scope, element, attrs ) {
-
       },
-      controller: 'CalendarWeekCtrl'
+      controller: 'CalendarWeekCtrl',
+      compile: function( element, attrs ) {
+      }
     };
   }]
 );

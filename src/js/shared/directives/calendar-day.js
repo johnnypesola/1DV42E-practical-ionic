@@ -172,8 +172,8 @@
 
       $scope.showAddHour = function( hour ){
 
-        // Only if user is logged in
-        if ( $rootScope.userInfo ) {
+        // Only if user is logged in, and its clickable
+        if ( $rootScope.userInfo && $scope.isClickable ) {
 
           $scope.hideAllAddButtonsCallback();
           $scope.visibleAddButtonHour = hour;
@@ -222,8 +222,8 @@
 
       $scope.showEvent = function( id ) {
 
-        // Only if user is logged in
-        if ( $rootScope.userInfo ) {
+        // Only if user is logged in, and its clickable
+        if ( $rootScope.userInfo && $scope.isClickable ) {
 
           // Redirect to edit view
           $state.go( 'app.' + $scope.bookingsType + '-details', {
@@ -297,10 +297,10 @@
           hideAddButton: '=',
           bookings: '=',
           bookingsType: '=',
-          zoom: '='
+          zoom: '=',
+          isClickable: '='
         },
         link: function ( scope, element, attrs ) {
-
         },
         controller: 'CalendarDayCtrl'
       };
