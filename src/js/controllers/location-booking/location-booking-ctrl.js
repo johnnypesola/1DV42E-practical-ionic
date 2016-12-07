@@ -557,8 +557,7 @@ angular.module( 'BookingSystem.locationBooking',
     /* Init vars */
     const modalTemplateUrl = 'templates/modals/location-details.html';
     let weekStartDate = null, weekEndDate = null;
-    let getLocationFurnituringsPromise = null;
-    let getLocationBookingsPromise = null;
+    let selectLocationDefer = null;
     $scope.locationBooking = {
       Provisional: true,
       BookingTypeId: 1
@@ -582,6 +581,7 @@ angular.module( 'BookingSystem.locationBooking',
 
       // Cleanup the modal when we're done with it!
       $scope.$on( '$destroy', () => {
+
         $scope.modal.remove();
       });
     };
@@ -787,8 +787,8 @@ angular.module( 'BookingSystem.locationBooking',
 
     const getLocationBookings = function () {
 
-      const locationBookings = LocationBooking.queryLessForPeriod({
-
+      const locationBookings = LocationBooking.queryForLocationForPeriod({
+        locationId: $scope.locationBooking.LocationId,
         fromDate: weekStartDate.format( 'YYYY-MM-DD' ),
         toDate: weekEndDate.format( 'YYYY-MM-DD' )
       });
@@ -807,27 +807,27 @@ angular.module( 'BookingSystem.locationBooking',
 
         .then( ( locationBookings ) => {
           $scope.locationBookings = locationBookings;
-
-          getLocationBookingsPromise = null;
         });
 
-      getLocationBookingsPromise = locationBookings.$promise;
+      return locationBookings.$promise;
     };
 
     const tryToGetLocationBookings = function() {
 
       // Only get locationBookings if we have fetched the furniturings. Check the promise used by that method.
 
-      if ( getLocationFurnituringsPromise === null ) {
+      if ( selectLocationDefer === null ) {
+
+        // Create new promise
+        selectLocationDefer = $q.defer();
+      }
+
+      selectLocationDefer.promise.then( () => {
+
+        console.log( 'getLocationBookings' );
 
         getLocationBookings();
-
-      } else {
-        getLocationFurnituringsPromise.then( () => {
-
-          getLocationBookings();
-        });
-      }
+      });
     };
 
     const updateFurniturings = function() {
@@ -855,15 +855,14 @@ angular.module( 'BookingSystem.locationBooking',
           // If furniturings were fetched
           .then( () => {
 
-            getLocationFurnituringsPromise = null;
           });
       }
       else {
         $scope.furnituring = [];
       }
 
-      // Save promise in private scope.
-      getLocationFurnituringsPromise = $scope.furniturings.$promise;
+      // return promise
+      return $scope.furniturings.$promise;
     };
 
     /* Private Methods END */
@@ -874,14 +873,17 @@ angular.module( 'BookingSystem.locationBooking',
 
       // Only get locationBookings if we have fetched the furniturings. Check the promise used by that method.
 
-      if ( getLocationBookingsPromise === null ) {
-        updateFurniturings();
-      } else {
-        getLocationBookingsPromise.then( () => {
+      if ( selectLocationDefer === null ) {
 
-          updateFurniturings();
-        });
+        selectLocationDefer = $q.defer();
       }
+
+      updateFurniturings().then( () => {
+
+        selectLocationDefer.resolve();
+
+        selectLocationDefer = null;
+      });
     };
 
     $scope.checkEndDate = function() {
@@ -983,9 +985,7 @@ angular.module( 'BookingSystem.locationBooking',
 
       // Calculate the correct week to show.
 
-      $scope.weekDate = moment( $scope.bookingStartDate ); // .set( 'hour', $scope.bookingStartHour ) );// .startOf( 'isoweek' );
-
-      // console.log( $scope.weekDate, $scope.bookingStartHour, $scope.weekDate.set( 'hour', $scope.bookingStartHour ) );
+      $scope.weekDate = moment( $scope.bookingStartDate );
 
       setupWeekStartAndEndDates();
 
@@ -1036,6 +1036,14 @@ angular.module( 'BookingSystem.locationBooking',
 
     });
     initTimeSelectData();
+
+    /*
+    $scope.$on( 'modal.hidden', () => {
+
+      // When location info modal hides, Reset location id. Or the next time we show location info modal, the data wont load correctly.
+      $scope.locationBooking.LocationId = null;
+    });
+    */
 
     /* Initialization END */
 
