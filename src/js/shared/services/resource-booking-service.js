@@ -35,6 +35,19 @@ angular.module( 'BookingSystem.resourceBookingServices',
             fromDate: '@fromDate',
             toDate: '@toDate'
           }
+        },
+
+        // Get bookings for a specified period for a specific resource
+        queryForResourceForPeriod: {
+          url: API_URL + 'ResourceBooking/resource/:resourceId/period/:fromDate/:toDate',
+          id: '@id',
+          method: 'GET',
+          isArray: true,
+          params: {
+            resourceId: '@resourceId',
+            fromDate: '@fromDate',
+            toDate: '@toDate'
+          }
         }
       }
     );

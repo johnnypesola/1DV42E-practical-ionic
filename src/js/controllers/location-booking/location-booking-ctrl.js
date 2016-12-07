@@ -555,7 +555,7 @@ angular.module( 'BookingSystem.locationBooking',
   .controller( 'LocationBookingCreateCtrl', [ '$rootScope', '$stateParams', '$scope', '$state', 'LocationBooking', 'Location', 'BookingHelper', 'LocationFurnituring', 'Customer', '$q', '$mdToast', '$ionicHistory', 'API_IMG_PATH_URL', 'PHOTO_MISSING_SRC', 'MODAL_ANIMATION', '$ionicModal', 'DEFAULT_CALENDAR_ZOOM', ( $rootScope, $stateParams, $scope, $state, LocationBooking, Location, BookingHelper, LocationFurnituring, Customer, $q, $mdToast, $ionicHistory, API_IMG_PATH_URL, PHOTO_MISSING_SRC, MODAL_ANIMATION, $ionicModal, DEFAULT_CALENDAR_ZOOM ) => {
 
     /* Init vars */
-    const modalTemplateUrl = 'templates/modals/location-details.html';
+    const modalTemplateUrl = 'templates/modals/location-calendar-details.html';
     let weekStartDate = null, weekEndDate = null;
     let selectLocationDefer = null;
     $scope.locationBooking = {
@@ -824,8 +824,6 @@ angular.module( 'BookingSystem.locationBooking',
 
       selectLocationDefer.promise.then( () => {
 
-        console.log( 'getLocationBookings' );
-
         getLocationBookings();
       });
     };
@@ -1036,14 +1034,6 @@ angular.module( 'BookingSystem.locationBooking',
 
     });
     initTimeSelectData();
-
-    /*
-    $scope.$on( 'modal.hidden', () => {
-
-      // When location info modal hides, Reset location id. Or the next time we show location info modal, the data wont load correctly.
-      $scope.locationBooking.LocationId = null;
-    });
-    */
 
     /* Initialization END */
 

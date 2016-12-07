@@ -37,7 +37,7 @@ angular.module( 'BookingSystem.locationBookingServices',
           }
         },
 
-        // Get bookings for a specified period
+        // Get bookings for a specified period for a specific location
         queryForLocationForPeriod: {
           url: API_URL + 'LocationBooking/location/:locationId/period/:fromDate/:toDate',
           id: '@id',
